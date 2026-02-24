@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Black Editorial Script';
+  src: url('/fonts/black-editorial-script.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @import "tailwindcss";
 
 @theme {
@@ -8,8 +15,8 @@
   --color-sage: #ABBE9C;
   --color-navy: #1A2744;
   --color-cream: #E8DFC8;
-  --font-script: 'Dancing Script', cursive;
-  --font-sans: 'Barlow Condensed', sans-serif;
+  --font-script: 'Black Editorial Script', cursive;
+  --font-sans: 'Helvetica Now Display', 'Arial Narrow', 'Helvetica Neue', sans-serif;
 }
 
 /* Responsive utility fallbacks for Tailwind v4 compatibility */
