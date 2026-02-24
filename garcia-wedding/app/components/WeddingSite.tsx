@@ -14,15 +14,15 @@ const PHOTOS = [
 ];
 
 const agenda = [
-  { day: 'Friday', date: 'June 17', event: 'Rehearsal Dinner', time: '7:00 PM', location: 'Location TBD', icon: '🥂' },
-  { day: 'Saturday', date: 'June 18', event: 'Ceremony', time: '5:00 PM', location: 'Our Lady Star of the Sea Church', icon: '💍' },
-  { day: 'Saturday', date: 'June 18', event: 'Cocktail Hour', time: '6:00 PM', location: 'The Venue, Cape May', icon: '🍸' },
-  { day: 'Saturday', date: 'June 18', event: 'Reception', time: '7:00 PM', location: 'The Venue, Cape May', icon: '✨' },
-  { day: 'Sunday', date: 'June 19', event: 'Farewell Brunch', time: '11:00 AM', location: 'Location TBD', icon: '☀️' },
+  { day: 'Friday', date: 'June 17', event: 'Rehearsal Dinner', time: '7:00 PM', location: 'Location TBD', icon: 'ð¥' },
+  { day: 'Saturday', date: 'June 18', event: 'Ceremony', time: '5:00 PM', location: 'Our Lady Star of the Sea Church', icon: 'ð' },
+  { day: 'Saturday', date: 'June 18', event: 'Cocktail Hour', time: '6:00 PM', location: 'The Venue, Cape May', icon: 'ð¸' },
+  { day: 'Saturday', date: 'June 18', event: 'Reception', time: '7:00 PM', location: 'The Venue, Cape May', icon: 'â¨' },
+  { day: 'Sunday', date: 'June 19', event: 'Farewell Brunch', time: '11:00 AM', location: 'Location TBD', icon: 'âï¸' },
 ];
 
 const hotels = [
-  { name: 'Congress Hall', desc: "Cape May's iconic grand hotel.", note: 'Book early — fills up fast.' },
+  { name: 'Congress Hall', desc: "Cape May's iconic grand hotel.", note: 'Book early â fills up fast.' },
   { name: 'The Virginia Hotel', desc: 'Boutique charm steps from the beach.', note: 'Intimate and elegant.' },
   { name: 'Cape May Holiday Inn', desc: 'Great value, easy parking.', note: 'Close to venue.' },
 ];
@@ -39,7 +39,7 @@ const localKnowledge = [
   { category: 'Restaurants', items: [
     { name: 'The Ebbitt Room', desc: 'Historic fine dining in Cape May.' },
     { name: 'The Lobster House', desc: 'Classic seafood on the water.' },
-    { name: "Louisa's Café", desc: 'Charming farm-to-table brunch spot.' },
+    { name: "Louisa's CafÃ©", desc: 'Charming farm-to-table brunch spot.' },
   ]},
   { category: 'Beaches', items: [
     { name: 'Sunset Beach', desc: 'Watch for Cape May diamonds!' },
@@ -54,17 +54,17 @@ const localKnowledge = [
   ]},
   { category: 'Coffee', items: [
     { name: 'The Coffee Talk', desc: 'Cozy spot for your morning cup.' },
-    { name: "Whale's Tale", desc: 'Beachside café and smoothies.' },
+    { name: "Whale's Tale", desc: 'Beachside cafÃ© and smoothies.' },
   ]},
 ];
 
 const faqs = [
-  { q: 'Is there a shuttle to/from the venue?', a: 'Details TBD — check back closer to the date.' },
+  { q: 'Is there a shuttle to/from the venue?', a: 'Details TBD â check back closer to the date.' },
   { q: 'Are kids welcome?', a: "We love your little ones! This is an adult-only reception, but children are welcome at the ceremony." },
   { q: "What's the parking situation?", a: 'Parking is available near the venue. We recommend carpooling when possible.' },
   { q: 'Can I bring a plus one?', a: 'Please refer to your invitation. If your invitation includes a guest, their name will appear on the envelope.' },
   { q: 'Will there be a signature cocktail?', a: 'Obviously yes. Details forthcoming.' },
-  { q: 'What should I do about accommodations?', a: "Book early — Cape May in June fills up! See our Accommodations section above." },
+  { q: 'What should I do about accommodations?', a: "Book early â Cape May in June fills up! See our Accommodations section above." },
 ];
 
 const CREAM = '#F5F0E8';
@@ -73,7 +73,7 @@ const ROSE = '#C05A68';
 const SALMON = '#E8896A';
 
 const sectionHeader = {
-  fontFamily: 'Dancing Script, cursive',
+  fontFamily: 'Black Editorial Script, cursive',
   color: NAVY,
   fontSize: 'clamp(42px, 6vw, 72px)',
   lineHeight: 1.1,
@@ -81,7 +81,7 @@ const sectionHeader = {
 };
 
 const sectionSubline = {
-  fontFamily: 'Barlow Condensed, sans-serif',
+  fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
   color: ROSE,
   fontSize: '13px',
   letterSpacing: '0.35em',
@@ -148,7 +148,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         onClick={() => setOpen(!open)}
         style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 0', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}
       >
-        <span style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY, fontSize: '18px', letterSpacing: '0.03em', fontWeight: 500 }}>
+        <span style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY, fontSize: '18px', letterSpacing: '0.03em', fontWeight: 500 }}>
           {q}
         </span>
         <motion.span animate={{ rotate: open ? 45 : 0 }} style={{ color: ROSE, fontSize: '24px', lineHeight: 1, marginLeft: '16px', flexShrink: 0 }}>
@@ -164,7 +164,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
             transition={{ duration: 0.3 }}
             style={{ overflow: 'hidden' }}
           >
-            <p style={{ paddingBottom: '20px', fontFamily: 'Barlow Condensed, sans-serif', color: NAVY + 'bb', fontSize: '16px', lineHeight: 1.6, letterSpacing: '0.02em' }}>
+            <p style={{ paddingBottom: '20px', fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + 'bb', fontSize: '16px', lineHeight: 1.6, letterSpacing: '0.02em' }}>
               {a}
             </p>
           </motion.div>
@@ -192,11 +192,11 @@ export default function WeddingSite() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
         >
-          June 18, 2027 · Cape May, NJ
+          June 18, 2027 Â· Cape May, NJ
         </motion.p>
 
         <motion.h1
-          style={{ fontFamily: 'Dancing Script, cursive', fontSize: 'clamp(64px, 10vw, 120px)', color: NAVY, lineHeight: 1, textAlign: 'center', marginBottom: '48px' }}
+          style={{ fontFamily: 'Black Editorial Script, cursive', fontSize: 'clamp(64px, 10vw, 120px)', color: NAVY, lineHeight: 1, textAlign: 'center', marginBottom: '48px' }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -213,7 +213,7 @@ export default function WeddingSite() {
           transition={{ duration: 0.8, delay: 0.6 }}
         >
           <div style={{ width: 40, height: 1, background: ROSE, opacity: 0.6 }} />
-          <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: ROSE, fontSize: '13px', letterSpacing: '0.35em', textTransform: 'uppercase' }}>
+          <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: ROSE, fontSize: '13px', letterSpacing: '0.35em', textTransform: 'uppercase' }}>
             Cape May, New Jersey
           </p>
           <div style={{ width: 40, height: 1, background: ROSE, opacity: 0.6 }} />
@@ -248,10 +248,10 @@ export default function WeddingSite() {
                 >
                   <div style={{ fontSize: '22px', position: 'relative', zIndex: 1 }}>{item.icon}</div>
                   <div style={{ width: 8, height: 8, borderRadius: '50%', background: SALMON, flexShrink: 0 }} />
-                  <p style={{ fontFamily: 'Dancing Script, cursive', color: '#F5F0E8', fontSize: '18px', marginBottom: '4px' }}>{item.day}</p>
-                  <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: SALMON, fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '4px' }}>{item.time}</p>
-                  <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: '#F5F0E8', fontSize: '15px', fontWeight: 600, letterSpacing: '0.05em' }}>{item.event}</p>
-                  <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'rgba(245,240,232,0.55)', fontSize: '13px', letterSpacing: '0.03em', lineHeight: 1.4 }}>{item.location}</p>
+                  <p style={{ fontFamily: 'Black Editorial Script, cursive', color: '#F5F0E8', fontSize: '18px', marginBottom: '4px' }}>{item.day}</p>
+                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: SALMON, fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '4px' }}>{item.time}</p>
+                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: '#F5F0E8', fontSize: '15px', fontWeight: 600, letterSpacing: '0.05em' }}>{item.event}</p>
+                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.55)', fontSize: '13px', letterSpacing: '0.03em', lineHeight: 1.4 }}>{item.location}</p>
                 </motion.div>
               ))}
             </div>
@@ -260,10 +260,10 @@ export default function WeddingSite() {
           <div className="md:hidden" style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
             {agenda.map((item, i) => (
               <motion.div key={i} style={{ textAlign: 'center' }} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.08 }}>
-                <p style={{ fontFamily: 'Dancing Script, cursive', color: '#F5F0E8', fontSize: '22px', marginBottom: '4px' }}>{item.day}, {item.date}</p>
-                <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: SALMON, fontSize: '12px', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '4px' }}>{item.time}</p>
-                <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: '#F5F0E8', fontSize: '18px', fontWeight: 600 }}>{item.event}</p>
-                <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'rgba(245,240,232,0.55)', fontSize: '14px' }}>{item.location}</p>
+                <p style={{ fontFamily: 'Black Editorial Script, cursive', color: '#F5F0E8', fontSize: '22px', marginBottom: '4px' }}>{item.day}, {item.date}</p>
+                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: SALMON, fontSize: '12px', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '4px' }}>{item.time}</p>
+                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: '#F5F0E8', fontSize: '18px', fontWeight: 600 }}>{item.event}</p>
+                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.55)', fontSize: '14px' }}>{item.location}</p>
               </motion.div>
             ))}
           </div>
@@ -286,14 +286,14 @@ export default function WeddingSite() {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
                 <div style={{ width: 32, height: 1, background: ROSE, opacity: 0.5 }} />
-                <h3 style={{ fontFamily: 'Dancing Script, cursive', color: NAVY, fontSize: '28px', lineHeight: 1.2 }}>{hotel.name}</h3>
-                <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY + '99', fontSize: '15px', letterSpacing: '0.02em', lineHeight: 1.5, flexGrow: 1 }}>{hotel.desc} {hotel.note}</p>
+                <h3 style={{ fontFamily: 'Black Editorial Script, cursive', color: NAVY, fontSize: '28px', lineHeight: 1.2 }}>{hotel.name}</h3>
+                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '99', fontSize: '15px', letterSpacing: '0.02em', lineHeight: 1.5, flexGrow: 1 }}>{hotel.desc} {hotel.note}</p>
                 <button
-                  style={{ fontFamily: 'Barlow Condensed, sans-serif', letterSpacing: '0.2em', padding: '10px 20px', border: '1px solid ' + NAVY, background: 'transparent', color: NAVY, fontSize: '12px', textTransform: 'uppercase', cursor: 'pointer', alignSelf: 'flex-start', marginTop: '8px', transition: 'all 0.2s' }}
+                  style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', letterSpacing: '0.2em', padding: '10px 20px', border: '1px solid ' + NAVY, background: 'transparent', color: NAVY, fontSize: '12px', textTransform: 'uppercase', cursor: 'pointer', alignSelf: 'flex-start', marginTop: '8px', transition: 'all 0.2s' }}
                   onMouseEnter={e => { e.currentTarget.style.background = NAVY; e.currentTarget.style.color = '#F5F0E8'; }}
                   onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = NAVY; }}
                 >
-                  View Hotel →
+                  View Hotel â
                 </button>
               </motion.div>
             ))}
@@ -306,17 +306,17 @@ export default function WeddingSite() {
           <p style={sectionSubline}>What to Wear</p>
           <h2 style={sectionHeader}>Dress Code</h2>
           <Divider />
-          <p style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: '22px', color: NAVY, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '48px', fontWeight: 300 }}>Garden Party Formal</p>
+          <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', fontSize: '22px', color: NAVY, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '48px', fontWeight: 300 }}>Garden Party Formal</p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '48px' }}>
             {swatches.map((s) => (
               <div key={s.hex} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
                 <div style={{ width: 52, height: 52, borderRadius: '50%', background: s.hex, border: '1px solid rgba(26,39,68,0.1)' }} />
-                <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: '11px', color: NAVY + '70', letterSpacing: '0.1em' }}>{s.hex}</span>
-                <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: '12px', color: NAVY, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.name}</span>
+                <span style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', fontSize: '11px', color: NAVY + '70', letterSpacing: '0.1em' }}>{s.hex}</span>
+                <span style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', fontSize: '12px', color: NAVY, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.name}</span>
               </div>
             ))}
           </div>
-          <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY + '99', fontSize: '16px', lineHeight: 1.8, fontStyle: 'italic', letterSpacing: '0.02em' }}>
+          <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '99', fontSize: '16px', lineHeight: 1.8, fontStyle: 'italic', letterSpacing: '0.02em' }}>
             Think floral prints, linen suits, sundresses. Florals encouraged. Navy, blush, sage, and coral are all very much on theme. Please no white or black tie.
           </p>
         </div>
@@ -329,15 +329,15 @@ export default function WeddingSite() {
           <Divider color={SALMON} />
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '48px', marginTop: '20px', textAlign: 'left' }}>
             {[
-              { icon: '✈️', title: 'Flying', content: 'Philadelphia (PHL, ~90 min), Atlantic City (ACY, ~45 min), Newark (EWR, ~2.5 hrs).' },
-              { icon: '🚗', title: 'Driving', content: 'Take the NJ Parkway to Exit 0. Cape May is at the very southern tip. Parking is available near the venue.' },
-              { icon: '🚲', title: 'Getting Around', content: "Cape May is a walkable, bikeable town. Many guests rent bikes — highly recommended." },
+              { icon: 'âï¸', title: 'Flying', content: 'Philadelphia (PHL, ~90 min), Atlantic City (ACY, ~45 min), Newark (EWR, ~2.5 hrs).' },
+              { icon: 'ð', title: 'Driving', content: 'Take the NJ Parkway to Exit 0. Cape May is at the very southern tip. Parking is available near the venue.' },
+              { icon: 'ð²', title: 'Getting Around', content: "Cape May is a walkable, bikeable town. Many guests rent bikes â highly recommended." },
             ].map((item, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}>
                 <div style={{ fontSize: '28px', marginBottom: '16px' }}>{item.icon}</div>
                 <div style={{ width: 32, height: 1, background: SALMON, opacity: 0.6, marginBottom: '16px' }} />
-                <h3 style={{ fontFamily: 'Dancing Script, cursive', color: '#F5F0E8', fontSize: '26px', marginBottom: '12px' }}>{item.title}</h3>
-                <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'rgba(245,240,232,0.6)', fontSize: '15px', lineHeight: 1.7, letterSpacing: '0.02em' }}>{item.content}</p>
+                <h3 style={{ fontFamily: 'Black Editorial Script, cursive', color: '#F5F0E8', fontSize: '26px', marginBottom: '12px' }}>{item.title}</h3>
+                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.6)', fontSize: '15px', lineHeight: 1.7, letterSpacing: '0.02em' }}>{item.content}</p>
               </motion.div>
             ))}
           </div>
@@ -360,9 +360,9 @@ export default function WeddingSite() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: j * 0.04 }}
                 >
-                  <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: '10px', color: ROSE, letterSpacing: '0.3em', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>{cat.category}</span>
-                  <h4 style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY, fontSize: '17px', fontWeight: 700, marginBottom: '6px', letterSpacing: '0.02em' }}>{item.name}</h4>
-                  <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY + '80', fontSize: '14px', lineHeight: 1.5 }}>{item.desc}</p>
+                  <span style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', fontSize: '10px', color: ROSE, letterSpacing: '0.3em', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>{cat.category}</span>
+                  <h4 style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY, fontSize: '17px', fontWeight: 700, marginBottom: '6px', letterSpacing: '0.02em' }}>{item.name}</h4>
+                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '80', fontSize: '14px', lineHeight: 1.5 }}>{item.desc}</p>
                 </motion.div>
               ))
             )}
@@ -386,7 +386,7 @@ export default function WeddingSite() {
           <p style={sectionSubline}>Gifts</p>
           <h2 style={sectionHeader}>Registry</h2>
           <Divider />
-          <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY + '99', fontSize: '16px', lineHeight: 1.8, marginBottom: '48px', letterSpacing: '0.02em' }}>
+          <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '99', fontSize: '16px', lineHeight: 1.8, marginBottom: '48px', letterSpacing: '0.02em' }}>
             Your presence is truly the greatest gift. For those who have asked, we've registered at the following:
           </p>
           <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -394,11 +394,11 @@ export default function WeddingSite() {
               <a
                 key={reg}
                 href="#"
-                style={{ fontFamily: 'Barlow Condensed, sans-serif', letterSpacing: '0.2em', padding: '16px 40px', border: '1px solid ' + NAVY, color: NAVY, fontSize: '13px', textTransform: 'uppercase', textDecoration: 'none', display: 'inline-block', transition: 'all 0.25s' }}
+                style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', letterSpacing: '0.2em', padding: '16px 40px', border: '1px solid ' + NAVY, color: NAVY, fontSize: '13px', textTransform: 'uppercase', textDecoration: 'none', display: 'inline-block', transition: 'all 0.25s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = NAVY; e.currentTarget.style.color = '#F5F0E8'; }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = NAVY; }}
               >
-                {reg} →
+                {reg} â
               </a>
             ))}
           </div>
@@ -408,14 +408,14 @@ export default function WeddingSite() {
       <footer style={{ padding: '60px 24px', background: NAVY, textAlign: 'center' }}>
         <svg width="60" height="30" viewBox="0 0 160 80" style={{ marginBottom: '20px' }}>
           <ellipse cx="80" cy="40" rx="76" ry="36" stroke="#E8DFC8" strokeWidth="1.5" fill="none" />
-          <text x="80" y="30" textAnchor="middle" fill="#E8DFC8" fontSize="12" fontFamily="Dancing Script, cursive">The</text>
-          <text x="80" y="54" textAnchor="middle" fill="#E8DFC8" fontSize="26" fontFamily="Dancing Script, cursive" fontWeight="700">Garcias</text>
+          <text x="80" y="30" textAnchor="middle" fill="#E8DFC8" fontSize="12" fontFamily="Black Editorial Script, cursive">The</text>
+          <text x="80" y="54" textAnchor="middle" fill="#E8DFC8" fontSize="26" fontFamily="Black Editorial Script, cursive" fontWeight="700">Garcias</text>
         </svg>
-        <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'rgba(245,240,232,0.5)', fontSize: '12px', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '8px' }}>
-          The Garcias · June 18, 2027 · Cape May, NJ
+        <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.5)', fontSize: '12px', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '8px' }}>
+          The Garcias Â· June 18, 2027 Â· Cape May, NJ
         </p>
-        <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'rgba(245,240,232,0.3)', fontSize: '11px', letterSpacing: '0.15em' }}>
-          Made with love ♥
+        <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.3)', fontSize: '11px', letterSpacing: '0.15em' }}>
+          Made with love â¥
         </p>
       </footer>
 
