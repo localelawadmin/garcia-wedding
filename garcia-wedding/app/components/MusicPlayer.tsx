@@ -3,6 +3,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const TRACKS = [
+  '/audio/leon-bridges.mp3',
+  '/audio/sam-cooke.mp3',
+  '/audio/frankie-valli.mp3',
+];
+
 export default function MusicPlayer() {
   const [open, setOpen] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -10,7 +16,8 @@ export default function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const audio = new Audio('/audio/wedding.mp3');
+    const src = TRACKS[Math.floor(Math.random() * TRACKS.length)];
+    const audio = new Audio(src);
     audio.loop = true;
     audio.volume = 0;
     audioRef.current = audio;
@@ -35,8 +42,6 @@ export default function MusicPlayer() {
 
     return () => { audio.pause(); };
   }, []);
-
-  const toggleSpotify = () => setOpen(p => !p);
 
   return (
     <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 50, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 12 }}>
@@ -81,7 +86,7 @@ export default function MusicPlayer() {
       </AnimatePresence>
 
       <motion.button
-        onClick={toggleSpotify}
+        onClick={() => setOpen(p => !p)}
         whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
         style={{
           width: 54, height: 54, borderRadius: '50%',
