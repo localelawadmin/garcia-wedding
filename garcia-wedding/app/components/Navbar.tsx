@@ -43,7 +43,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <a href="#hero" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-          <GarciaLogo width={80} height={40} color="#1A2744" />
+          <GarciaLogo width={80} height={40} />
         </a>
 
         {/* Desktop nav */}
@@ -53,7 +53,7 @@ export default function Navbar() {
               key={link.href}
               onClick={() => handleNavClick(link.href)}
               className="text-navy text-sm tracking-widest uppercase hover:text-rose transition-colors duration-200"
-              style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 500 }}
+              style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', fontWeight: 500 }}
             >
               {link.label}
             </button>
@@ -89,7 +89,7 @@ export default function Navbar() {
                   key={link.href}
                   onClick={() => handleNavClick(link.href)}
                   className="text-navy text-lg tracking-widest uppercase hover:text-rose transition-colors"
-                  style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 500 }}
+                  style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', fontWeight: 500 }}
                 >
                   {link.label}
                 </button>
