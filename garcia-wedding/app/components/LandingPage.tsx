@@ -49,7 +49,7 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <GarciaLogo width={180} height={90} color="#1A2744" />
+        <GarciaLogo width={180} height={90} />
       </motion.div>
 
       {/* Oval video frame */}
@@ -76,7 +76,7 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
             </clipPath>
           </defs>
 
-          {/* Video inside oval — inset cover, no black bars */}
+          {/* Video inside oval â inset cover, no black bars */}
           <foreignObject x="4" y="8" width="272" height="344" clipPath="url(#oval-clip)">
             <div
               style={{
@@ -164,7 +164,7 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
             onMouseEnter={e => (e.currentTarget.style.background = '#C05A68')}
             onMouseLeave={e => (e.currentTarget.style.background = '#1A2744')}
           >
-            Enter →
+            Enter â
           </button>
         </form>
         <AnimatePresence>
