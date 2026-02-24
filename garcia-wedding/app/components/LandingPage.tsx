@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GarciaLogo from './GarciaLogo';
 import MusicPlayer from './MusicPlayer';
@@ -18,8 +18,8 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
 
   const correctPassword = process.env.NEXT_PUBLIC_PASSWORD || 'hdg3';
 
-  const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (password.toLowerCase() === correctPassword.toLowerCase()) {
       setVideoFading(true);
       await new Promise(r => setTimeout(r, 600));
@@ -63,57 +63,59 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
         }
         transition={{ duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
-        <svg
-          viewBox="0 0 280 360"
-          width="280"
-          height="360"
-          style={{ filter: 'drop-shadow(0 12px 40px rgba(26,39,68,0.35))' }}
-          overflow="visible"
-        >
-          <defs>
-            <clipPath id="oval-clip">
-              <ellipse cx="140" cy="180" rx="136" ry="172" />
-            </clipPath>
-          </defs>
-
-          {/* Video inside oval Ã¢ÂÂ inset cover, no black bars */}
-          <foreignObject x="4" y="8" width="272" height="344" clipPath="url(#oval-clip)">
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                position: 'relative',
-                overflow: 'hidden',
-                background: '#000',
-              }}
+        {/* Container for drop shadow */}
+        <div style={{
+          position: 'relative',
+          width: 280,
+          height: 360,
+          filter: 'drop-shadow(0 12px 40px rgba(26,39,68,0.35))',
+        }}>
+          {/* CSS oval clip — works on all browsers including mobile */}
+          <div style={{
+            position: 'absolute',
+            left: 4,
+            top: 8,
+            width: 272,
+            height: 344,
+            borderRadius: '50%',
+            overflow: 'hidden',
+            background: '#000',
+          }}>
+            <motion.div
+              style={{ position: 'absolute', inset: 0 }}
+              animate={videoFading ? { opacity: 0 } : { opacity: 1 }}
+              transition={{ duration: 0.6 }}
             >
-              <motion.div
-                style={{ position: 'absolute', inset: 0 }}
-                animate={videoFading ? { opacity: 0 } : { opacity: 1 }}
-                transition={{ duration: 0.6 }}
-              >
-                <iframe
-                  src="https://www.youtube.com/embed/he6_qMIM3wY?autoplay=1&mute=1&loop=1&playlist=he6_qMIM3wY&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&start=5"
-                  style={{
-                    position: 'absolute',
-                    width: '225%',
-                    height: '110%',
-                    left: '-62.5%',
-                    top: '-5%',
-                    border: 'none',
-                    pointerEvents: 'none',
-                  }}
-                  allow="autoplay; encrypted-media"
-                  allowFullScreen
-                />
-              </motion.div>
-            </div>
-          </foreignObject>
+              <iframe
+                src="https://www.youtube.com/embed/he6_qMIM3wY?autoplay=1&mute=1&loop=1&playlist=he6_qMIM3wY&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&start=25"
+                style={{
+                  position: 'absolute',
+                  width: '225%',
+                  height: '110%',
+                  left: '-62.5%',
+                  top: '-5%',
+                  border: 'none',
+                  pointerEvents: 'none',
+                }}
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                frameBorder="0"
+              />
+            </motion.div>
+          </div>
 
-          {/* Oval border */}
-          <ellipse cx="140" cy="180" rx="136" ry="172" fill="none" stroke="#1A2744" strokeWidth="2.5" />
-          <ellipse cx="140" cy="180" rx="130" ry="166" fill="none" stroke="#1A2744" strokeWidth="0.8" strokeOpacity="0.5" />
-        </svg>
+          {/* Decorative oval border rings — SVG overlay, no clip needed */}
+          <svg
+            viewBox="0 0 280 360"
+            width="280"
+            height="360"
+            style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+            overflow="visible"
+          >
+            <ellipse cx="140" cy="180" rx="136" ry="172" fill="none" stroke="#1A2744" strokeWidth="2.5" />
+            <ellipse cx="140" cy="180" rx="130" ry="166" fill="none" stroke="#1A2744" strokeWidth="0.8" strokeOpacity="0.5" />
+          </svg>
+        </div>
       </motion.div>
 
       {/* Password form */}
@@ -151,12 +153,12 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
             style={{
               fontFamily: "'Helvetica Now Display','Arial Narrow','Helvetica Neue',sans-serif",
               fontStretch: 'condensed',
-              letterSpacing: '0.25em',
-              padding: '12px 36px',
+              letterSpacing: '0.2em',
+              padding: '10px 32px',
               background: '#1A2744',
               color: '#E8DFC8',
-              fontSize: '14px',
               border: 'none',
+              fontSize: '13px',
               cursor: 'pointer',
               textTransform: 'uppercase' as const,
               transition: 'background 0.3s',
@@ -164,7 +166,7 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
             onMouseEnter={e => (e.currentTarget.style.background = '#C05A68')}
             onMouseLeave={e => (e.currentTarget.style.background = '#1A2744')}
           >
-            Enter Ã¢ÂÂ
+            Enter →
           </button>
         </form>
         <AnimatePresence>
@@ -179,7 +181,7 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
                 color: '#C05A68',
                 fontSize: '13px',
                 letterSpacing: '0.15em',
-                textTransform: 'uppercase' as const,
+                textTransform: 'uppercase',
               }}
             >
               Incorrect password
