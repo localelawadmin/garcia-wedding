@@ -76,7 +76,7 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
             </clipPath>
           </defs>
 
-          {/* Video inside oval â inset cover, no black bars */}
+          {/* Video inside oval Ã¢ÂÂ inset cover, no black bars */}
           <foreignObject x="4" y="8" width="272" height="344" clipPath="url(#oval-clip)">
             <div
               style={{
@@ -93,7 +93,7 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
                 transition={{ duration: 0.6 }}
               >
                 <iframe
-                  src="https://www.youtube.com/embed/he6_qMIM3wY?autoplay=1&mute=1&loop=1&playlist=he6_qMIM3wY&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
+                  src="https://www.youtube.com/embed/he6_qMIM3wY?autoplay=1&mute=1&loop=1&playlist=he6_qMIM3wY&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&start=5"
                   style={{
                     position: 'absolute',
                     width: '225%',
@@ -164,7 +164,7 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
             onMouseEnter={e => (e.currentTarget.style.background = '#C05A68')}
             onMouseLeave={e => (e.currentTarget.style.background = '#1A2744')}
           >
-            Enter â
+            Enter Ã¢ÂÂ
           </button>
         </form>
         <AnimatePresence>
