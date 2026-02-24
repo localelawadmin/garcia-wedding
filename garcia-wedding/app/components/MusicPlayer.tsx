@@ -4,9 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 const TRACKS = [
-  { src: '/audio/leon-bridges.mp3',   label: "Leon Bridges — Coming Home" },
-  { src: '/audio/sam-cooke.mp3',      label: "Sam Cooke — Bring It On Home" },
-  { src: '/audio/frankie-valli.mp3',  label: "Frankie Valli — Can't Take My Eyes Off You" },
+  { src: '/audio/leon-bridges.mp3',   label: "Leon Bridges â Coming Home" },
+  { src: '/audio/sam-cooke.mp3',      label: "Sam Cooke â Bring It On Home" },
+  { src: '/audio/frankie-valli.mp3',  label: "Frankie Valli â Can't Take My Eyes Off You" },
 ];
 
 export default function MusicPlayer() {
@@ -28,7 +28,7 @@ export default function MusicPlayer() {
     audioRef.current = audio;
     idxRef.current = idx;
     audio.addEventListener('ended', () => {
-      const next = (idxRef.current + 1) % TRACKS.length;
+      const next = (idxRef.current + Math.floor(Math.random() * (TRACKS.length - 1)) + 1) % TRACKS.length;
       idxRef.current = next;
       setTrackIdx(next);
       loadTrack(next, true);
@@ -62,7 +62,7 @@ export default function MusicPlayer() {
       .catch(() => {});
 
     audio.addEventListener('ended', () => {
-      const next = (idxRef.current + 1) % TRACKS.length;
+      const next = (idxRef.current + Math.floor(Math.random() * (TRACKS.length - 1)) + 1) % TRACKS.length;
       idxRef.current = next;
       setTrackIdx(next);
       loadTrack(next, true);
@@ -95,7 +95,7 @@ export default function MusicPlayer() {
   };
 
   const next = () => {
-    const idx = (idxRef.current + 1) % TRACKS.length;
+    const idx = (idxRef.current + Math.floor(Math.random() * (TRACKS.length - 1)) + 1) % TRACKS.length;
     setTrackIdx(idx);
     loadTrack(idx, true);
   };
@@ -146,16 +146,16 @@ export default function MusicPlayer() {
         textOverflow: 'ellipsis',
         maxWidth: 224,
       }}>
-        {!unmuted ? '♫  Tap anywhere to unmute' : '♫  ' + TRACKS[trackIdx].label}
+        {!unmuted ? 'â«  Tap anywhere to unmute' : 'â«  ' + TRACKS[trackIdx].label}
       </div>
 
       {/* Controls row */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <button onClick={prev}       style={btn} aria-label="Previous">⏮</button>
+        <button onClick={prev}       style={btn} aria-label="Previous">â®</button>
         <button onClick={togglePlay} style={{ ...btn, fontSize: 17, color: '#E8896A', padding: '2px 8px' }} aria-label={playing ? 'Pause' : 'Play'}>
-          {playing ? '⏸' : '▶'}
+          {playing ? 'â¸' : 'â¶'}
         </button>
-        <button onClick={next}       style={btn} aria-label="Next">⏭</button>
+        <button onClick={next}       style={btn} aria-label="Next">â­</button>
         <input
           type="range" min={0} max={1} step={0.02}
           value={unmuted ? volume : 0}
