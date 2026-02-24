@@ -5,27 +5,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './Navbar';
 import MusicPlayer from './MusicPlayer';
 
-// Photo carousel images from picsum
 const PHOTOS = [
-  { url: 'https://picsum.photos/seed/beach1/400/500', rotate: -6, aspect: 'portrait' },
-  { url: 'https://picsum.photos/seed/flowers2/500/400', rotate: 3, aspect: 'landscape' },
-  { url: 'https://picsum.photos/seed/golden3/400/400', rotate: -2, aspect: 'square' },
-  { url: 'https://picsum.photos/seed/sunset4/400/500', rotate: 5, aspect: 'portrait' },
-  { url: 'https://picsum.photos/seed/ocean5/500/380', rotate: -4, aspect: 'landscape' },
+  { url: 'https://picsum.photos/seed/beach1/500/650', rotate: -5 },
+  { url: 'https://picsum.photos/seed/flowers2/600/480', rotate: 3 },
+  { url: 'https://picsum.photos/seed/golden3/500/500', rotate: -2 },
+  { url: 'https://picsum.photos/seed/sunset4/500/650', rotate: 4 },
+  { url: 'https://picsum.photos/seed/ocean5/600/460', rotate: -3 },
 ];
 
 const agenda = [
-  { day: 'Friday, June 17', event: 'Rehearsal Dinner', time: '7:00 PM', location: 'Location TBD' },
-  { day: 'Saturday, June 18', event: 'Ceremony', time: '5:00 PM', location: 'Our Lady Star of the Sea Church, Cape May NJ' },
-  { day: 'Saturday, June 18', event: 'Cocktail Hour', time: '6:00 PM', location: 'The Venue, Cape May NJ' },
-  { day: 'Saturday, June 18', event: 'Reception', time: '7:00 PM', location: 'The Venue, Cape May NJ' },
-  { day: 'Sunday, June 19', event: 'Farewell Brunch', time: '11:00 AM', location: 'Location TBD' },
+  { day: 'Friday', date: 'June 17', event: 'Rehearsal Dinner', time: '7:00 PM', location: 'Location TBD', icon: '🥂' },
+  { day: 'Saturday', date: 'June 18', event: 'Ceremony', time: '5:00 PM', location: 'Our Lady Star of the Sea Church', icon: '💍' },
+  { day: 'Saturday', date: 'June 18', event: 'Cocktail Hour', time: '6:00 PM', location: 'The Venue, Cape May', icon: '🍸' },
+  { day: 'Saturday', date: 'June 18', event: 'Reception', time: '7:00 PM', location: 'The Venue, Cape May', icon: '✨' },
+  { day: 'Sunday', date: 'June 19', event: 'Farewell Brunch', time: '11:00 AM', location: 'Location TBD', icon: '☀️' },
 ];
 
 const hotels = [
-  { name: 'Congress Hall', desc: "Cape May's iconic grand hotel. Book early — fills up fast." },
-  { name: 'The Virginia Hotel', desc: 'Boutique charm steps from the beach.' },
-  { name: 'Cape May Holiday Inn', desc: 'Great value, easy parking, close to venue.' },
+  { name: 'Congress Hall', desc: "Cape May's iconic grand hotel.", note: 'Book early — fills up fast.' },
+  { name: 'The Virginia Hotel', desc: 'Boutique charm steps from the beach.', note: 'Intimate and elegant.' },
+  { name: 'Cape May Holiday Inn', desc: 'Great value, easy parking.', note: 'Close to venue.' },
 ];
 
 const swatches = [
@@ -45,10 +44,10 @@ const localKnowledge = [
   { category: 'Beaches', items: [
     { name: 'Sunset Beach', desc: 'Watch for Cape May diamonds!' },
     { name: 'Higbee Beach', desc: 'Birding, sunsets, and serenity.' },
-    { name: 'Beach Ave', desc: "The classic Cape May boardwalk strip." },
+    { name: 'Beach Ave', desc: "Classic Cape May boardwalk." },
   ]},
   { category: 'Things To Do', items: [
-    { name: 'Cape May Whale Watch', desc: 'See whales and dolphins up close.' },
+    { name: 'Cape May Whale Watch', desc: 'Dolphins and whales up close.' },
     { name: 'Cape May Lighthouse', desc: 'Climb for panoramic views.' },
     { name: 'Washington Street Mall', desc: 'Boutique shopping & dining.' },
     { name: 'Cape May Winery', desc: 'Wine tasting in the vineyards.' },
@@ -68,68 +67,73 @@ const faqs = [
   { q: 'What should I do about accommodations?', a: "Book early — Cape May in June fills up! See our Accommodations section above." },
 ];
 
+const CREAM = '#F5F0E8';
+const NAVY = '#1A2744';
+const ROSE = '#C05A68';
+const SALMON = '#E8896A';
+
+const sectionHeader = {
+  fontFamily: 'Dancing Script, cursive',
+  color: NAVY,
+  fontSize: 'clamp(42px, 6vw, 72px)',
+  lineHeight: 1.1,
+  marginBottom: '16px',
+};
+
+const sectionSubline = {
+  fontFamily: 'Barlow Condensed, sans-serif',
+  color: ROSE,
+  fontSize: '13px',
+  letterSpacing: '0.35em',
+  textTransform: 'uppercase' as const,
+  marginBottom: '8px',
+};
+
 function PhotoCarousel() {
   const [current, setCurrent] = useState(1);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((c) => (c + 1) % PHOTOS.length);
-    }, 3000);
+    const timer = setInterval(() => setCurrent(c => (c + 1) % PHOTOS.length), 3500);
     return () => clearInterval(timer);
   }, []);
 
-  const getVisible = () => {
-    const prev = (current - 1 + PHOTOS.length) % PHOTOS.length;
-    const next = (current + 1) % PHOTOS.length;
-    return [prev, current, next];
-  };
-
-  const [prev, curr, next] = getVisible();
+  const prev = (current - 1 + PHOTOS.length) % PHOTOS.length;
+  const next = (current + 1) % PHOTOS.length;
 
   return (
-    <div className="relative flex items-center justify-center gap-4 py-8" style={{ minHeight: 320 }}>
-      {/* Desktop: 3 photos */}
-      <div className="hidden md:flex items-center justify-center gap-6">
-        {[prev, curr, next].map((idx, i) => (
+    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 380, padding: '20px 0' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '28px' }} className="hidden md:flex">
+        {[prev, current, next].map((idx, i) => (
           <motion.div
-            key={`${idx}-${i}`}
-            className="bg-white p-3 shadow-lg"
+            key={idx + '-' + i}
             style={{
+              background: '#fff',
+              padding: i === 1 ? '14px 14px 36px' : '10px 10px 28px',
+              boxShadow: i === 1 ? '0 20px 60px rgba(26,39,68,0.18)' : '0 8px 24px rgba(26,39,68,0.1)',
               rotate: PHOTOS[idx].rotate,
+              scale: i === 1 ? 1.1 : 0.88,
               zIndex: i === 1 ? 10 : 5,
-              scale: i === 1 ? 1.08 : 0.92,
             }}
-            animate={{ rotate: PHOTOS[idx].rotate, scale: i === 1 ? 1.08 : 0.92 }}
-            transition={{ duration: 0.5 }}
+            animate={{ rotate: PHOTOS[idx].rotate }}
+            transition={{ duration: 0.6 }}
           >
             <img
               src={PHOTOS[idx].url}
               alt="Wedding photo"
-              className="object-cover"
-              style={{
-                width: i === 1 ? 200 : 160,
-                height: i === 1 ? (PHOTOS[idx].aspect === 'landscape' ? 150 : 220) : (PHOTOS[idx].aspect === 'landscape' ? 120 : 180),
-              }}
+              style={{ display: 'block', width: i === 1 ? 200 : 155, height: i === 1 ? 260 : 200, objectFit: 'cover' }}
             />
           </motion.div>
         ))}
       </div>
-      {/* Mobile: 1 photo */}
-      <div className="md:hidden flex items-center justify-center">
+      <div className="md:hidden">
         <motion.div
           key={current}
-          className="bg-white p-3 shadow-lg"
-          style={{ rotate: PHOTOS[current].rotate }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+          style={{ background: '#fff', padding: '14px 14px 40px', boxShadow: '0 20px 60px rgba(26,39,68,0.18)', rotate: PHOTOS[current].rotate }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <img
-            src={PHOTOS[current].url}
-            alt="Wedding photo"
-            className="object-cover"
-            style={{ width: 220, height: 260 }}
-          />
+          <img src={PHOTOS[current].url} alt="Wedding photo" style={{ width: 240, height: 300, objectFit: 'cover', display: 'block' }} />
         </motion.div>
       </div>
     </div>
@@ -139,18 +143,15 @@ function PhotoCarousel() {
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-navy/20">
+    <div style={{ borderBottom: '1px solid rgba(26,39,68,0.12)' }}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex justify-between items-center py-4 text-left"
+        style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 0', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}
       >
-        <span className="text-navy text-lg tracking-wide" style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 600 }}>
+        <span style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY, fontSize: '18px', letterSpacing: '0.03em', fontWeight: 500 }}>
           {q}
         </span>
-        <motion.span
-          animate={{ rotate: open ? 45 : 0 }}
-          className="text-rose text-2xl font-light ml-4 flex-shrink-0"
-        >
+        <motion.span animate={{ rotate: open ? 45 : 0 }} style={{ color: ROSE, fontSize: '24px', lineHeight: 1, marginLeft: '16px', flexShrink: 0 }}>
           +
         </motion.span>
       </button>
@@ -161,9 +162,9 @@ function FAQItem({ q, a }: { q: string; a: string }) {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden"
+            style={{ overflow: 'hidden' }}
           >
-            <p className="pb-4 text-navy/80 text-base tracking-wide" style={{ fontFamily: 'Barlow Condensed, sans-serif' }}>
+            <p style={{ paddingBottom: '20px', fontFamily: 'Barlow Condensed, sans-serif', color: NAVY + 'bb', fontSize: '16px', lineHeight: 1.6, letterSpacing: '0.02em' }}>
               {a}
             </p>
           </motion.div>
@@ -173,110 +174,124 @@ function FAQItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+function Divider({ color = ROSE, width = 60 }: { color?: string; width?: number }) {
+  return <div style={{ width, height: 1, background: color, margin: '0 auto 40px', opacity: 0.5 }} />;
+}
+
 export default function WeddingSite() {
   return (
-    <div className="relative">
+    <div style={{ background: CREAM }}>
       <Navbar />
 
-      {/* HERO */}
-      <section
-        id="hero"
-        className="min-h-screen flex flex-col items-center justify-center pt-16 relative overflow-hidden"
-        style={{
-          background: `repeating-linear-gradient(
-            to right,
-            #E8DFC8 0px,
-            #E8DFC8 38px,
-            #F2C4BA22 38px,
-            #F2C4BA22 52px
-          )`,
-        }}
-      >
+      <section id="hero" style={{ minHeight: '100vh', background: CREAM, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '100px 24px 60px', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: 80, left: '50%', transform: 'translateX(-50%)', width: 1, height: 40, background: NAVY + '30' }} />
+
+        <motion.p
+          style={{ ...sectionSubline, marginBottom: '24px' }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+        >
+          June 18, 2027 · Cape May, NJ
+        </motion.p>
+
         <motion.h1
-          className="text-6xl md:text-8xl text-navy mb-8"
-          style={{ fontFamily: 'Dancing Script, cursive' }}
+          style={{ fontFamily: 'Dancing Script, cursive', fontSize: 'clamp(64px, 10vw, 120px)', color: NAVY, lineHeight: 1, textAlign: 'center', marginBottom: '48px' }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1, delay: 0.2 }}
         >
           Haley &amp; George
         </motion.h1>
+
         <PhotoCarousel />
-        <motion.p
-          className="mt-6 text-rose text-xl md:text-2xl tracking-widest uppercase"
-          style={{ fontFamily: 'Barlow Condensed, sans-serif', letterSpacing: '0.3em' }}
+
+        <motion.div
+          style={{ marginTop: '40px', display: 'flex', alignItems: 'center', gap: '16px' }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
         >
-          6.18.2027 · Cape May, NJ
-        </motion.p>
+          <div style={{ width: 40, height: 1, background: ROSE, opacity: 0.6 }} />
+          <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: ROSE, fontSize: '13px', letterSpacing: '0.35em', textTransform: 'uppercase' }}>
+            Cape May, New Jersey
+          </p>
+          <div style={{ width: 40, height: 1, background: ROSE, opacity: 0.6 }} />
+        </motion.div>
+
+        <motion.div
+          style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)' }}
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        >
+          <div style={{ width: 1, height: 40, background: NAVY + '40', margin: '0 auto' }} />
+        </motion.div>
       </section>
 
-      {/* WEEKEND AGENDA */}
-      <section id="weekend-agenda" className="py-20 px-4" style={{ background: '#E8DFC8' }}>
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-5xl md:text-6xl text-navy text-center mb-16" style={{ fontFamily: 'Dancing Script, cursive' }}>
-            Weekend Agenda
-          </h2>
-          <div className="relative">
-            {/* Vertical line */}
-            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-rose/30 hidden sm:block" />
-            <div className="flex flex-col gap-10">
+      <section id="weekend-agenda" style={{ padding: '100px 24px', background: NAVY }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ ...sectionSubline, color: SALMON }}>The Schedule</p>
+          <h2 style={{ ...sectionHeader, color: '#F5F0E8', marginBottom: '8px' }}>Weekend Agenda</h2>
+          <Divider color={SALMON} />
+
+          <div className="hidden md:block" style={{ position: 'relative', marginTop: '60px' }}>
+            <div style={{ position: 'absolute', top: 28, left: 0, right: 0, height: 1, background: 'rgba(232,223,200,0.2)' }} />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
               {agenda.map((item, i) => (
                 <motion.div
                   key={i}
-                  className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4"
-                  initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
                 >
-                  {/* Dot */}
-                  <div className="hidden sm:block absolute left-4 md:left-1/2 w-3 h-3 rounded-full bg-rose -translate-x-1.5 -translate-y-1" />
-                  <div className={`sm:w-1/2 ${i % 2 === 0 ? 'sm:text-right sm:pr-12 md:pr-16' : 'sm:ml-auto sm:pl-12 md:pl-16'}`}>
-                    <p className="text-rose text-base tracking-widest uppercase mb-1" style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 600 }}>
-                      {item.day}
-                    </p>
-                    <h3 className="text-3xl text-navy" style={{ fontFamily: 'Dancing Script, cursive' }}>
-                      {item.event}
-                    </h3>
-                    <p className="text-navy/70 text-base tracking-wide" style={{ fontFamily: 'Barlow Condensed, sans-serif' }}>
-                      {item.time} · {item.location}
-                    </p>
-                  </div>
+                  <div style={{ fontSize: '22px', position: 'relative', zIndex: 1 }}>{item.icon}</div>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: SALMON, flexShrink: 0 }} />
+                  <p style={{ fontFamily: 'Dancing Script, cursive', color: '#F5F0E8', fontSize: '18px', marginBottom: '4px' }}>{item.day}</p>
+                  <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: SALMON, fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '4px' }}>{item.time}</p>
+                  <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: '#F5F0E8', fontSize: '15px', fontWeight: 600, letterSpacing: '0.05em' }}>{item.event}</p>
+                  <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'rgba(245,240,232,0.55)', fontSize: '13px', letterSpacing: '0.03em', lineHeight: 1.4 }}>{item.location}</p>
                 </motion.div>
               ))}
             </div>
           </div>
+
+          <div className="md:hidden" style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            {agenda.map((item, i) => (
+              <motion.div key={i} style={{ textAlign: 'center' }} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.08 }}>
+                <p style={{ fontFamily: 'Dancing Script, cursive', color: '#F5F0E8', fontSize: '22px', marginBottom: '4px' }}>{item.day}, {item.date}</p>
+                <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: SALMON, fontSize: '12px', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '4px' }}>{item.time}</p>
+                <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: '#F5F0E8', fontSize: '18px', fontWeight: 600 }}>{item.event}</p>
+                <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'rgba(245,240,232,0.55)', fontSize: '14px' }}>{item.location}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ACCOMMODATIONS */}
-      <section id="accommodations" className="py-20 px-4" style={{ background: '#F2C4BA' }}>
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-5xl md:text-6xl text-navy text-center mb-16" style={{ fontFamily: 'Dancing Script, cursive' }}>
-            Accommodations
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section id="accommodations" style={{ padding: '100px 24px', background: CREAM }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
+          <p style={sectionSubline}>Where to Stay</p>
+          <h2 style={sectionHeader}>Accommodations</h2>
+          <Divider />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px', marginTop: '20px' }}>
             {hotels.map((hotel, i) => (
               <motion.div
                 key={i}
-                className="bg-cream border border-navy/20 p-6 flex flex-col gap-3"
+                style={{ background: '#fff', padding: '40px 32px', border: '1px solid rgba(26,39,68,0.08)', display: 'flex', flexDirection: 'column', gap: '12px', textAlign: 'left' }}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
-                <h3 className="text-2xl text-navy" style={{ fontFamily: 'Dancing Script, cursive' }}>
-                  {hotel.name}
-                </h3>
-                <p className="text-navy/70 text-base flex-grow" style={{ fontFamily: 'Barlow Condensed, sans-serif' }}>
-                  {hotel.desc}
-                </p>
+                <div style={{ width: 32, height: 1, background: ROSE, opacity: 0.5 }} />
+                <h3 style={{ fontFamily: 'Dancing Script, cursive', color: NAVY, fontSize: '28px', lineHeight: 1.2 }}>{hotel.name}</h3>
+                <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY + '99', fontSize: '15px', letterSpacing: '0.02em', lineHeight: 1.5, flexGrow: 1 }}>{hotel.desc} {hotel.note}</p>
                 <button
-                  className="mt-2 border border-navy text-navy px-4 py-2 text-sm tracking-widest uppercase hover:bg-navy hover:text-cream transition-colors"
-                  style={{ fontFamily: 'Barlow Condensed, sans-serif' }}
+                  style={{ fontFamily: 'Barlow Condensed, sans-serif', letterSpacing: '0.2em', padding: '10px 20px', border: '1px solid ' + NAVY, background: 'transparent', color: NAVY, fontSize: '12px', textTransform: 'uppercase', cursor: 'pointer', alignSelf: 'flex-start', marginTop: '8px', transition: 'all 0.2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = NAVY; e.currentTarget.style.color = '#F5F0E8'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = NAVY; }}
                 >
                   View Hotel →
                 </button>
@@ -286,108 +301,68 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      {/* DRESS CODE */}
-      <section id="dress-code" className="py-20 px-4" style={{ background: '#E8DFC8' }}>
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-5xl md:text-6xl text-navy mb-4" style={{ fontFamily: 'Dancing Script, cursive' }}>
-            Dress Code
-          </h2>
-          <p className="text-3xl text-navy tracking-widest uppercase mb-10" style={{ fontFamily: 'Barlow Condensed, sans-serif', letterSpacing: '0.25em' }}>
-            Garden Party Formal
-          </p>
-          <div className="flex justify-center gap-4 flex-wrap mb-10">
+      <section id="dress-code" style={{ padding: '100px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
+          <p style={sectionSubline}>What to Wear</p>
+          <h2 style={sectionHeader}>Dress Code</h2>
+          <Divider />
+          <p style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: '22px', color: NAVY, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '48px', fontWeight: 300 }}>Garden Party Formal</p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '48px' }}>
             {swatches.map((s) => (
-              <div key={s.hex} className="flex flex-col items-center gap-2">
-                <div
-                  className="w-14 h-14 rounded-full border-2 border-navy/20 shadow-sm"
-                  style={{ background: s.hex }}
-                />
-                <span className="text-xs text-navy/60 tracking-wide" style={{ fontFamily: 'Barlow Condensed, sans-serif' }}>
-                  {s.hex}
-                </span>
-                <span className="text-xs text-navy tracking-wide uppercase" style={{ fontFamily: 'Barlow Condensed, sans-serif' }}>
-                  {s.name}
-                </span>
+              <div key={s.hex} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: 52, height: 52, borderRadius: '50%', background: s.hex, border: '1px solid rgba(26,39,68,0.1)' }} />
+                <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: '11px', color: NAVY + '70', letterSpacing: '0.1em' }}>{s.hex}</span>
+                <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: '12px', color: NAVY, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.name}</span>
               </div>
             ))}
           </div>
-          <p className="text-navy/70 italic text-lg" style={{ fontFamily: 'Barlow Condensed, sans-serif' }}>
+          <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY + '99', fontSize: '16px', lineHeight: 1.8, fontStyle: 'italic', letterSpacing: '0.02em' }}>
             Think floral prints, linen suits, sundresses. Florals encouraged. Navy, blush, sage, and coral are all very much on theme. Please no white or black tie.
           </p>
         </div>
       </section>
 
-      {/* TRAVEL GUIDE */}
-      <section id="travel-guide" className="py-20 px-4" style={{ background: '#1A2744' }}>
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-5xl md:text-6xl text-cream text-center mb-16" style={{ fontFamily: 'Dancing Script, cursive' }}>
-            Travel Guide
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section id="travel-guide" style={{ padding: '100px 24px', background: NAVY }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ ...sectionSubline, color: SALMON }}>Getting Here</p>
+          <h2 style={{ ...sectionHeader, color: '#F5F0E8' }}>Travel Guide</h2>
+          <Divider color={SALMON} />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '48px', marginTop: '20px', textAlign: 'left' }}>
             {[
-              {
-                icon: '✈️',
-                title: 'Flying',
-                content: 'Nearest airports: Philadelphia (PHL, ~90 min), Atlantic City (ACY, ~45 min), Newark (EWR, ~2.5 hrs)'
-              },
-              {
-                icon: '🚗',
-                title: 'Driving',
-                content: 'Cape May is at the southern tip of the NJ Parkway. Take Exit 0. Parking available near venue.'
-              },
-              {
-                icon: '🚲',
-                title: 'Getting Around',
-                content: "Cape May is a walkable, bikeable town. Ride shares available. Many guests rent bikes for the weekend — highly recommended."
-              },
+              { icon: '✈️', title: 'Flying', content: 'Philadelphia (PHL, ~90 min), Atlantic City (ACY, ~45 min), Newark (EWR, ~2.5 hrs).' },
+              { icon: '🚗', title: 'Driving', content: 'Take the NJ Parkway to Exit 0. Cape May is at the very southern tip. Parking is available near the venue.' },
+              { icon: '🚲', title: 'Getting Around', content: "Cape May is a walkable, bikeable town. Many guests rent bikes — highly recommended." },
             ].map((item, i) => (
-              <motion.div
-                key={i}
-                className="text-cream"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.15 }}
-              >
-                <div className="text-4xl mb-4">{item.icon}</div>
-                <h3 className="text-2xl mb-3 text-salmon" style={{ fontFamily: 'Dancing Script, cursive' }}>
-                  {item.title}
-                </h3>
-                <p className="text-cream/80 text-base tracking-wide leading-relaxed" style={{ fontFamily: 'Barlow Condensed, sans-serif' }}>
-                  {item.content}
-                </p>
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}>
+                <div style={{ fontSize: '28px', marginBottom: '16px' }}>{item.icon}</div>
+                <div style={{ width: 32, height: 1, background: SALMON, opacity: 0.6, marginBottom: '16px' }} />
+                <h3 style={{ fontFamily: 'Dancing Script, cursive', color: '#F5F0E8', fontSize: '26px', marginBottom: '12px' }}>{item.title}</h3>
+                <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'rgba(245,240,232,0.6)', fontSize: '15px', lineHeight: 1.7, letterSpacing: '0.02em' }}>{item.content}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* LOCAL KNOWLEDGE */}
-      <section id="local-knowledge" className="py-20 px-4" style={{ background: '#F2C4BA' }}>
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-5xl md:text-6xl text-navy text-center mb-16" style={{ fontFamily: 'Dancing Script, cursive' }}>
-            Local Knowledge
-          </h2>
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+      <section id="local-knowledge" style={{ padding: '100px 24px', background: CREAM }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
+          <p style={sectionSubline}>Insider Tips</p>
+          <h2 style={sectionHeader}>Local Knowledge</h2>
+          <Divider />
+          <div style={{ columns: '1', columnGap: '24px', textAlign: 'left' }} className="sm:columns-2 lg:columns-3">
             {localKnowledge.map((cat) =>
               cat.items.map((item, j) => (
                 <motion.div
                   key={item.name}
-                  className="bg-cream border border-navy/10 p-5 break-inside-avoid"
-                  initial={{ opacity: 0, y: 15 }}
+                  style={{ background: '#fff', padding: '24px 28px', marginBottom: '24px', breakInside: 'avoid', border: '1px solid rgba(26,39,68,0.06)' }}
+                  initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: j * 0.05 }}
+                  transition={{ duration: 0.4, delay: j * 0.04 }}
                 >
-                  <span className="text-xs text-rose tracking-widest uppercase mb-2 block" style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 600 }}>
-                    {cat.category}
-                  </span>
-                  <h4 className="text-navy text-lg font-semibold mb-1" style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700 }}>
-                    {item.name}
-                  </h4>
-                  <p className="text-navy/70 text-sm" style={{ fontFamily: 'Barlow Condensed, sans-serif' }}>
-                    {item.desc}
-                  </p>
+                  <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontSize: '10px', color: ROSE, letterSpacing: '0.3em', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>{cat.category}</span>
+                  <h4 style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY, fontSize: '17px', fontWeight: 700, marginBottom: '6px', letterSpacing: '0.02em' }}>{item.name}</h4>
+                  <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY + '80', fontSize: '14px', lineHeight: 1.5 }}>{item.desc}</p>
                 </motion.div>
               ))
             )}
@@ -395,69 +370,55 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section id="faq" className="py-20 px-4" style={{ background: '#E8DFC8' }}>
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-5xl md:text-6xl text-navy text-center mb-16" style={{ fontFamily: 'Dancing Script, cursive' }}>
-            FAQ
-          </h2>
-          <div>
-            {faqs.map((item, i) => (
-              <FAQItem key={i} q={item.q} a={item.a} />
-            ))}
+      <section id="faq" style={{ padding: '100px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
+          <p style={sectionSubline}>Good Questions</p>
+          <h2 style={sectionHeader}>FAQ</h2>
+          <Divider />
+          <div style={{ textAlign: 'left' }}>
+            {faqs.map((item, i) => <FAQItem key={i} q={item.q} a={item.a} />)}
           </div>
         </div>
       </section>
 
-      {/* REGISTRY */}
-      <section id="registry" className="py-20 px-4" style={{ background: '#ABBE9C' }}>
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-5xl md:text-6xl text-navy mb-6" style={{ fontFamily: 'Dancing Script, cursive' }}>
-            Registry
-          </h2>
-          <p className="text-navy/80 text-lg mb-12 leading-relaxed" style={{ fontFamily: 'Barlow Condensed, sans-serif' }}>
+      <section id="registry" style={{ padding: '100px 24px', background: CREAM }}>
+        <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
+          <p style={sectionSubline}>Gifts</p>
+          <h2 style={sectionHeader}>Registry</h2>
+          <Divider />
+          <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: NAVY + '99', fontSize: '16px', lineHeight: 1.8, marginBottom: '48px', letterSpacing: '0.02em' }}>
             Your presence is truly the greatest gift. For those who have asked, we've registered at the following:
           </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            {[
-              { name: 'Crate & Barrel' },
-              { name: 'Zola' },
-            ].map((reg) => (
-              <div key={reg.name} className="bg-cream border border-navy/20 p-8 flex flex-col items-center gap-4 flex-1">
-                <h3 className="text-2xl text-navy" style={{ fontFamily: 'Dancing Script, cursive' }}>
-                  {reg.name}
-                </h3>
-                <a
-                  href="#"
-                  className="border border-navy text-navy px-6 py-2 text-sm tracking-widest uppercase hover:bg-navy hover:text-cream transition-colors"
-                  style={{ fontFamily: 'Barlow Condensed, sans-serif' }}
-                >
-                  View Registry →
-                </a>
-              </div>
+          <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            {['Crate & Barrel', 'Zola'].map((reg) => (
+              <a
+                key={reg}
+                href="#"
+                style={{ fontFamily: 'Barlow Condensed, sans-serif', letterSpacing: '0.2em', padding: '16px 40px', border: '1px solid ' + NAVY, color: NAVY, fontSize: '13px', textTransform: 'uppercase', textDecoration: 'none', display: 'inline-block', transition: 'all 0.25s' }}
+                onMouseEnter={e => { e.currentTarget.style.background = NAVY; e.currentTarget.style.color = '#F5F0E8'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = NAVY; }}
+              >
+                {reg} →
+              </a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="py-10 px-4 text-center" style={{ background: '#1A2744' }}>
-        <div className="flex justify-center mb-4">
-          <svg width="60" height="30" viewBox="0 0 160 80">
-            <ellipse cx="80" cy="40" rx="76" ry="36" stroke="#E8DFC8" strokeWidth="2" fill="none" />
-            <text x="80" y="30" textAnchor="middle" fill="#E8DFC8" fontSize="12" fontFamily="Dancing Script, cursive">The</text>
-            <text x="80" y="54" textAnchor="middle" fill="#E8DFC8" fontSize="26" fontFamily="Dancing Script, cursive" fontWeight="700">Garcias</text>
-          </svg>
-        </div>
-        <p className="text-cream/80 text-base tracking-widest" style={{ fontFamily: 'Barlow Condensed, sans-serif' }}>
+      <footer style={{ padding: '60px 24px', background: NAVY, textAlign: 'center' }}>
+        <svg width="60" height="30" viewBox="0 0 160 80" style={{ marginBottom: '20px' }}>
+          <ellipse cx="80" cy="40" rx="76" ry="36" stroke="#E8DFC8" strokeWidth="1.5" fill="none" />
+          <text x="80" y="30" textAnchor="middle" fill="#E8DFC8" fontSize="12" fontFamily="Dancing Script, cursive">The</text>
+          <text x="80" y="54" textAnchor="middle" fill="#E8DFC8" fontSize="26" fontFamily="Dancing Script, cursive" fontWeight="700">Garcias</text>
+        </svg>
+        <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'rgba(245,240,232,0.5)', fontSize: '12px', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '8px' }}>
           The Garcias · June 18, 2027 · Cape May, NJ
         </p>
-        <p className="text-cream/50 text-sm mt-2" style={{ fontFamily: 'Barlow Condensed, sans-serif' }}>
+        <p style={{ fontFamily: 'Barlow Condensed, sans-serif', color: 'rgba(245,240,232,0.3)', fontSize: '11px', letterSpacing: '0.15em' }}>
           Made with love ♥
         </p>
       </footer>
 
-      {/* Floating music player */}
       <MusicPlayer />
     </div>
   );
