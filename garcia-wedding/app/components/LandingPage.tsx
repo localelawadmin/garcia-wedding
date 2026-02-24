@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GarciaLogo from './GarciaLogo';
+import MusicPlayer from './MusicPlayer';
 
 interface LandingPageProps {
   onSuccess: () => void;
@@ -75,7 +76,7 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
             </clipPath>
           </defs>
 
-          {/* Video inside oval */}
+          {/* Video inside oval — inset cover, no black bars */}
           <foreignObject x="4" y="8" width="272" height="344" clipPath="url(#oval-clip)">
             <div
               style={{
@@ -87,17 +88,18 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
               }}
             >
               <motion.div
-                style={{ width: '100%', height: '100%' }}
+                style={{ position: 'absolute', inset: 0 }}
                 animate={videoFading ? { opacity: 0 } : { opacity: 1 }}
                 transition={{ duration: 0.6 }}
               >
                 <iframe
                   src="https://www.youtube.com/embed/he6_qMIM3wY?autoplay=1&mute=1&loop=1&playlist=he6_qMIM3wY&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
                   style={{
-                    width: '180%',
-                    height: '180%',
-                    marginLeft: '-40%',
-                    marginTop: '-40%',
+                    position: 'absolute',
+                    width: '225%',
+                    height: '110%',
+                    left: '-62.5%',
+                    top: '-5%',
                     border: 'none',
                     pointerEvents: 'none',
                   }}
@@ -109,26 +111,8 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
           </foreignObject>
 
           {/* Oval border */}
-          <ellipse
-            cx="140"
-            cy="180"
-            rx="136"
-            ry="172"
-            fill="none"
-            stroke="#1A2744"
-            strokeWidth="2.5"
-          />
-          {/* Inner oval ring for elegance */}
-          <ellipse
-            cx="140"
-            cy="180"
-            rx="130"
-            ry="166"
-            fill="none"
-            stroke="#1A2744"
-            strokeWidth="0.8"
-            strokeOpacity="0.5"
-          />
+          <ellipse cx="140" cy="180" rx="136" ry="172" fill="none" stroke="#1A2744" strokeWidth="2.5" />
+          <ellipse cx="140" cy="180" rx="130" ry="166" fill="none" stroke="#1A2744" strokeWidth="0.8" strokeOpacity="0.5" />
         </svg>
       </motion.div>
 
@@ -147,7 +131,8 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
             placeholder="Enter Password"
             className={shake ? 'shake' : ''}
             style={{
-              fontFamily: 'Barlow Condensed, sans-serif',
+              fontFamily: "'Helvetica Now Display','Arial Narrow','Helvetica Neue',sans-serif",
+              fontStretch: 'condensed',
               letterSpacing: '0.2em',
               minWidth: 240,
               padding: '12px 24px',
@@ -164,7 +149,8 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
           <button
             type="submit"
             style={{
-              fontFamily: 'Barlow Condensed, sans-serif',
+              fontFamily: "'Helvetica Now Display','Arial Narrow','Helvetica Neue',sans-serif",
+              fontStretch: 'condensed',
               letterSpacing: '0.25em',
               padding: '12px 36px',
               background: '#1A2744',
@@ -188,7 +174,8 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               style={{
-                fontFamily: 'Barlow Condensed, sans-serif',
+                fontFamily: "'Helvetica Now Display','Arial Narrow','Helvetica Neue',sans-serif",
+                fontStretch: 'condensed',
                 color: '#C05A68',
                 fontSize: '13px',
                 letterSpacing: '0.15em',
@@ -200,6 +187,9 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
           )}
         </AnimatePresence>
       </motion.div>
+
+      {/* Music player */}
+      <MusicPlayer />
     </motion.div>
   );
 }
