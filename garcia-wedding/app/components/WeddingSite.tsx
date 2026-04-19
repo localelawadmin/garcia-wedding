@@ -418,7 +418,7 @@ export default function WeddingSite() {
                           letterSpacing: '0.15em',
                         }}>{ev.time}</span>
                       </div>
-                      {ev.location && (
+                      {'location' in ev && ev.location && (
                         <p style={{
                           fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
                           color: 'rgba(245,240,232,0.7)',
@@ -427,7 +427,7 @@ export default function WeddingSite() {
                           lineHeight: 1.5,
                         }}>{ev.location}</p>
                       )}
-                      {ev.address && (
+                      {'address' in ev && ev.address && (
                         <p style={{
                           fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
                           color: 'rgba(245,240,232,0.45)',
@@ -435,7 +435,7 @@ export default function WeddingSite() {
                           letterSpacing: '0.03em',
                         }}>{ev.address}</p>
                       )}
-                      {ev.attire && (
+                      {'attire' in ev && ev.attire && (
                         <p style={{
                           fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
                           color: SALMON,
