@@ -13,18 +13,131 @@ const PHOTOS = [
   { url: 'https://picsum.photos/seed/ocean5/600/460', rotate: -3 },
 ];
 
-const agenda = [
-  { day: 'Friday', date: 'June 17', event: 'Rehearsal Dinner', time: '7:00 PM', location: 'Location TBD', icon: 'ð¥' },
-  { day: 'Saturday', date: 'June 18', event: 'Ceremony', time: '5:00 PM', location: 'Our Lady Star of the Sea Church', icon: 'ð' },
-  { day: 'Saturday', date: 'June 18', event: 'Cocktail Hour', time: '6:00 PM', location: 'The Venue, Cape May', icon: 'ð¸' },
-  { day: 'Saturday', date: 'June 18', event: 'Reception', time: '7:00 PM', location: 'The Venue, Cape May', icon: 'â¨' },
-  { day: 'Sunday', date: 'June 19', event: 'Farewell Brunch', time: '11:00 AM', location: 'Location TBD', icon: 'âï¸' },
+const schedule = [
+  {
+    day: 'Thursday, June 17',
+    events: [
+      {
+        name: 'Welcome Drinks',
+        time: '8:00 PM \u2013 10:00 PM',
+        location: 'The Pier House \u2013 La Mer Beachfront Resort',
+        attire: 'Summer Cocktail',
+        note: 'Welcome to Cape May! Come have a drink with the Bride and Groom to kickoff their wedding weekend!',
+      },
+    ],
+  },
+  {
+    day: 'Friday, June 18',
+    events: [
+      {
+        name: 'Ceremony',
+        time: '2:00 PM',
+        location: 'Our Lady Star of the Sea Roman Catholic Church',
+        address: '525 Washington Street, Cape May, NJ 08204',
+        note: 'The mass will start promptly at 2:00 PM. Please arrive 15\u201330 minutes early to find your seat.',
+      },
+      {
+        name: 'Reception',
+        time: '5:00 PM \u2013 10:00 PM',
+        location: 'Isaac Smith Vineyard',
+        address: '1039 Seashore Road, Cape May, NJ 08204',
+      },
+      {
+        name: 'After Party',
+        time: '10:30 PM \u2013 2:00 AM',
+        location: "Carney\u2019s Restaurant & Bar",
+        address: '411 Beach Ave, Cape May, NJ 08204',
+      },
+    ],
+  },
+  {
+    day: 'Saturday, June 19',
+    events: [
+      {
+        name: 'Beach Day!',
+        time: '10:00 AM',
+        note: 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia \u2014 or stay the weekend!',
+      },
+    ],
+  },
 ];
 
 const hotels = [
-  { name: 'Congress Hall', desc: "Cape May's iconic grand hotel.", note: 'Book early â fills up fast.' },
-  { name: 'The Virginia Hotel', desc: 'Boutique charm steps from the beach.', note: 'Intimate and elegant.' },
-  { name: 'Cape May Holiday Inn', desc: 'Great value, easy parking.', note: 'Close to venue.' },
+  {
+    name: 'La Mer Beachfront Resort',
+    address: '1317 Beach Avenue, Cape May, NJ 08204',
+    note: 'This is where we will be having our Welcome Drinks!',
+  },
+  {
+    name: 'The Beach Club on Madison Avenue',
+    address: '605 Madison Avenue, Cape May, NJ 08204',
+  },
+  {
+    name: 'Grand Hotel of Cape May',
+    address: '1045 Beach Avenue, Cape May, NJ 08204',
+    note: 'Room block code: 744882',
+  },
+];
+
+const bridesParty = [
+  { name: 'Hanna Driscoll', role: 'Maid of Honor' },
+  { name: 'Chloe Driscoll', role: 'Maid of Honor' },
+  { name: 'Alexa Garcia', role: 'Bridesmaid' },
+  { name: 'Taylor Lucey', role: 'Bridesmaid' },
+  { name: 'Brittany Bruno', role: 'Bridesmaid' },
+  { name: 'Olivia Farrington', role: 'Bridesmaid' },
+  { name: 'Piper Fowler', role: 'Flower Girl' },
+];
+
+const groomsParty = [
+  { name: 'Sam DiCocco', role: 'Best Man' },
+  { name: 'Daniel Palma', role: 'Groomsman' },
+  { name: 'Matt Graziano', role: 'Groomsman' },
+  { name: 'Matt Potter', role: 'Groomsman' },
+  { name: 'Sean Potter', role: 'Groomsman' },
+  { name: 'Patrick Quirke', role: 'Groomsman' },
+  { name: 'Beau Saley', role: 'Ring Bearer' },
+];
+
+const thingsToDo = [
+  { name: 'The Buoy Coffee Shop', address: '722 Beach Avenue', desc: 'A morning must!' },
+  { name: 'Avalon Coffee of Cape May', address: '7 Gurney Street', desc: 'Great stop for coffee, a breakfast sandwich, or an acai bowl!' },
+  { name: "Uncle Bill\u2019s Pancake House", address: '261 Beach Avenue', desc: 'A sit-down breakfast you won\u2019t forget! Bonus points for the gluten free pancakes!' },
+  { name: 'The Mad Batter Restaurant & Bar', address: '19 Jackson Street', desc: 'A great breakfast spot! Best omelettes in town!' },
+  { name: 'Ugly Mug Bar & Restaurant', address: '426 Washington Street', desc: 'A perfect Irish Pub to grab a Guinness and a burger!' },
+  { name: 'Ocean Club Hotel', address: '1035 Beach Avenue', desc: 'Grab a quick lunch on their pool deck!' },
+  { name: "Harry\u2019s Ocean Bar & Grille", address: '1025 Beach Avenue', desc: 'Quick stop for brunch or lunch!' },
+  { name: 'Rusty Nail', address: '205 Beach Avenue', desc: 'Live music, good drinks, appetizers, feet in the sand!' },
+  { name: "George\u2019s Place Beachfront", address: '301 Beach Avenue', desc: "The Groom\u2019s favorite spot! Great lunch spot for gyros, salads, and smoothies!" },
+  { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', desc: 'A sit-down breakfast worth driving to! Farm fresh food, picnic tables, and an indoor market!' },
+  { name: 'Westside Market', address: '517 Broadway, West Cape May', desc: 'Best deli in town!' },
+];
+
+const faqs = [
+  {
+    q: 'What is the dress code?',
+    a: 'Welcome Drinks: Summer Cocktail Attire \u2014 we request that women wear dresses (any length) and men wear a button-down with dress pants or chinos. No tie required! Reception: Garden Party Formal \u2014 think floral prints, linen suits, sundresses. Florals encouraged. Navy, blush, sage, and coral are all very much on theme. Please no white or black tie.',
+  },
+  {
+    q: 'Can I bring a plus one?',
+    a: 'We kindly ask that only guests who are listed on the formal invitation be in attendance.',
+  },
+  {
+    q: 'Will transportation be provided to the reception?',
+    a: 'Yes, there will be a shuttle service from the church to the reception. The shuttle will leave from Our Lady Star of the Sea after the ceremony.',
+  },
+  {
+    q: 'Can I add an extra day to the hotel room block?',
+    a: 'Absolutely! Most of our family and many of our friends will be continuing the weekend at the beach! Contact the hotel directly to extend your stay.',
+  },
+  {
+    q: 'Will there be transportation provided to the ceremony?',
+    a: 'No, we recommend using a rideshare or the hotel\u2019s shuttle service.',
+  },
+  {
+    q: 'When should I get to the ceremony?',
+    a: 'The mass will start promptly at 2:00 PM and we ask that you arrive 15\u201330 minutes early to find your seat.',
+  },
 ];
 
 const swatches = [
@@ -33,38 +146,6 @@ const swatches = [
   { name: 'Periwinkle', hex: '#B8C8E0' },
   { name: 'Sage', hex: '#ABBE9C' },
   { name: 'Cream', hex: '#E8DFC8' },
-];
-
-const localKnowledge = [
-  { category: 'Restaurants', items: [
-    { name: 'The Ebbitt Room', desc: 'Historic fine dining in Cape May.' },
-    { name: 'The Lobster House', desc: 'Classic seafood on the water.' },
-    { name: "Louisa's CafÃ©", desc: 'Charming farm-to-table brunch spot.' },
-  ]},
-  { category: 'Beaches', items: [
-    { name: 'Sunset Beach', desc: 'Watch for Cape May diamonds!' },
-    { name: 'Higbee Beach', desc: 'Birding, sunsets, and serenity.' },
-    { name: 'Beach Ave', desc: "Classic Cape May boardwalk." },
-  ]},
-  { category: 'Things To Do', items: [
-    { name: 'Cape May Whale Watch', desc: 'Dolphins and whales up close.' },
-    { name: 'Cape May Lighthouse', desc: 'Climb for panoramic views.' },
-    { name: 'Washington Street Mall', desc: 'Boutique shopping & dining.' },
-    { name: 'Cape May Winery', desc: 'Wine tasting in the vineyards.' },
-  ]},
-  { category: 'Coffee', items: [
-    { name: 'The Coffee Talk', desc: 'Cozy spot for your morning cup.' },
-    { name: "Whale's Tale", desc: 'Beachside cafÃ© and smoothies.' },
-  ]},
-];
-
-const faqs = [
-  { q: 'Is there a shuttle to/from the venue?', a: 'Details TBD â check back closer to the date.' },
-  { q: 'Are kids welcome?', a: "We love your little ones! This is an adult-only reception, but children are welcome at the ceremony." },
-  { q: "What's the parking situation?", a: 'Parking is available near the venue. We recommend carpooling when possible.' },
-  { q: 'Can I bring a plus one?', a: 'Please refer to your invitation. If your invitation includes a guest, their name will appear on the envelope.' },
-  { q: 'Will there be a signature cocktail?', a: 'Obviously yes. Details forthcoming.' },
-  { q: 'What should I do about accommodations?', a: "Book early â Cape May in June fills up! See our Accommodations section above." },
 ];
 
 const CREAM = '#F5F0E8';
@@ -178,11 +259,57 @@ function Divider({ color = ROSE, width = 60 }: { color?: string; width?: number 
   return <div style={{ width, height: 1, background: color, margin: '0 auto 40px', opacity: 0.5 }} />;
 }
 
+function PersonCard({ name, role }: { name: string; role: string }) {
+  return (
+    <motion.div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '8px',
+      }}
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
+    >
+      <div style={{
+        width: 80,
+        height: 80,
+        borderRadius: '50%',
+        background: 'rgba(26,39,68,0.06)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '28px',
+        border: '1.5px solid rgba(26,39,68,0.1)',
+      }}>
+        {role.includes('Maid') || role.includes('Bridesmaid') || role.includes('Flower') ? '\u2727' : '\u2726'}
+      </div>
+      <h4 style={{
+        fontFamily: 'Black Editorial Script, cursive',
+        color: NAVY,
+        fontSize: '20px',
+        lineHeight: 1.2,
+        textAlign: 'center',
+      }}>{name}</h4>
+      <p style={{
+        fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
+        color: ROSE,
+        fontSize: '11px',
+        letterSpacing: '0.25em',
+        textTransform: 'uppercase',
+      }}>{role}</p>
+    </motion.div>
+  );
+}
+
 export default function WeddingSite() {
   return (
     <div style={{ background: CREAM }}>
       <Navbar />
 
+      {/* ─── HERO ─── */}
       <section id="hero" style={{ minHeight: '100vh', background: CREAM, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '100px 24px 60px', position: 'relative' }}>
         <div style={{ position: 'absolute', top: 80, left: '50%', transform: 'translateX(-50%)', width: 1, height: 40, background: NAVY + '30' }} />
 
@@ -192,7 +319,7 @@ export default function WeddingSite() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
         >
-          June 18, 2027 Â· Cape May, NJ
+          June 18, 2027 &middot; Cape May, NJ
         </motion.p>
 
         <motion.h1
@@ -228,53 +355,121 @@ export default function WeddingSite() {
         </motion.div>
       </section>
 
-      <section id="weekend-agenda" style={{ padding: '100px 24px', background: NAVY }}>
+      {/* ─── SCHEDULE ─── */}
+      <section id="schedule" style={{ padding: '100px 24px', background: NAVY }}>
         <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
-          <p style={{ ...sectionSubline, color: SALMON }}>The Schedule</p>
-          <h2 style={{ ...sectionHeader, color: '#F5F0E8', marginBottom: '8px' }}>Weekend Agenda</h2>
+          <p style={{ ...sectionSubline, color: SALMON }}>The Weekend</p>
+          <h2 style={{ ...sectionHeader, color: '#F5F0E8', marginBottom: '8px' }}>Schedule</h2>
+          <p style={{
+            fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
+            color: 'rgba(245,240,232,0.6)',
+            fontSize: '15px',
+            letterSpacing: '0.03em',
+            lineHeight: 1.6,
+            marginBottom: '16px',
+            maxWidth: 560,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}>
+            We can&apos;t wait to celebrate with you! Here&apos;s what the weekend looks like.
+          </p>
           <Divider color={SALMON} />
 
-          <div className="hidden md:block" style={{ position: 'relative', marginTop: '60px' }}>
-            <div style={{ position: 'absolute', top: 28, left: 0, right: 0, height: 1, background: 'rgba(232,223,200,0.2)' }} />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
-              {agenda.map((item, i) => (
-                <motion.div
-                  key={i}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                >
-                  <div style={{ fontSize: '22px', position: 'relative', zIndex: 1 }}>{item.icon}</div>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: SALMON, flexShrink: 0 }} />
-                  <p style={{ fontFamily: 'Black Editorial Script, cursive', color: '#F5F0E8', fontSize: '18px', marginBottom: '4px' }}>{item.day}</p>
-                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: SALMON, fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '4px' }}>{item.time}</p>
-                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: '#F5F0E8', fontSize: '15px', fontWeight: 600, letterSpacing: '0.05em' }}>{item.event}</p>
-                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.55)', fontSize: '13px', letterSpacing: '0.03em', lineHeight: 1.4 }}>{item.location}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '60px', marginTop: '40px', textAlign: 'left' }}>
+            {schedule.map((block, bi) => (
+              <motion.div
+                key={bi}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: bi * 0.1 }}
+              >
+                <h3 style={{
+                  fontFamily: 'Black Editorial Script, cursive',
+                  color: '#F5F0E8',
+                  fontSize: 'clamp(24px, 4vw, 32px)',
+                  marginBottom: '24px',
+                  textAlign: 'center',
+                }}>{block.day}</h3>
 
-          <div className="md:hidden" style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
-            {agenda.map((item, i) => (
-              <motion.div key={i} style={{ textAlign: 'center' }} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.08 }}>
-                <p style={{ fontFamily: 'Black Editorial Script, cursive', color: '#F5F0E8', fontSize: '22px', marginBottom: '4px' }}>{item.day}, {item.date}</p>
-                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: SALMON, fontSize: '12px', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '4px' }}>{item.time}</p>
-                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: '#F5F0E8', fontSize: '18px', fontWeight: 600 }}>{item.event}</p>
-                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.55)', fontSize: '14px' }}>{item.location}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                  {block.events.map((ev, ei) => (
+                    <div key={ei} style={{
+                      background: 'rgba(245,240,232,0.05)',
+                      border: '1px solid rgba(245,240,232,0.1)',
+                      padding: '28px 32px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '8px',
+                    }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '8px' }}>
+                        <h4 style={{
+                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
+                          color: '#F5F0E8',
+                          fontSize: '18px',
+                          fontWeight: 600,
+                          letterSpacing: '0.08em',
+                          textTransform: 'uppercase',
+                        }}>{ev.name}</h4>
+                        <span style={{
+                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
+                          color: SALMON,
+                          fontSize: '13px',
+                          letterSpacing: '0.15em',
+                        }}>{ev.time}</span>
+                      </div>
+                      <p style={{
+                        fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
+                        color: 'rgba(245,240,232,0.7)',
+                        fontSize: '14px',
+                        letterSpacing: '0.03em',
+                        lineHeight: 1.5,
+                      }}>{ev.location}</p>
+                      {ev.address && (
+                        <p style={{
+                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
+                          color: 'rgba(245,240,232,0.45)',
+                          fontSize: '13px',
+                          letterSpacing: '0.03em',
+                        }}>{ev.address}</p>
+                      )}
+                      {ev.attire && (
+                        <p style={{
+                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
+                          color: SALMON,
+                          fontSize: '12px',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          marginTop: '4px',
+                        }}>Attire: {ev.attire}</p>
+                      )}
+                      {ev.note && (
+                        <p style={{
+                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
+                          color: 'rgba(245,240,232,0.55)',
+                          fontSize: '14px',
+                          fontStyle: 'italic',
+                          lineHeight: 1.5,
+                          marginTop: '4px',
+                        }}>{ev.note}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="accommodations" style={{ padding: '100px 24px', background: CREAM }}>
+      {/* ─── TRAVEL / ACCOMMODATIONS ─── */}
+      <section id="travel" style={{ padding: '100px 24px', background: CREAM }}>
         <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
           <p style={sectionSubline}>Where to Stay</p>
-          <h2 style={sectionHeader}>Accommodations</h2>
+          <h2 style={sectionHeader}>Travel</h2>
           <Divider />
+
+          {/* Hotels */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px', marginTop: '20px' }}>
             {hotels.map((hotel, i) => (
               <motion.div
@@ -287,21 +482,82 @@ export default function WeddingSite() {
               >
                 <div style={{ width: 32, height: 1, background: ROSE, opacity: 0.5 }} />
                 <h3 style={{ fontFamily: 'Black Editorial Script, cursive', color: NAVY, fontSize: '28px', lineHeight: 1.2 }}>{hotel.name}</h3>
-                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '99', fontSize: '15px', letterSpacing: '0.02em', lineHeight: 1.5, flexGrow: 1 }}>{hotel.desc} {hotel.note}</p>
-                <button
-                  style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', letterSpacing: '0.2em', padding: '10px 20px', border: '1px solid ' + NAVY, background: 'transparent', color: NAVY, fontSize: '12px', textTransform: 'uppercase', cursor: 'pointer', alignSelf: 'flex-start', marginTop: '8px', transition: 'all 0.2s' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = NAVY; e.currentTarget.style.color = '#F5F0E8'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = NAVY; }}
-                >
-                  View Hotel â
-                </button>
+                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '80', fontSize: '14px', letterSpacing: '0.02em', lineHeight: 1.5 }}>
+                  {hotel.address}
+                </p>
+                {hotel.note && (
+                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: SALMON, fontSize: '13px', letterSpacing: '0.03em', fontStyle: 'italic', lineHeight: 1.5 }}>
+                    {hotel.note}
+                  </p>
+                )}
               </motion.div>
             ))}
+          </div>
+
+          {/* Getting Here */}
+          <div style={{ marginTop: '80px' }}>
+            <p style={{ ...sectionSubline, marginBottom: '16px' }}>Getting Here</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '48px', marginTop: '20px', textAlign: 'left' }}>
+              {[
+                { icon: '\u2708\uFE0F', title: 'Flying', content: 'Philadelphia (PHL, ~90 min), Atlantic City (ACY, ~45 min), Newark (EWR, ~2.5 hrs).' },
+                { icon: '\uD83D\uDE97', title: 'Driving', content: 'Take the NJ Parkway to Exit 0. Cape May is at the very southern tip. Parking is available near the venue.' },
+                { icon: '\uD83D\uDEB2', title: 'Getting Around', content: 'Cape May is a walkable, bikeable town. Many guests rent bikes \u2014 highly recommended.' },
+              ].map((item, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}>
+                  <div style={{ fontSize: '28px', marginBottom: '16px' }}>{item.icon}</div>
+                  <div style={{ width: 32, height: 1, background: ROSE, opacity: 0.5, marginBottom: '16px' }} />
+                  <h3 style={{ fontFamily: 'Black Editorial Script, cursive', color: NAVY, fontSize: '26px', marginBottom: '12px' }}>{item.title}</h3>
+                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '80', fontSize: '15px', lineHeight: 1.7, letterSpacing: '0.02em' }}>{item.content}</p>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="dress-code" style={{ padding: '100px 24px', background: '#fff' }}>
+      {/* ─── WEDDING PARTY ─── */}
+      <section id="wedding-party" style={{ padding: '100px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
+          <p style={sectionSubline}>Our People</p>
+          <h2 style={sectionHeader}>Wedding Party</h2>
+          <Divider />
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '60px', marginTop: '20px' }}>
+            {/* Bride's Side */}
+            <div>
+              <p style={{
+                fontFamily: 'Black Editorial Script, cursive',
+                color: ROSE,
+                fontSize: '24px',
+                marginBottom: '32px',
+              }}>The Bride&apos;s Side</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '32px' }}>
+                {bridesParty.map((person) => (
+                  <PersonCard key={person.name} name={person.name} role={person.role} />
+                ))}
+              </div>
+            </div>
+
+            {/* Groom's Side */}
+            <div>
+              <p style={{
+                fontFamily: 'Black Editorial Script, cursive',
+                color: ROSE,
+                fontSize: '24px',
+                marginBottom: '32px',
+              }}>The Groom&apos;s Side</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '32px' }}>
+                {groomsParty.map((person) => (
+                  <PersonCard key={person.name} name={person.name} role={person.role} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── DRESS CODE ─── */}
+      <section id="dress-code" style={{ padding: '100px 24px', background: CREAM }}>
         <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
           <p style={sectionSubline}>What to Wear</p>
           <h2 style={sectionHeader}>Dress Code</h2>
@@ -311,7 +567,6 @@ export default function WeddingSite() {
             {swatches.map((s) => (
               <div key={s.hex} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
                 <div style={{ width: 52, height: 52, borderRadius: '50%', background: s.hex, border: '1px solid rgba(26,39,68,0.1)' }} />
-                <span style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', fontSize: '11px', color: NAVY + '70', letterSpacing: '0.1em' }}>{s.hex}</span>
                 <span style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', fontSize: '12px', color: NAVY, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.name}</span>
               </div>
             ))}
@@ -322,54 +577,45 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      <section id="travel-guide" style={{ padding: '100px 24px', background: NAVY }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
-          <p style={{ ...sectionSubline, color: SALMON }}>Getting Here</p>
-          <h2 style={{ ...sectionHeader, color: '#F5F0E8' }}>Travel Guide</h2>
+      {/* ─── THINGS TO DO ─── */}
+      <section id="things-to-do" style={{ padding: '100px 24px', background: NAVY }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ ...sectionSubline, color: SALMON }}>Insider Tips</p>
+          <h2 style={{ ...sectionHeader, color: '#F5F0E8' }}>Things To Do</h2>
+          <p style={{
+            fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
+            color: 'rgba(245,240,232,0.6)',
+            fontSize: '15px',
+            letterSpacing: '0.03em',
+            lineHeight: 1.6,
+            marginBottom: '16px',
+            maxWidth: 480,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}>
+            Here are some of our favorite spots in Cape May!
+          </p>
           <Divider color={SALMON} />
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '48px', marginTop: '20px', textAlign: 'left' }}>
-            {[
-              { icon: 'âï¸', title: 'Flying', content: 'Philadelphia (PHL, ~90 min), Atlantic City (ACY, ~45 min), Newark (EWR, ~2.5 hrs).' },
-              { icon: 'ð', title: 'Driving', content: 'Take the NJ Parkway to Exit 0. Cape May is at the very southern tip. Parking is available near the venue.' },
-              { icon: 'ð²', title: 'Getting Around', content: "Cape May is a walkable, bikeable town. Many guests rent bikes â highly recommended." },
-            ].map((item, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}>
-                <div style={{ fontSize: '28px', marginBottom: '16px' }}>{item.icon}</div>
-                <div style={{ width: 32, height: 1, background: SALMON, opacity: 0.6, marginBottom: '16px' }} />
-                <h3 style={{ fontFamily: 'Black Editorial Script, cursive', color: '#F5F0E8', fontSize: '26px', marginBottom: '12px' }}>{item.title}</h3>
-                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.6)', fontSize: '15px', lineHeight: 1.7, letterSpacing: '0.02em' }}>{item.content}</p>
+          <div style={{ columns: '1', columnGap: '24px', textAlign: 'left' }} className="sm:columns-2 lg:columns-3">
+            {thingsToDo.map((item, j) => (
+              <motion.div
+                key={item.name}
+                style={{ background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(245,240,232,0.08)', padding: '24px 28px', marginBottom: '24px', breakInside: 'avoid' }}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: j * 0.04 }}
+              >
+                <h4 style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: '#F5F0E8', fontSize: '17px', fontWeight: 700, marginBottom: '6px', letterSpacing: '0.02em' }}>{item.name}</h4>
+                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.45)', fontSize: '12px', letterSpacing: '0.1em', marginBottom: '8px' }}>{item.address}</p>
+                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.7)', fontSize: '14px', lineHeight: 1.5 }}>{item.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="local-knowledge" style={{ padding: '100px 24px', background: CREAM }}>
-        <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
-          <p style={sectionSubline}>Insider Tips</p>
-          <h2 style={sectionHeader}>Local Knowledge</h2>
-          <Divider />
-          <div style={{ columns: '1', columnGap: '24px', textAlign: 'left' }} className="sm:columns-2 lg:columns-3">
-            {localKnowledge.map((cat) =>
-              cat.items.map((item, j) => (
-                <motion.div
-                  key={item.name}
-                  style={{ background: '#fff', padding: '24px 28px', marginBottom: '24px', breakInside: 'avoid', border: '1px solid rgba(26,39,68,0.06)' }}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: j * 0.04 }}
-                >
-                  <span style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', fontSize: '10px', color: ROSE, letterSpacing: '0.3em', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>{cat.category}</span>
-                  <h4 style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY, fontSize: '17px', fontWeight: 700, marginBottom: '6px', letterSpacing: '0.02em' }}>{item.name}</h4>
-                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '80', fontSize: '14px', lineHeight: 1.5 }}>{item.desc}</p>
-                </motion.div>
-              ))
-            )}
-          </div>
-        </div>
-      </section>
-
+      {/* ─── FAQ ─── */}
       <section id="faq" style={{ padding: '100px 24px', background: '#fff' }}>
         <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
           <p style={sectionSubline}>Good Questions</p>
@@ -381,13 +627,14 @@ export default function WeddingSite() {
         </div>
       </section>
 
+      {/* ─── REGISTRY ─── */}
       <section id="registry" style={{ padding: '100px 24px', background: CREAM }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <p style={sectionSubline}>Gifts</p>
           <h2 style={sectionHeader}>Registry</h2>
           <Divider />
           <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '99', fontSize: '16px', lineHeight: 1.8, marginBottom: '48px', letterSpacing: '0.02em' }}>
-            Your presence is truly the greatest gift. For those who have asked, we've registered at the following:
+            Your presence is truly the greatest gift. For those who have asked, we&apos;ve registered at the following:
           </p>
           <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
             {['Crate & Barrel', 'Zola'].map((reg) => (
@@ -398,13 +645,14 @@ export default function WeddingSite() {
                 onMouseEnter={e => { e.currentTarget.style.background = NAVY; e.currentTarget.style.color = '#F5F0E8'; }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = NAVY; }}
               >
-                {reg} â
+                {reg} &rarr;
               </a>
             ))}
           </div>
         </div>
       </section>
 
+      {/* ─── FOOTER ─── */}
       <footer style={{ padding: '60px 24px', background: NAVY, textAlign: 'center' }}>
         <svg width="60" height="30" viewBox="0 0 160 80" style={{ marginBottom: '20px' }}>
           <ellipse cx="80" cy="40" rx="76" ry="36" stroke="#E8DFC8" strokeWidth="1.5" fill="none" />
@@ -412,10 +660,10 @@ export default function WeddingSite() {
           <text x="80" y="54" textAnchor="middle" fill="#E8DFC8" fontSize="26" fontFamily="Black Editorial Script, cursive" fontWeight="700">Garcias</text>
         </svg>
         <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.5)', fontSize: '12px', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '8px' }}>
-          The Garcias Â· June 18, 2027 Â· Cape May, NJ
+          The Garcias &middot; June 18, 2027 &middot; Cape May, NJ
         </p>
         <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.3)', fontSize: '11px', letterSpacing: '0.15em' }}>
-          Made with love â¥
+          Made with love &hearts;
         </p>
       </footer>
 
