@@ -309,7 +309,7 @@ export default function WeddingSite() {
     <div style={{ background: CREAM }}>
       <Navbar />
 
-      {/* ─── HERO ─── */}
+      {/* âââ HERO âââ */}
       <section id="hero" style={{ minHeight: '100vh', background: CREAM, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '100px 24px 60px', position: 'relative' }}>
         <div style={{ position: 'absolute', top: 80, left: '50%', transform: 'translateX(-50%)', width: 1, height: 40, background: NAVY + '30' }} />
 
@@ -355,7 +355,7 @@ export default function WeddingSite() {
         </motion.div>
       </section>
 
-      {/* ─── SCHEDULE ─── */}
+      {/* âââ SCHEDULE âââ */}
       <section id="schedule" style={{ padding: '100px 24px', background: NAVY }}>
         <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
           <p style={{ ...sectionSubline, color: SALMON }}>The Weekend</p>
@@ -418,13 +418,15 @@ export default function WeddingSite() {
                           letterSpacing: '0.15em',
                         }}>{ev.time}</span>
                       </div>
-                      <p style={{
-                        fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
-                        color: 'rgba(245,240,232,0.7)',
-                        fontSize: '14px',
-                        letterSpacing: '0.03em',
-                        lineHeight: 1.5,
-                      }}>{ev.location}</p>
+                      {ev.location && (
+                        <p style={{
+                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
+                          color: 'rgba(245,240,232,0.7)',
+                          fontSize: '14px',
+                          letterSpacing: '0.03em',
+                          lineHeight: 1.5,
+                        }}>{ev.location}</p>
+                      )}
                       {ev.address && (
                         <p style={{
                           fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
@@ -462,7 +464,7 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      {/* ─── TRAVEL / ACCOMMODATIONS ─── */}
+      {/* âââ TRAVEL / ACCOMMODATIONS âââ */}
       <section id="travel" style={{ padding: '100px 24px', background: CREAM }}>
         <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
           <p style={sectionSubline}>Where to Stay</p>
@@ -515,7 +517,7 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      {/* ─── WEDDING PARTY ─── */}
+      {/* âââ WEDDING PARTY âââ */}
       <section id="wedding-party" style={{ padding: '100px 24px', background: '#fff' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
           <p style={sectionSubline}>Our People</p>
@@ -556,7 +558,7 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      {/* ─── DRESS CODE ─── */}
+      {/* âââ DRESS CODE âââ */}
       <section id="dress-code" style={{ padding: '100px 24px', background: CREAM }}>
         <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
           <p style={sectionSubline}>What to Wear</p>
@@ -577,7 +579,7 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      {/* ─── THINGS TO DO ─── */}
+      {/* âââ THINGS TO DO âââ */}
       <section id="things-to-do" style={{ padding: '100px 24px', background: NAVY }}>
         <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
           <p style={{ ...sectionSubline, color: SALMON }}>Insider Tips</p>
@@ -615,7 +617,7 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      {/* ─── FAQ ─── */}
+      {/* âââ FAQ âââ */}
       <section id="faq" style={{ padding: '100px 24px', background: '#fff' }}>
         <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
           <p style={sectionSubline}>Good Questions</p>
@@ -627,7 +629,7 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      {/* ─── REGISTRY ─── */}
+      {/* âââ REGISTRY âââ */}
       <section id="registry" style={{ padding: '100px 24px', background: CREAM }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <p style={sectionSubline}>Gifts</p>
@@ -652,7 +654,7 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      {/* ─── FOOTER ─── */}
+      {/* âââ FOOTER âââ */}
       <footer style={{ padding: '60px 24px', background: NAVY, textAlign: 'center' }}>
         <svg width="60" height="30" viewBox="0 0 160 80" style={{ marginBottom: '20px' }}>
           <ellipse cx="80" cy="40" rx="76" ry="36" stroke="#E8DFC8" strokeWidth="1.5" fill="none" />
