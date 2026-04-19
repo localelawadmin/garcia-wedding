@@ -9,12 +9,23 @@ import MusicPlayer from './MusicPlayer';
    DATA — unchanged from original
    ═══════════════════════════════════════════════════ */
 
-const PHOTOS = [
-  { url: 'https://picsum.photos/seed/beach1/800/1100', rotate: -3 },
-  { url: 'https://picsum.photos/seed/flowers2/900/700', rotate: 2 },
-  { url: 'https://picsum.photos/seed/golden3/800/800', rotate: -1.5 },
-  { url: 'https://picsum.photos/seed/sunset4/800/1100', rotate: 3 },
-  { url: 'https://picsum.photos/seed/ocean5/900/680', rotate: -2 },
+// Hero grid photos
+const HERO_PHOTOS = [
+  '/photos/hero-couple-portrait.jpg',
+  '/photos/hero-couple-closeup.jpg',
+  '/photos/hero-intimate-moment.jpg',
+];
+
+// Photo break 1 — proposal
+const BREAK1_PHOTOS = [
+  '/photos/proposal-wide.jpg',
+  '/photos/proposal-bw-closeup.jpg',
+];
+
+// Photo break 2 — celebration
+const BREAK2_PHOTOS = [
+  '/photos/champagne-glasses.jpg',
+  '/photos/walking-bw.jpg',
 ];
 
 interface ScheduleEvent {
@@ -705,20 +716,20 @@ export default function WeddingSite() {
               transition={{ duration: 0.6, delay: 0.6 }}
             >
               <RevealImage
-                src={PHOTOS[0].url}
-                alt="Wedding photo"
+                src={HERO_PHOTOS[0]}
+                alt="Haley and George engagement portrait"
                 style={{ aspectRatio: '3/4', marginTop: '40px' }}
                 delay={0.7}
               />
               <RevealImage
-                src={PHOTOS[1].url}
-                alt="Wedding photo"
+                src={HERO_PHOTOS[1]}
+                alt="Haley and George close-up"
                 style={{ aspectRatio: '4/5' }}
                 delay={0.9}
               />
               <RevealImage
-                src={PHOTOS[2].url}
-                alt="Wedding photo"
+                src={HERO_PHOTOS[2]}
+                alt="Haley and George intimate moment"
                 style={{ aspectRatio: '3/4', marginTop: '60px' }}
                 delay={1.1}
               />
@@ -963,7 +974,7 @@ export default function WeddingSite() {
           </div>
         </section>
 
-        {/* ─── EDITORIAL PHOTO BREAK ─── */}
+        {/* ─── EDITORIAL PHOTO BREAK — THE PROPOSAL ─── */}
         <section style={{ padding: '0 24px', background: CREAM }}>
           <div style={{
             maxWidth: '1200px',
@@ -974,15 +985,39 @@ export default function WeddingSite() {
             minHeight: '50vh',
           }} className="photo-break">
             <RevealImage
-              src={PHOTOS[3].url}
-              alt="Wedding moment"
+              src={BREAK1_PHOTOS[0]}
+              alt="The proposal"
+              style={{ aspectRatio: '3/4' }}
+              delay={0}
+            />
+            <RevealImage
+              src={BREAK1_PHOTOS[1]}
+              alt="The proposal moment"
+              style={{ aspectRatio: '3/4', marginTop: '80px' }}
+              delay={0.2}
+            />
+          </div>
+        </section>
+
+        {/* ─── EDITORIAL PHOTO BREAK 2 — CELEBRATION ─── */}
+        <section style={{ padding: '0 24px', background: '#fff', paddingTop: 'clamp(40px, 6vw, 80px)', paddingBottom: 'clamp(40px, 6vw, 80px)' }}>
+          <div style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '16px',
+          }} className="photo-break">
+            <RevealImage
+              src={BREAK2_PHOTOS[0]}
+              alt="Celebrating with champagne"
               style={{ aspectRatio: '4/5' }}
               delay={0}
             />
             <RevealImage
-              src={PHOTOS[4].url}
-              alt="Wedding moment"
-              style={{ aspectRatio: '4/5', marginTop: '80px' }}
+              src={BREAK2_PHOTOS[1]}
+              alt="Walking together"
+              style={{ aspectRatio: '4/3', marginTop: '60px' }}
               delay={0.2}
             />
           </div>
