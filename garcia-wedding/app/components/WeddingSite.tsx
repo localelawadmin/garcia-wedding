@@ -1,19 +1,37 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import Navbar from './Navbar';
 import MusicPlayer from './MusicPlayer';
 
+/* ═══════════════════════════════════════════════════
+   DATA — unchanged from original
+   ═══════════════════════════════════════════════════ */
+
 const PHOTOS = [
-  { url: 'https://picsum.photos/seed/beach1/500/650', rotate: -5 },
-  { url: 'https://picsum.photos/seed/flowers2/600/480', rotate: 3 },
-  { url: 'https://picsum.photos/seed/golden3/500/500', rotate: -2 },
-  { url: 'https://picsum.photos/seed/sunset4/500/650', rotate: 4 },
-  { url: 'https://picsum.photos/seed/ocean5/600/460', rotate: -3 },
+  { url: 'https://picsum.photos/seed/beach1/800/1100', rotate: -3 },
+  { url: 'https://picsum.photos/seed/flowers2/900/700', rotate: 2 },
+  { url: 'https://picsum.photos/seed/golden3/800/800', rotate: -1.5 },
+  { url: 'https://picsum.photos/seed/sunset4/800/1100', rotate: 3 },
+  { url: 'https://picsum.photos/seed/ocean5/900/680', rotate: -2 },
 ];
 
-const schedule = [
+interface ScheduleEvent {
+  name: string;
+  time: string;
+  location?: string;
+  address?: string;
+  attire?: string;
+  note?: string;
+}
+
+interface ScheduleBlock {
+  day: string;
+  events: ScheduleEvent[];
+}
+
+const schedule: ScheduleBlock[] = [
   {
     day: 'Thursday, June 17',
     events: [
@@ -148,91 +166,365 @@ const swatches = [
   { name: 'Cream', hex: '#E8DFC8' },
 ];
 
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKENS
+   ═══════════════════════════════════════════════════ */
+
 const CREAM = '#F5F0E8';
 const NAVY = '#1A2744';
 const ROSE = '#C05A68';
 const SALMON = '#E8896A';
 
-const sectionHeader = {
-  fontFamily: 'Black Editorial Script, cursive',
-  color: NAVY,
-  fontSize: 'clamp(42px, 6vw, 72px)',
-  lineHeight: 1.1,
-  marginBottom: '16px',
+const FONT_SCRIPT = 'Black Editorial Script, cursive';
+const FONT_SANS = 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif';
+
+/* ═══════════════════════════════════════════════════
+   ANIMATION UTILITIES
+   ═══════════════════════════════════════════════════ */
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+// Stagger children reveal
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
 };
 
-const sectionSubline = {
-  fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
-  color: ROSE,
-  fontSize: '13px',
-  letterSpacing: '0.35em',
-  textTransform: 'uppercase' as const,
-  marginBottom: '8px',
+const fadeUp = {
+  hidden: { opacity: 0, y: 60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, ease: EASE },
+  },
 };
 
-function PhotoCarousel() {
-  const [current, setCurrent] = useState(1);
+const fadeUpSlow = {
+  hidden: { opacity: 0, y: 80 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1.2, ease: EASE },
+  },
+};
+
+const lineGrow = {
+  hidden: { scaleX: 0 },
+  visible: {
+    scaleX: 1,
+    transition: { duration: 0.8, ease: EASE },
+  },
+};
+
+/* ═══════════════════════════════════════════════════
+   PRELOADER
+   ═══════════════════════════════════════════════════ */
+
+function Preloader({ onComplete }: { onComplete: () => void }) {
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => setCurrent(c => (c + 1) % PHOTOS.length), 3500);
-    return () => clearInterval(timer);
-  }, []);
+    let frame = 0;
+    const target = 100;
+    const duration = 2200; // ms
+    const start = performance.now();
 
-  const prev = (current - 1 + PHOTOS.length) % PHOTOS.length;
-  const next = (current + 1) % PHOTOS.length;
+    const tick = (now: number) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(eased * target));
+
+      if (progress < 1) {
+        frame = requestAnimationFrame(tick);
+      } else {
+        setTimeout(onComplete, 600);
+      }
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [onComplete]);
 
   return (
-    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 380, padding: '20px 0' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '28px' }} className="hidden md:flex">
-        {[prev, current, next].map((idx, i) => (
-          <motion.div
-            key={idx + '-' + i}
-            style={{
-              background: '#fff',
-              padding: i === 1 ? '14px 14px 36px' : '10px 10px 28px',
-              boxShadow: i === 1 ? '0 20px 60px rgba(26,39,68,0.18)' : '0 8px 24px rgba(26,39,68,0.1)',
-              rotate: PHOTOS[idx].rotate,
-              scale: i === 1 ? 1.1 : 0.88,
-              zIndex: i === 1 ? 10 : 5,
-            }}
-            animate={{ rotate: PHOTOS[idx].rotate }}
-            transition={{ duration: 0.6 }}
-          >
-            <img
-              src={PHOTOS[idx].url}
-              alt="Wedding photo"
-              style={{ display: 'block', width: i === 1 ? 200 : 155, height: i === 1 ? 260 : 200, objectFit: 'cover' }}
-            />
-          </motion.div>
-        ))}
-      </div>
-      <div className="md:hidden">
+    <motion.div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        background: NAVY,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '32px',
+      }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8, ease: EASE }}
+    >
+      <motion.p
+        style={{
+          fontFamily: FONT_SANS,
+          fontSize: '11px',
+          letterSpacing: '0.4em',
+          textTransform: 'uppercase',
+          color: SALMON,
+        }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.1 }}
+      >
+        June 18, 2027
+      </motion.p>
+
+      <motion.h1
+        style={{
+          fontFamily: FONT_SCRIPT,
+          fontSize: 'clamp(48px, 8vw, 96px)',
+          color: CREAM,
+          lineHeight: 1,
+          textAlign: 'center',
+        }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.2, ease: EASE }}
+      >
+        H &amp; G
+      </motion.h1>
+
+      <motion.div
+        style={{
+          width: '120px',
+          height: '1px',
+          background: CREAM + '30',
+          position: 'relative',
+          overflow: 'hidden',
+          marginTop: '8px',
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+      >
         <motion.div
-          key={current}
-          style={{ background: '#fff', padding: '14px 14px 40px', boxShadow: '0 20px 60px rgba(26,39,68,0.18)', rotate: PHOTOS[current].rotate }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <img src={PHOTOS[current].url} alt="Wedding photo" style={{ width: 240, height: 300, objectFit: 'cover', display: 'block' }} />
-        </motion.div>
-      </div>
-    </div>
+          style={{
+            height: '100%',
+            background: SALMON,
+            transformOrigin: 'left',
+          }}
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: count / 100 }}
+          transition={{ duration: 0.1 }}
+        />
+      </motion.div>
+
+      <motion.span
+        style={{
+          fontFamily: FONT_SANS,
+          fontSize: '13px',
+          letterSpacing: '0.15em',
+          color: CREAM + '60',
+          fontVariantNumeric: 'tabular-nums',
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
+        {count}
+      </motion.span>
+    </motion.div>
   );
 }
+
+/* ═══════════════════════════════════════════════════
+   REVEAL WRAPPERS
+   ═══════════════════════════════════════════════════ */
+
+function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
+  return (
+    <motion.div
+      variants={{
+        hidden: { opacity: 0, y: 60 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.9, ease: EASE, delay },
+        },
+      }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-80px' }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function RevealImage({ src, alt, style, delay = 0 }: { src: string; alt: string; style?: React.CSSProperties; delay?: number }) {
+  return (
+    <motion.div
+      style={{ overflow: 'hidden', ...style }}
+      variants={{
+        hidden: { clipPath: 'inset(100% 0 0 0)' },
+        visible: {
+          clipPath: 'inset(0% 0 0 0)',
+          transition: { duration: 1.2, ease: EASE, delay },
+        },
+      }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
+    >
+      <motion.img
+        src={src}
+        alt={alt}
+        style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
+        variants={{
+          hidden: { scale: 1.15 },
+          visible: {
+            scale: 1,
+            transition: { duration: 1.6, ease: EASE, delay },
+          },
+        }}
+      />
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════
+   SECTION HEADER COMPONENT
+   ═══════════════════════════════════════════════════ */
+
+function SectionHeader({
+  subline,
+  headline,
+  description,
+  dark = false,
+}: {
+  subline: string;
+  headline: string;
+  description?: string;
+  dark?: boolean;
+}) {
+  const textColor = dark ? CREAM : NAVY;
+  const subColor = dark ? SALMON : ROSE;
+  const descColor = dark ? CREAM + '99' : NAVY + '88';
+
+  return (
+    <motion.div
+      style={{ textAlign: 'center', marginBottom: '80px' }}
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
+    >
+      <motion.p
+        variants={fadeUp}
+        style={{
+          fontFamily: FONT_SANS,
+          fontSize: '11px',
+          letterSpacing: '0.4em',
+          textTransform: 'uppercase',
+          color: subColor,
+          marginBottom: '24px',
+        }}
+      >
+        {subline}
+      </motion.p>
+      <motion.h2
+        variants={fadeUpSlow}
+        style={{
+          fontFamily: FONT_SCRIPT,
+          fontSize: 'clamp(48px, 7vw, 88px)',
+          color: textColor,
+          lineHeight: 1,
+          marginBottom: description ? '32px' : '0',
+        }}
+      >
+        {headline}
+      </motion.h2>
+      {description && (
+        <motion.p
+          variants={fadeUp}
+          style={{
+            fontFamily: FONT_SANS,
+            fontSize: '16px',
+            color: descColor,
+            letterSpacing: '0.03em',
+            lineHeight: 1.8,
+            maxWidth: '520px',
+            margin: '0 auto',
+          }}
+        >
+          {description}
+        </motion.p>
+      )}
+      <motion.div
+        variants={lineGrow}
+        style={{
+          width: '60px',
+          height: '1px',
+          background: subColor,
+          margin: '40px auto 0',
+          opacity: 0.5,
+          transformOrigin: 'center',
+        }}
+      />
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════
+   FAQ ITEM
+   ═══════════════════════════════════════════════════ */
 
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ borderBottom: '1px solid rgba(26,39,68,0.12)' }}>
+    <div style={{ borderBottom: '1px solid ' + NAVY + '15' }}>
       <button
         onClick={() => setOpen(!open)}
-        style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 0', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}
+        style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '28px 0',
+          textAlign: 'left',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          transition: 'opacity 0.3s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.opacity = '0.7'; }}
+        onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
       >
-        <span style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY, fontSize: '18px', letterSpacing: '0.03em', fontWeight: 500 }}>
+        <span style={{
+          fontFamily: FONT_SANS,
+          color: NAVY,
+          fontSize: '20px',
+          letterSpacing: '0.02em',
+          fontWeight: 400,
+          lineHeight: 1.4,
+        }}>
           {q}
         </span>
-        <motion.span animate={{ rotate: open ? 45 : 0 }} style={{ color: ROSE, fontSize: '24px', lineHeight: 1, marginLeft: '16px', flexShrink: 0 }}>
+        <motion.span
+          animate={{ rotate: open ? 45 : 0 }}
+          transition={{ duration: 0.3, ease: EASE }}
+          style={{
+            color: ROSE,
+            fontSize: '28px',
+            lineHeight: 1,
+            marginLeft: '24px',
+            flexShrink: 0,
+          }}
+        >
           +
         </motion.span>
       </button>
@@ -242,10 +534,17 @@ function FAQItem({ q, a }: { q: string; a: string }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4, ease: EASE }}
             style={{ overflow: 'hidden' }}
           >
-            <p style={{ paddingBottom: '20px', fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + 'bb', fontSize: '16px', lineHeight: 1.6, letterSpacing: '0.02em' }}>
+            <p style={{
+              paddingBottom: '28px',
+              fontFamily: FONT_SANS,
+              color: NAVY + 'aa',
+              fontSize: '16px',
+              lineHeight: 1.8,
+              letterSpacing: '0.015em',
+            }}>
               {a}
             </p>
           </motion.div>
@@ -255,421 +554,726 @@ function FAQItem({ q, a }: { q: string; a: string }) {
   );
 }
 
-function Divider({ color = ROSE, width = 60 }: { color?: string; width?: number }) {
-  return <div style={{ width, height: 1, background: color, margin: '0 auto 40px', opacity: 0.5 }} />;
-}
+/* ═══════════════════════════════════════════════════
+   PERSON CARD (Wedding Party)
+   ═══════════════════════════════════════════════════ */
 
-function PersonCard({ name, role }: { name: string; role: string }) {
+function PersonCard({ name, role, index }: { name: string; role: string; index: number }) {
   return (
     <motion.div
       style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '8px',
+        gap: '12px',
+        padding: '20px',
       }}
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={{
+        hidden: { opacity: 0, y: 40 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.7, ease: EASE, delay: index * 0.06 },
+        },
+      }}
+      initial="hidden"
+      whileInView="visible"
       viewport={{ once: true }}
-      transition={{ duration: 0.4 }}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.3 }}
     >
       <div style={{
-        width: 80,
-        height: 80,
+        width: 88,
+        height: 88,
         borderRadius: '50%',
-        background: 'rgba(26,39,68,0.06)',
+        background: NAVY + '06',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         fontSize: '28px',
-        border: '1.5px solid rgba(26,39,68,0.1)',
+        border: '1px solid ' + NAVY + '10',
+        transition: 'border-color 0.3s',
       }}>
         {role.includes('Maid') || role.includes('Bridesmaid') || role.includes('Flower') ? '\u2727' : '\u2726'}
       </div>
       <h4 style={{
-        fontFamily: 'Black Editorial Script, cursive',
+        fontFamily: FONT_SCRIPT,
         color: NAVY,
-        fontSize: '20px',
+        fontSize: '24px',
         lineHeight: 1.2,
         textAlign: 'center',
       }}>{name}</h4>
       <p style={{
-        fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
+        fontFamily: FONT_SANS,
         color: ROSE,
-        fontSize: '11px',
-        letterSpacing: '0.25em',
+        fontSize: '10px',
+        letterSpacing: '0.3em',
         textTransform: 'uppercase',
       }}>{role}</p>
     </motion.div>
   );
 }
 
+/* ═══════════════════════════════════════════════════
+   MAIN COMPONENT
+   ═══════════════════════════════════════════════════ */
+
 export default function WeddingSite() {
+  const [loaded, setLoaded] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
   return (
-    <div style={{ background: CREAM }}>
-      <Navbar />
+    <>
+      {/* Preloader */}
+      <AnimatePresence mode="wait">
+        {!loaded && <Preloader onComplete={() => setLoaded(true)} />}
+      </AnimatePresence>
 
-      {/* âââ HERO âââ */}
-      <section id="hero" style={{ minHeight: '100vh', background: CREAM, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '100px 24px 60px', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: 80, left: '50%', transform: 'translateX(-50%)', width: 1, height: 40, background: NAVY + '30' }} />
+      <div style={{ background: CREAM, overflowX: 'hidden' }}>
+        <Navbar />
 
-        <motion.p
-          style={{ ...sectionSubline, marginBottom: '24px' }}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
+        {/* ─── HERO ─── */}
+        <section
+          ref={heroRef}
+          id="hero"
+          style={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '120px 24px 80px',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
         >
-          June 18, 2027 &middot; Cape May, NJ
-        </motion.p>
+          <motion.div style={{ y: heroY, opacity: heroOpacity, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {/* Date */}
+            <motion.p
+              style={{
+                fontFamily: FONT_SANS,
+                fontSize: '11px',
+                letterSpacing: '0.45em',
+                textTransform: 'uppercase',
+                color: ROSE,
+                marginBottom: '32px',
+              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={loaded ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 1, delay: 0.2, ease: EASE }}
+            >
+              June 18, 2027 &middot; Cape May, NJ
+            </motion.p>
 
-        <motion.h1
-          style={{ fontFamily: 'Black Editorial Script, cursive', fontSize: 'clamp(64px, 10vw, 120px)', color: NAVY, lineHeight: 1, textAlign: 'center', marginBottom: '48px' }}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-        >
-          Haley &amp; George
-        </motion.h1>
+            {/* Names */}
+            <motion.h1
+              style={{
+                fontFamily: FONT_SCRIPT,
+                fontSize: 'clamp(72px, 12vw, 160px)',
+                color: NAVY,
+                lineHeight: 0.9,
+                textAlign: 'center',
+                marginBottom: '64px',
+                letterSpacing: '-0.02em',
+              }}
+              initial={{ opacity: 0, y: 50 }}
+              animate={loaded ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 1.2, delay: 0.4, ease: EASE }}
+            >
+              Haley &amp; George
+            </motion.h1>
 
-        <PhotoCarousel />
+            {/* Editorial Photo Grid */}
+            <motion.div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '16px',
+                maxWidth: '820px',
+                width: '100%',
+                padding: '0 24px',
+              }}
+              className="hero-photos"
+              initial={{ opacity: 0 }}
+              animate={loaded ? { opacity: 1 } : {}}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              <RevealImage
+                src={PHOTOS[0].url}
+                alt="Wedding photo"
+                style={{ aspectRatio: '3/4', marginTop: '40px' }}
+                delay={0.7}
+              />
+              <RevealImage
+                src={PHOTOS[1].url}
+                alt="Wedding photo"
+                style={{ aspectRatio: '4/5' }}
+                delay={0.9}
+              />
+              <RevealImage
+                src={PHOTOS[2].url}
+                alt="Wedding photo"
+                style={{ aspectRatio: '3/4', marginTop: '60px' }}
+                delay={1.1}
+              />
+            </motion.div>
 
-        <motion.div
-          style={{ marginTop: '40px', display: 'flex', alignItems: 'center', gap: '16px' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          <div style={{ width: 40, height: 1, background: ROSE, opacity: 0.6 }} />
-          <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: ROSE, fontSize: '13px', letterSpacing: '0.35em', textTransform: 'uppercase' }}>
-            Cape May, New Jersey
-          </p>
-          <div style={{ width: 40, height: 1, background: ROSE, opacity: 0.6 }} />
-        </motion.div>
+            {/* Location line */}
+            <motion.div
+              style={{ marginTop: '64px', display: 'flex', alignItems: 'center', gap: '20px' }}
+              initial={{ opacity: 0 }}
+              animate={loaded ? { opacity: 1 } : {}}
+              transition={{ duration: 1, delay: 1.2 }}
+            >
+              <div style={{ width: 48, height: '1px', background: ROSE + '60' }} />
+              <p style={{
+                fontFamily: FONT_SANS,
+                color: ROSE,
+                fontSize: '11px',
+                letterSpacing: '0.4em',
+                textTransform: 'uppercase',
+              }}>
+                Cape May, New Jersey
+              </p>
+              <div style={{ width: 48, height: '1px', background: ROSE + '60' }} />
+            </motion.div>
+          </motion.div>
 
-        <motion.div
-          style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)' }}
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-        >
-          <div style={{ width: 1, height: 40, background: NAVY + '40', margin: '0 auto' }} />
-        </motion.div>
-      </section>
+          {/* Scroll indicator */}
+          <motion.div
+            style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)' }}
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
+          >
+            <div style={{ width: '1px', height: '48px', background: NAVY + '25' }} />
+          </motion.div>
+        </section>
 
-      {/* âââ SCHEDULE âââ */}
-      <section id="schedule" style={{ padding: '100px 24px', background: NAVY }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
-          <p style={{ ...sectionSubline, color: SALMON }}>The Weekend</p>
-          <h2 style={{ ...sectionHeader, color: '#F5F0E8', marginBottom: '8px' }}>Schedule</h2>
-          <p style={{
-            fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
-            color: 'rgba(245,240,232,0.6)',
-            fontSize: '15px',
-            letterSpacing: '0.03em',
-            lineHeight: 1.6,
-            marginBottom: '16px',
-            maxWidth: 560,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}>
-            We can&apos;t wait to celebrate with you! Here&apos;s what the weekend looks like.
-          </p>
-          <Divider color={SALMON} />
+        {/* ─── SCHEDULE ─── */}
+        <section id="schedule" style={{ padding: 'clamp(80px, 12vw, 160px) 24px', background: NAVY }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+            <SectionHeader
+              subline="The Weekend"
+              headline="Schedule"
+              description="We can't wait to celebrate with you! Here's what the weekend looks like."
+              dark
+            />
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '60px', marginTop: '40px', textAlign: 'left' }}>
-            {schedule.map((block, bi) => (
-              <motion.div
-                key={bi}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: bi * 0.1 }}
-              >
-                <h3 style={{
-                  fontFamily: 'Black Editorial Script, cursive',
-                  color: '#F5F0E8',
-                  fontSize: 'clamp(24px, 4vw, 32px)',
-                  marginBottom: '24px',
-                  textAlign: 'center',
-                }}>{block.day}</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '80px' }}>
+              {schedule.map((block, bi) => (
+                <Reveal key={bi} delay={bi * 0.1}>
+                  <h3 style={{
+                    fontFamily: FONT_SCRIPT,
+                    color: CREAM,
+                    fontSize: 'clamp(28px, 4vw, 38px)',
+                    marginBottom: '32px',
+                    textAlign: 'center',
+                  }}>{block.day}</h3>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                  {block.events.map((ev, ei) => (
-                    <div key={ei} style={{
-                      background: 'rgba(245,240,232,0.05)',
-                      border: '1px solid rgba(245,240,232,0.1)',
-                      padding: '28px 32px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '8px',
-                    }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '8px' }}>
-                        <h4 style={{
-                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
-                          color: '#F5F0E8',
-                          fontSize: '18px',
-                          fontWeight: 600,
-                          letterSpacing: '0.08em',
-                          textTransform: 'uppercase',
-                        }}>{ev.name}</h4>
-                        <span style={{
-                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
-                          color: SALMON,
-                          fontSize: '13px',
-                          letterSpacing: '0.15em',
-                        }}>{ev.time}</span>
-                      </div>
-                      {'location' in ev && ev.location && (
-                        <p style={{
-                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
-                          color: 'rgba(245,240,232,0.7)',
-                          fontSize: '14px',
-                          letterSpacing: '0.03em',
-                          lineHeight: 1.5,
-                        }}>{ev.location}</p>
-                      )}
-                      {'address' in ev && ev.address && (
-                        <p style={{
-                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
-                          color: 'rgba(245,240,232,0.45)',
-                          fontSize: '13px',
-                          letterSpacing: '0.03em',
-                        }}>{ev.address}</p>
-                      )}
-                      {'attire' in ev && ev.attire && (
-                        <p style={{
-                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
-                          color: SALMON,
-                          fontSize: '12px',
-                          letterSpacing: '0.2em',
-                          textTransform: 'uppercase',
-                          marginTop: '4px',
-                        }}>Attire: {ev.attire}</p>
-                      )}
-                      {ev.note && (
-                        <p style={{
-                          fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
-                          color: 'rgba(245,240,232,0.55)',
-                          fontSize: '14px',
-                          fontStyle: 'italic',
-                          lineHeight: 1.5,
-                          marginTop: '4px',
-                        }}>{ev.note}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* âââ TRAVEL / ACCOMMODATIONS âââ */}
-      <section id="travel" style={{ padding: '100px 24px', background: CREAM }}>
-        <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
-          <p style={sectionSubline}>Where to Stay</p>
-          <h2 style={sectionHeader}>Travel</h2>
-          <Divider />
-
-          {/* Hotels */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px', marginTop: '20px' }}>
-            {hotels.map((hotel, i) => (
-              <motion.div
-                key={i}
-                style={{ background: '#fff', padding: '40px 32px', border: '1px solid rgba(26,39,68,0.08)', display: 'flex', flexDirection: 'column', gap: '12px', textAlign: 'left' }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-              >
-                <div style={{ width: 32, height: 1, background: ROSE, opacity: 0.5 }} />
-                <h3 style={{ fontFamily: 'Black Editorial Script, cursive', color: NAVY, fontSize: '28px', lineHeight: 1.2 }}>{hotel.name}</h3>
-                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '80', fontSize: '14px', letterSpacing: '0.02em', lineHeight: 1.5 }}>
-                  {hotel.address}
-                </p>
-                {hotel.note && (
-                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: SALMON, fontSize: '13px', letterSpacing: '0.03em', fontStyle: 'italic', lineHeight: 1.5 }}>
-                    {hotel.note}
-                  </p>
-                )}
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Getting Here */}
-          <div style={{ marginTop: '80px' }}>
-            <p style={{ ...sectionSubline, marginBottom: '16px' }}>Getting Here</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '48px', marginTop: '20px', textAlign: 'left' }}>
-              {[
-                { icon: '\u2708\uFE0F', title: 'Flying', content: 'Philadelphia (PHL, ~90 min), Atlantic City (ACY, ~45 min), Newark (EWR, ~2.5 hrs).' },
-                { icon: '\uD83D\uDE97', title: 'Driving', content: 'Take the NJ Parkway to Exit 0. Cape May is at the very southern tip. Parking is available near the venue.' },
-                { icon: '\uD83D\uDEB2', title: 'Getting Around', content: 'Cape May is a walkable, bikeable town. Many guests rent bikes \u2014 highly recommended.' },
-              ].map((item, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}>
-                  <div style={{ fontSize: '28px', marginBottom: '16px' }}>{item.icon}</div>
-                  <div style={{ width: 32, height: 1, background: ROSE, opacity: 0.5, marginBottom: '16px' }} />
-                  <h3 style={{ fontFamily: 'Black Editorial Script, cursive', color: NAVY, fontSize: '26px', marginBottom: '12px' }}>{item.title}</h3>
-                  <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '80', fontSize: '15px', lineHeight: 1.7, letterSpacing: '0.02em' }}>{item.content}</p>
-                </motion.div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    {block.events.map((ev, ei) => (
+                      <motion.div
+                        key={ei}
+                        style={{
+                          background: CREAM + '06',
+                          border: '1px solid ' + CREAM + '10',
+                          padding: 'clamp(24px, 4vw, 36px) clamp(24px, 4vw, 40px)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '10px',
+                          transition: 'background 0.4s, border-color 0.4s',
+                        }}
+                        whileHover={{
+                          backgroundColor: CREAM + '0d',
+                          borderColor: CREAM + '20',
+                        }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '12px' }}>
+                          <h4 style={{
+                            fontFamily: FONT_SANS,
+                            color: CREAM,
+                            fontSize: '20px',
+                            fontWeight: 500,
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
+                          }}>{ev.name}</h4>
+                          <span style={{
+                            fontFamily: FONT_SANS,
+                            color: SALMON,
+                            fontSize: '13px',
+                            letterSpacing: '0.15em',
+                          }}>{ev.time}</span>
+                        </div>
+                        {ev.location && (
+                          <p style={{
+                            fontFamily: FONT_SANS,
+                            color: CREAM + 'b3',
+                            fontSize: '15px',
+                            letterSpacing: '0.02em',
+                            lineHeight: 1.6,
+                          }}>{ev.location}</p>
+                        )}
+                        {ev.address && (
+                          <p style={{
+                            fontFamily: FONT_SANS,
+                            color: CREAM + '66',
+                            fontSize: '13px',
+                            letterSpacing: '0.02em',
+                          }}>{ev.address}</p>
+                        )}
+                        {ev.attire && (
+                          <p style={{
+                            fontFamily: FONT_SANS,
+                            color: SALMON,
+                            fontSize: '11px',
+                            letterSpacing: '0.25em',
+                            textTransform: 'uppercase',
+                            marginTop: '4px',
+                          }}>Attire: {ev.attire}</p>
+                        )}
+                        {ev.note && (
+                          <p style={{
+                            fontFamily: FONT_SANS,
+                            color: CREAM + '80',
+                            fontSize: '15px',
+                            fontStyle: 'italic',
+                            lineHeight: 1.7,
+                            marginTop: '4px',
+                          }}>{ev.note}</p>
+                        )}
+                      </motion.div>
+                    ))}
+                  </div>
+                </Reveal>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* âââ WEDDING PARTY âââ */}
-      <section id="wedding-party" style={{ padding: '100px 24px', background: '#fff' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
-          <p style={sectionSubline}>Our People</p>
-          <h2 style={sectionHeader}>Wedding Party</h2>
-          <Divider />
+        {/* ─── TRAVEL / ACCOMMODATIONS ─── */}
+        <section id="travel" style={{ padding: 'clamp(80px, 12vw, 160px) 24px', background: CREAM }}>
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <SectionHeader subline="Where to Stay" headline="Travel" />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '60px', marginTop: '20px' }}>
-            {/* Bride's Side */}
-            <div>
-              <p style={{
-                fontFamily: 'Black Editorial Script, cursive',
-                color: ROSE,
-                fontSize: '24px',
-                marginBottom: '32px',
-              }}>The Bride&apos;s Side</p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '32px' }}>
-                {bridesParty.map((person) => (
-                  <PersonCard key={person.name} name={person.name} role={person.role} />
+            {/* Hotels */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '32px',
+            }}>
+              {hotels.map((hotel, i) => (
+                <Reveal key={i} delay={i * 0.12}>
+                  <motion.div
+                    style={{
+                      background: '#fff',
+                      padding: '48px 36px',
+                      border: '1px solid ' + NAVY + '08',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '16px',
+                      height: '100%',
+                      transition: 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+                    }}
+                    whileHover={{
+                      y: -6,
+                      boxShadow: '0 24px 64px rgba(26,39,68,0.08)',
+                    }}
+                    transition={{ duration: 0.5, ease: EASE }}
+                  >
+                    <div style={{ width: 40, height: '1px', background: ROSE + '80' }} />
+                    <h3 style={{
+                      fontFamily: FONT_SCRIPT,
+                      color: NAVY,
+                      fontSize: '32px',
+                      lineHeight: 1.2,
+                    }}>{hotel.name}</h3>
+                    <p style={{
+                      fontFamily: FONT_SANS,
+                      color: NAVY + '70',
+                      fontSize: '14px',
+                      letterSpacing: '0.02em',
+                      lineHeight: 1.6,
+                    }}>{hotel.address}</p>
+                    {hotel.note && (
+                      <p style={{
+                        fontFamily: FONT_SANS,
+                        color: SALMON,
+                        fontSize: '14px',
+                        letterSpacing: '0.02em',
+                        fontStyle: 'italic',
+                        lineHeight: 1.6,
+                      }}>{hotel.note}</p>
+                    )}
+                  </motion.div>
+                </Reveal>
+              ))}
+            </div>
+
+            {/* Getting Here */}
+            <div style={{ marginTop: 'clamp(80px, 10vw, 140px)' }}>
+              <Reveal>
+                <p style={{
+                  fontFamily: FONT_SANS,
+                  fontSize: '11px',
+                  letterSpacing: '0.4em',
+                  textTransform: 'uppercase',
+                  color: ROSE,
+                  marginBottom: '24px',
+                  textAlign: 'center',
+                }}>Getting Here</p>
+              </Reveal>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                gap: '64px',
+                marginTop: '40px',
+              }}>
+                {[
+                  { icon: '\u2708\uFE0F', title: 'Flying', content: 'Philadelphia (PHL, ~90 min), Atlantic City (ACY, ~45 min), Newark (EWR, ~2.5 hrs).' },
+                  { icon: '\uD83D\uDE97', title: 'Driving', content: 'Take the NJ Parkway to Exit 0. Cape May is at the very southern tip. Parking is available near the venue.' },
+                  { icon: '\uD83D\uDEB2', title: 'Getting Around', content: 'Cape May is a walkable, bikeable town. Many guests rent bikes \u2014 highly recommended.' },
+                ].map((item, i) => (
+                  <Reveal key={i} delay={i * 0.15}>
+                    <div style={{ fontSize: '32px', marginBottom: '20px' }}>{item.icon}</div>
+                    <div style={{ width: 32, height: '1px', background: ROSE + '60', marginBottom: '20px' }} />
+                    <h3 style={{
+                      fontFamily: FONT_SCRIPT,
+                      color: NAVY,
+                      fontSize: '30px',
+                      marginBottom: '16px',
+                    }}>{item.title}</h3>
+                    <p style={{
+                      fontFamily: FONT_SANS,
+                      color: NAVY + '77',
+                      fontSize: '16px',
+                      lineHeight: 1.8,
+                      letterSpacing: '0.015em',
+                    }}>{item.content}</p>
+                  </Reveal>
                 ))}
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Groom's Side */}
-            <div>
-              <p style={{
-                fontFamily: 'Black Editorial Script, cursive',
-                color: ROSE,
-                fontSize: '24px',
-                marginBottom: '32px',
-              }}>The Groom&apos;s Side</p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '32px' }}>
-                {groomsParty.map((person) => (
-                  <PersonCard key={person.name} name={person.name} role={person.role} />
-                ))}
+        {/* ─── EDITORIAL PHOTO BREAK ─── */}
+        <section style={{ padding: '0 24px', background: CREAM }}>
+          <div style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '16px',
+            minHeight: '50vh',
+          }} className="photo-break">
+            <RevealImage
+              src={PHOTOS[3].url}
+              alt="Wedding moment"
+              style={{ aspectRatio: '4/5' }}
+              delay={0}
+            />
+            <RevealImage
+              src={PHOTOS[4].url}
+              alt="Wedding moment"
+              style={{ aspectRatio: '4/5', marginTop: '80px' }}
+              delay={0.2}
+            />
+          </div>
+        </section>
+
+        {/* ─── WEDDING PARTY ─── */}
+        <section id="wedding-party" style={{ padding: 'clamp(80px, 12vw, 160px) 24px', background: '#fff' }}>
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <SectionHeader subline="Our People" headline="Wedding Party" />
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '80px',
+            }}>
+              {/* Bride's Side */}
+              <div>
+                <Reveal>
+                  <p style={{
+                    fontFamily: FONT_SCRIPT,
+                    color: ROSE,
+                    fontSize: '28px',
+                    marginBottom: '48px',
+                    textAlign: 'center',
+                  }}>The Bride&apos;s Side</p>
+                </Reveal>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                  gap: '36px',
+                }}>
+                  {bridesParty.map((person, i) => (
+                    <PersonCard key={person.name} name={person.name} role={person.role} index={i} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Groom's Side */}
+              <div>
+                <Reveal>
+                  <p style={{
+                    fontFamily: FONT_SCRIPT,
+                    color: ROSE,
+                    fontSize: '28px',
+                    marginBottom: '48px',
+                    textAlign: 'center',
+                  }}>The Groom&apos;s Side</p>
+                </Reveal>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                  gap: '36px',
+                }}>
+                  {groomsParty.map((person, i) => (
+                    <PersonCard key={person.name} name={person.name} role={person.role} index={i} />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* âââ DRESS CODE âââ */}
-      <section id="dress-code" style={{ padding: '100px 24px', background: CREAM }}>
-        <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
-          <p style={sectionSubline}>What to Wear</p>
-          <h2 style={sectionHeader}>Dress Code</h2>
-          <Divider />
-          <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', fontSize: '22px', color: NAVY, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '48px', fontWeight: 300 }}>Garden Party Formal</p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '48px' }}>
-            {swatches.map((s) => (
-              <div key={s.hex} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: 52, height: 52, borderRadius: '50%', background: s.hex, border: '1px solid rgba(26,39,68,0.1)' }} />
-                <span style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', fontSize: '12px', color: NAVY, letterSpacing: '0.15em', textTransform: 'uppercase' }}>{s.name}</span>
-              </div>
-            ))}
+        {/* ─── DRESS CODE ─── */}
+        <section id="dress-code" style={{ padding: 'clamp(80px, 12vw, 160px) 24px', background: CREAM }}>
+          <div style={{ maxWidth: '640px', margin: '0 auto', textAlign: 'center' }}>
+            <SectionHeader subline="What to Wear" headline="Dress Code" />
+
+            <Reveal>
+              <p style={{
+                fontFamily: FONT_SANS,
+                fontSize: '24px',
+                color: NAVY,
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                marginBottom: '56px',
+                fontWeight: 300,
+              }}>Garden Party Formal</p>
+            </Reveal>
+
+            <motion.div
+              style={{ display: 'flex', justifyContent: 'center', gap: '32px', flexWrap: 'wrap', marginBottom: '56px' }}
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              {swatches.map((s) => (
+                <motion.div
+                  key={s.hex}
+                  variants={fadeUp}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div style={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: '50%',
+                    background: s.hex,
+                    border: '1px solid ' + NAVY + '0d',
+                    transition: 'transform 0.3s',
+                  }} />
+                  <span style={{
+                    fontFamily: FONT_SANS,
+                    fontSize: '10px',
+                    color: NAVY,
+                    letterSpacing: '0.2em',
+                    textTransform: 'uppercase',
+                  }}>{s.name}</span>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <Reveal>
+              <p style={{
+                fontFamily: FONT_SANS,
+                color: NAVY + '88',
+                fontSize: '17px',
+                lineHeight: 2,
+                fontStyle: 'italic',
+                letterSpacing: '0.015em',
+              }}>
+                Think floral prints, linen suits, sundresses. Florals encouraged. Navy, blush, sage, and coral are all very much on theme. Please no white or black tie.
+              </p>
+            </Reveal>
           </div>
-          <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '99', fontSize: '16px', lineHeight: 1.8, fontStyle: 'italic', letterSpacing: '0.02em' }}>
-            Think floral prints, linen suits, sundresses. Florals encouraged. Navy, blush, sage, and coral are all very much on theme. Please no white or black tie.
-          </p>
-        </div>
-      </section>
+        </section>
 
-      {/* âââ THINGS TO DO âââ */}
-      <section id="things-to-do" style={{ padding: '100px 24px', background: NAVY }}>
-        <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
-          <p style={{ ...sectionSubline, color: SALMON }}>Insider Tips</p>
-          <h2 style={{ ...sectionHeader, color: '#F5F0E8' }}>Things To Do</h2>
-          <p style={{
-            fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif',
-            color: 'rgba(245,240,232,0.6)',
-            fontSize: '15px',
-            letterSpacing: '0.03em',
-            lineHeight: 1.6,
-            marginBottom: '16px',
-            maxWidth: 480,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}>
-            Here are some of our favorite spots in Cape May!
-          </p>
-          <Divider color={SALMON} />
-          <div style={{ columns: '1', columnGap: '24px', textAlign: 'left' }} className="sm:columns-2 lg:columns-3">
-            {thingsToDo.map((item, j) => (
-              <motion.div
-                key={item.name}
-                style={{ background: 'rgba(245,240,232,0.06)', border: '1px solid rgba(245,240,232,0.08)', padding: '24px 28px', marginBottom: '24px', breakInside: 'avoid' }}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: j * 0.04 }}
-              >
-                <h4 style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: '#F5F0E8', fontSize: '17px', fontWeight: 700, marginBottom: '6px', letterSpacing: '0.02em' }}>{item.name}</h4>
-                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.45)', fontSize: '12px', letterSpacing: '0.1em', marginBottom: '8px' }}>{item.address}</p>
-                <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.7)', fontSize: '14px', lineHeight: 1.5 }}>{item.desc}</p>
-              </motion.div>
-            ))}
+        {/* ─── THINGS TO DO ─── */}
+        <section id="things-to-do" style={{ padding: 'clamp(80px, 12vw, 160px) 24px', background: NAVY }}>
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <SectionHeader
+              subline="Insider Tips"
+              headline="Things To Do"
+              description="Here are some of our favorite spots in Cape May!"
+              dark
+            />
+
+            <div style={{ columns: '1', columnGap: '24px' }} className="sm:columns-2 lg:columns-3">
+              {thingsToDo.map((item, j) => (
+                <Reveal key={item.name} delay={j * 0.03}>
+                  <motion.div
+                    style={{
+                      background: CREAM + '06',
+                      border: '1px solid ' + CREAM + '0a',
+                      padding: '28px 32px',
+                      marginBottom: '24px',
+                      breakInside: 'avoid',
+                      transition: 'background 0.4s, border-color 0.4s',
+                    }}
+                    whileHover={{
+                      backgroundColor: CREAM + '0f',
+                      borderColor: CREAM + '20',
+                    }}
+                  >
+                    <h4 style={{
+                      fontFamily: FONT_SANS,
+                      color: CREAM,
+                      fontSize: '18px',
+                      fontWeight: 600,
+                      marginBottom: '8px',
+                      letterSpacing: '0.015em',
+                    }}>{item.name}</h4>
+                    <p style={{
+                      fontFamily: FONT_SANS,
+                      color: CREAM + '55',
+                      fontSize: '11px',
+                      letterSpacing: '0.12em',
+                      marginBottom: '10px',
+                      textTransform: 'uppercase',
+                    }}>{item.address}</p>
+                    <p style={{
+                      fontFamily: FONT_SANS,
+                      color: CREAM + 'b3',
+                      fontSize: '15px',
+                      lineHeight: 1.7,
+                    }}>{item.desc}</p>
+                  </motion.div>
+                </Reveal>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* âââ FAQ âââ */}
-      <section id="faq" style={{ padding: '100px 24px', background: '#fff' }}>
-        <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
-          <p style={sectionSubline}>Good Questions</p>
-          <h2 style={sectionHeader}>FAQ</h2>
-          <Divider />
-          <div style={{ textAlign: 'left' }}>
-            {faqs.map((item, i) => <FAQItem key={i} q={item.q} a={item.a} />)}
+        {/* ─── FAQ ─── */}
+        <section id="faq" style={{ padding: 'clamp(80px, 12vw, 160px) 24px', background: '#fff' }}>
+          <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+            <SectionHeader subline="Good Questions" headline="FAQ" />
+            <div>
+              {faqs.map((item, i) => (
+                <Reveal key={i} delay={i * 0.05}>
+                  <FAQItem q={item.q} a={item.a} />
+                </Reveal>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* âââ REGISTRY âââ */}
-      <section id="registry" style={{ padding: '100px 24px', background: CREAM }}>
-        <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
-          <p style={sectionSubline}>Gifts</p>
-          <h2 style={sectionHeader}>Registry</h2>
-          <Divider />
-          <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: NAVY + '99', fontSize: '16px', lineHeight: 1.8, marginBottom: '48px', letterSpacing: '0.02em' }}>
-            Your presence is truly the greatest gift. For those who have asked, we&apos;ve registered at the following:
-          </p>
-          <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {['Crate & Barrel', 'Zola'].map((reg) => (
-              <a
-                key={reg}
-                href="#"
-                style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', letterSpacing: '0.2em', padding: '16px 40px', border: '1px solid ' + NAVY, color: NAVY, fontSize: '13px', textTransform: 'uppercase', textDecoration: 'none', display: 'inline-block', transition: 'all 0.25s' }}
-                onMouseEnter={e => { e.currentTarget.style.background = NAVY; e.currentTarget.style.color = '#F5F0E8'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = NAVY; }}
-              >
-                {reg} &rarr;
-              </a>
-            ))}
+        {/* ─── REGISTRY ─── */}
+        <section id="registry" style={{ padding: 'clamp(80px, 12vw, 160px) 24px', background: CREAM }}>
+          <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+            <SectionHeader subline="Gifts" headline="Registry" />
+            <Reveal>
+              <p style={{
+                fontFamily: FONT_SANS,
+                color: NAVY + '88',
+                fontSize: '17px',
+                lineHeight: 2,
+                marginBottom: '56px',
+                letterSpacing: '0.015em',
+              }}>
+                Your presence is truly the greatest gift. For those who have asked, we&apos;ve registered at the following:
+              </p>
+            </Reveal>
+            <motion.div
+              style={{ display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap' }}
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              {['Crate & Barrel', 'Zola'].map((reg) => (
+                <motion.a
+                  key={reg}
+                  href="#"
+                  variants={fadeUp}
+                  style={{
+                    fontFamily: FONT_SANS,
+                    letterSpacing: '0.2em',
+                    padding: '18px 48px',
+                    border: '1px solid ' + NAVY,
+                    color: NAVY,
+                    fontSize: '12px',
+                    textTransform: 'uppercase',
+                    textDecoration: 'none',
+                    display: 'inline-block',
+                    transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                  }}
+                  whileHover={{
+                    backgroundColor: NAVY,
+                    color: CREAM,
+                  }}
+                >
+                  {reg} &rarr;
+                </motion.a>
+              ))}
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* âââ FOOTER âââ */}
-      <footer style={{ padding: '60px 24px', background: NAVY, textAlign: 'center' }}>
-        <svg width="60" height="30" viewBox="0 0 160 80" style={{ marginBottom: '20px' }}>
-          <ellipse cx="80" cy="40" rx="76" ry="36" stroke="#E8DFC8" strokeWidth="1.5" fill="none" />
-          <text x="80" y="30" textAnchor="middle" fill="#E8DFC8" fontSize="12" fontFamily="Black Editorial Script, cursive">The</text>
-          <text x="80" y="54" textAnchor="middle" fill="#E8DFC8" fontSize="26" fontFamily="Black Editorial Script, cursive" fontWeight="700">Garcias</text>
-        </svg>
-        <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.5)', fontSize: '12px', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '8px' }}>
-          The Garcias &middot; June 18, 2027 &middot; Cape May, NJ
-        </p>
-        <p style={{ fontFamily: 'Helvetica Now Display, Arial Narrow, Helvetica Neue, sans-serif', color: 'rgba(245,240,232,0.3)', fontSize: '11px', letterSpacing: '0.15em' }}>
-          Made with love &hearts;
-        </p>
-      </footer>
+        {/* ─── FOOTER ─── */}
+        <footer style={{
+          padding: '80px 24px',
+          background: NAVY,
+          textAlign: 'center',
+        }}>
+          <Reveal>
+            <svg width="60" height="30" viewBox="0 0 160 80" style={{ marginBottom: '24px' }}>
+              <ellipse cx="80" cy="40" rx="76" ry="36" stroke={CREAM + '40'} strokeWidth="1.5" fill="none" />
+              <text x="80" y="30" textAnchor="middle" fill={CREAM + '80'} fontSize="12" fontFamily={FONT_SCRIPT}>The</text>
+              <text x="80" y="54" textAnchor="middle" fill={CREAM + '80'} fontSize="26" fontFamily={FONT_SCRIPT} fontWeight="700">Garcias</text>
+            </svg>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p style={{
+              fontFamily: FONT_SANS,
+              color: CREAM + '50',
+              fontSize: '11px',
+              letterSpacing: '0.35em',
+              textTransform: 'uppercase',
+              marginBottom: '12px',
+            }}>
+              The Garcias &middot; June 18, 2027 &middot; Cape May, NJ
+            </p>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p style={{
+              fontFamily: FONT_SANS,
+              color: CREAM + '30',
+              fontSize: '11px',
+              letterSpacing: '0.15em',
+            }}>
+              Made with love &hearts;
+            </p>
+          </Reveal>
+        </footer>
 
-      <MusicPlayer />
-    </div>
+        <MusicPlayer />
+      </div>
+    </>
   );
 }
