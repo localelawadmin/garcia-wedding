@@ -38,17 +38,19 @@ const SectionShell: React.FC<{
         minHeight: '100vh',
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
-        padding: '120px 24px 80px',
+        padding: '110px 24px 70px',
         background: bg, color: fg,
         display: 'flex', flexDirection: 'column',
+        justifyContent: 'center',
         position: 'relative',
       }}
     >
       <div style={{ maxWidth: maxW, margin: '0 auto', width: '100%' }}>{children}</div>
       {foot && (
         <div style={{
+          position: 'absolute', bottom: 28, left: 0, right: 0, textAlign: 'center',
           fontSize: 9, letterSpacing: '0.4em', textTransform: 'uppercase',
-          opacity: .45, alignSelf: 'center', marginTop: 'auto', paddingTop: 32,
+          opacity: .45,
         }}>{foot}</div>
       )}
     </section>
@@ -57,14 +59,14 @@ const SectionShell: React.FC<{
 
 const Eyebrow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div style={{
-    fontSize: 9, letterSpacing: '0.42em', textTransform: 'uppercase',
+    fontSize: 10, letterSpacing: '0.42em', textTransform: 'uppercase',
     opacity: .55, marginBottom: 14, fontWeight: 400,
   }}>{children}</div>
 );
 
 const NumEyebrow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="heading" style={{
-    fontSize: 14, letterSpacing: '0.02em', opacity: .65, marginBottom: 8, fontWeight: 400,
+    fontSize: 16, letterSpacing: '0.02em', opacity: .65, marginBottom: 10, fontWeight: 400,
   }}>{children}</div>
 );
 
@@ -80,12 +82,11 @@ const Title: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 
 const Lede: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <p style={{
-    fontSize: 15.5, lineHeight: 1.55, maxWidth: 560, opacity: .8,
-    margin: '0 0 28px', fontWeight: 300, letterSpacing: '-0.005em',
+    fontSize: 16, lineHeight: 1.55, maxWidth: 560, opacity: .8,
+    margin: '0 0 28px', fontWeight: 400, letterSpacing: '-0.005em',
   }}>{children}</p>
 );
 
-// Line art icon — auto-tones black on cream, cream on dark
 const Icon: React.FC<{ src: string; size?: number; tone: Tone }> = ({ src, size = 96, tone }) => (
   <img
     src={src}
@@ -105,14 +106,14 @@ const EventSection: React.FC<{
   <SectionShell id={id} tone={tone} foot={foot}>
     <Eyebrow>{eyebrow}</Eyebrow>
     <div style={{
-      display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 60, alignItems: 'center', flex: 1,
+      display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 60, alignItems: 'center',
     }} className="event-grid">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Icon src={iconSrc} size={220} tone={tone} />
       </div>
       <div>
         <h3 className="heading" style={{
-          fontSize: 'clamp(72px, 9vw, 130px)',
+          fontSize: 'clamp(64px, 8vw, 110px)',
           lineHeight: 0.8,
           margin: '0 0 26px',
           letterSpacing: '-0.005em',
@@ -125,7 +126,7 @@ const EventSection: React.FC<{
           {rows.map(([k, v]) => (
             <div key={k} style={{
               display: 'grid', gridTemplateColumns: '110px 1fr', gap: 16,
-              fontSize: 14.5, letterSpacing: '-0.005em', lineHeight: 1.45, fontWeight: 300,
+              fontSize: 15, letterSpacing: '-0.005em', lineHeight: 1.45, fontWeight: 400,
             }}>
               <div style={{
                 textTransform: 'uppercase', opacity: .5, letterSpacing: '0.3em',
@@ -146,9 +147,53 @@ const EventSection: React.FC<{
 const Tile: React.FC<{ heading: string; body: string }> = ({ heading, body }) => (
   <div style={{ padding: 26, border: '1px solid currentColor' }}>
     <h3 className="heading" style={{ fontSize: 22, margin: '0 0 12px', fontWeight: 400 }}>{heading}</h3>
-    <p style={{ fontSize: 14.5, lineHeight: 1.5, opacity: .8, fontWeight: 300, letterSpacing: '-0.005em', margin: 0 }}>{body}</p>
+    <p style={{ fontSize: 15, lineHeight: 1.5, opacity: .8, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{body}</p>
   </div>
 );
+
+const FaqRow: React.FC<{ q: string; a: string }> = ({ q, a }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ borderBottom: '1px solid currentColor' }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        type="button"
+        style={{
+          width: '100%', padding: '20px 0', textAlign: 'left',
+          background: 'transparent', border: 'none', color: 'inherit',
+          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          font: 'inherit',
+        }}
+      >
+        <span style={{ fontSize: 16, letterSpacing: '-0.005em', fontWeight: 400, lineHeight: 1.4, paddingRight: 16 }}>{q}</span>
+        <span style={{
+          width: 22, height: 22, position: 'relative', flexShrink: 0,
+          opacity: .85,
+        }}>
+          <span style={{
+            position: 'absolute', top: '50%', left: 0, right: 0, height: 1,
+            background: 'currentColor', transform: 'translateY(-50%)',
+          }} />
+          <span style={{
+            position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1,
+            background: 'currentColor', transform: `translateX(-50%) ${open ? 'rotate(90deg)' : 'rotate(0deg)'}`,
+            transformOrigin: 'center', transition: 'transform .3s ease, opacity .3s ease',
+            opacity: open ? 0 : 1,
+          }} />
+        </span>
+      </button>
+      <div style={{
+        maxHeight: open ? 200 : 0,
+        overflow: 'hidden',
+        transition: 'max-height .35s ease, opacity .35s ease, padding .35s ease',
+        opacity: open ? 1 : 0,
+        paddingBottom: open ? 20 : 0,
+      }}>
+        <p style={{ fontSize: 15, lineHeight: 1.55, opacity: .8, margin: 0, maxWidth: 580, fontWeight: 400, letterSpacing: '-0.005em' }}>{a}</p>
+      </div>
+    </div>
+  );
+};
 
 export default function WeddingSite() {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -181,25 +226,27 @@ export default function WeddingSite() {
       <Navbar />
       <MusicPlayer />
 
-      {/* Back-to-top */}
+      {/* Back-to-top — sits above the music player on the right */}
       <button
         onClick={scrollTop}
         aria-label="Back to top"
         type="button"
         style={{
-          position: 'fixed', bottom: 22, left: 22,
-          width: 42, height: 42, borderRadius: '50%',
-          background: 'rgba(0,0,0,.55)', color: cream,
-          border: '1px solid rgba(242,239,233,.4)',
+          position: 'fixed', bottom: 78, right: 22,
+          width: 36, height: 36, borderRadius: '50%',
+          background: 'rgba(0,0,0,.5)', color: cream,
+          border: '1px solid rgba(242,239,233,.35)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backdropFilter: 'blur(8px)', cursor: 'pointer', padding: 0,
-          zIndex: 200,
+          backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+          cursor: 'pointer', padding: 0, zIndex: 200,
           opacity: showTop ? 1 : 0,
           pointerEvents: showTop ? 'auto' : 'none',
-          transition: 'opacity .35s ease, background .25s ease, color .25s ease',
+          transition: 'opacity .35s ease, background .25s ease, color .25s ease, transform .25s ease',
         }}
+        onMouseEnter={e => { e.currentTarget.style.background = cream; e.currentTarget.style.color = ink; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,.5)'; e.currentTarget.style.color = cream; }}
       >
-        <svg viewBox="0 0 24 24" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" width={12} height={12} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 19V5M5 12l7-7 7 7" />
         </svg>
       </button>
@@ -218,6 +265,7 @@ export default function WeddingSite() {
           style={{
             position: 'absolute', inset: 0, width: '100%', height: '100%',
             objectFit: 'cover',
+            objectPosition: 'center 25%',
             filter: 'grayscale(1) brightness(.78) contrast(1.08)',
           }}
         />
@@ -249,8 +297,8 @@ export default function WeddingSite() {
           <div style={{
             textAlign: 'right',
             fontFamily: "'Inter Tight', -apple-system, sans-serif",
-            fontSize: 13, letterSpacing: '0.42em', textTransform: 'uppercase',
-            fontWeight: 400, lineHeight: 2.1,
+            fontSize: 13, letterSpacing: '0.18em', textTransform: 'uppercase',
+            fontWeight: 400, lineHeight: 1.5,
           }}>
             <span style={{ display: 'block' }}>Cape May</span>
             <span style={{ display: 'block' }}>June 2027</span>
@@ -263,7 +311,7 @@ export default function WeddingSite() {
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12,
           color: cream,
         }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.42em', textTransform: 'uppercase', opacity: .8, fontWeight: 300 }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.42em', textTransform: 'uppercase', opacity: .8, fontWeight: 400 }}>
             Scroll
           </div>
           <div className="scroll-bob" style={{ width: 1, height: 40, background: cream, opacity: .55 }} />
@@ -290,10 +338,10 @@ export default function WeddingSite() {
               textAlign: 'center', gap: 12,
             }}>
               <Icon src={card.src} size={96} tone="cream" />
-              <div className="heading" style={{ fontSize: 18, fontWeight: 400 }}>{card.name}</div>
+              <div className="heading" style={{ fontSize: 20, fontWeight: 400 }}>{card.name}</div>
               <div style={{
                 fontSize: 10, letterSpacing: '0.14em', opacity: .65,
-                lineHeight: 1.5, fontWeight: 300, textTransform: 'uppercase',
+                lineHeight: 1.5, fontWeight: 400, textTransform: 'uppercase',
               }}>
                 {card.meta[0]}<br />{card.meta[1]}
               </div>
@@ -377,12 +425,12 @@ export default function WeddingSite() {
             ['Sail',  'Whale & dolphin tours from the harbor'],
           ].map(([k, v]) => (
             <div key={k} style={{
-              fontSize: 14.5, lineHeight: 1.5, padding: 22,
+              fontSize: 15, lineHeight: 1.5, padding: 22,
               border: '1px solid currentColor', opacity: .9,
-              fontWeight: 300, letterSpacing: '-0.005em',
+              fontWeight: 400, letterSpacing: '-0.005em',
             }}>
               <strong className="heading" style={{
-                display: 'block', fontSize: 18, opacity: .85, marginBottom: 8, fontWeight: 400,
+                display: 'block', fontSize: 20, opacity: .85, marginBottom: 8, fontWeight: 400,
               }}>{k}</strong>
               {v}
             </div>
@@ -406,7 +454,7 @@ export default function WeddingSite() {
         <div style={{
           display: 'inline-flex', padding: '14px 36px', border: '1px solid currentColor',
           fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase',
-          cursor: 'pointer', marginTop: 16, fontWeight: 300, alignSelf: 'flex-start',
+          cursor: 'pointer', marginTop: 16, fontWeight: 400, alignSelf: 'flex-start',
         }}>View Registry →</div>
       </SectionShell>
 
@@ -414,18 +462,30 @@ export default function WeddingSite() {
         <NumEyebrow>No. 12</NumEyebrow>
         <Title>FAQ</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {[
-            'Can I bring a plus-one?',
-            'Is there parking at the venue?',
-            'Are kids welcome?',
-            'What’s the weather like in June?',
-            'Will there be transportation between events?',
-            'When should I RSVP by?',
-          ].map(q => (
-            <div key={q} style={{ padding: '22px 0', borderBottom: '1px solid currentColor' }}>
-              <div style={{ fontSize: 16, letterSpacing: '-0.005em', fontWeight: 300, lineHeight: 1.4 }}>{q}</div>
-            </div>
-          ))}
+          <FaqRow
+            q="Can I bring a plus-one?"
+            a="If your invitation includes a plus-one, you'll see them listed on your RSVP. Otherwise we're keeping the guest list close — thank you for understanding."
+          />
+          <FaqRow
+            q="Is there parking at the venue?"
+            a="Yes — both Star of the Sea and Isaac Smith Vineyard have on-site parking. Carney's is in town, so plan to walk or rideshare from your hotel."
+          />
+          <FaqRow
+            q="Are kids welcome?"
+            a="We love your kids, but we're keeping the celebration adults-only. Cape May has a few sitters that come highly recommended — happy to share if useful."
+          />
+          <FaqRow
+            q="What's the weather like in June?"
+            a="Mid-June in Cape May runs 70°–80°F during the day and dips to the 60s after sunset. A light layer for the reception is a good call."
+          />
+          <FaqRow
+            q="Will there be transportation between events?"
+            a="We won't have shuttles, but Cape May is walkable and Uber/Lyft are reliable in town. The Pier House and Isaac Smith Vineyard are about a 10-minute drive apart."
+          />
+          <FaqRow
+            q="When should I RSVP by?"
+            a="Please RSVP by April 1, 2027. If you're delayed, just shoot us a note and we'll work it out."
+          />
         </div>
       </SectionShell>
 

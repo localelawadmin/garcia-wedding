@@ -14,41 +14,49 @@ export default function Navbar() {
   return (
     <nav
       style={{
-        position: 'fixed', top: 0, left: 0, right: 0,
-        padding: '22px 40px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        zIndex: 50,
-        mixBlendMode: 'difference',
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
+        background: 'rgba(10,10,10,0.45)',
+        backdropFilter: 'blur(18px) saturate(120%)',
+        WebkitBackdropFilter: 'blur(18px) saturate(120%)',
+        borderBottom: '1px solid rgba(242,239,233,0.10)',
         color: '#f2efe9',
       }}
     >
-      <a
-        href="#hero"
+      <div
         style={{
-          fontFamily: "'Montmartre','Cormorant Garamond',Georgia,serif",
-          fontStyle: 'italic', fontWeight: 300, fontSize: 26,
-          letterSpacing: 0, lineHeight: 1, whiteSpace: 'nowrap',
-          color: '#f2efe9', textDecoration: 'none',
+          maxWidth: 1080, margin: '0 auto',
+          padding: '20px 24px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}
       >
-        Haley &amp; George
-      </a>
-      <div style={{ display: 'flex', gap: 26 }} className="nav-links">
-        {LINKS.map(l => (
-          <a
-            key={l.href}
-            href={l.href}
-            style={{
-              fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase',
-              opacity: .9, fontWeight: 300, color: '#f2efe9', textDecoration: 'none',
-              transition: 'opacity .25s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.opacity = '1'; }}
-            onMouseLeave={e => { e.currentTarget.style.opacity = '0.9'; }}
-          >
-            {l.label}
-          </a>
-        ))}
+        <a
+          href="#hero"
+          className="heading"
+          style={{
+            fontSize: 28, lineHeight: 1, letterSpacing: 0,
+            color: '#f2efe9', textDecoration: 'none', whiteSpace: 'nowrap',
+          }}
+        >
+          Haley &amp; George
+        </a>
+        <div style={{ display: 'flex', gap: 26 }} className="nav-links">
+          {LINKS.map(l => (
+            <a
+              key={l.href}
+              href={l.href}
+              style={{
+                fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
+                opacity: .85, fontWeight: 400,
+                color: '#f2efe9', textDecoration: 'none',
+                transition: 'opacity .25s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.opacity = '1'; }}
+              onMouseLeave={e => { e.currentTarget.style.opacity = '0.85'; }}
+            >
+              {l.label}
+            </a>
+          ))}
+        </div>
       </div>
       <style jsx>{`
         @media (max-width: 768px) {

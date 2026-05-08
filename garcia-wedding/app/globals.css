@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap');
 @import "tailwindcss";
 
 @font-face {
   font-family: 'Montmartre';
   src: url('https://static.showit.co/file/RR2mVNeCRiq1KM0wCkf85g/139270/montmartre-thin.woff') format('woff');
   font-display: swap;
-  font-weight: 300;
+  font-weight: 100 900;
   font-style: normal;
 }
 
@@ -30,7 +30,7 @@
 html, body { background: #0a0a0a; }
 body {
   font-family: 'Inter Tight', -apple-system, 'Helvetica Neue', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: -0.005em;
   line-height: 1.55;
   color: #f2efe9;
@@ -38,7 +38,10 @@ body {
 
 .heading {
   font-family: 'Montmartre', 'Cormorant Garamond', Georgia, serif;
-  font-style: italic; font-weight: 300;
+  font-style: italic;
+  font-weight: 400;
+  -webkit-text-stroke: 0.5px currentColor;
+  text-rendering: optimizeLegibility;
 }
 
 @keyframes shake {
@@ -55,3 +58,34 @@ body {
   50% { transform: translateY(8px); opacity: 1; }
 }
 .scroll-bob { animation: scroll-bob 2.4s ease-in-out infinite; }
+
+/* Volume slider styling */
+.vol-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 56px;
+  height: 16px;
+  background: transparent;
+  cursor: pointer;
+}
+.vol-slider::-webkit-slider-runnable-track {
+  height: 1px;
+  background: rgba(242,239,233,.4);
+  border-radius: 1px;
+}
+.vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #f2efe9;
+  margin-top: -4px;
+}
+.vol-slider::-moz-range-track {
+  height: 1px;
+  background: rgba(242,239,233,.4);
+  border-radius: 1px;
+}
+.vol-slider::-moz-range-thumb {
+  width: 9px; height: 9px; border: none; border-radius: 50%;
+  background: #f2efe9;
+}

@@ -8,11 +8,19 @@ const TRACKS = [
   { src: '/audio/frankie-valli.mp3', label: "Can't Take My Eyes Off You" },
 ];
 
+const CREAM = '#f2efe9';
+
 export default function MusicPlayer() {
   const [trackIdx, setTrackIdx] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const idxRef   = useRef(0);
+  const [volume, setVolume]   = useState(0.4);
+  const [muted, setMuted]     = useState(true);
+  const [hover, setHover]     = useState(false);
+
+  const audioRef  = useRef<HTMLAudioElement | null>(null);
+  const idxRef    = useRef(0);
+  const volRef    = useRef(0.4);
+  const mutedRef  = useRef(true);
 
   useEffect(() => {
     const startIdx = Math.floor(Math.random() * TRACKS.length);
@@ -22,27 +30,41 @@ export default function MusicPlayer() {
     audio.volume = 0;
     audioRef.current = audio;
     audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
-    audio.addEventListener('ended', () => advance());
+    audio.addEventListener('ended', goNext);
     return () => { audio.pause(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const advance = () => {
+  const loadTrack = (idx: number) => {
+    if (audioRef.current) audioRef.current.pause();
+    const audio = new Audio(TRACKS[idx].src);
+    audio.volume = mutedRef.current ? 0 : volRef.current;
+    audioRef.current = audio;
+    idxRef.current = idx;
+    audio.addEventListener('ended', goNext);
+    audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+  };
+
+  const goNext = () => {
     const next = (idxRef.current + Math.floor(Math.random() * (TRACKS.length - 1)) + 1) % TRACKS.length;
     setTrackIdx(next);
-    idxRef.current = next;
-    if (audioRef.current) audioRef.current.pause();
-    const audio = new Audio(TRACKS[next].src);
-    audio.volume = audioRef.current?.volume ?? 0.4;
-    audioRef.current = audio;
-    audio.addEventListener('ended', advance);
-    audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    loadTrack(next);
+  };
+
+  const goPrev = () => {
+    const prev = (idxRef.current - 1 + TRACKS.length) % TRACKS.length;
+    setTrackIdx(prev);
+    loadTrack(prev);
   };
 
   const togglePlay = () => {
     const a = audioRef.current; if (!a) return;
+    if (mutedRef.current) {
+      mutedRef.current = false;
+      setMuted(false);
+      a.volume = volRef.current;
+    }
     if (a.paused) {
-      if (a.volume === 0) a.volume = 0.4;
       a.play().then(() => setPlaying(true)).catch(() => {});
     } else {
       a.pause();
@@ -50,60 +72,144 @@ export default function MusicPlayer() {
     }
   };
 
+  const toggleMute = () => {
+    const newMuted = !mutedRef.current;
+    mutedRef.current = newMuted;
+    setMuted(newMuted);
+    if (audioRef.current) {
+      audioRef.current.volume = newMuted ? 0 : volRef.current;
+      if (!newMuted && audioRef.current.paused) {
+        audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+      }
+    }
+  };
+
+  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = parseFloat(e.target.value);
+    volRef.current = v;
+    setVolume(v);
+    if (v > 0 && mutedRef.current) {
+      mutedRef.current = false;
+      setMuted(false);
+      if (audioRef.current) {
+        audioRef.current.volume = v;
+        if (audioRef.current.paused) {
+          audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+        }
+      }
+    } else if (audioRef.current) {
+      audioRef.current.volume = mutedRef.current ? 0 : v;
+    }
+  };
+
+  const iconBtn: React.CSSProperties = {
+    width: 22, height: 22, borderRadius: '50%',
+    border: `1px solid rgba(242,239,233,.45)`,
+    background: 'transparent', color: CREAM,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    padding: 0, cursor: 'pointer', transition: 'all .25s',
+    flexShrink: 0,
+  };
+
   return (
     <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       style={{
         position: 'fixed', bottom: 22, right: 22,
-        display: 'flex', alignItems: 'center', gap: 12,
+        display: 'flex', alignItems: 'center', gap: 10,
         padding: '7px 18px 7px 12px',
         background: 'rgba(0,0,0,.5)',
         border: '1px solid rgba(242,239,233,.35)',
         borderRadius: 999,
-        color: '#f2efe9',
+        color: CREAM,
         backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
         zIndex: 200,
+        transition: 'padding .3s ease, gap .3s ease',
       }}
     >
+      {/* Play / Pause */}
       <button
         onClick={togglePlay}
-        aria-label={playing ? 'Pause' : 'Play'}
+        aria-label={playing && !muted ? 'Pause' : 'Play'}
         type="button"
-        style={{
-          width: 22, height: 22, borderRadius: '50%',
-          border: '1px solid rgba(242,239,233,.55)',
-          background: 'transparent',
-          color: '#f2efe9',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: 0, cursor: 'pointer',
-          transition: 'all .25s',
-        }}
-        onMouseEnter={e => { e.currentTarget.style.background = '#f2efe9'; e.currentTarget.style.color = '#0a0a0a'; }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#f2efe9'; }}
+        style={iconBtn}
+        onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
       >
-        {playing ? (
+        {playing && !muted ? (
           <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><rect x="3" y="2" width="2" height="8"/><rect x="7" y="2" width="2" height="8"/></svg>
         ) : (
           <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L10 6 L3 10 Z" /></svg>
         )}
       </button>
-      <span style={{ fontSize: 9, letterSpacing: '0.38em', textTransform: 'uppercase', opacity: .55, fontWeight: 300 }}>
+
+      <span style={{ fontSize: 9, letterSpacing: '0.38em', textTransform: 'uppercase', opacity: .55, fontWeight: 400 }}>
         Now Playing
       </span>
       <span style={{ width: 1, height: 12, background: 'rgba(242,239,233,.3)' }} />
       <span
-        onClick={advance}
-        style={{
-          fontFamily: "'Montmartre','Cormorant Garamond',Georgia,serif",
-          fontStyle: 'italic',
-          fontSize: 13,
-          lineHeight: 1,
-          fontWeight: 400,
-          cursor: 'pointer',
-        }}
-        title="Next track"
+        className="heading"
+        style={{ fontSize: 14, lineHeight: 1, fontWeight: 400, whiteSpace: 'nowrap' }}
       >
         {TRACKS[trackIdx].label}
       </span>
+
+      {/* Expanded controls — appear on hover */}
+      <div
+        style={{
+          display: 'flex', alignItems: 'center', gap: 8,
+          maxWidth: hover ? 200 : 0,
+          opacity: hover ? 1 : 0,
+          overflow: 'hidden',
+          transition: 'max-width .35s ease, opacity .25s ease',
+        }}
+      >
+        <span style={{ width: 1, height: 12, background: 'rgba(242,239,233,.3)', flexShrink: 0 }} />
+
+        <button onClick={goPrev} aria-label="Previous" type="button"
+          style={iconBtn}
+          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
+        >
+          <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M9 2 L9 10 L4 6 Z M3 2 L4 2 L4 10 L3 10 Z"/></svg>
+        </button>
+
+        <button onClick={goNext} aria-label="Next" type="button"
+          style={iconBtn}
+          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
+        >
+          <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L8 6 L3 10 Z M8 2 L9 2 L9 10 L8 10 Z"/></svg>
+        </button>
+
+        <button onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'} type="button"
+          style={iconBtn}
+          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
+        >
+          {muted ? (
+            <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
+              <path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" />
+              <path d="M9 4 L11 6 M11 4 L9 6" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
+              <path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" />
+              <path d="M9 4 Q10 6 9 8 M10.5 3 Q12 6 10.5 9" />
+            </svg>
+          )}
+        </button>
+
+        <input
+          type="range" min={0} max={1} step={0.02}
+          value={muted ? 0 : volume}
+          onChange={handleVolume}
+          aria-label="Volume"
+          className="vol-slider"
+        />
+      </div>
     </div>
   );
 }
