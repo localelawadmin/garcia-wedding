@@ -265,7 +265,7 @@ export default function WeddingSite() {
           style={{
             position: 'absolute', inset: 0, width: '100%', height: '100%',
             objectFit: 'cover',
-            objectPosition: 'center 25%',
+            objectPosition: 'center 65%',
             filter: 'grayscale(1) brightness(.78) contrast(1.08)',
           }}
         />
