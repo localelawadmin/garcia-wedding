@@ -49,7 +49,7 @@ export default function LandingPage({ onSuccess }: Props) {
 
   return (
     <motion.div
-      style={{ position: 'fixed', inset: 0, background: '#000', overflow: 'hidden' }}
+      style={{ position: 'fixed', inset: 0, background: '#3f5953', overflow: 'hidden' }}
       animate={{ opacity: exiting ? 0 : 1 }}
       transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
     >
@@ -63,7 +63,7 @@ export default function LandingPage({ onSuccess }: Props) {
             style={{
               position: 'absolute', inset: 0, width: '100%', height: '100%',
               objectFit: 'cover',
-              filter: 'grayscale(1) blur(8px) brightness(.55) contrast(1.15)',
+              filter: 'blur(10px) brightness(.7) contrast(1.05) saturate(.65)',
               transform: 'scale(1.08)',
               opacity: i === idx ? 1 : 0,
               transition: 'opacity 1.4s ease',
@@ -73,19 +73,19 @@ export default function LandingPage({ onSuccess }: Props) {
       </div>
 
       {/* Dark overlay */}
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,.55)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(63, 89, 83, .42)', backdropFilter: 'saturate(180%)', WebkitBackdropFilter: 'saturate(180%)' }} />
 
       {/* Grain */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        opacity: .35, mixBlendMode: 'overlay',
+        opacity: .25, mixBlendMode: 'overlay',
         backgroundImage: GRAIN_SVG,
       }} />
 
       {/* Vignette */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(circle at center, rgba(0,0,0,0) 30%, rgba(0,0,0,.45) 80%, rgba(0,0,0,.78) 100%)',
+        background: 'radial-gradient(circle at center, rgba(63,89,83,0) 30%, rgba(63,89,83,.3) 80%, rgba(63,89,83,.6) 100%)',
       }} />
 
       {/* Content */}
