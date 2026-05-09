@@ -15,29 +15,29 @@ export default function Navbar() {
     <nav
       style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-        background: 'rgba(10,10,10,0.45)',
-        backdropFilter: 'blur(18px) saturate(120%)',
-        WebkitBackdropFilter: 'blur(18px) saturate(120%)',
-        borderBottom: '1px solid rgba(242,239,233,0.10)',
+        background: 'rgba(63, 89, 83, 0.42)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        borderBottom: '1px solid rgba(242, 239, 233, 0.12)',
         color: '#f2efe9',
       }}
     >
       <div
         style={{
           maxWidth: 1080, margin: '0 auto',
-          padding: '20px 24px',
+          padding: '12px 24px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}
       >
-        <a
-          href="#hero"
-          className="heading"
-          style={{
-            fontSize: 28, lineHeight: 1, letterSpacing: 0,
-            color: '#f2efe9', textDecoration: 'none', whiteSpace: 'nowrap',
-          }}
-        >
-          Haley &amp; George
+        <a href="#hero" aria-label="Haley & George — home" style={{ display: 'block' }}>
+          <img
+            src="/photos/agenda/haley-and-george.png"
+            alt="Haley & George"
+            style={{
+              height: 46, width: 'auto', display: 'block',
+              filter: 'brightness(0) invert(.95)',
+            }}
+          />
         </a>
         <div style={{ display: 'flex', gap: 26 }} className="nav-links">
           {LINKS.map(l => (

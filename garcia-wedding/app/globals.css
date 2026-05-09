@@ -18,10 +18,11 @@
 
 @theme {
   --color-cream: #f2efe9;
-  --color-olive: #49492f;
+  --color-deep:  #6a857f;
+  --color-deep-dark: #3f5953;
   --color-ink:   #0a0a0a;
   --color-cream-soft: rgba(242,239,233,.55);
-  --color-olive-soft: rgba(73,73,47,.4);
+  --color-deep-soft: rgba(63,89,83,.4);
   --font-heading: 'Montmartre', 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Inter Tight', -apple-system, 'Helvetica Neue', sans-serif;
   --font-script: 'Black Editorial Script', cursive;
@@ -59,31 +60,22 @@ body {
 }
 .scroll-bob { animation: scroll-bob 2.4s ease-in-out infinite; }
 
-/* Volume slider styling */
 .vol-slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 56px;
-  height: 16px;
-  background: transparent;
-  cursor: pointer;
+  width: 56px; height: 16px;
+  background: transparent; cursor: pointer;
 }
 .vol-slider::-webkit-slider-runnable-track {
-  height: 1px;
-  background: rgba(242,239,233,.4);
-  border-radius: 1px;
+  height: 1px; background: rgba(242,239,233,.4); border-radius: 1px;
 }
 .vol-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
+  -webkit-appearance: none; appearance: none;
   width: 9px; height: 9px; border-radius: 50%;
-  background: #f2efe9;
-  margin-top: -4px;
+  background: #f2efe9; margin-top: -4px;
 }
 .vol-slider::-moz-range-track {
-  height: 1px;
-  background: rgba(242,239,233,.4);
-  border-radius: 1px;
+  height: 1px; background: rgba(242,239,233,.4); border-radius: 1px;
 }
 .vol-slider::-moz-range-thumb {
   width: 9px; height: 9px; border: none; border-radius: 50%;
