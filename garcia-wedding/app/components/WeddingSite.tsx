@@ -251,6 +251,35 @@ const EventSection: React.FC<{
   </SectionShell>
 );
 
+
+const HotelTile: React.FC<{ name: string; address: string; note?: string }> = ({ name, address, note }) => (
+  <div style={{ padding: 22, border: '1px solid currentColor' }}>
+    <h3 className="heading" style={{ fontSize: 20, margin: '0 0 4px', fontWeight: 400, lineHeight: 1.15 }}>{name}</h3>
+    <p style={{ fontSize: 9.5, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: .55, margin: '4px 0 8px', fontWeight: 400 }}>{address}</p>
+    {note && <p style={{ fontSize: 13.5, lineHeight: 1.45, opacity: .8, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{note}</p>}
+  </div>
+);
+
+const EatTile: React.FC<{ name: string; address: string; note: string }> = ({ name, address, note }) => {
+  const mapQ = encodeURIComponent(address + ', Cape May, NJ');
+  return (
+    <div style={{ padding: '14px 18px', border: '1px solid currentColor', opacity: .92, fontSize: 13.5, lineHeight: 1.45, fontWeight: 400, letterSpacing: '-0.005em' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+        <strong className="heading" style={{ display: 'block', fontSize: 18, opacity: .9, margin: 0, fontWeight: 400, lineHeight: 1.1 }}>{name}</strong>
+        <a href={`https://www.google.com/maps/search/?api=1&query=${mapQ}`} target="_blank" rel="noopener noreferrer" aria-label="Open in maps"
+          style={{ width: 24, height: 24, borderRadius: '50%', border: '1px solid currentColor', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'inherit', textDecoration: 'none', transition: 'background .25s, color .25s' }}>
+          <svg viewBox="0 0 16 16" width={13} height={13} fill="none" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M8 1.5 C5 1.5 3 3.5 3 6 C3 9 8 14 8 14 S13 9 13 6 C13 3.5 11 1.5 8 1.5 Z" />
+            <circle cx="8" cy="6" r="1.5" />
+          </svg>
+        </a>
+      </div>
+      <p style={{ fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: .55, margin: '4px 0 6px', fontWeight: 400 }}>{address}</p>
+      <p style={{ margin: 0 }}>{note}</p>
+    </div>
+  );
+};
+
 const Tile: React.FC<{ heading: string; body: string }> = ({ heading, body }) => (
   <div style={{ padding: 26, border: '1px solid currentColor' }}>
     <h3 className="heading" style={{ fontSize: 22, margin: '0 0 12px', fontWeight: 400 }}>{heading}</h3>
@@ -612,10 +641,14 @@ export default function WeddingSite() {
       <SectionShell id="accommodations" tone="cream" foot="More options on FAQ ↓">
         <NumEyebrow>No. 07</NumEyebrow>
         <Title>The Accommodations</Title>
-        <Lede>A few places we&apos;ve reserved blocks at, plus options for stays nearby.</Lede>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
-          <Tile heading="La Mer Beachfront Resort" body="1317 Beach Avenue. This is also where Welcome Drinks are happening." />
-          <Tile heading="Hotel Macomber"           body="Beachfront classic, walking distance to the church and town." />
+        <Lede>A few favorites in town. Cape May fills up fast in summer — book sooner than later.</Lede>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 28 }} className="hotels-grid">
+          <HotelTile name="La Mer Beachfront Resort" address="1317 Beach Avenue" note="This is also where Welcome Drinks are happening." />
+          <HotelTile name="The Beach Club on Madison" address="605 Madison Avenue" />
+          <HotelTile name="Grand Hotel of Cape May" address="1045 Beach Avenue" note="Use code 744882 when booking to be in the room block." />
+          <HotelTile name="Marquis de Lafayette Hotel" address="501 Beach Avenue" />
+          <HotelTile name="The Inn of Cape May" address="7 Ocean Street" />
+          <HotelTile name="ICONA Cape May" address="1101 Beach Avenue" />
         </div>
       </SectionShell>
 
@@ -632,27 +665,22 @@ export default function WeddingSite() {
 
       <SectionShell id="things" tone="cream">
         <NumEyebrow>No. 09</NumEyebrow>
-        <Title>Things to Do</Title>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }} className="things-grid">
+        <Title>Places to Eat</Title>
+        <Lede>A few of our favorite spots in town. Reservations recommended for dinners.</Lede>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 22px' }} className="things-grid">
           {[
-            ['Eat',   'The Ebbitt Room · The Lobster House · Mad Batter'],
-            ['Drink', 'Cape May Brewing Co · Hawk Haven Vineyard'],
-            ['Beach', 'Sunset Beach for the cement ship at golden hour'],
-            ['Walk',  'Washington Street Mall · Victorian district'],
-            ['Light', 'Cape May Lighthouse — climb if you’re up for it'],
-            ['Sail',  'Whale & dolphin tours from the harbor'],
-          ].map(([k, v]) => (
-            <div key={k} style={{
-              fontSize: 15, lineHeight: 1.5, padding: 22,
-              border: '1px solid currentColor', opacity: .9,
-              fontWeight: 400, letterSpacing: '-0.005em',
-            }}>
-              <strong className="heading" style={{
-                display: 'block', fontSize: 20, opacity: .85, marginBottom: 8, fontWeight: 400,
-              }}>{k}</strong>
-              {v}
-            </div>
-          ))}
+            { name: 'The Buoy Coffee Shop', address: '722 Beach Avenue', note: 'A morning must!' },
+          { name: 'Avalon Coffee of Cape May', address: '7 Gurney Street', note: 'Coffee, a breakfast sandwich, or an acai bowl.' },
+          { name: "Uncle Bill's Pancake House", address: '261 Beach Avenue', note: "Sit-down breakfast you won't forget — bonus points for the gluten-free pancakes." },
+          { name: 'The Mad Batter', address: '19 Jackson Street', note: 'Great breakfast — best omelettes in town.' },
+          { name: 'Ugly Mug Bar & Restaurant', address: '426 Washington Street', note: 'A perfect Irish pub for a Guinness and a burger.' },
+          { name: 'Ocean Club Hotel', address: '1035 Beach Avenue', note: 'Quick lunch on their pool deck.' },
+          { name: "Harry's Ocean Bar & Grille", address: '1025 Beach Avenue', note: 'Quick stop for brunch or lunch.' },
+          { name: 'Rusty Nail', address: '205 Beach Avenue', note: 'Live music, good drinks, appetizers, feet in the sand.' },
+          { name: "George's Place Beachfront", address: '301 Beach Avenue', note: "The Groom's favorite — gyros, salads, and smoothies." },
+          { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', note: 'Worth driving to. Farm-fresh food, picnic tables, indoor market.' },
+          { name: 'Westside Market', address: '517 Broadway, West Cape May', note: 'Best deli in town.' },
+          ].map(eat => <EatTile key={eat.name} {...eat} />)}
         </div>
       </SectionShell>
 
@@ -660,8 +688,8 @@ export default function WeddingSite() {
         <NumEyebrow>No. 10</NumEyebrow>
         <Title>The Dress Code</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
-          <Tile heading="Welcome Drinks"        body="Summer cocktail. Linen, light dresses, loafers welcome." />
-          <Tile heading="Ceremony & Reception" body="Black tie optional. Florals, cream, and ivory are encouraged but not required." />
+          <Tile heading="Welcome Drinks"        body="Summer cocktail. Dresses (any length) for women, button-down and pants for men. Jackets preferred but not required." />
+          <Tile heading="Ceremony & Reception" body="Black tie optional. Tux or dark suit for men. Floor-length gowns for women — bright, summery colors and patterns encouraged. The reception is fully outdoors on grass; block heels are strongly recommended." />
         </div>
       </SectionShell>
 
@@ -669,31 +697,79 @@ export default function WeddingSite() {
         <NumEyebrow>No. 11</NumEyebrow>
         <Title>Registry</Title>
         <Lede>Your presence is the gift. If you&apos;d like to celebrate further, we&apos;ve put a few things together.</Lede>
-        <div style={{
-          display: 'inline-flex', padding: '14px 36px', border: '1px solid currentColor',
-          fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase',
-          cursor: 'pointer', marginTop: 16, fontWeight: 400, alignSelf: 'flex-start',
-        }}>View Registry →</div>
+        <a href="https://www.zola.com/wedding/haleyandgeorge2027/registry" target="_blank" rel="noopener noreferrer"
+          style={{
+            display: 'inline-flex', padding: '14px 36px', border: '1px solid currentColor',
+            fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase',
+            cursor: 'pointer', marginTop: 16, fontWeight: 400, alignSelf: 'flex-start',
+            color: 'inherit', textDecoration: 'none',
+          }}>View Registry →</a>
       </SectionShell>
 
-      <SectionShell id="faq" tone="ink" foot="Haley & George · Cape May · 06.18.2027">
+      <SectionShell id="faq" tone="ink">
         <NumEyebrow>No. 12</NumEyebrow>
         <Title>FAQ</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <FaqRow q="Can I bring a plus-one?"
-            a="If your invitation includes a plus-one, you'll see them listed on your RSVP. Otherwise we're keeping the guest list close — thank you for understanding." />
-          <FaqRow q="Is there parking at the venue?"
-            a="Yes — both Star of the Sea and Isaac Smith Vineyard have on-site parking. Carney's is in town, so plan to walk or rideshare from your hotel." />
-          <FaqRow q="Are kids welcome?"
-            a="We love your kids, but we're keeping the celebration adults-only. Cape May has a few sitters that come highly recommended — happy to share if useful." />
-          <FaqRow q="What's the weather like in June?"
-            a="Mid-June in Cape May runs 70°–80°F during the day and dips to the 60s after sunset. A light layer for the reception is a good call." />
-          <FaqRow q="Will there be transportation between events?"
-            a="We won't have shuttles, but Cape May is walkable and Uber/Lyft are reliable in town. The Pier House and Isaac Smith Vineyard are about a 10-minute drive apart." />
-          <FaqRow q="When should I RSVP by?"
-            a="Please RSVP by April 1, 2027. If you're delayed, just shoot us a note and we'll work it out." />
+          <FaqRow q='How far in advance should I book my hotel?' a='As soon as possible — hotels in Cape May in summer go fast.' />
+          <FaqRow q="What's the dress code for Welcome Drinks?" a='Summer cocktail. Dresses (any length) for women, button-down and pants for men. Jackets preferred but not required.' />
+          <FaqRow q='Where can I go for dinner on Thursday night?' a='Check the Places to Eat section for our local favorites. We highly recommend making a reservation in advance.' />
+          <FaqRow q="What's the dress code for the ceremony and reception?" a='Black tie optional. Tux or dark suit for men, floor-length gowns for women — bright, summery colors encouraged. The reception is outdoors on grass, so block heels are strongly recommended.' />
+          <FaqRow q='Can I bring a plus-one?' a='We kindly ask that only guests listed on the formal invitation attend.' />
+          <FaqRow q='Will there be transportation to the ceremony?' a="No — we recommend Ubering or using your hotel's shuttle service." />
+          <FaqRow q='When should I get to the ceremony?' a='The mass starts promptly at 1:30 PM — please arrive 15–30 minutes early to find your seat.' />
+          <FaqRow q='Will there be transportation to the reception?' a='Yes — a shuttle leaves Our Lady Star of the Sea promptly at 4:15 PM, with stops at the participating hotels.' />
+          <FaqRow q='Can I add an extra day to the hotel room block?' a='Absolutely — many of us are staying through the weekend. Call the hotel to extend your stay, and book early to secure your room.' />
         </div>
       </SectionShell>
+      {/* CONTACT */}
+      <section
+        id="contact"
+        style={{
+          minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
+          background: stripeCream, color: DEEP_DARK,
+          padding: '110px 24px 70px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          position: 'relative',
+        }}
+      >
+        <div style={{
+          position: 'relative', width: '100%', maxWidth: 760,
+          aspectRatio: '800 / 480',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <svg viewBox="0 0 800 480" preserveAspectRatio="none"
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
+          </svg>
+          <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%' }}>
+            <div style={{ fontSize: 16, letterSpacing: '0.4em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 32, opacity: .75 }}>
+              Any questions?
+            </div>
+            <h2 className="heading" style={{
+              fontSize: 'clamp(40px, 5.5vw, 68px)', lineHeight: 1, margin: 0, letterSpacing: '-0.005em', paddingTop: '0.12em',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, whiteSpace: 'nowrap',
+            }}>
+              <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
+              Shoot us a note!
+              <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
+            </h2>
+            <a
+              href="mailto:thegarciawedding.2027@gmail.com"
+              style={{
+                display: 'inline-block', marginTop: 28,
+                fontSize: 13, letterSpacing: '0.15em', color: 'inherit', textDecoration: 'none',
+                borderBottom: '1px solid currentColor', paddingBottom: 2,
+                transition: 'opacity .25s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.opacity = '0.65'; }}
+              onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+            >
+              thegarciawedding.2027@gmail.com
+            </a>
+          </div>
+        </div>
+      </section>
+
 
       <style jsx>{`
         @media (max-width: 768px) {
