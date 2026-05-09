@@ -109,10 +109,85 @@ const Icon: React.FC<{ src: string; size?: number; tone: Tone }> = ({ src, size 
   />
 );
 
+
+const EVENT_DATA: Record<string, { summary: string; start: string; end: string; location: string; description: string }> = {
+  welcome:    { summary: 'Welcome Drinks — Haley & George', start: '20270618T000000Z', end: '20270618T020000Z', location: 'The Pier House at La Mer Beachfront Resort, 1317 Beach Avenue, Cape May, NJ', description: 'Welcome to Cape May — come grab a drink with us before the weekend takes off.' },
+  ceremony:   { summary: 'Wedding Ceremony — Haley & George', start: '20270618T180000Z', end: '20270618T193000Z', location: 'Our Lady Star of the Sea, 525 Washington Street, Cape May, NJ', description: 'Mass starts promptly. Please arrive 15-30 minutes early.' },
+  reception:  { summary: 'Wedding Reception — Haley & George', start: '20270618T210000Z', end: '20270619T020000Z', location: 'Isaac Smith Vineyard, 1039 Seashore Road, Cape May, NJ', description: '' },
+  afterparty: { summary: 'After Party — Haley & George', start: '20270619T023000Z', end: '20270619T060000Z', location: "Carney's Restaurant & Bar, 411 Beach Ave, Cape May, NJ", description: '' },
+  beach:      { summary: 'Beach Day — Haley & George', start: '20270619T140000Z', end: '20270619T180000Z', location: 'Cape May Beach, Cape May, NJ', description: 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia — or stay the weekend.' },
+};
+
+function downloadICS(id: string) {
+  const ev = EVENT_DATA[id]; if (!ev) return;
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+  const ics = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Garcia Wedding//EN','BEGIN:VEVENT',
+    'UID:' + id + '@garcia-wedding',
+    'DTSTAMP:' + stamp,
+    'DTSTART:' + ev.start, 'DTEND:' + ev.end,
+    'SUMMARY:' + ev.summary,
+    'LOCATION:' + ev.location.replace(/,/g, '\\,'),
+    'DESCRIPTION:' + ev.description.replace(/,/g, '\\,'),
+    'END:VEVENT','END:VCALENDAR',
+  ].join('\r\n');
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = id + '.ics';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 200);
+}
+
+const EventActions: React.FC<{ calId: string; mapQuery: string; tone: Tone }> = ({ calId, mapQuery, tone }) => {
+  const hoverBg = tone === 'cream' ? DEEP_DARK : CREAM;
+  const hoverFg = tone === 'cream' ? CREAM : DEEP_DARK;
+  const baseStyle: React.CSSProperties = {
+    width: 36, height: 36, borderRadius: '50%',
+    border: '1px solid currentColor', background: 'transparent',
+    color: 'inherit', cursor: 'pointer', padding: 0,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    transition: 'background .25s, color .25s',
+    textDecoration: 'none',
+  };
+  const onEnter = (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.background = hoverBg; e.currentTarget.style.color = hoverFg; };
+  const onLeave = (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'inherit'; };
+  return (
+    <div style={{ display: 'flex', gap: 12, marginTop: 28 }}>
+      <button type="button" aria-label="Add to calendar" title="Add to calendar"
+        onClick={() => downloadICS(calId)}
+        onMouseEnter={onEnter} onMouseLeave={onLeave}
+        style={baseStyle}
+      >
+        <svg viewBox="0 0 16 16" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round">
+          <rect x="1.5" y="3" width="9" height="9" rx="1" />
+          <line x1="1.5" y1="5.5" x2="10.5" y2="5.5" />
+          <line x1="3.5" y1="2" x2="3.5" y2="4" />
+          <line x1="8.5" y1="2" x2="8.5" y2="4" />
+          <line x1="13" y1="11" x2="13" y2="14" strokeWidth={1.4} />
+          <line x1="11.5" y1="12.5" x2="14.5" y2="12.5" strokeWidth={1.4} />
+        </svg>
+      </button>
+      <a target="_blank" rel="noopener noreferrer"
+        href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
+        aria-label="Open in maps" title="Open in maps"
+        onMouseEnter={onEnter} onMouseLeave={onLeave}
+        style={baseStyle}
+      >
+        <svg viewBox="0 0 16 16" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round" strokeLinejoin="round">
+          <path d="M8 1.5 C5 1.5 3 3.5 3 6 C3 9 8 14 8 14 S13 9 13 6 C13 3.5 11 1.5 8 1.5 Z" />
+          <circle cx="8" cy="6" r="1.5" />
+        </svg>
+      </a>
+    </div>
+  );
+};
+
 const EventSection: React.FC<{
   id: string; tone: Tone; eyebrow: string; name: string; iconSrc: string;
   rows: Array<[string, string]>; foot?: string;
-}> = ({ id, tone, eyebrow, name, iconSrc, rows, foot }) => (
+  calId: string; mapQuery: string;
+}> = ({ id, tone, eyebrow, name, iconSrc, rows, foot, calId, mapQuery }) => (
   <SectionShell id={id} tone={tone} foot={foot}>
     <Eyebrow>{eyebrow}</Eyebrow>
     <div style={{
@@ -143,6 +218,7 @@ const EventSection: React.FC<{
             </div>
           ))}
         </div>
+        <EventActions calId={calId} mapQuery={mapQuery} tone={tone} />
       </div>
     </div>
     <style jsx>{`
@@ -440,7 +516,7 @@ export default function WeddingSite() {
         </div>
       </SectionShell>
 
-      <EventSection id="welcome" tone="ink" eyebrow="Thursday · June 17"
+      <EventSection calId="welcome" mapQuery="The+Pier+House+at+La+Mer+Beachfront+Resort+1317+Beach+Avenue+Cape+May+NJ" id="welcome" tone="ink" eyebrow="Thursday · June 17"
         name="Welcome Drinks" iconSrc={ICON.pier}
         rows={[
           ['Time',   '8:00 — 10:00 PM'],
@@ -449,7 +525,7 @@ export default function WeddingSite() {
           ['Note',   'Welcome to Cape May — come grab a drink with us before the weekend takes off.'],
         ]} foot="No. 02 / Welcome Drinks" />
 
-      <EventSection id="ceremony" tone="cream" eyebrow="Friday · June 18"
+      <EventSection calId="ceremony" mapQuery="Our+Lady+Star+of+the+Sea+525+Washington+Street+Cape+May+NJ" id="ceremony" tone="cream" eyebrow="Friday · June 18"
         name="Ceremony" iconSrc={ICON.osos}
         rows={[
           ['Time',    '2:00 PM'],
@@ -458,7 +534,7 @@ export default function WeddingSite() {
           ['Note',    'Mass starts promptly. Please arrive 15–30 minutes early.'],
         ]} foot="No. 03 / Ceremony" />
 
-      <EventSection id="reception" tone="ink" eyebrow="Friday · June 18"
+      <EventSection calId="reception" mapQuery="Isaac+Smith+Vineyard+1039+Seashore+Road+Cape+May+NJ" id="reception" tone="ink" eyebrow="Friday · June 18"
         name="Reception" iconSrc={ICON.tent}
         rows={[
           ['Time',    '5:00 — 10:00 PM'],
@@ -466,7 +542,7 @@ export default function WeddingSite() {
           ['Address', '1039 Seashore Road, Cape May, NJ'],
         ]} foot="No. 04 / Reception" />
 
-      <EventSection id="afterparty" tone="cream" eyebrow="Friday · June 18"
+      <EventSection calId="afterparty" mapQuery="Carneys+Restaurant+Bar+411+Beach+Ave+Cape+May+NJ" id="afterparty" tone="cream" eyebrow="Friday · June 18"
         name="After Party" iconSrc={ICON.carneys}
         rows={[
           ['Time',    '10:30 PM — 2:00 AM'],
@@ -474,7 +550,7 @@ export default function WeddingSite() {
           ['Address', '411 Beach Ave, Cape May, NJ'],
         ]} foot="No. 05 / After Party" />
 
-      <EventSection id="beach" tone="ink" eyebrow="Saturday · June 19"
+      <EventSection calId="beach" mapQuery="Cape+May+Beach+NJ" id="beach" tone="ink" eyebrow="Saturday · June 19"
         name="Beach Day" iconSrc={ICON.beach}
         rows={[
           ['Time', '10 AM onward'],
