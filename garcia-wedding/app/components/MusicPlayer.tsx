@@ -27,33 +27,37 @@ export default function MusicPlayer() {
     setTrackIdx(startIdx);
     idxRef.current = startIdx;
     const audio = new Audio(TRACKS[startIdx].src);
-    audio.muted = true;
     audio.volume = 0.4;
     audioRef.current = audio;
-    audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    setMuted(false);
+    mutedRef.current = false;
     audio.addEventListener('ended', goNext);
 
-    // Auto-unmute on the first user interaction anywhere on the page
-    const onFirstInteract = () => {
-      if (!audioRef.current) return;
-      if (audioRef.current.muted) {
-        audioRef.current.muted = false;
-        mutedRef.current = false;
-        setMuted(false);
-        if (audioRef.current.paused) {
-          audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
-        }
-      }
-      document.removeEventListener('pointerdown', onFirstInteract);
-      document.removeEventListener('keydown', onFirstInteract);
+    // Music kicks in on first user interaction with the site (post-password).
+    // MusicPlayer only mounts inside WeddingSite, so this only arms post-auth.
+    let fired = false;
+    const fire = () => {
+      if (fired || !audioRef.current) return;
+      fired = true;
+      audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+      cleanup();
     };
-    document.addEventListener('pointerdown', onFirstInteract);
-    document.addEventListener('keydown', onFirstInteract);
+    const cleanup = () => {
+      document.removeEventListener('pointerdown', fire);
+      document.removeEventListener('wheel', fire);
+      document.removeEventListener('touchstart', fire);
+      document.removeEventListener('keydown', fire);
+      document.removeEventListener('scroll', fire, true);
+    };
+    document.addEventListener('pointerdown', fire);
+    document.addEventListener('wheel', fire);
+    document.addEventListener('touchstart', fire);
+    document.addEventListener('keydown', fire);
+    document.addEventListener('scroll', fire, true);
 
     return () => {
       audio.pause();
-      document.removeEventListener('pointerdown', onFirstInteract);
-      document.removeEventListener('keydown', onFirstInteract);
+      cleanup();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

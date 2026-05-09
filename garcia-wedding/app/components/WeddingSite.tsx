@@ -177,7 +177,7 @@ const EventActions: React.FC<{ calId: string; mapQuery: string; tone: Tone }> = 
   const onEnter = (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.background = hoverBg; e.currentTarget.style.color = hoverFg; };
   const onLeave = (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'inherit'; };
   return (
-    <div style={{ display: 'flex', gap: 10, flexShrink: 0, paddingBottom: 6 }}>
+    <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
       <button type="button" aria-label="Add to calendar" title="Add to calendar"
         onClick={() => downloadICS(calId)}
         onMouseEnter={onEnter} onMouseLeave={onLeave}
@@ -217,17 +217,15 @@ const EventSection: React.FC<{
     <div style={{
       display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 60, alignItems: 'center',
     }} className="event-grid">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
         <Icon src={iconSrc} size={220} tone={tone} />
+        <EventActions calId={calId} mapQuery={mapQuery} tone={tone} />
       </div>
       <div>
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 24, marginBottom: 22 }}>
-          <h3 className="heading" style={{
-            fontSize: 'clamp(64px, 8vw, 110px)', lineHeight: 0.8,
-            margin: 0, letterSpacing: '-0.005em', paddingTop: '0.12em',
-          }}>{name}</h3>
-          <EventActions calId={calId} mapQuery={mapQuery} tone={tone} />
-        </div>
+        <h3 className="heading" style={{
+          fontSize: 'clamp(64px, 8vw, 110px)', lineHeight: 0.8,
+          margin: '0 0 22px', letterSpacing: '-0.005em', paddingTop: '0.12em',
+        }}>{name}</h3>
         <div style={{
           display: 'flex', flexDirection: 'column', gap: 16,
           paddingTop: 22, borderTop: '1px solid currentColor',

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import MusicPlayer from './MusicPlayer';
 
 const LANDER_PHOTOS = [
   '/photos/walking-bw.jpg',
@@ -197,8 +196,6 @@ export default function LandingPage({ onSuccess }: Props) {
       }}>
         The more you look, the more you find
       </div>
-
-      <MusicPlayer />
     </motion.div>
   );
 }
