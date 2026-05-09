@@ -27,18 +27,42 @@ export default function MusicPlayer() {
     setTrackIdx(startIdx);
     idxRef.current = startIdx;
     const audio = new Audio(TRACKS[startIdx].src);
-    audio.volume = 0;
+    audio.muted = true;
+    audio.volume = 0.4;
     audioRef.current = audio;
     audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
     audio.addEventListener('ended', goNext);
-    return () => { audio.pause(); };
+
+    // Auto-unmute on the first user interaction anywhere on the page
+    const onFirstInteract = () => {
+      if (!audioRef.current) return;
+      if (audioRef.current.muted) {
+        audioRef.current.muted = false;
+        mutedRef.current = false;
+        setMuted(false);
+        if (audioRef.current.paused) {
+          audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+        }
+      }
+      document.removeEventListener('pointerdown', onFirstInteract);
+      document.removeEventListener('keydown', onFirstInteract);
+    };
+    document.addEventListener('pointerdown', onFirstInteract);
+    document.addEventListener('keydown', onFirstInteract);
+
+    return () => {
+      audio.pause();
+      document.removeEventListener('pointerdown', onFirstInteract);
+      document.removeEventListener('keydown', onFirstInteract);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadTrack = (idx: number) => {
     if (audioRef.current) audioRef.current.pause();
     const audio = new Audio(TRACKS[idx].src);
-    audio.volume = mutedRef.current ? 0 : volRef.current;
+    audio.muted = mutedRef.current;
+    audio.volume = volRef.current;
     audioRef.current = audio;
     idxRef.current = idx;
     audio.addEventListener('ended', goNext);
@@ -62,6 +86,7 @@ export default function MusicPlayer() {
     if (mutedRef.current) {
       mutedRef.current = false;
       setMuted(false);
+      a.muted = false;
       a.volume = volRef.current;
     }
     if (a.paused) {
@@ -77,7 +102,8 @@ export default function MusicPlayer() {
     mutedRef.current = newMuted;
     setMuted(newMuted);
     if (audioRef.current) {
-      audioRef.current.volume = newMuted ? 0 : volRef.current;
+      audioRef.current.muted = newMuted;
+      audioRef.current.volume = volRef.current;
       if (!newMuted && audioRef.current.paused) {
         audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
       }

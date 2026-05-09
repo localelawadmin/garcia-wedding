@@ -167,7 +167,7 @@ const EventActions: React.FC<{ calId: string; mapQuery: string; tone: Tone }> = 
   const hoverBg = tone === 'cream' ? DEEP_DARK : CREAM;
   const hoverFg = tone === 'cream' ? CREAM : DEEP_DARK;
   const baseStyle: React.CSSProperties = {
-    width: 36, height: 36, borderRadius: '50%',
+    width: 30, height: 30, borderRadius: '50%',
     border: '1px solid currentColor', background: 'transparent',
     color: 'inherit', cursor: 'pointer', padding: 0,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -177,13 +177,13 @@ const EventActions: React.FC<{ calId: string; mapQuery: string; tone: Tone }> = 
   const onEnter = (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.background = hoverBg; e.currentTarget.style.color = hoverFg; };
   const onLeave = (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'inherit'; };
   return (
-    <div style={{ display: 'flex', gap: 12, marginTop: 28 }}>
+    <div style={{ display: 'flex', gap: 10, flexShrink: 0, paddingBottom: 6 }}>
       <button type="button" aria-label="Add to calendar" title="Add to calendar"
         onClick={() => downloadICS(calId)}
         onMouseEnter={onEnter} onMouseLeave={onLeave}
         style={baseStyle}
       >
-        <svg viewBox="0 0 16 16" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round">
+        <svg viewBox="0 0 16 16" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round">
           <rect x="1.5" y="3" width="9" height="9" rx="1" />
           <line x1="1.5" y1="5.5" x2="10.5" y2="5.5" />
           <line x1="3.5" y1="2" x2="3.5" y2="4" />
@@ -198,7 +198,7 @@ const EventActions: React.FC<{ calId: string; mapQuery: string; tone: Tone }> = 
         onMouseEnter={onEnter} onMouseLeave={onLeave}
         style={baseStyle}
       >
-        <svg viewBox="0 0 16 16" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 16 16" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round" strokeLinejoin="round">
           <path d="M8 1.5 C5 1.5 3 3.5 3 6 C3 9 8 14 8 14 S13 9 13 6 C13 3.5 11 1.5 8 1.5 Z" />
           <circle cx="8" cy="6" r="1.5" />
         </svg>
@@ -221,10 +221,13 @@ const EventSection: React.FC<{
         <Icon src={iconSrc} size={220} tone={tone} />
       </div>
       <div>
-        <h3 className="heading" style={{
-          fontSize: 'clamp(64px, 8vw, 110px)', lineHeight: 0.8,
-          margin: '0 0 26px', letterSpacing: '-0.005em', paddingTop: '0.12em',
-        }}>{name}</h3>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 24, marginBottom: 22 }}>
+          <h3 className="heading" style={{
+            fontSize: 'clamp(64px, 8vw, 110px)', lineHeight: 0.8,
+            margin: 0, letterSpacing: '-0.005em', paddingTop: '0.12em',
+          }}>{name}</h3>
+          <EventActions calId={calId} mapQuery={mapQuery} tone={tone} />
+        </div>
         <div style={{
           display: 'flex', flexDirection: 'column', gap: 16,
           paddingTop: 22, borderTop: '1px solid currentColor',
@@ -242,7 +245,6 @@ const EventSection: React.FC<{
             </div>
           ))}
         </div>
-        <EventActions calId={calId} mapQuery={mapQuery} tone={tone} />
       </div>
     </div>
     <style jsx>{`
@@ -545,7 +547,8 @@ export default function WeddingSite() {
             onClick={downloadAllICS}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 10,
-              padding: '14px 32px', border: '1px solid currentColor',
+              padding: '12px 26px', border: '1px solid currentColor',
+              borderRadius: 999,
               fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase',
               cursor: 'pointer', background: 'transparent', color: 'inherit',
               fontFamily: 'inherit', fontWeight: 400,
