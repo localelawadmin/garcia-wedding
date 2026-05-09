@@ -177,7 +177,7 @@ const EventActions: React.FC<{ calId: string; mapQuery: string; tone: Tone }> = 
   const onEnter = (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.background = hoverBg; e.currentTarget.style.color = hoverFg; };
   const onLeave = (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'inherit'; };
   return (
-    <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+    <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-start', marginTop: 20 }}>
       <button type="button" aria-label="Add to calendar" title="Add to calendar"
         onClick={() => downloadICS(calId)}
         onMouseEnter={onEnter} onMouseLeave={onLeave}
@@ -212,14 +212,13 @@ const EventSection: React.FC<{
   rows: Array<[string, string]>; foot?: string;
   calId: string; mapQuery: string;
 }> = ({ id, tone, eyebrow, name, iconSrc, rows, foot, calId, mapQuery }) => (
-  <SectionShell id={id} tone={tone} foot={foot}>
+  <SectionShell id={id} tone={tone} foot={foot} wide>
     <Eyebrow>{eyebrow}</Eyebrow>
     <div style={{
       display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 60, alignItems: 'center',
     }} className="event-grid">
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Icon src={iconSrc} size={220} tone={tone} />
-        <EventActions calId={calId} mapQuery={mapQuery} tone={tone} />
       </div>
       <div>
         <h3 className="heading" style={{
@@ -243,6 +242,7 @@ const EventSection: React.FC<{
             </div>
           ))}
         </div>
+        <EventActions calId={calId} mapQuery={mapQuery} tone={tone} />
       </div>
     </div>
     <style jsx>{`
