@@ -118,6 +118,30 @@ const EVENT_DATA: Record<string, { summary: string; start: string; end: string; 
   beach:      { summary: 'Beach Day — Haley & George', start: '20270619T140000Z', end: '20270619T180000Z', location: 'Cape May Beach, Cape May, NJ', description: 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia — or stay the weekend.' },
 };
 
+function downloadAllICS() {
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+  const blocks = Object.keys(EVENT_DATA).map(id => {
+    const ev = EVENT_DATA[id];
+    return [
+      'BEGIN:VEVENT',
+      'UID:' + id + '@garcia-wedding',
+      'DTSTAMP:' + stamp,
+      'DTSTART:' + ev.start, 'DTEND:' + ev.end,
+      'SUMMARY:' + ev.summary,
+      'LOCATION:' + ev.location.replace(/,/g, '\\,'),
+      'DESCRIPTION:' + ev.description.replace(/,/g, '\\,'),
+      'END:VEVENT',
+    ].join('\r\n');
+  });
+  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Garcia Wedding//EN', ...blocks, 'END:VCALENDAR'].join('\r\n');
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'garcia-wedding-weekend.ics';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 200);
+}
+
 function downloadICS(id: string) {
   const ev = EVENT_DATA[id]; if (!ev) return;
   const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
@@ -513,6 +537,33 @@ export default function WeddingSite() {
               </div>
             </div>
           ))}
+        </div>
+        <div style={{ textAlign: 'center', marginTop: 36 }}>
+          <button
+            type="button"
+            aria-label="Add all events to your calendar"
+            onClick={downloadAllICS}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              padding: '14px 32px', border: '1px solid currentColor',
+              fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase',
+              cursor: 'pointer', background: 'transparent', color: 'inherit',
+              fontFamily: 'inherit', fontWeight: 400,
+              transition: 'background .25s, color .25s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = DEEP_DARK; e.currentTarget.style.color = CREAM; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'inherit'; }}
+          >
+            <svg viewBox="0 0 16 16" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round">
+              <rect x="1.5" y="3" width="9" height="9" rx="1" />
+              <line x1="1.5" y1="5.5" x2="10.5" y2="5.5" />
+              <line x1="3.5" y1="2" x2="3.5" y2="4" />
+              <line x1="8.5" y1="2" x2="8.5" y2="4" />
+              <line x1="13" y1="11" x2="13" y2="14" strokeWidth={1.4} />
+              <line x1="11.5" y1="12.5" x2="14.5" y2="12.5" strokeWidth={1.4} />
+            </svg>
+            Add all to calendar
+          </button>
         </div>
       </SectionShell>
 
