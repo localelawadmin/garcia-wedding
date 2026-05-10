@@ -117,7 +117,7 @@ const Icon: React.FC<{ src: string; size?: number; tone: Tone }> = ({ src, size 
     alt=""
     style={{
       width: size, height: size, objectFit: 'contain', display: 'block',
-      filter: tone === 'cream' ? 'url(#tint-deep-dark)' : 'url(#tint-cream)',
+      filter: tone === 'ink' ? 'url(#tint-cream)' : 'url(#tint-deep-dark)',
     }}
   />
 );
@@ -569,7 +569,7 @@ export default function WeddingSite() {
             <div key={card.name} style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 12,
             }}>
-              <Icon src={card.src} size={96} tone="cream" />
+              <Icon src={card.src} size={96} tone="ink" />
               <div className="heading" style={{ fontSize: 20, fontWeight: 400 }}>{card.name}</div>
               <div style={{
                 fontSize: 10, letterSpacing: '0.14em', opacity: .65,
