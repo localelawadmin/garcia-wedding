@@ -23,7 +23,7 @@ const DEEP = '#99b0c2';
 const DEEP_DARK = '#4c647a';
 
 // Noise texture (SVG turbulence as data URI) — adds paper grain to backgrounds
-const NOISE_BG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
+const NOISE_BG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 const NOISE_CARD = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.95' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 
 // Stripe backgrounds with paper-grain texture layered on top via blend
@@ -55,8 +55,8 @@ const SectionShell: React.FC<{
         padding: '110px 24px 70px',
         backgroundColor: tone === 'cream' ? CREAM : DEEP,
         backgroundImage: sectionBg,
-        backgroundSize: '280px 280px, auto',
-        backgroundBlendMode: 'multiply',
+        backgroundSize: '260px 260px, auto',
+        backgroundBlendMode: 'soft-light',
         color: fg,
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center',
@@ -65,12 +65,9 @@ const SectionShell: React.FC<{
     >
       <div style={{
         maxWidth: maxW, margin: '0 auto', width: '100%',
-        backgroundColor: boxBg,
-        backgroundImage: `${NOISE_CARD}, linear-gradient(${boxBg}, ${boxBg})`,
-        backgroundSize: '200px 200px, auto',
-        backgroundBlendMode: 'multiply',
+        background: boxBg,
         padding: 'clamp(48px, 6vw, 72px) clamp(32px, 5vw, 56px)',
-        boxShadow: '0 14px 40px rgba(20,30,45,.10), 0 2px 8px rgba(20,30,45,.06)',
+        boxShadow: '0 14px 40px rgba(20,30,45,.12), 0 2px 8px rgba(20,30,45,.08)',
       }}>
         {children}
       </div>
@@ -511,7 +508,7 @@ export default function WeddingSite() {
         id="invite"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: CREAM, backgroundImage: stripeCream, backgroundSize: stripeCreamSize, backgroundBlendMode: 'multiply', color: DEEP_DARK,
+          backgroundColor: CREAM, backgroundImage: stripeCream, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -740,7 +737,7 @@ export default function WeddingSite() {
         id="contact"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: CREAM, backgroundImage: stripeCream, backgroundSize: stripeCreamSize, backgroundBlendMode: 'multiply', color: DEEP_DARK,
+          backgroundColor: CREAM, backgroundImage: stripeCream, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
