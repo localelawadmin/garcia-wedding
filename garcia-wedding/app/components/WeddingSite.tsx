@@ -346,6 +346,7 @@ const COUNTDOWN_TARGET = new Date('2027-06-17T20:00:00-04:00').getTime();
 export default function WeddingSite() {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [showTop, setShowTop] = useState(false);
+  const [noteOpen, setNoteOpen] = useState(false);
   const [days, setDays] = useState<number | null>(null);
 
   useEffect(() => {
@@ -396,7 +397,7 @@ export default function WeddingSite() {
 
       <Navbar />
       <MusicPlayer />
-      <NoteFromCouple />
+      <NoteFromCouple onOpenChange={setNoteOpen} />
 
       {/* Countdown pill */}
       <div
@@ -424,15 +425,15 @@ export default function WeddingSite() {
         aria-label="Back to top"
         type="button"
         style={{
-          position: 'fixed', bottom: 134, right: 22,
+          position: 'fixed', bottom: 134, right: 70,
           width: 36, height: 36, borderRadius: '50%',
           background: 'rgba(76, 100, 122, .65)', color: CREAM,
           border: '1px solid rgba(242, 239, 233, .45)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           backdropFilter: 'blur(14px) saturate(180%)', WebkitBackdropFilter: 'blur(14px) saturate(180%)',
           cursor: 'pointer', padding: 0, zIndex: 200,
-          opacity: showTop ? 1 : 0,
-          pointerEvents: showTop ? 'auto' : 'none',
+          opacity: (showTop && !noteOpen) ? 1 : 0,
+          pointerEvents: (showTop && !noteOpen) ? 'auto' : 'none',
           transition: 'opacity .35s ease, background .25s ease, color .25s ease',
         }}
         onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = DEEP_DARK; }}

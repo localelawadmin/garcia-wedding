@@ -134,7 +134,7 @@ export default function MusicPlayer() {
 
   const iconBtn: React.CSSProperties = {
     width: 22, height: 22, borderRadius: '50%',
-    border: `1px solid rgba(242,239,233,.45)`,
+    border: '1px solid rgba(242, 239, 233, .45)',
     background: 'transparent', color: CREAM,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     padding: 0, cursor: 'pointer', transition: 'all .25s',
@@ -149,12 +149,12 @@ export default function MusicPlayer() {
         position: 'fixed', bottom: 22, right: 22,
         display: 'flex', alignItems: 'center', gap: 10,
         padding: '7px 18px 7px 12px',
-        background: 'rgba(0,0,0,.5)',
-        border: '1px solid rgba(242,239,233,.35)',
+        background: 'rgba(76, 100, 122, .65)',
+        border: '1px solid rgba(242, 239, 233, .45)',
         borderRadius: 999,
         color: CREAM,
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
+        backdropFilter: 'blur(14px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(14px) saturate(180%)',
         zIndex: 200,
         transition: 'padding .3s ease, gap .3s ease',
       }}
