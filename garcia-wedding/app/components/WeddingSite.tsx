@@ -508,7 +508,7 @@ export default function WeddingSite() {
         id="invite"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: CREAM, backgroundImage: stripeCream, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light', color: DEEP_DARK,
+          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light', color: CREAM,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -524,12 +524,12 @@ export default function WeddingSite() {
             preserveAspectRatio="none"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
           >
-            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" filter="drop-shadow(0 6px 20px rgba(20,30,45,0.10)) drop-shadow(0 2px 4px rgba(20,30,45,0.05))" />
+            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
           </svg>
           <div style={{
             position: 'relative', zIndex: 1,
             padding: '0 clamp(48px, 8vw, 96px)',
-            textAlign: 'center', width: '100%',
+            textAlign: 'center', width: '100%', color: DEEP_DARK,
           }}>
             <h2 className="heading" style={{
               fontSize: 'clamp(40px, 5.5vw, 68px)', lineHeight: 1,
@@ -750,10 +750,10 @@ export default function WeddingSite() {
         }}>
           <svg viewBox="0 0 800 480" preserveAspectRatio="none"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" filter="drop-shadow(0 6px 20px rgba(20,30,45,0.10)) drop-shadow(0 2px 4px rgba(20,30,45,0.05))" />
+            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
           </svg>
           <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%' }}>
-            <div style={{ fontSize: 16, letterSpacing: '0.4em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 32, opacity: .75 }}>
+            <div style={{ fontSize: 14, letterSpacing: '0.4em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 14, opacity: .75 }}>
               Any questions?
             </div>
             <h2 className="heading" style={{
