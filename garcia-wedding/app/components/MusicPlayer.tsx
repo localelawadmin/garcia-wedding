@@ -159,6 +159,62 @@ export default function MusicPlayer() {
         transition: 'padding .3s ease, gap .3s ease',
       }}
     >
+      {/* Expanded controls — appear on hover (LEFT of play, so play stays put) */}
+      <div
+        style={{
+          display: 'flex', alignItems: 'center', gap: 8,
+          maxWidth: hover ? 220 : 0,
+          opacity: hover ? 1 : 0,
+          overflow: 'hidden',
+          marginRight: hover ? 0 : -10,
+          transition: 'max-width .35s ease, opacity .25s ease, margin-right .35s ease',
+        }}
+      >
+        <input
+          type="range" min={0} max={1} step={0.02}
+          value={muted ? 0 : volume}
+          onChange={handleVolume}
+          aria-label="Volume"
+          className="vol-slider"
+        />
+
+        <button onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'} type="button"
+          style={iconBtn}
+          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
+        >
+          {muted ? (
+            <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
+              <path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" />
+              <path d="M9 4 L11 6 M11 4 L9 6" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
+              <path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" />
+              <path d="M9 4 Q10 6 9 8 M10.5 3 Q12 6 10.5 9" />
+            </svg>
+          )}
+        </button>
+
+        <button onClick={goNext} aria-label="Next" type="button"
+          style={iconBtn}
+          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
+        >
+          <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L8 6 L3 10 Z M8 2 L9 2 L9 10 L8 10 Z"/></svg>
+        </button>
+
+        <button onClick={goPrev} aria-label="Previous" type="button"
+          style={iconBtn}
+          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
+        >
+          <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M9 2 L9 10 L4 6 Z M3 2 L4 2 L4 10 L3 10 Z"/></svg>
+        </button>
+
+        <span style={{ width: 1, height: 12, background: 'rgba(242,239,233,.3)', flexShrink: 0 }} />
+      </div>
+
       {/* Play / Pause */}
       <button
         onClick={togglePlay}
@@ -185,61 +241,6 @@ export default function MusicPlayer() {
       >
         {TRACKS[trackIdx].label}
       </span>
-
-      {/* Expanded controls — appear on hover */}
-      <div
-        style={{
-          display: 'flex', alignItems: 'center', gap: 8,
-          maxWidth: hover ? 200 : 0,
-          opacity: hover ? 1 : 0,
-          overflow: 'hidden',
-          transition: 'max-width .35s ease, opacity .25s ease',
-        }}
-      >
-        <span style={{ width: 1, height: 12, background: 'rgba(242,239,233,.3)', flexShrink: 0 }} />
-
-        <button onClick={goPrev} aria-label="Previous" type="button"
-          style={iconBtn}
-          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
-        >
-          <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M9 2 L9 10 L4 6 Z M3 2 L4 2 L4 10 L3 10 Z"/></svg>
-        </button>
-
-        <button onClick={goNext} aria-label="Next" type="button"
-          style={iconBtn}
-          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
-        >
-          <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L8 6 L3 10 Z M8 2 L9 2 L9 10 L8 10 Z"/></svg>
-        </button>
-
-        <button onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'} type="button"
-          style={iconBtn}
-          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
-        >
-          {muted ? (
-            <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
-              <path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" />
-              <path d="M9 4 L11 6 M11 4 L9 6" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
-              <path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" />
-              <path d="M9 4 Q10 6 9 8 M10.5 3 Q12 6 10.5 9" />
-            </svg>
-          )}
-        </button>
-
-        <input
-          type="range" min={0} max={1} step={0.02}
-          value={muted ? 0 : volume}
-          onChange={handleVolume}
-          aria-label="Volume"
-          className="vol-slider"
-        />
-      </div>
     </div>
   );
 }
