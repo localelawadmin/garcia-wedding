@@ -72,7 +72,7 @@ export default function LandingPage({ onSuccess }: Props) {
       </div>
 
       {/* Dark overlay */}
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(63, 89, 83, .42)', backdropFilter: 'saturate(180%)', WebkitBackdropFilter: 'saturate(180%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(76, 100, 122, .42)', backdropFilter: 'saturate(180%)', WebkitBackdropFilter: 'saturate(180%)' }} />
 
       {/* Grain */}
       <div style={{
@@ -84,7 +84,7 @@ export default function LandingPage({ onSuccess }: Props) {
       {/* Vignette */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(circle at center, rgba(63,89,83,0) 30%, rgba(63,89,83,.3) 80%, rgba(63,89,83,.6) 100%)',
+        background: 'radial-gradient(circle at center, rgba(76,100,122,0) 30%, rgba(76,100,122,.3) 80%, rgba(76,100,122,.6) 100%)',
       }} />
 
       {/* Content */}
