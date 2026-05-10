@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Navbar from './Navbar';
 import MusicPlayer from './MusicPlayer';
+import NoteFromCouple from './NoteFromCouple';
 
 const HG = '/photos/agenda/hg.png';
 const HERO_PHOTO = '/photos/hero-beach.jpg';
@@ -395,6 +396,7 @@ export default function WeddingSite() {
 
       <Navbar />
       <MusicPlayer />
+      <NoteFromCouple />
 
       {/* Countdown pill */}
       <div
@@ -402,9 +404,9 @@ export default function WeddingSite() {
           position: 'fixed', bottom: 78, right: 22,
           display: 'flex', alignItems: 'center', gap: 7,
           padding: '4px 22px 10px',
-          background: 'rgba(0,0,0,.5)', border: '1px solid rgba(242,239,233,.35)',
+          background: 'rgba(76, 100, 122, .65)', border: '1px solid rgba(242, 239, 233, .45)',
           borderRadius: 999, color: CREAM,
-          backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+          backdropFilter: 'blur(14px) saturate(180%)', WebkitBackdropFilter: 'blur(14px) saturate(180%)',
           zIndex: 200,
           fontFamily: "'Montmartre','Cormorant Garamond',Georgia,serif",
           fontStyle: 'italic', fontWeight: 400, lineHeight: 1,
@@ -424,17 +426,17 @@ export default function WeddingSite() {
         style={{
           position: 'fixed', bottom: 134, right: 22,
           width: 36, height: 36, borderRadius: '50%',
-          background: 'rgba(0,0,0,.5)', color: CREAM,
-          border: '1px solid rgba(242,239,233,.35)',
+          background: 'rgba(76, 100, 122, .65)', color: CREAM,
+          border: '1px solid rgba(242, 239, 233, .45)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+          backdropFilter: 'blur(14px) saturate(180%)', WebkitBackdropFilter: 'blur(14px) saturate(180%)',
           cursor: 'pointer', padding: 0, zIndex: 200,
           opacity: showTop ? 1 : 0,
           pointerEvents: showTop ? 'auto' : 'none',
           transition: 'opacity .35s ease, background .25s ease, color .25s ease',
         }}
-        onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,.5)'; e.currentTarget.style.color = CREAM; }}
+        onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = DEEP_DARK; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(76, 100, 122, .65)'; e.currentTarget.style.color = CREAM; }}
       >
         <svg viewBox="0 0 24 24" width={12} height={12} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 19V5M5 12l7-7 7 7" />
@@ -712,7 +714,8 @@ export default function WeddingSite() {
         <Lede>Your presence is the gift. If you&apos;d like to celebrate further, we&apos;ve put a few things together.</Lede>
         <a href="https://www.zola.com/wedding/haleyandgeorge2027/registry" target="_blank" rel="noopener noreferrer"
           style={{
-            display: 'inline-flex', padding: '14px 36px', border: '1px solid currentColor',
+            display: 'inline-flex', padding: '12px 26px', border: '1px solid currentColor',
+            borderRadius: 999,
             fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase',
             cursor: 'pointer', marginTop: 16, fontWeight: 400, alignSelf: 'flex-start',
             color: 'inherit', textDecoration: 'none',

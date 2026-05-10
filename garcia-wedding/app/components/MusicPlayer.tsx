@@ -180,7 +180,7 @@ export default function MusicPlayer() {
 
         <button onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'} type="button"
           style={iconBtn}
-          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
+          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4c647a'; }}
           onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
         >
           {muted ? (
@@ -198,7 +198,7 @@ export default function MusicPlayer() {
 
         <button onClick={goNext} aria-label="Next" type="button"
           style={iconBtn}
-          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
+          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4c647a'; }}
           onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
         >
           <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L8 6 L3 10 Z M8 2 L9 2 L9 10 L8 10 Z"/></svg>
@@ -206,7 +206,7 @@ export default function MusicPlayer() {
 
         <button onClick={goPrev} aria-label="Previous" type="button"
           style={iconBtn}
-          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
+          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4c647a'; }}
           onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
         >
           <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M9 2 L9 10 L4 6 Z M3 2 L4 2 L4 10 L3 10 Z"/></svg>
@@ -221,7 +221,7 @@ export default function MusicPlayer() {
         aria-label={playing && !muted ? 'Pause' : 'Play'}
         type="button"
         style={iconBtn}
-        onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#0a0a0a'; }}
+        onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4c647a'; }}
         onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
       >
         {playing && !muted ? (
