@@ -2,30 +2,41 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import GarciaLogo from './GarciaLogo';
-import MusicPlayer from './MusicPlayer';
 
-interface LandingPageProps {
-  onSuccess: () => void;
-}
+const LANDER_PHOTOS = [
+  '/photos/walking-bw.jpg',
+  '/photos/cheek-kiss-bw.jpg',
+  '/photos/lift-bw.jpg',
+  '/photos/proposal-bw-closeup.jpg',
+  '/photos/pouring-champagne-bw.jpg',
+  '/photos/bouquet-bw.jpg',
+];
 
-export default function LandingPage({ onSuccess }: LandingPageProps) {
-  const [password, setPassword] = useState('');
+const CYCLE_MS = 2400;
+
+interface Props { onSuccess: () => void; }
+
+const GRAIN_SVG =
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>\")";
+
+export default function LandingPage({ onSuccess }: Props) {
+  const [pw, setPw] = useState('');
   const [error, setError] = useState(false);
   const [shake, setShake] = useState(false);
-  const [transitioning, setTransitioning] = useState(false);
-  const [videoFading, setVideoFading] = useState(false);
+  const [exiting, setExiting] = useState(false);
+  const [idx, setIdx] = useState(0);
 
-  const correctPassword = process.env.NEXT_PUBLIC_PASSWORD || 'hdg3';
+  // Cycle B&W lander photos
+  useEffectInterval(() => setIdx(i => (i + 1) % LANDER_PHOTOS.length), CYCLE_MS);
+
+  const correct = (process.env.NEXT_PUBLIC_PASSWORD || 'hdg3').toLowerCase();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.toLowerCase() === correctPassword.toLowerCase()) {
-      setVideoFading(true);
-      await new Promise(r => setTimeout(r, 600));
-      setTransitioning(true);
+    if (pw.toLowerCase() === correct) {
+      setExiting(true);
       sessionStorage.setItem('garcia-auth', 'true');
-      await new Promise(r => setTimeout(r, 1800));
+      await new Promise(r => setTimeout(r, 900));
       onSuccess();
     } else {
       setError(true);
@@ -37,161 +48,164 @@ export default function LandingPage({ onSuccess }: LandingPageProps) {
 
   return (
     <motion.div
-      className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: 'linear-gradient(160deg, #B8C8E0 0%, #C8D8C0 50%, #ABBE9C 100%)' }}
-      animate={transitioning ? { opacity: 0 } : { opacity: 1 }}
-      transition={{ duration: 0.8, delay: transitioning ? 0.8 : 0 }}
+      style={{ position: 'fixed', inset: 0, background: '#3f5953', overflow: 'hidden' }}
+      animate={{ opacity: exiting ? 0 : 1 }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
     >
-      {/* Logo */}
-      <motion.div
-        className="mb-6 z-10"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-      >
-        <GarciaLogo width={180} height={90} />
-      </motion.div>
+      {/* Crossfading B&W photos */}
+      <div style={{ position: 'absolute', inset: 0 }}>
+        {LANDER_PHOTOS.map((src, i) => (
+          <img
+            key={src}
+            src={src}
+            alt=""
+            style={{
+              position: 'absolute', inset: 0, width: '100%', height: '100%',
+              objectFit: 'cover',
+              filter: 'blur(10px) brightness(.7) contrast(1.05) saturate(.65)',
+              transform: 'scale(1.08)',
+              opacity: i === idx ? 1 : 0,
+              transition: 'opacity 1.4s ease',
+            }}
+          />
+        ))}
+      </div>
 
-      {/* Oval video frame */}
-      <motion.div
-        className="relative z-10"
-        style={{ width: 280, height: 360 }}
-        animate={
-          transitioning
-            ? { scale: 3.5, y: 180, opacity: 0 }
-            : { scale: 1, y: 0, opacity: 1 }
-        }
-        transition={{ duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-      >
-        {/* Container for drop shadow */}
-        <div style={{
-          position: 'relative',
-          width: 280,
-          height: 360,
-          filter: 'drop-shadow(0 12px 40px rgba(26,39,68,0.35))',
-        }}>
-          {/* CSS oval clip — works on all browsers including mobile */}
-          <div style={{
-            position: 'absolute',
-            left: 4,
-            top: 8,
-            width: 272,
-            height: 344,
-            borderRadius: '50%',
-            overflow: 'hidden',
-            background: '#000',
-          }}>
-            <motion.div
-              style={{ position: 'absolute', inset: 0 }}
-              animate={videoFading ? { opacity: 0 } : { opacity: 1 }}
-              transition={{ duration: 0.6 }}
-            >
-              <iframe
-                src="https://www.youtube.com/embed/he6_qMIM3wY?autoplay=1&mute=1&loop=1&playlist=he6_qMIM3wY&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&start=25"
-                style={{
-                  position: 'absolute',
-                  width: '225%',
-                  height: '110%',
-                  left: '-62.5%',
-                  top: '-5%',
-                  border: 'none',
-                  pointerEvents: 'none',
-                }}
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                frameBorder="0"
-              />
-            </motion.div>
-          </div>
+      {/* Dark overlay */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(76, 100, 122, .42)', backdropFilter: 'saturate(180%)', WebkitBackdropFilter: 'saturate(180%)' }} />
 
-          {/* Decorative oval border rings — SVG overlay, no clip needed */}
-          <svg
-            viewBox="0 0 280 360"
-            width="280"
-            height="360"
-            style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
-            overflow="visible"
-          >
-            <ellipse cx="140" cy="180" rx="136" ry="172" fill="none" stroke="#1A2744" strokeWidth="2.5" />
-            <ellipse cx="140" cy="180" rx="130" ry="166" fill="none" stroke="#1A2744" strokeWidth="0.8" strokeOpacity="0.5" />
-          </svg>
-        </div>
-      </motion.div>
+      {/* Grain */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        opacity: .25, mixBlendMode: 'overlay',
+        backgroundImage: GRAIN_SVG,
+      }} />
 
-      {/* Password form */}
-      <motion.div
-        className="mt-8 z-10 flex flex-col items-center gap-3"
-        initial={{ opacity: 0, y: 20 }}
-        animate={transitioning ? { opacity: 0 } : { opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-      >
-        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-3">
+      {/* Vignette */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(circle at center, rgba(76,100,122,0) 30%, rgba(76,100,122,.3) 80%, rgba(76,100,122,.6) 100%)',
+      }} />
+
+      {/* Content */}
+      <div style={{
+        position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', gap: 30,
+        color: '#f2efe9', padding: '0 24px',
+      }}>
+        <motion.img
+          src="/photos/agenda/hg.png"
+          alt="Haley & George"
+          width={160}
+          height={160}
+          style={{
+            width: 160, height: 'auto', display: 'block',
+            filter: 'brightness(0) invert(.95)',
+          }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        />
+
+        <motion.div
+          style={{
+            fontSize: 10, letterSpacing: '0.42em', textTransform: 'uppercase',
+            opacity: .8, fontWeight: 300,
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.8 }}
+          transition={{ duration: 1, delay: 0.4 }}
+        >
+          Haley &nbsp;·&nbsp; George
+        </motion.div>
+
+        <motion.form
+          onSubmit={handleSubmit}
+          autoComplete="off"
+          style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'center', marginTop: 6 }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.55 }}
+        >
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter Password"
+            value={pw}
+            onChange={e => setPw(e.target.value)}
+            placeholder="Enter password"
             className={shake ? 'shake' : ''}
             style={{
-              fontFamily: "'Helvetica Now Display','Arial Narrow','Helvetica Neue',sans-serif",
-              fontStretch: 'condensed',
-              letterSpacing: '0.2em',
-              minWidth: 240,
-              padding: '12px 24px',
-              background: 'rgba(232,223,200,0.9)',
-              border: error ? '1.5px solid #C05A68' : '1.5px solid #1A2744',
-              color: '#1A2744',
+              background: 'rgba(255,255,255,.06)',
+              border: error ? '1px solid #d9a3a3' : '1px solid rgba(242,239,233,.55)',
+              color: '#f2efe9',
+              padding: '13px 24px',
+              minWidth: 280,
               textAlign: 'center',
-              fontSize: '16px',
+              fontSize: 11,
+              letterSpacing: '0.3em',
+              textTransform: 'uppercase',
               outline: 'none',
               backdropFilter: 'blur(4px)',
+              fontFamily: 'inherit',
+              fontWeight: 300,
             }}
             autoFocus
           />
           <button
             type="submit"
             style={{
-              fontFamily: "'Helvetica Now Display','Arial Narrow','Helvetica Neue',sans-serif",
-              fontStretch: 'condensed',
-              letterSpacing: '0.2em',
-              padding: '10px 32px',
-              background: '#1A2744',
-              color: '#E8DFC8',
-              border: 'none',
-              fontSize: '13px',
+              background: 'transparent',
+              border: '1px solid rgba(242,239,233,.55)',
+              color: '#f2efe9',
+              padding: '11px 34px',
+              fontSize: 10,
+              letterSpacing: '0.35em',
+              textTransform: 'uppercase',
               cursor: 'pointer',
-              textTransform: 'uppercase' as const,
-              transition: 'background 0.3s',
+              fontFamily: 'inherit',
+              fontWeight: 300,
+              transition: 'all .25s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#C05A68')}
-            onMouseLeave={e => (e.currentTarget.style.background = '#1A2744')}
+            onMouseEnter={e => { e.currentTarget.style.background = '#f2efe9'; e.currentTarget.style.color = '#0a0a0a'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#f2efe9'; }}
           >
             Enter →
           </button>
-        </form>
-        <AnimatePresence>
-          {error && (
-            <motion.p
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              style={{
-                fontFamily: "'Helvetica Now Display','Arial Narrow','Helvetica Neue',sans-serif",
-                fontStretch: 'condensed',
-                color: '#C05A68',
-                fontSize: '13px',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-              }}
-            >
-              Incorrect password
-            </motion.p>
-          )}
-        </AnimatePresence>
-      </motion.div>
+          <AnimatePresence>
+            {error && (
+              <motion.span
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                style={{
+                  color: '#e8a4a4', fontSize: 9, letterSpacing: '0.3em',
+                  textTransform: 'uppercase', fontWeight: 300,
+                }}
+              >
+                Try again
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.form>
+      </div>
 
-      {/* Music player */}
-      <MusicPlayer />
+      {/* Hint */}
+      <div style={{
+        position: 'absolute', bottom: 36, left: '50%', transform: 'translateX(-50%)',
+        fontSize: 9, letterSpacing: '0.42em', textTransform: 'uppercase',
+        color: 'rgba(242,239,233,.5)', fontWeight: 300,
+      }}>
+        The more you look, the more you find
+      </div>
     </motion.div>
   );
+}
+
+// ─── small useEffect with interval helper ───────────
+import { useEffect } from 'react';
+function useEffectInterval(cb: () => void, ms: number) {
+  useEffect(() => {
+    const id = setInterval(cb, ms);
+    return () => clearInterval(id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ms]);
 }

@@ -1,3 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap');
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Montmartre';
+  src: url('https://static.showit.co/file/RR2mVNeCRiq1KM0wCkf85g/139270/montmartre-thin.woff') format('woff');
+  font-display: swap;
+  font-weight: 100 900;
+  font-style: normal;
+}
+
 @font-face {
   font-family: 'Black Editorial Script';
   src: url('/black-editorial-script.otf') format('opentype');
@@ -5,36 +16,33 @@
   font-style: normal;
 }
 
-@import "tailwindcss";
-
 @theme {
-  --color-salmon: #E8896A;
-  --color-blush: #F2C4BA;
-  --color-rose: #C05A68;
-  --color-periwinkle: #B8C8E0;
-  --color-sage: #ABBE9C;
-  --color-navy: #1A2744;
-  --color-cream: #E8DFC8;
+  --color-cream: #f2efe9;
+  --color-deep:  #6a857f;
+  --color-deep-dark: #3f5953;
+  --color-ink:   #0a0a0a;
+  --color-cream-soft: rgba(242,239,233,.55);
+  --color-deep-soft: rgba(63,89,83,.4);
+  --font-heading: 'Montmartre', 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Inter Tight', -apple-system, 'Helvetica Neue', sans-serif;
   --font-script: 'Black Editorial Script', cursive;
-  --font-sans: 'Helvetica Now Display', 'Arial Narrow', 'Helvetica Neue', sans-serif;
 }
 
-/* Responsive utility fallbacks for Tailwind v4 compatibility */
-.hidden { display: none !important; }
-
-@media (min-width: 640px) {
-  .sm\:columns-2 { columns: 2 !important; }
+html, body { background: #0a0a0a; }
+body {
+  font-family: 'Inter Tight', -apple-system, 'Helvetica Neue', sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  line-height: 1.55;
+  color: #f2efe9;
 }
 
-@media (min-width: 768px) {
-  .md\:flex { display: flex !important; }
-  .md\:block { display: block !important; }
-  .md\:hidden { display: none !important; }
-  .md\:grid { display: grid !important; }
-}
-
-@media (min-width: 1024px) {
-  .lg\:columns-3 { columns: 3 !important; }
+.heading {
+  font-family: 'Montmartre', 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  -webkit-text-stroke: 0.5px currentColor;
+  text-rendering: optimizeLegibility;
 }
 
 @keyframes shake {
@@ -44,11 +52,32 @@
   60% { transform: translateX(-6px); }
   80% { transform: translateX(6px); }
 }
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 12px rgba(192, 90, 104, 0.5); }
-  50% { box-shadow: 0 0 24px rgba(192, 90, 104, 0.9); }
-}
-
 .shake { animation: shake 0.5s ease-in-out; }
-.pulse-glow { animation: pulse-glow 2s infinite; }
+
+@keyframes scroll-bob {
+  0%, 100% { transform: translateY(0); opacity: .55; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+.scroll-bob { animation: scroll-bob 2.4s ease-in-out infinite; }
+
+.vol-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 56px; height: 16px;
+  background: transparent; cursor: pointer;
+}
+.vol-slider::-webkit-slider-runnable-track {
+  height: 1px; background: rgba(242,239,233,.4); border-radius: 1px;
+}
+.vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #f2efe9; margin-top: -4px;
+}
+.vol-slider::-moz-range-track {
+  height: 1px; background: rgba(242,239,233,.4); border-radius: 1px;
+}
+.vol-slider::-moz-range-thumb {
+  width: 9px; height: 9px; border: none; border-radius: 50%;
+  background: #f2efe9;
+}
