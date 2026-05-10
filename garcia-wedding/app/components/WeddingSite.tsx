@@ -19,12 +19,18 @@ const GRAIN_SVG =
   "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>\")";
 
 const CREAM = '#f2efe9';
-const DEEP = '#6a857f';
-const DEEP_DARK = '#3f5953';
+const DEEP = '#99b0c2';
+const DEEP_DARK = '#4c647a';
 
-// Stripe backgrounds for sections (vertical, 28px dominant + 12px accent)
-const stripeCream = `repeating-linear-gradient(90deg, ${CREAM} 0 28px, ${DEEP} 28px 40px)`;
-const stripeInk   = `repeating-linear-gradient(90deg, ${DEEP} 0 28px, ${CREAM} 28px 40px)`;
+// Noise texture (SVG turbulence as data URI) — adds paper grain to backgrounds
+const NOISE_BG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
+const NOISE_CARD = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.95' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
+
+// Stripe backgrounds with paper-grain texture layered on top via blend
+const stripeCream = `${NOISE_BG}, repeating-linear-gradient(90deg, ${CREAM} 0 28px, ${DEEP} 28px 40px)`;
+const stripeInk   = `${NOISE_BG}, repeating-linear-gradient(90deg, ${DEEP} 0 28px, ${CREAM} 28px 40px)`;
+const stripeCreamSize = '280px 280px, auto';
+const stripeInkSize   = '280px 280px, auto';
 
 // Wavy oval path for the invite section (generated from sin-wave perimeter)
 const WAVY_PATH = "M 780.00 240.00 L 783.49 245.83 L 786.47 251.78 L 788.70 257.82 L 789.98 263.90 L 790.16 269.98 L 789.15 275.98 L 786.93 281.85 L 783.56 287.54 L 779.13 293.01 L 773.81 298.23 L 767.83 303.22 L 761.40 307.98 L 754.79 312.57 L 748.23 317.05 L 741.93 321.48 L 736.07 325.96 L 730.78 330.55 L 726.11 335.34 L 722.07 340.37 L 718.59 345.67 L 715.56 351.26 L 712.82 357.10 L 710.18 363.14 L 707.43 369.31 L 704.35 375.50 L 700.76 381.60 L 696.48 387.47 L 691.41 393.00 L 685.45 398.09 L 678.60 402.63 L 670.88 406.59 L 662.38 409.93 L 653.22 412.67 L 643.55 414.86 L 633.54 416.59 L 623.36 417.98 L 613.18 419.17 L 603.15 420.31 L 593.38 421.55 L 583.94 423.03 L 574.87 424.85 L 566.16 427.11 L 557.77 429.85 L 549.63 433.07 L 541.63 436.72 L 533.67 440.72 L 525.64 444.94 L 517.43 449.23 L 508.95 453.42 L 500.16 457.33 L 491.02 460.80 L 481.53 463.66 L 471.71 465.81 L 461.64 467.17 L 451.37 467.69 L 440.99 467.41 L 430.59 466.37 L 420.25 464.69 L 410.04 462.51 L 400.00 460.00 L 390.15 457.34 L 380.48 454.71 L 370.96 452.27 L 361.55 450.18 L 352.17 448.54 L 342.74 447.41 L 333.21 446.82 L 323.51 446.72 L 313.60 447.05 L 303.46 447.67 L 293.10 448.46 L 282.57 449.23 L 271.94 449.82 L 261.31 450.06 L 250.79 449.79 L 240.51 448.89 L 230.58 447.29 L 221.13 444.93 L 212.23 441.83 L 203.94 438.03 L 196.28 433.61 L 189.22 428.70 L 182.71 423.44 L 176.64 417.98 L 170.88 412.48 L 165.26 407.09 L 159.64 401.91 L 153.84 397.06 L 147.73 392.58 L 141.20 388.49 L 134.17 384.79 L 126.62 381.41 L 118.57 378.29 L 110.12 375.30 L 101.40 372.35 L 92.57 369.31 L 83.85 366.08 L 75.43 362.54 L 67.56 358.64 L 60.41 354.33 L 54.17 349.58 L 48.94 344.42 L 44.81 338.87 L 41.78 333.00 L 39.78 326.90 L 38.70 320.63 L 38.38 314.30 L 38.60 307.98 L 39.12 301.75 L 39.71 295.65 L 40.13 289.71 L 40.16 283.94 L 39.66 278.33 L 38.51 272.85 L 36.66 267.45 L 34.14 262.09 L 31.04 256.71 L 27.51 251.25 L 23.75 245.69 L 20.00 240.00 L 16.51 234.17 L 13.53 228.22 L 11.30 222.18 L 10.02 216.10 L 9.84 210.02 L 10.85 204.02 L 13.07 198.15 L 16.44 192.46 L 20.87 186.99 L 26.19 181.77 L 32.17 176.78 L 38.60 172.02 L 45.21 167.43 L 51.77 162.95 L 58.07 158.52 L 63.93 154.04 L 69.22 149.45 L 73.89 144.66 L 77.93 139.63 L 81.41 134.33 L 84.44 128.74 L 87.18 122.90 L 89.82 116.86 L 92.57 110.69 L 95.65 104.50 L 99.24 98.40 L 103.52 92.53 L 108.59 87.00 L 114.55 81.91 L 121.40 77.37 L 129.12 73.41 L 137.62 70.07 L 146.78 67.33 L 156.45 65.14 L 166.46 63.41 L 176.64 62.02 L 186.82 60.83 L 196.85 59.69 L 206.62 58.45 L 216.06 56.97 L 225.13 55.15 L 233.84 52.89 L 242.23 50.15 L 250.37 46.93 L 258.37 43.28 L 266.33 39.28 L 274.36 35.06 L 282.57 30.77 L 291.05 26.58 L 299.84 22.67 L 308.98 19.20 L 318.47 16.34 L 328.29 14.19 L 338.36 12.83 L 348.63 12.31 L 359.01 12.59 L 369.41 13.63 L 379.75 15.31 L 389.96 17.49 L 400.00 20.00 L 409.85 22.66 L 419.52 25.29 L 429.04 27.73 L 438.45 29.82 L 447.83 31.46 L 457.26 32.59 L 466.79 33.18 L 476.49 33.28 L 486.40 32.95 L 496.54 32.33 L 506.90 31.54 L 517.43 30.77 L 528.06 30.18 L 538.69 29.94 L 549.21 30.21 L 559.49 31.11 L 569.42 32.71 L 578.87 35.07 L 587.77 38.17 L 596.06 41.97 L 603.72 46.39 L 610.78 51.30 L 617.29 56.56 L 623.36 62.02 L 629.12 67.52 L 634.74 72.91 L 640.36 78.09 L 646.16 82.94 L 652.27 87.42 L 658.80 91.51 L 665.83 95.21 L 673.38 98.59 L 681.43 101.71 L 689.88 104.70 L 698.60 107.65 L 707.43 110.69 L 716.15 113.92 L 724.57 117.46 L 732.44 121.36 L 739.59 125.67 L 745.83 130.42 L 751.06 135.58 L 755.19 141.13 L 758.22 147.00 L 760.22 153.10 L 761.30 159.37 L 761.62 165.70 L 761.40 172.02 L 760.88 178.25 L 760.29 184.35 L 759.87 190.29 L 759.84 196.06 L 760.34 201.67 L 761.49 207.15 L 763.34 212.55 L 765.86 217.91 L 768.96 223.29 L 772.49 228.75 L 776.25 234.31 Z";
@@ -47,7 +53,11 @@ const SectionShell: React.FC<{
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
         padding: '110px 24px 70px',
-        background: sectionBg, color: fg,
+        backgroundColor: tone === 'cream' ? CREAM : DEEP,
+        backgroundImage: sectionBg,
+        backgroundSize: '280px 280px, auto',
+        backgroundBlendMode: 'multiply',
+        color: fg,
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center',
         position: 'relative',
@@ -55,8 +65,12 @@ const SectionShell: React.FC<{
     >
       <div style={{
         maxWidth: maxW, margin: '0 auto', width: '100%',
-        background: boxBg,
+        backgroundColor: boxBg,
+        backgroundImage: `${NOISE_CARD}, linear-gradient(${boxBg}, ${boxBg})`,
+        backgroundSize: '200px 200px, auto',
+        backgroundBlendMode: 'multiply',
         padding: 'clamp(48px, 6vw, 72px) clamp(32px, 5vw, 56px)',
+        boxShadow: '0 14px 40px rgba(20,30,45,.10), 0 2px 8px rgba(20,30,45,.06)',
       }}>
         {children}
       </div>
@@ -497,7 +511,7 @@ export default function WeddingSite() {
         id="invite"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          background: stripeCream, color: DEEP_DARK,
+          backgroundColor: CREAM, backgroundImage: stripeCream, backgroundSize: stripeCreamSize, backgroundBlendMode: 'multiply', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -513,7 +527,7 @@ export default function WeddingSite() {
             preserveAspectRatio="none"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
           >
-            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
+            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" filter="drop-shadow(0 6px 20px rgba(20,30,45,0.10)) drop-shadow(0 2px 4px rgba(20,30,45,0.05))" />
           </svg>
           <div style={{
             position: 'relative', zIndex: 1,
@@ -726,7 +740,7 @@ export default function WeddingSite() {
         id="contact"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          background: stripeCream, color: DEEP_DARK,
+          backgroundColor: CREAM, backgroundImage: stripeCream, backgroundSize: stripeCreamSize, backgroundBlendMode: 'multiply', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -739,7 +753,7 @@ export default function WeddingSite() {
         }}>
           <svg viewBox="0 0 800 480" preserveAspectRatio="none"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
+            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" filter="drop-shadow(0 6px 20px rgba(20,30,45,0.10)) drop-shadow(0 2px 4px rgba(20,30,45,0.05))" />
           </svg>
           <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%' }}>
             <div style={{ fontSize: 16, letterSpacing: '0.4em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 32, opacity: .75 }}>
