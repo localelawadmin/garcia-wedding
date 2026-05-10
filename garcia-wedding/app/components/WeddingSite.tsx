@@ -27,7 +27,7 @@ const NOISE_BG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/20
 const NOISE_CARD = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.95' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 
 // Stripe backgrounds with paper-grain texture layered on top via blend
-const stripeCream = `${NOISE_BG}, repeating-linear-gradient(90deg, ${CREAM} 0 28px, ${DEEP} 28px 40px)`;
+const stripeCream = `${NOISE_BG}, repeating-linear-gradient(90deg, ${DEEP} 0 28px, ${CREAM} 28px 40px)`;
 const stripeInk   = `${NOISE_BG}, repeating-linear-gradient(90deg, ${DEEP} 0 28px, ${CREAM} 28px 40px)`;
 const stripeCreamSize = '280px 280px, auto';
 const stripeInkSize   = '280px 280px, auto';
