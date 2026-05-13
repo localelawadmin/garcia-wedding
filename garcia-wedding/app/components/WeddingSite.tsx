@@ -267,19 +267,22 @@ const EventSection: React.FC<{
 
 
 const HotelTile: React.FC<{ name: string; address: string; note?: string }> = ({ name, address, note }) => (
-  <div style={{ padding: 22, border: '1px solid currentColor' }}>
-    <h3 className="heading" style={{ fontSize: 20, margin: '0 0 4px', fontWeight: 400, lineHeight: 1.15 }}>{name}</h3>
-    <p style={{ fontSize: 9.5, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: .55, margin: '4px 0 8px', fontWeight: 400 }}>{address}</p>
-    {note && <p style={{ fontSize: 13.5, lineHeight: 1.45, opacity: .8, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{note}</p>}
+  <div style={{ padding: '28px 26px', background: 'rgba(76, 100, 122, .03)', position: 'relative' }}>
+    <Bracket pos="tl" /><Bracket pos="br" />
+    <h3 className="heading" style={{ fontSize: 22, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>{name}</h3>
+    <p style={{ fontSize: 9.5, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: .55, margin: '10px 0 0', fontWeight: 400 }}>{address}</p>
+    <div style={{ width: 24, height: 1, background: 'currentColor', opacity: .3, margin: '12px 0' }} />
+    {note && <p style={{ fontSize: 13.5, lineHeight: 1.5, opacity: .82, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{note}</p>}
   </div>
 );
 
 const EatTile: React.FC<{ name: string; address: string; note: string }> = ({ name, address, note }) => {
   const mapQ = encodeURIComponent(address + ', Cape May, NJ');
   return (
-    <div style={{ padding: '14px 18px', border: '1px solid currentColor', opacity: .92, fontSize: 13.5, lineHeight: 1.45, fontWeight: 400, letterSpacing: '-0.005em' }}>
+    <div style={{ padding: '22px 22px', background: 'rgba(76, 100, 122, .03)', position: 'relative', fontSize: 13.5, lineHeight: 1.5, fontWeight: 400, letterSpacing: '-0.005em' }}>
+      <Bracket pos="tl" /><Bracket pos="br" />
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-        <strong className="heading" style={{ display: 'block', fontSize: 18, opacity: .9, margin: 0, fontWeight: 400, lineHeight: 1.1 }}>{name}</strong>
+        <strong className="heading" style={{ display: 'block', fontSize: 18, opacity: .92, margin: 0, fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.005em' }}>{name}</strong>
         <a href={`https://www.google.com/maps/search/?api=1&query=${mapQ}`} target="_blank" rel="noopener noreferrer" aria-label="Open in maps"
           style={{ width: 24, height: 24, borderRadius: '50%', border: '1px solid currentColor', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'inherit', textDecoration: 'none', transition: 'background .25s, color .25s' }}>
           <svg viewBox="0 0 16 16" width={13} height={13} fill="none" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round" strokeLinejoin="round">
@@ -294,10 +297,22 @@ const EatTile: React.FC<{ name: string; address: string; note: string }> = ({ na
   );
 };
 
+const Bracket: React.FC<{ pos: 'tl' | 'br' }> = ({ pos }) => (
+  <span aria-hidden="true" style={{
+    position: 'absolute',
+    width: 18, height: 18, opacity: .45, pointerEvents: 'none',
+    ...(pos === 'tl'
+      ? { top: 0, left: 0, borderTop: '1px solid currentColor', borderLeft: '1px solid currentColor' }
+      : { bottom: 0, right: 0, borderBottom: '1px solid currentColor', borderRight: '1px solid currentColor' }),
+  }} />
+);
+
 const Tile: React.FC<{ heading: string; body: string }> = ({ heading, body }) => (
-  <div style={{ padding: 26, border: '1px solid currentColor' }}>
-    <h3 className="heading" style={{ fontSize: 22, margin: '0 0 12px', fontWeight: 400 }}>{heading}</h3>
-    <p style={{ fontSize: 15, lineHeight: 1.5, opacity: .8, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{body}</p>
+  <div style={{ padding: '32px 30px', background: 'rgba(76, 100, 122, .03)', position: 'relative' }}>
+    <Bracket pos="tl" /><Bracket pos="br" />
+    <h3 className="heading" style={{ fontSize: 26, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>{heading}</h3>
+    <div style={{ width: 26, height: 1, background: 'currentColor', opacity: .35, margin: '12px 0 14px' }} />
+    <p style={{ fontSize: 14, lineHeight: 1.55, opacity: .82, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{body}</p>
   </div>
 );
 
@@ -654,8 +669,74 @@ export default function WeddingSite() {
           ['Note', 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia — or stay the weekend.'],
         ]} foot="No. 06 / Beach Day" />
 
+      {/* RSVP */}
+      <section
+        id="rsvp"
+        style={{
+          minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
+          backgroundColor: CREAM, backgroundImage: "url('/photos/trellis.jpg')",
+          backgroundSize: '540px auto', backgroundRepeat: 'repeat',
+          padding: '110px 24px 70px',
+          display: 'flex', flexDirection: 'column', justifyContent: 'center',
+          color: DEEP_DARK, position: 'relative',
+        }}
+      >
+        <div style={{
+          maxWidth: 720, margin: '0 auto', width: '100%',
+          background: CREAM,
+          padding: 'clamp(48px, 6vw, 72px) clamp(32px, 5vw, 56px)',
+          boxShadow: '0 14px 40px rgba(20,30,45,.12), 0 2px 8px rgba(20,30,45,.08)',
+        }}>
+          <div className="heading" style={{ fontSize: 16, letterSpacing: '0.02em', opacity: .65, marginBottom: 10, fontWeight: 400 }}>No. 07</div>
+          <div style={{ position: 'relative', width: '100%', maxWidth: 520, margin: '24px auto 0', aspectRatio: '600 / 480' }}>
+            <svg viewBox="0 0 600 480" preserveAspectRatio="xMidYMid meet" aria-hidden="true"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }}>
+              <defs>
+                <linearGradient id="envGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#5d7488" />
+                  <stop offset="100%" stopColor="#3d5469" />
+                </linearGradient>
+                <filter id="envShadow" x="-15%" y="-15%" width="130%" height="130%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="6" />
+                  <feOffset dx="0" dy="10" />
+                  <feComponentTransfer><feFuncA type="linear" slope="0.22" /></feComponentTransfer>
+                  <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+              </defs>
+              <g filter="url(#envShadow)">
+                <rect x="30" y="200" width="540" height="260" rx="5" fill="url(#envGrad)" />
+                <path d="M 30 200 L 300 360 L 570 200" stroke="rgba(255,255,255,.18)" strokeWidth={1} fill="none" />
+                <line x1="30" y1="460" x2="570" y2="460" stroke="rgba(0,0,0,.18)" strokeWidth={0.5} />
+              </g>
+            </svg>
+            <div style={{
+              position: 'absolute', top: '5%', left: '11%', right: '11%', bottom: '36%',
+              background: CREAM,
+              padding: 'clamp(22px, 4vw, 34px) clamp(20px, 3.5vw, 28px)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              textAlign: 'center',
+              transform: 'rotate(-1.5deg)',
+              boxShadow: '0 10px 28px rgba(20,30,45,.20), 0 2px 5px rgba(20,30,45,.08)',
+              color: DEEP_DARK,
+            }}>
+              <h3 className="heading" style={{
+                fontSize: 'clamp(48px, 7vw, 68px)', lineHeight: 1, letterSpacing: '-.01em', margin: '0 0 12px',
+                fontWeight: 400,
+              }}>RSVP</h3>
+              <div style={{ width: 36, height: 1, background: 'currentColor', opacity: .35, margin: '0 0 14px' }} />
+              <p style={{
+                fontSize: 'clamp(11px, 1.4vw, 12.5px)', lineHeight: 1.6, opacity: .85,
+                fontWeight: 400, letterSpacing: '-.005em', margin: 0, maxWidth: 320,
+              }}>
+                We are so excited to celebrate with you all, and thankful you&rsquo;re considering joining us! Enclosed in your invitation there is an RSVP card and envelope. Kindly mark your response, enclose, and drop it in a mailbox.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <SectionShell id="accommodations" tone="ink" foot="More options on FAQ ↓">
-        <NumEyebrow>No. 07</NumEyebrow>
+        <NumEyebrow>No. 08</NumEyebrow>
         <Title>The Accommodations</Title>
         <Lede>A few favorites in town. Cape May fills up fast in summer — book sooner than later.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 28 }} className="hotels-grid">
@@ -669,7 +750,7 @@ export default function WeddingSite() {
       </SectionShell>
 
       <SectionShell id="getting-there" tone="pattern">
-        <NumEyebrow>No. 08</NumEyebrow>
+        <NumEyebrow>No. 09</NumEyebrow>
         <Title>Getting There</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginTop: 8 }} className="pair-grid">
           <Tile heading="By Car"      body="Cape May is at the southern tip of NJ. ~2.5 hrs from NYC, ~1.75 hrs from Philly. Garden State Parkway south to Exit 0." />
@@ -680,7 +761,7 @@ export default function WeddingSite() {
       </SectionShell>
 
       <SectionShell id="things" tone="cream">
-        <NumEyebrow>No. 09</NumEyebrow>
+        <NumEyebrow>No. 10</NumEyebrow>
         <Title>Places to Eat</Title>
         <Lede>A few of our favorite spots in town. Reservations recommended for dinners.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 22px' }} className="things-grid">
@@ -701,7 +782,7 @@ export default function WeddingSite() {
       </SectionShell>
 
       <SectionShell id="dress" tone="ink">
-        <NumEyebrow>No. 10</NumEyebrow>
+        <NumEyebrow>No. 11</NumEyebrow>
         <Title>The Dress Code</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
           <Tile heading="Welcome Drinks"        body="Summer cocktail. Dresses (any length) for women, button-down and pants for men. Jackets preferred but not required." />
@@ -710,7 +791,7 @@ export default function WeddingSite() {
       </SectionShell>
 
       <SectionShell id="registry" tone="pattern">
-        <NumEyebrow>No. 11</NumEyebrow>
+        <NumEyebrow>No. 12</NumEyebrow>
         <Title>Registry</Title>
         <Lede>Your presence is the gift. If you&apos;d like to celebrate further, we&apos;ve put a few things together.</Lede>
         <a href="https://www.zola.com/wedding/haleyandgeorge2027/registry" target="_blank" rel="noopener noreferrer"
@@ -724,7 +805,7 @@ export default function WeddingSite() {
       </SectionShell>
 
       <SectionShell id="faq" tone="cream">
-        <NumEyebrow>No. 12</NumEyebrow>
+        <NumEyebrow>No. 13</NumEyebrow>
         <Title>FAQ</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <FaqRow q='How far in advance should I book my hotel?' a='As soon as possible — hotels in Cape May in summer go fast.' />
@@ -756,9 +837,9 @@ export default function WeddingSite() {
         }}>
           <svg viewBox="0 0 800 480" preserveAspectRatio="none"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
+            <path d={WAVY_PATH} fill={DEEP_DARK} stroke="rgba(242,239,233,.5)" strokeWidth={1} vectorEffect="non-scaling-stroke" />
           </svg>
-          <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%' }}>
+          <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%', color: CREAM }}>
             <div style={{ fontSize: 14, letterSpacing: '0.4em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 14, opacity: .75 }}>
               Any questions?
             </div>
