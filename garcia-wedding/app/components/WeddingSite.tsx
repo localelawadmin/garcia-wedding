@@ -51,13 +51,13 @@ const HOTELS: Hotel[] = [
       <>Starts at $564/night. Use code <strong>270617DWRB</strong> to access the block. Check-in at 4 PM.</>,
     ],
     bookUrl: 'https://capemaylamer.com/?selfbook=true&hotel=2032&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=270617DWRB' },
-  { name: 'The Beach Club on Madison', frame: 18, logo: 'beach-club', price: '$$',
+  { name: 'The Beach Club on Madison', frame: 18, logo: 'beach-club', price: '$',
     details: [
       'A bit further back from the beach.',
       'Starts at $294/night. Check-in at 4 PM.',
     ],
     bookUrl: 'https://www.beachclubcapemay.com/?selfbook=true&hotel=42068&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=2706DRISCO' },
-  { name: 'The Grand Hotel', frame: 19, logo: 'grand', price: '$$$',
+  { name: 'The Grand Hotel', frame: 19, logo: 'grand', price: '$$',
     details: [
       'Beachfront classic — 28 rooms reserved for our block.',
       <>Starts at $406/night. Select your dates first, then enter Group ID <strong>744882</strong> to unlock the block.</>,
@@ -79,9 +79,9 @@ const HOTELS: Hotel[] = [
       'Reaching back out in summer to lock the block.',
       'Check back closer to the date for the booking link and code.',
     ] },
-  { name: 'Ocean Club Hotel', frame: 20, logo: 'ocean-club', price: '$$',
+  { name: 'Ocean Club Hotel', frame: 20, logo: 'ocean-club', price: '$$$',
     details: ['Still in conversation — details to come.'] },
-  { name: 'The Inn of Cape May', frame: 18, logo: 'inn', price: '$$',
+  { name: 'The Inn of Cape May', frame: 18, logo: 'inn', price: '$$$',
     details: ['Still in conversation — details to come.'] },
 ];
 
@@ -159,6 +159,50 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
         </div>
       </div>
     </div>
+  );
+};
+
+
+function priceTier(p: string): number { return p.length; }
+
+const AccommodationsBody: React.FC = () => {
+  const [sortByPrice, setSortByPrice] = useState(false);
+  const sorted = sortByPrice
+    ? [...HOTELS].sort((a, b) => priceTier(a.price) - priceTier(b.price))
+    : HOTELS;
+  return (
+    <>
+      <div style={{ maxWidth: 720, margin: '0 auto 28px' }}>
+        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>Get ready for a fun weekend in Cape May. We&apos;ve secured room blocks at several local hotels and resorts — from beachfront classics to boutique stays, at a range of price points. Cape May is small enough that no matter where you stay, you&apos;ll be close to the action.</p>
+        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>If hotels aren&apos;t your vibe, the area is full of Airbnbs and rental properties too.</p>
+        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400 }}>A few things to note: scheduled transportation to the venue won&apos;t stop at every single hotel. We&apos;ll be sharing trolley pickup points closer to the date, and we kindly ask you meet us at the nearest one.</p>
+      </div>
+      <div style={{ maxWidth: 720, margin: '0 auto 12px', display: 'flex', justifyContent: 'flex-end' }}>
+        <button type="button" onClick={() => setSortByPrice(v => !v)}
+          aria-pressed={sortByPrice}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
+            fontWeight: 400, opacity: 0.85, cursor: 'pointer', userSelect: 'none',
+            background: 'transparent', border: 'none', color: 'inherit', padding: '4px 0',
+          }}>
+          <span aria-hidden="true" style={{
+            width: 14, height: 14, border: '1px solid currentColor',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            position: 'relative',
+          }}>
+            <span style={{
+              width: 8, height: 8, background: 'currentColor',
+              opacity: sortByPrice ? 1 : 0, transition: 'opacity .15s ease',
+            }} />
+          </span>
+          <span>Sort by Estimated Price</span>
+        </button>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px 28px', margin: '8px auto 0', maxWidth: 720 }} className="hotels-grid">
+        {sorted.map(h => <HotelCard key={h.name} hotel={h} />)}
+      </div>
+    </>
   );
 };
 
@@ -862,14 +906,7 @@ export default function WeddingSite() {
       <SectionShell id="accommodations" tone="ink" wide foot="More options on FAQ ↓">
         <NumEyebrow>No. 08</NumEyebrow>
         <Title>The Accommodations</Title>
-        <div style={{ maxWidth: 580, margin: '0 0 32px' }}>
-          <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>Get ready for a fun weekend in Cape May. We&apos;ve secured room blocks at several local hotels and resorts — from beachfront classics to boutique stays, at a range of price points. Cape May is small enough that no matter where you stay, you&apos;ll be close to the action.</p>
-          <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>If hotels aren&apos;t your vibe, the area is full of Airbnbs and rental properties too.</p>
-          <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400 }}>A few things to note: scheduled transportation to the venue won&apos;t stop at every single hotel. We&apos;ll be sharing trolley pickup points closer to the date, and we kindly ask you meet us at the nearest one.</p>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px 28px', margin: '8px auto 0', maxWidth: 720 }} className="hotels-grid">
-          {HOTELS.map(h => <HotelCard key={h.name} hotel={h} />)}
-        </div>
+        <AccommodationsBody />
       </SectionShell>
 
       <SectionShell id="getting-there" tone="pattern">
