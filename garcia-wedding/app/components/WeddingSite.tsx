@@ -89,21 +89,33 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
   const [open, setOpen] = useState(false);
   const frameSrc = `/photos/accommodations/frames/${hotel.frame}.png`;
   const logoSrc  = `/photos/accommodations/logos/${hotel.logo}.png`;
+  // Stamp-style frame (18) is rendered slightly compressed vertically so it reads more rectangular
+  const isStamp = hotel.frame === 18;
+  // Icona logo sits slightly low in its art — nudge it up so 'ICONA' centers in the frame
+  const isIcona = hotel.logo === 'icona';
+  const toggle = () => setOpen(o => !o);
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <div style={{
-        position: 'relative', aspectRatio: '1 / 1',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 6,
-      }}>
+      <div onClick={toggle} role="button" tabIndex={0}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
+        aria-expanded={open} aria-controls={`hotel-${hotel.logo}-details`}
+        style={{
+          position: 'relative', aspectRatio: '1 / 1',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 6,
+          cursor: 'pointer',
+        }}>
         <img src={frameSrc} alt="" aria-hidden="true" style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
           objectFit: 'contain', pointerEvents: 'none',
           filter: 'url(#tint-cream)',
+          transform: isStamp ? 'scaleY(0.78)' : undefined,
         }} />
         <img src={logoSrc} alt={hotel.name} style={{
           position: 'relative', zIndex: 1,
           maxWidth: '72%', maxHeight: '72%', objectFit: 'contain',
           filter: 'url(#tint-cream)',
+          transform: isIcona ? 'translateY(-9%)' : undefined,
+          pointerEvents: 'none',
         }} />
       </div>
       <div style={{ borderTop: '1px solid currentColor', marginTop: 4 }}>
@@ -127,7 +139,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
             </span>
           </span>
         </button>
-        <div style={{
+        <div id={`hotel-${hotel.logo}-details`} style={{
           maxHeight: open ? 400 : 0, overflow: 'hidden',
           opacity: open ? 1 : 0, paddingBottom: open ? 16 : 0,
           transition: 'max-height .35s ease, opacity .35s ease, padding .35s ease',
