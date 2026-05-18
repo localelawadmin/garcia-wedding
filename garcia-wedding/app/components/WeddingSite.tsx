@@ -38,6 +38,118 @@ const WAVY_PATH = "M 780.00 240.00 L 783.49 245.83 L 786.47 251.78 L 788.70 257.
 
 type Tone = 'cream' | 'ink' | 'pattern';
 
+
+type Hotel = {
+  name: string; frame: 8 | 9 | 10; logo: string; price: string;
+  details: React.ReactNode[]; bookUrl?: string;
+};
+
+const HOTELS: Hotel[] = [
+  { name: 'La Mer Beachfront Resort', frame: 9, logo: 'la-mer', price: '$$$',
+    details: [
+      'Where our welcome drinks will take place.',
+      <>Starts at $564/night. Use code <strong>270617DWRB</strong> to access the block. Check-in at 4 PM.</>,
+    ],
+    bookUrl: 'https://capemaylamer.com/?selfbook=true&hotel=2032&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=270617DWRB' },
+  { name: 'The Beach Club on Madison', frame: 10, logo: 'beach-club', price: '$$',
+    details: [
+      'A bit further back from the beach.',
+      'Starts at $294/night. Check-in at 4 PM.',
+    ],
+    bookUrl: 'https://www.beachclubcapemay.com/?selfbook=true&hotel=42068&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=2706DRISCO' },
+  { name: 'The Grand Hotel', frame: 8, logo: 'grand', price: '$$$',
+    details: [
+      'Beachfront classic — 28 rooms reserved for our block.',
+      <>Starts at $406/night. Select your dates first, then enter Group ID <strong>744882</strong> to unlock the block.</>,
+    ],
+    bookUrl: 'https://www.grandhotelcapemay.com' },
+  { name: 'Marquis de Lafayette', frame: 9, logo: 'marquis', price: '$$',
+    details: [
+      '50 rooms reserved for our wedding block.',
+      <>Starts at $389/night. Use code <strong>DRISGAR6</strong>. If booking by phone, mention the Driscoll Garcia Wedding Room Block.</>,
+    ],
+    bookUrl: 'https://marquiscapemay.com' },
+  { name: 'Hotel Montreal', frame: 10, logo: 'montreal', price: '$$',
+    details: [
+      '10% off all rooms for our guests.',
+      'Booking code coming soon — we\'ll update this card once we have it.',
+    ] },
+  { name: 'ICONA Cape May', frame: 8, logo: 'icona-cape-may', price: '$$$',
+    details: [
+      'Reaching back out in summer to lock the block.',
+      'Check back closer to the date for the booking link and code.',
+    ] },
+  { name: 'Ocean Club Hotel', frame: 9, logo: 'ocean-club', price: '$$',
+    details: ['Still in conversation — details to come.'] },
+  { name: 'The Inn of Cape May', frame: 10, logo: 'inn-of-cape-may', price: '$$',
+    details: ['Still in conversation — details to come.'] },
+];
+
+const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
+  const [open, setOpen] = useState(false);
+  const frameSrc = `/photos/accommodations/frames/${hotel.frame}.png`;
+  const logoSrc  = `/photos/accommodations/logos/${hotel.logo}.png`;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{
+        position: 'relative', aspectRatio: '1 / 1',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8,
+      }}>
+        <img src={frameSrc} alt="" aria-hidden="true" style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'contain', pointerEvents: 'none',
+          filter: 'url(#tint-cream)',
+        }} />
+        <img src={logoSrc} alt={hotel.name} style={{
+          position: 'relative', zIndex: 1,
+          maxWidth: '58%', maxHeight: '58%', objectFit: 'contain',
+          filter: 'url(#tint-cream)',
+        }} />
+      </div>
+      <div style={{ borderTop: '1px solid currentColor', marginTop: 4 }}>
+        <button type="button" onClick={() => setOpen(o => !o)}
+          aria-expanded={open}
+          style={{
+            width: '100%', padding: '14px 4px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: 'transparent', border: 'none', color: 'inherit',
+            cursor: 'pointer', font: 'inherit',
+          }}>
+          <span className="heading" style={{ fontSize: 24, lineHeight: 1, fontStyle: 'italic', fontWeight: 400, letterSpacing: 0 }}>{hotel.price}</span>
+          <span style={{
+            fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
+            fontWeight: 400, opacity: 0.8, display: 'flex', alignItems: 'center', gap: 10,
+          }}>
+            Details
+            <span style={{ position: 'relative', display: 'inline-block', width: 12, height: 12 }}>
+              <span style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 1, background: 'currentColor', transform: 'translateY(-50%)' }} />
+              <span style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: 'currentColor', transform: 'translateX(-50%)', opacity: open ? 0 : 1, transition: 'opacity .25s' }} />
+            </span>
+          </span>
+        </button>
+        <div style={{
+          maxHeight: open ? 400 : 0, overflow: 'hidden',
+          opacity: open ? 1 : 0, paddingBottom: open ? 16 : 0,
+          transition: 'max-height .35s ease, opacity .35s ease, padding .35s ease',
+        }}>
+          {hotel.details.map((line, i) => (
+            <p key={i} style={{ fontSize: 13, lineHeight: 1.55, opacity: .85, margin: '0 0 8px', letterSpacing: '-0.005em' }}>{line}</p>
+          ))}
+          {hotel.bookUrl && (
+            <a href={hotel.bookUrl} target="_blank" rel="noopener noreferrer"
+              style={{
+                display: 'inline-block', marginTop: 12,
+                fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
+                fontWeight: 400, opacity: 0.9, color: 'inherit', textDecoration: 'none',
+                borderBottom: '1px solid currentColor', paddingBottom: 2,
+              }}>Book →</a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SectionShell: React.FC<{
   id?: string; tone: Tone; children: React.ReactNode;
   wide?: boolean; foot?: React.ReactNode;
@@ -735,17 +847,16 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      <SectionShell id="accommodations" tone="ink" foot="More options on FAQ ↓">
+      <SectionShell id="accommodations" tone="ink" wide foot="More options on FAQ ↓">
         <NumEyebrow>No. 08</NumEyebrow>
         <Title>The Accommodations</Title>
-        <Lede>A few favorites in town. Cape May fills up fast in summer — book sooner than later.</Lede>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 28 }} className="hotels-grid">
-          <HotelTile name="La Mer Beachfront Resort" address="1317 Beach Avenue" note="This is also where Welcome Drinks are happening." />
-          <HotelTile name="The Beach Club on Madison" address="605 Madison Avenue" />
-          <HotelTile name="Grand Hotel of Cape May" address="1045 Beach Avenue" note="Use code 744882 when booking to be in the room block." />
-          <HotelTile name="Marquis de Lafayette Hotel" address="501 Beach Avenue" />
-          <HotelTile name="The Inn of Cape May" address="7 Ocean Street" />
-          <HotelTile name="ICONA Cape May" address="1101 Beach Avenue" />
+        <div style={{ maxWidth: 580, margin: '0 0 32px' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>Get ready for a fun weekend in Cape May. We&apos;ve secured room blocks at several local hotels and resorts — from beachfront classics to boutique stays, at a range of price points. Cape May is small enough that no matter where you stay, you&apos;ll be close to the action.</p>
+          <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>If hotels aren&apos;t your vibe, the area is full of Airbnbs and rental properties too.</p>
+          <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400 }}>A few things to note: scheduled transportation to the venue won&apos;t stop at every single hotel. We&apos;ll be sharing trolley pickup points closer to the date, and we kindly ask you meet us at the nearest one.</p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px 36px', marginTop: 8 }} className="hotels-grid">
+          {HOTELS.map(h => <HotelCard key={h.name} hotel={h} />)}
         </div>
       </SectionShell>
 
