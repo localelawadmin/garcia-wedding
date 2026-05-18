@@ -93,7 +93,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div style={{
         position: 'relative', aspectRatio: '1 / 1',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 6,
       }}>
         <img src={frameSrc} alt="" aria-hidden="true" style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
@@ -102,7 +102,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
         }} />
         <img src={logoSrc} alt={hotel.name} style={{
           position: 'relative', zIndex: 1,
-          maxWidth: '58%', maxHeight: '58%', objectFit: 'contain',
+          maxWidth: '72%', maxHeight: '72%', objectFit: 'contain',
           filter: 'url(#tint-cream)',
         }} />
       </div>
@@ -855,7 +855,7 @@ export default function WeddingSite() {
           <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>If hotels aren&apos;t your vibe, the area is full of Airbnbs and rental properties too.</p>
           <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400 }}>A few things to note: scheduled transportation to the venue won&apos;t stop at every single hotel. We&apos;ll be sharing trolley pickup points closer to the date, and we kindly ask you meet us at the nearest one.</p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px 36px', marginTop: 8 }} className="hotels-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px 28px', margin: '8px auto 0', maxWidth: 720 }} className="hotels-grid">
           {HOTELS.map(h => <HotelCard key={h.name} hotel={h} />)}
         </div>
       </SectionShell>
