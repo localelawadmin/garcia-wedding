@@ -40,48 +40,48 @@ type Tone = 'cream' | 'ink' | 'pattern';
 
 
 type Hotel = {
-  name: string; frame: 8 | 9 | 10; logo: string; price: string;
+  name: string; frame: 18 | 19 | 20; logo: string; price: string;
   details: React.ReactNode[]; bookUrl?: string;
 };
 
 const HOTELS: Hotel[] = [
-  { name: 'La Mer Beachfront Resort', frame: 9, logo: 'la-mer', price: '$$$',
+  { name: 'La Mer Beachfront Resort', frame: 20, logo: 'la-mer', price: '$$$',
     details: [
       'Where our welcome drinks will take place.',
       <>Starts at $564/night. Use code <strong>270617DWRB</strong> to access the block. Check-in at 4 PM.</>,
     ],
     bookUrl: 'https://capemaylamer.com/?selfbook=true&hotel=2032&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=270617DWRB' },
-  { name: 'The Beach Club on Madison', frame: 10, logo: 'beach-club', price: '$$',
+  { name: 'The Beach Club on Madison', frame: 18, logo: 'beach-club', price: '$$',
     details: [
       'A bit further back from the beach.',
       'Starts at $294/night. Check-in at 4 PM.',
     ],
     bookUrl: 'https://www.beachclubcapemay.com/?selfbook=true&hotel=42068&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=2706DRISCO' },
-  { name: 'The Grand Hotel', frame: 8, logo: 'grand', price: '$$$',
+  { name: 'The Grand Hotel', frame: 19, logo: 'grand', price: '$$$',
     details: [
       'Beachfront classic — 28 rooms reserved for our block.',
       <>Starts at $406/night. Select your dates first, then enter Group ID <strong>744882</strong> to unlock the block.</>,
     ],
     bookUrl: 'https://www.grandhotelcapemay.com' },
-  { name: 'Marquis de Lafayette', frame: 9, logo: 'marquis', price: '$$',
+  { name: 'Marquis de Lafayette', frame: 20, logo: 'marquis', price: '$$',
     details: [
       '50 rooms reserved for our wedding block.',
       <>Starts at $389/night. Use code <strong>DRISGAR6</strong>. If booking by phone, mention the Driscoll Garcia Wedding Room Block.</>,
     ],
     bookUrl: 'https://marquiscapemay.com' },
-  { name: 'Hotel Montreal', frame: 10, logo: 'montreal', price: '$$',
+  { name: 'Hotel Montreal', frame: 18, logo: 'montreal', price: '$$',
     details: [
       '10% off all rooms for our guests.',
       'Booking code coming soon — we\'ll update this card once we have it.',
     ] },
-  { name: 'ICONA Cape May', frame: 8, logo: 'icona-cape-may', price: '$$$',
+  { name: 'ICONA Cape May', frame: 19, logo: 'icona', price: '$$$',
     details: [
       'Reaching back out in summer to lock the block.',
       'Check back closer to the date for the booking link and code.',
     ] },
-  { name: 'Ocean Club Hotel', frame: 9, logo: 'ocean-club', price: '$$',
+  { name: 'Ocean Club Hotel', frame: 20, logo: 'ocean-club', price: '$$',
     details: ['Still in conversation — details to come.'] },
-  { name: 'The Inn of Cape May', frame: 10, logo: 'inn-of-cape-may', price: '$$',
+  { name: 'The Inn of Cape May', frame: 18, logo: 'inn', price: '$$',
     details: ['Still in conversation — details to come.'] },
 ];
 
