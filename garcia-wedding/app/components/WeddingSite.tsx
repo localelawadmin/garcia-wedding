@@ -452,11 +452,12 @@ const HotelTile: React.FC<{ name: string; address: string; note?: string }> = ({
 
 type CardTone = 'ink' | 'cream' | 'pattern';
 function cardColors(tone: CardTone) {
-  // Card fill contrasts with section tone; text + icon are inverse of fill
-  const isCreamSection = tone === 'cream';
+  // Card fill contrasts with section tone; text + icon are inverse of fill.
+  // Pattern section reads as cream-ish (trellis wallpaper) so it sides with cream.
+  const isLightSection = tone === 'cream' || tone === 'pattern';
   return {
-    bg: isCreamSection ? DEEP_DARK : CREAM,
-    fg: isCreamSection ? CREAM : DEEP_DARK,
+    bg: isLightSection ? DEEP_DARK : CREAM,
+    fg: isLightSection ? CREAM : DEEP_DARK,
   };
 }
 
