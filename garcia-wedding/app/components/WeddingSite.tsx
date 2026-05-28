@@ -88,6 +88,7 @@ const HOTELS: Hotel[] = [
 const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
   const [open, setOpen] = useState(false);
   const frameSrc = `/photos/accommodations/frames/${hotel.frame}.png`;
+  const fillSrc  = `/photos/accommodations/frames/${hotel.frame}-fill.png`;
   const logoSrc  = `/photos/accommodations/logos/${hotel.logo}.png`;
   // Stamp-style frame (18) is rendered slightly compressed vertically so it reads more rectangular
   const isStamp = hotel.frame === 18;
@@ -104,16 +105,21 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
           display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 6,
           cursor: 'pointer',
         }}>
+        <img src={fillSrc} alt="" aria-hidden="true" style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'contain', pointerEvents: 'none',
+          transform: isStamp ? 'scaleY(0.78)' : undefined,
+        }} />
         <img src={frameSrc} alt="" aria-hidden="true" style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
           objectFit: 'contain', pointerEvents: 'none',
-          filter: 'url(#tint-cream)',
+          filter: 'url(#tint-deep-dark)',
           transform: isStamp ? 'scaleY(0.78)' : undefined,
         }} />
         <img src={logoSrc} alt={hotel.name} style={{
-          position: 'relative', zIndex: 1,
+          position: 'relative', zIndex: 2,
           maxWidth: '72%', maxHeight: '72%', objectFit: 'contain',
-          filter: 'url(#tint-cream)',
+          filter: 'url(#tint-deep-dark)',
           transform: isIcona ? 'translateY(-9%)' : undefined,
           pointerEvents: 'none',
         }} />
