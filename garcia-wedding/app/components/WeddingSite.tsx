@@ -146,7 +146,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
           </span>
         </button>
         <div id={`hotel-${hotel.logo}-details`} style={{
-          maxHeight: open ? 240 : 0, minHeight: open ? 240 : 0, overflow: 'hidden',
+          maxHeight: open ? 180 : 0, minHeight: open ? 180 : 0, overflow: 'hidden',
           opacity: open ? 1 : 0, paddingBottom: open ? 16 : 0,
           transition: 'max-height .35s ease, min-height .35s ease, opacity .35s ease, padding .35s ease',
           display: 'flex', flexDirection: 'column',
