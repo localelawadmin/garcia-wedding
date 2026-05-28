@@ -89,7 +89,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
   const [open, setOpen] = useState(false);
   const frameSrc = `/photos/accommodations/frames/${hotel.frame}.png`;
   const fillSrc  = `/photos/accommodations/frames/${hotel.frame}-fill.png`;
-  const logoSrc  = `/photos/accommodations/logos/${hotel.logo}-fill.png`;
+  const logoSrc  = `/photos/accommodations/logos/${hotel.logo}.png`;
   // Stamp-style frame (18) is rendered slightly compressed vertically so it reads more rectangular
   const isStamp = hotel.frame === 18;
   // Icona logo sits slightly low in its art — nudge it up so 'ICONA' centers in the frame
