@@ -450,22 +450,34 @@ const HotelTile: React.FC<{ name: string; address: string; note?: string }> = ({
   </div>
 );
 
-const EatTile: React.FC<{ name: string; address: string; note: string }> = ({ name, address, note }) => {
-  const mapQ = encodeURIComponent(address + ', Cape May, NJ');
+type CardTone = 'ink' | 'cream' | 'pattern';
+function cardColors(tone: CardTone) {
+  // Card fill contrasts with section tone; text + icon are inverse of fill
+  const isCreamSection = tone === 'cream';
+  return {
+    bg: isCreamSection ? DEEP_DARK : CREAM,
+    fg: isCreamSection ? CREAM : DEEP_DARK,
+  };
+}
+
+const EatTile: React.FC<{ name: string; address: string; note: string; mapUrl?: string; tone?: CardTone }> = ({ name, address, note, mapUrl, tone = 'cream' }) => {
+  const { bg, fg } = cardColors(tone);
+  // Default Google Maps URL: include the business NAME so Maps lands on the listing,
+  // not just an address search. mapUrl prop can override with a real place URL.
+  const href = mapUrl ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}, ${address}, Cape May, NJ`)}`;
   return (
-    <div style={{ padding: '22px 22px', background: 'rgba(76, 100, 122, .03)', position: 'relative', fontSize: 13.5, lineHeight: 1.5, fontWeight: 400, letterSpacing: '-0.005em' }}>
-      <Bracket pos="tl" /><Bracket pos="br" />
+    <div style={{ padding: '22px 24px', background: bg, color: fg, fontSize: 13.5, lineHeight: 1.5, fontWeight: 400, letterSpacing: '-0.005em' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-        <strong className="heading" style={{ display: 'block', fontSize: 18, opacity: .92, margin: 0, fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.005em' }}>{name}</strong>
-        <a href={`https://www.google.com/maps/search/?api=1&query=${mapQ}`} target="_blank" rel="noopener noreferrer" aria-label="Open in maps"
-          style={{ width: 24, height: 24, borderRadius: '50%', border: '1px solid currentColor', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'inherit', textDecoration: 'none', transition: 'background .25s, color .25s' }}>
-          <svg viewBox="0 0 16 16" width={13} height={13} fill="none" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round" strokeLinejoin="round">
+        <strong className="heading" style={{ display: 'block', fontSize: 19, opacity: .94, margin: 0, fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.005em' }}>{name}</strong>
+        <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`Open ${name} in Google Maps`}
+          style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid currentColor', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'inherit', textDecoration: 'none', transition: 'background .2s, color .2s' }}>
+          <svg viewBox="0 0 16 16" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" strokeLinejoin="round">
             <path d="M8 1.5 C5 1.5 3 3.5 3 6 C3 9 8 14 8 14 S13 9 13 6 C13 3.5 11 1.5 8 1.5 Z" />
             <circle cx="8" cy="6" r="1.5" />
           </svg>
         </a>
       </div>
-      <p style={{ fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: .55, margin: '4px 0 6px', fontWeight: 400 }}>{address}</p>
+      <p style={{ fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: .6, margin: '6px 0 8px', fontWeight: 400 }}>{address}</p>
       <p style={{ margin: 0 }}>{note}</p>
     </div>
   );
@@ -481,14 +493,16 @@ const Bracket: React.FC<{ pos: 'tl' | 'br' }> = ({ pos }) => (
   }} />
 );
 
-const Tile: React.FC<{ heading: string; body: string }> = ({ heading, body }) => (
-  <div style={{ padding: '32px 30px', background: 'rgba(76, 100, 122, .03)', position: 'relative' }}>
-    <Bracket pos="tl" /><Bracket pos="br" />
-    <h3 className="heading" style={{ fontSize: 26, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>{heading}</h3>
-    <div style={{ width: 26, height: 1, background: 'currentColor', opacity: .35, margin: '12px 0 14px' }} />
-    <p style={{ fontSize: 14, lineHeight: 1.55, opacity: .82, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{body}</p>
-  </div>
-);
+const Tile: React.FC<{ heading: string; body: string; tone?: CardTone }> = ({ heading, body, tone = 'ink' }) => {
+  const { bg, fg } = cardColors(tone);
+  return (
+    <div style={{ padding: '32px 30px', background: bg, color: fg }}>
+      <h3 className="heading" style={{ fontSize: 26, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>{heading}</h3>
+      <div style={{ width: 26, height: 1, background: 'currentColor', opacity: .35, margin: '12px 0 14px' }} />
+      <p style={{ fontSize: 14, lineHeight: 1.55, opacity: .85, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{body}</p>
+    </div>
+  );
+};
 
 const FaqRow: React.FC<{ q: string; a: string }> = ({ q, a }) => {
   const [open, setOpen] = useState(false);
@@ -919,10 +933,10 @@ export default function WeddingSite() {
         <NumEyebrow>No. 09</NumEyebrow>
         <Title>Getting There</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginTop: 8 }} className="pair-grid">
-          <Tile heading="By Car"      body="Cape May is at the southern tip of NJ. ~2.5 hrs from NYC, ~1.75 hrs from Philly. Garden State Parkway south to Exit 0." />
-          <Tile heading="By Air"      body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). Rentals recommended." />
-          <Tile heading="By Ferry"    body="Cape May–Lewes Ferry from Delaware. Walk-on or drive-on." />
-          <Tile heading="Around Town" body="Walkable downtown. Trolleys, bikes, and Uber operate locally." />
+          <Tile tone="pattern" heading="By Car"      body="Cape May is at the southern tip of NJ. ~2.5 hrs from NYC, ~1.75 hrs from Philly. Garden State Parkway south to Exit 0." />
+          <Tile tone="pattern" heading="By Air"      body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). Rentals recommended." />
+          <Tile tone="pattern" heading="By Ferry"    body="Cape May–Lewes Ferry from Delaware. Walk-on or drive-on." />
+          <Tile tone="pattern" heading="Around Town" body="Walkable downtown. Trolleys, bikes, and Uber operate locally." />
         </div>
       </SectionShell>
 
@@ -943,7 +957,7 @@ export default function WeddingSite() {
           { name: "George's Place Beachfront", address: '301 Beach Avenue', note: "The Groom's favorite — gyros, salads, and smoothies." },
           { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', note: 'Worth driving to. Farm-fresh food, picnic tables, indoor market.' },
           { name: 'Westside Market', address: '517 Broadway, West Cape May', note: 'Best deli in town.' },
-          ].map(eat => <EatTile key={eat.name} {...eat} />)}
+          ].map(eat => <EatTile key={eat.name} tone="cream" {...eat} />)}
         </div>
       </SectionShell>
 
@@ -951,8 +965,8 @@ export default function WeddingSite() {
         <NumEyebrow>No. 11</NumEyebrow>
         <Title>The Dress Code</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
-          <Tile heading="Welcome Drinks"        body="Summer cocktail. Dresses (any length) for women, button-down and pants for men. Jackets preferred but not required." />
-          <Tile heading="Ceremony & Reception" body="Black tie optional. Tux or dark suit for men. Floor-length gowns for women — bright, summery colors and patterns encouraged. The reception is fully outdoors on grass; block heels are strongly recommended." />
+          <Tile tone="ink" heading="Welcome Drinks"        body="Summer cocktail. Dresses (any length) for women, button-down and pants for men. Jackets preferred but not required." />
+          <Tile tone="ink" heading="Ceremony & Reception" body="Black tie optional. Tux or dark suit for men. Floor-length gowns for women — bright, summery colors and patterns encouraged. The reception is fully outdoors on grass; block heels are strongly recommended." />
         </div>
       </SectionShell>
 
