@@ -146,22 +146,40 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
           </span>
         </button>
         <div id={`hotel-${hotel.logo}-details`} style={{
-          maxHeight: open ? 400 : 0, overflow: 'hidden',
+          maxHeight: open ? 240 : 0, minHeight: open ? 240 : 0, overflow: 'hidden',
           opacity: open ? 1 : 0, paddingBottom: open ? 16 : 0,
-          transition: 'max-height .35s ease, opacity .35s ease, padding .35s ease',
+          transition: 'max-height .35s ease, min-height .35s ease, opacity .35s ease, padding .35s ease',
+          display: 'flex', flexDirection: 'column',
         }}>
           {hotel.details.map((line, i) => (
             <p key={i} style={{ fontSize: 13, lineHeight: 1.55, opacity: .85, margin: '0 0 8px', letterSpacing: '-0.005em' }}>{line}</p>
           ))}
-          {hotel.bookUrl && (
-            <a href={hotel.bookUrl} target="_blank" rel="noopener noreferrer"
+          <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 12, paddingTop: 10 }}>
+            {hotel.bookUrl && (
+              <a href={hotel.bookUrl} target="_blank" rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
+                  fontWeight: 400, opacity: 0.9, color: 'inherit', textDecoration: 'none',
+                  borderBottom: '1px solid currentColor', paddingBottom: 2,
+                }}>Book →</a>
+            )}
+            <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${hotel.name}, Cape May, NJ`)}`}
+              target="_blank" rel="noopener noreferrer" aria-label={`Open ${hotel.name} in Google Maps`}
+              onMouseEnter={(e) => { const t = e.currentTarget; t.style.background = CREAM; t.style.color = DEEP_DARK; }}
+              onMouseLeave={(e) => { const t = e.currentTarget; t.style.background = 'transparent'; t.style.color = 'inherit'; }}
               style={{
-                display: 'inline-block', marginTop: 12,
-                fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
-                fontWeight: 400, opacity: 0.9, color: 'inherit', textDecoration: 'none',
-                borderBottom: '1px solid currentColor', paddingBottom: 2,
-              }}>Book →</a>
-          )}
+                marginLeft: 'auto',
+                width: 28, height: 28, borderRadius: '50%', border: '1px solid currentColor',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                color: 'inherit', textDecoration: 'none', transition: 'background .2s, color .2s',
+              }}>
+              <svg viewBox="0 0 16 16" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 1.5 C5 1.5 3 3.5 3 6 C3 9 8 14 8 14 S13 9 13 6 C13 3.5 11 1.5 8 1.5 Z" />
+                <circle cx="8" cy="6" r="1.5" />
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -471,6 +489,8 @@ const EatTile: React.FC<{ name: string; address: string; note: string; mapUrl?: 
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
         <strong className="heading" style={{ display: 'block', fontSize: 19, opacity: .94, margin: 0, fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.005em' }}>{name}</strong>
         <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`Open ${name} in Google Maps`}
+          onMouseEnter={(e) => { const t = e.currentTarget; t.style.background = fg; t.style.color = bg; }}
+          onMouseLeave={(e) => { const t = e.currentTarget; t.style.background = 'transparent'; t.style.color = 'inherit'; }}
           style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid currentColor', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'inherit', textDecoration: 'none', transition: 'background .2s, color .2s' }}>
           <svg viewBox="0 0 16 16" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" strokeLinejoin="round">
             <path d="M8 1.5 C5 1.5 3 3.5 3 6 C3 9 8 14 8 14 S13 9 13 6 C13 3.5 11 1.5 8 1.5 Z" />
