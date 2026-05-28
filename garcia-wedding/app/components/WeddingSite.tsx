@@ -95,7 +95,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
   const isIcona = hotel.logo === 'icona';
   const toggle = () => setOpen(o => !o);
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', background: 'var(--cream)', color: 'var(--deep-dark)', padding: '18px 18px 4px', boxShadow: '0 14px 28px rgba(20, 30, 45, .18)' }}>
       <div onClick={toggle} role="button" tabIndex={0}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
         aria-expanded={open} aria-controls={`hotel-${hotel.logo}-details`}
@@ -107,13 +107,13 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
         <img src={frameSrc} alt="" aria-hidden="true" style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
           objectFit: 'contain', pointerEvents: 'none',
-          filter: 'url(#tint-cream)',
+          filter: 'url(#tint-deep-dark)',
           transform: isStamp ? 'scaleY(0.78)' : undefined,
         }} />
         <img src={logoSrc} alt={hotel.name} style={{
           position: 'relative', zIndex: 1,
           maxWidth: '72%', maxHeight: '72%', objectFit: 'contain',
-          filter: 'url(#tint-cream)',
+          filter: 'url(#tint-deep-dark)',
           transform: isIcona ? 'translateY(-9%)' : undefined,
           pointerEvents: 'none',
         }} />
