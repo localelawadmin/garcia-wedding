@@ -38,6 +38,199 @@ const WAVY_PATH = "M 780.00 240.00 L 783.49 245.83 L 786.47 251.78 L 788.70 257.
 
 type Tone = 'cream' | 'ink' | 'pattern';
 
+
+type Hotel = {
+  name: string; frame: 18 | 19 | 20; logo: string; price: string;
+  details: React.ReactNode[]; bookUrl?: string;
+};
+
+const HOTELS: Hotel[] = [
+  { name: 'La Mer Beachfront Resort', frame: 20, logo: 'la-mer', price: '$$$',
+    details: [
+      'Where our welcome drinks will take place.',
+      <>Starts at $564/night. Use code <strong>270617DWRB</strong> to access the block. Check-in at 4 PM.</>,
+    ],
+    bookUrl: 'https://capemaylamer.com/?selfbook=true&hotel=2032&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=270617DWRB' },
+  { name: 'The Beach Club on Madison', frame: 18, logo: 'beach-club', price: '$',
+    details: [
+      'A bit further back from the beach.',
+      'Starts at $294/night. Check-in at 4 PM.',
+    ],
+    bookUrl: 'https://www.beachclubcapemay.com/?selfbook=true&hotel=42068&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=2706DRISCO' },
+  { name: 'The Grand Hotel', frame: 19, logo: 'grand', price: '$$',
+    details: [
+      'Beachfront classic — 28 rooms reserved for our block.',
+      <>Starts at $406/night. Select your dates first, then enter Group ID <strong>744882</strong> to unlock the block.</>,
+    ],
+    bookUrl: 'https://www.grandhotelcapemay.com' },
+  { name: 'Marquis de Lafayette', frame: 20, logo: 'marquis', price: '$$',
+    details: [
+      '50 rooms reserved for our wedding block.',
+      <>Starts at $389/night. Use code <strong>DRISGAR6</strong>. If booking by phone, mention the Driscoll Garcia Wedding Room Block.</>,
+    ],
+    bookUrl: 'https://marquiscapemay.com' },
+  { name: 'Hotel Montreal', frame: 18, logo: 'montreal', price: '$$',
+    details: [
+      '10% off all rooms for our guests.',
+      'Booking code coming soon — we\'ll update this card once we have it.',
+    ] },
+  { name: 'ICONA Cape May', frame: 19, logo: 'icona', price: '$$$',
+    details: [
+      'Reaching back out in summer to lock the block.',
+      'Check back closer to the date for the booking link and code.',
+    ] },
+  { name: 'Ocean Club Hotel', frame: 20, logo: 'ocean-club', price: '$$$',
+    details: ['Still in conversation — details to come.'] },
+  { name: 'The Inn of Cape May', frame: 18, logo: 'inn', price: '$$$',
+    details: ['Still in conversation — details to come.'] },
+];
+
+const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
+  const [open, setOpen] = useState(false);
+  const frameSrc = `/photos/accommodations/frames/${hotel.frame}.png`;
+  const fillSrc  = `/photos/accommodations/frames/${hotel.frame}-fill.png`;
+  const logoSrc  = `/photos/accommodations/logos/${hotel.logo}.png`;
+  // Stamp-style frame (18) is rendered slightly compressed vertically so it reads more rectangular
+  const isStamp = hotel.frame === 18;
+  // Icona logo sits slightly low in its art — nudge it up so 'ICONA' centers in the frame
+  const isIcona = hotel.logo === 'icona';
+  const toggle = () => setOpen(o => !o);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div onClick={toggle} role="button" tabIndex={0}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
+        aria-expanded={open} aria-controls={`hotel-${hotel.logo}-details`}
+        style={{
+          position: 'relative', aspectRatio: '1 / 1',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 6,
+          cursor: 'pointer',
+        }}>
+        <img src={fillSrc} alt="" aria-hidden="true" style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'contain', pointerEvents: 'none',
+          transform: isStamp ? 'scaleY(0.78)' : undefined,
+        }} />
+        <img src={frameSrc} alt="" aria-hidden="true" style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'contain', pointerEvents: 'none',
+          filter: 'url(#tint-deep-dark)',
+          transform: isStamp ? 'scaleY(0.78)' : undefined,
+        }} />
+        <img src={logoSrc} alt={hotel.name} style={{
+          position: 'relative', zIndex: 2,
+          maxWidth: '72%', maxHeight: '72%', objectFit: 'contain',
+          filter: 'url(#tint-deep-dark)',
+          transform: isIcona ? 'translateY(-9%)' : undefined,
+          pointerEvents: 'none',
+        }} />
+      </div>
+      <div style={{ borderTop: '1px solid currentColor', marginTop: 4 }}>
+        <button type="button" onClick={() => setOpen(o => !o)}
+          aria-expanded={open}
+          style={{
+            width: '100%', padding: '14px 4px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: 'transparent', border: 'none', color: 'inherit',
+            cursor: 'pointer', font: 'inherit',
+          }}>
+          <span className="heading" style={{ fontSize: 24, lineHeight: 1, fontStyle: 'italic', fontWeight: 400, letterSpacing: 0 }}>{hotel.price}</span>
+          <span style={{
+            fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
+            fontWeight: 400, opacity: 0.8, display: 'flex', alignItems: 'center', gap: 10,
+          }}>
+            Details
+            <span style={{ position: 'relative', display: 'inline-block', width: 12, height: 12 }}>
+              <span style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 1, background: 'currentColor', transform: 'translateY(-50%)' }} />
+              <span style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: 'currentColor', transform: 'translateX(-50%)', opacity: open ? 0 : 1, transition: 'opacity .25s' }} />
+            </span>
+          </span>
+        </button>
+        <div id={`hotel-${hotel.logo}-details`} style={{
+          maxHeight: open ? 180 : 0, minHeight: open ? 180 : 0, overflow: 'hidden',
+          opacity: open ? 1 : 0, paddingBottom: open ? 16 : 0,
+          transition: 'max-height .35s ease, min-height .35s ease, opacity .35s ease, padding .35s ease',
+          display: 'flex', flexDirection: 'column',
+        }}>
+          {hotel.details.map((line, i) => (
+            <p key={i} style={{ fontSize: 13, lineHeight: 1.55, opacity: .85, margin: '0 0 8px', letterSpacing: '-0.005em' }}>{line}</p>
+          ))}
+          <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 12, paddingTop: 10 }}>
+            {hotel.bookUrl && (
+              <a href={hotel.bookUrl} target="_blank" rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
+                  fontWeight: 400, opacity: 0.9, color: 'inherit', textDecoration: 'none',
+                  borderBottom: '1px solid currentColor', paddingBottom: 2,
+                }}>Book →</a>
+            )}
+            <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${hotel.name}, Cape May, NJ`)}`}
+              target="_blank" rel="noopener noreferrer" aria-label={`Open ${hotel.name} in Google Maps`}
+              onMouseEnter={(e) => { const t = e.currentTarget; t.style.background = CREAM; t.style.color = DEEP_DARK; }}
+              onMouseLeave={(e) => { const t = e.currentTarget; t.style.background = 'transparent'; t.style.color = 'inherit'; }}
+              style={{
+                marginLeft: 'auto',
+                width: 28, height: 28, borderRadius: '50%', border: '1px solid currentColor',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                color: 'inherit', textDecoration: 'none', transition: 'background .2s, color .2s',
+              }}>
+              <svg viewBox="0 0 16 16" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 1.5 C5 1.5 3 3.5 3 6 C3 9 8 14 8 14 S13 9 13 6 C13 3.5 11 1.5 8 1.5 Z" />
+                <circle cx="8" cy="6" r="1.5" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+function priceTier(p: string): number { return p.length; }
+
+const AccommodationsBody: React.FC = () => {
+  const [sortByPrice, setSortByPrice] = useState(false);
+  const sorted = sortByPrice
+    ? [...HOTELS].sort((a, b) => priceTier(a.price) - priceTier(b.price))
+    : HOTELS;
+  return (
+    <>
+      <div style={{ maxWidth: 720, margin: '0 auto 28px' }}>
+        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>Get ready for a fun stay in Cape May!</p>
+        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>We&apos;ve secured room blocks at several local hotels and resorts — from beachfront classics to boutique stays, at a range of price points. Cape May is small enough that no matter where you stay, you&apos;ll be close to the action and events.</p>
+        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>If you wish to book elsewhere, the area is full of Airbnbs and rental properties as well.</p>
+        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400 }}>We will be sharing trolley pickup points and schedule closer to the date.</p>
+      </div>
+      <div style={{ maxWidth: 720, margin: '0 auto 12px', display: 'flex', justifyContent: 'flex-end' }}>
+        <button type="button" onClick={() => setSortByPrice(v => !v)}
+          aria-pressed={sortByPrice}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
+            fontWeight: 400, opacity: 0.85, cursor: 'pointer', userSelect: 'none',
+            background: 'transparent', border: 'none', color: 'inherit', padding: '4px 0',
+          }}>
+          <span aria-hidden="true" style={{
+            width: 14, height: 14, border: '1px solid currentColor',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            position: 'relative',
+          }}>
+            <span style={{
+              width: 8, height: 8, background: 'currentColor',
+              opacity: sortByPrice ? 1 : 0, transition: 'opacity .15s ease',
+            }} />
+          </span>
+          <span>Sort by Estimated Price</span>
+        </button>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px 28px', margin: '8px auto 0', maxWidth: 720 }} className="hotels-grid">
+        {sorted.map(h => <HotelCard key={h.name} hotel={h} />)}
+      </div>
+    </>
+  );
+};
+
 const SectionShell: React.FC<{
   id?: string; tone: Tone; children: React.ReactNode;
   wide?: boolean; foot?: React.ReactNode;
@@ -267,39 +460,71 @@ const EventSection: React.FC<{
 
 
 const HotelTile: React.FC<{ name: string; address: string; note?: string }> = ({ name, address, note }) => (
-  <div style={{ padding: 22, border: '1px solid currentColor' }}>
-    <h3 className="heading" style={{ fontSize: 20, margin: '0 0 4px', fontWeight: 400, lineHeight: 1.15 }}>{name}</h3>
-    <p style={{ fontSize: 9.5, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: .55, margin: '4px 0 8px', fontWeight: 400 }}>{address}</p>
-    {note && <p style={{ fontSize: 13.5, lineHeight: 1.45, opacity: .8, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{note}</p>}
+  <div style={{ padding: '28px 26px', background: 'rgba(76, 100, 122, .03)', position: 'relative' }}>
+    <Bracket pos="tl" /><Bracket pos="br" />
+    <h3 className="heading" style={{ fontSize: 22, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>{name}</h3>
+    <p style={{ fontSize: 9.5, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: .55, margin: '10px 0 0', fontWeight: 400 }}>{address}</p>
+    <div style={{ width: 24, height: 1, background: 'currentColor', opacity: .3, margin: '12px 0' }} />
+    {note && <p style={{ fontSize: 13.5, lineHeight: 1.5, opacity: .82, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{note}</p>}
   </div>
 );
 
-const EatTile: React.FC<{ name: string; address: string; note: string }> = ({ name, address, note }) => {
-  const mapQ = encodeURIComponent(address + ', Cape May, NJ');
+type CardTone = 'ink' | 'cream' | 'pattern';
+function cardColors(tone: CardTone) {
+  // Card fill contrasts with section tone; text + icon are inverse of fill.
+  // Pattern section reads as cream-ish (trellis wallpaper) so it sides with cream.
+  const isLightSection = tone === 'cream' || tone === 'pattern';
+  return {
+    bg: isLightSection ? DEEP_DARK : CREAM,
+    fg: isLightSection ? CREAM : DEEP_DARK,
+  };
+}
+
+const EatTile: React.FC<{ name: string; address: string; note: string; mapUrl?: string; tone?: CardTone }> = ({ name, address, note, mapUrl, tone = 'cream' }) => {
+  const { bg, fg } = cardColors(tone);
+  // Default Google Maps URL: include the business NAME so Maps lands on the listing,
+  // not just an address search. mapUrl prop can override with a real place URL.
+  const href = mapUrl ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}, ${address}, Cape May, NJ`)}`;
   return (
-    <div style={{ padding: '14px 18px', border: '1px solid currentColor', opacity: .92, fontSize: 13.5, lineHeight: 1.45, fontWeight: 400, letterSpacing: '-0.005em' }}>
+    <div style={{ padding: '22px 24px', background: bg, color: fg, fontSize: 13.5, lineHeight: 1.5, fontWeight: 400, letterSpacing: '-0.005em' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-        <strong className="heading" style={{ display: 'block', fontSize: 18, opacity: .9, margin: 0, fontWeight: 400, lineHeight: 1.1 }}>{name}</strong>
-        <a href={`https://www.google.com/maps/search/?api=1&query=${mapQ}`} target="_blank" rel="noopener noreferrer" aria-label="Open in maps"
-          style={{ width: 24, height: 24, borderRadius: '50%', border: '1px solid currentColor', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'inherit', textDecoration: 'none', transition: 'background .25s, color .25s' }}>
-          <svg viewBox="0 0 16 16" width={13} height={13} fill="none" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round" strokeLinejoin="round">
+        <strong className="heading" style={{ display: 'block', fontSize: 19, opacity: .94, margin: 0, fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.005em' }}>{name}</strong>
+        <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`Open ${name} in Google Maps`}
+          onMouseEnter={(e) => { const t = e.currentTarget; t.style.background = fg; t.style.color = bg; }}
+          onMouseLeave={(e) => { const t = e.currentTarget; t.style.background = 'transparent'; t.style.color = 'inherit'; }}
+          style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid currentColor', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'inherit', textDecoration: 'none', transition: 'background .2s, color .2s' }}>
+          <svg viewBox="0 0 16 16" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" strokeLinejoin="round">
             <path d="M8 1.5 C5 1.5 3 3.5 3 6 C3 9 8 14 8 14 S13 9 13 6 C13 3.5 11 1.5 8 1.5 Z" />
             <circle cx="8" cy="6" r="1.5" />
           </svg>
         </a>
       </div>
-      <p style={{ fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: .55, margin: '4px 0 6px', fontWeight: 400 }}>{address}</p>
+      <p style={{ fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: .6, margin: '6px 0 8px', fontWeight: 400 }}>{address}</p>
       <p style={{ margin: 0 }}>{note}</p>
     </div>
   );
 };
 
-const Tile: React.FC<{ heading: string; body: string }> = ({ heading, body }) => (
-  <div style={{ padding: 26, border: '1px solid currentColor' }}>
-    <h3 className="heading" style={{ fontSize: 22, margin: '0 0 12px', fontWeight: 400 }}>{heading}</h3>
-    <p style={{ fontSize: 15, lineHeight: 1.5, opacity: .8, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{body}</p>
-  </div>
+const Bracket: React.FC<{ pos: 'tl' | 'br' }> = ({ pos }) => (
+  <span aria-hidden="true" style={{
+    position: 'absolute',
+    width: 18, height: 18, opacity: .45, pointerEvents: 'none',
+    ...(pos === 'tl'
+      ? { top: 0, left: 0, borderTop: '1px solid currentColor', borderLeft: '1px solid currentColor' }
+      : { bottom: 0, right: 0, borderBottom: '1px solid currentColor', borderRight: '1px solid currentColor' }),
+  }} />
 );
+
+const Tile: React.FC<{ heading: string; body: React.ReactNode; tone?: CardTone }> = ({ heading, body, tone = 'ink' }) => {
+  const { bg, fg } = cardColors(tone);
+  return (
+    <div style={{ padding: '32px 30px', background: bg, color: fg }}>
+      <h3 className="heading" style={{ fontSize: 26, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>{heading}</h3>
+      <div style={{ width: 26, height: 1, background: 'currentColor', opacity: .35, margin: '12px 0 14px' }} />
+      <p style={{ fontSize: 14, lineHeight: 1.55, opacity: .85, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{body}</p>
+    </div>
+  );
+};
 
 const FaqRow: React.FC<{ q: string; a: string }> = ({ q, a }) => {
   const [open, setOpen] = useState(false);
@@ -558,15 +783,14 @@ export default function WeddingSite() {
 
       {/* AGENDA */}
       <SectionShell id="agenda" tone="ink" wide foot="↓ scroll for each event">
-        <NumEyebrow>No. 01</NumEyebrow>
         <Title>The Agenda</Title>
-        <Lede>Three days in Cape May. Here&apos;s the shape of it — each event has its own page below.</Lede>
+        <Lede>We can&apos;t wait to see you and celebrate in Cape May! Please see below for the details on each event.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 28, marginTop: 28 }} className="agenda-grid">
           {[
-            { src: ICON.pier,    name: 'Welcome',     meta: ['Thu · 8 PM', 'La Mer'] },
-            { src: ICON.osos,    name: 'Ceremony',    meta: ['Fri · 2 PM', 'Star of the Sea'] },
-            { src: ICON.tent,    name: 'Reception',   meta: ['Fri · 5 PM', 'Isaac Smith'] },
-            { src: ICON.carneys, name: 'After Party', meta: ['Fri · 10:30', "Carney's"] },
+            { src: ICON.pier,    name: 'Welcome',     meta: ['Thu · 8 PM', 'The Pier House'] },
+            { src: ICON.osos,    name: 'Nuptial Mass', meta: ['Fri · 1:30 PM', 'OLSOS'] },
+            { src: ICON.tent,    name: 'Reception',   meta: ['Fri · 5 PM', 'Isaac Smith Vineyard'] },
+            { src: ICON.carneys, name: 'After Party', meta: ['Fri · 10:30', "Carney's Restaurant & Bar"] },
             { src: ICON.beach,   name: 'Beach Day',   meta: ['Sat · 10 AM', 'Cape May'] },
           ].map(card => (
             <div key={card.name} style={{
@@ -619,17 +843,17 @@ export default function WeddingSite() {
           ['Time',   '8:00 — 10:00 PM'],
           ['Place',  'The Pier House at La Mer Beachfront Resort'],
           ['Attire', 'Summer Cocktail'],
-          ['Note',   'Welcome to Cape May — come grab a drink with us before the weekend takes off.'],
-        ]} foot="No. 02 / Welcome Drinks" />
+          ['Note',   'Welcome to Cape May! Come grab a drink with the Bride and Groom to kick off their wedding weekend.'],
+        ]} />
 
       <EventSection calId="ceremony" mapQuery="Our+Lady+Star+of+the+Sea+525+Washington+Street+Cape+May+NJ" id="ceremony" tone="cream" eyebrow="Friday · June 18"
-        name="Ceremony" iconSrc={ICON.osos}
+        name="Nuptial Mass" iconSrc={ICON.osos}
         rows={[
-          ['Time',    '2:00 PM'],
+          ['Time',    '1:30 PM'],
           ['Place',   'Our Lady Star of the Sea'],
           ['Address', '525 Washington Street, Cape May, NJ'],
-          ['Note',    'Mass starts promptly. Please arrive 15–30 minutes early.'],
-        ]} foot="No. 03 / Ceremony" />
+          ['Note',    'Mass will begin promptly. We kindly ask that you are seated 15–30 minutes prior.'],
+        ]} />
 
       <EventSection calId="reception" mapQuery="Isaac+Smith+Vineyard+1039+Seashore+Road+Cape+May+NJ" id="reception" tone="ink" eyebrow="Friday · June 18"
         name="Reception" iconSrc={ICON.tent}
@@ -637,7 +861,8 @@ export default function WeddingSite() {
           ['Time',    '5:00 — 10:00 PM'],
           ['Place',   'Isaac Smith Vineyard'],
           ['Address', '1039 Seashore Road, Cape May, NJ'],
-        ]} foot="No. 04 / Reception" />
+          ['Note',    'Please review the Travel section for information on arranged transportation.'],
+        ]} />
 
       <EventSection calId="afterparty" mapQuery="Carneys+Restaurant+Bar+411+Beach+Ave+Cape+May+NJ" id="afterparty" tone="pattern" eyebrow="Friday · June 18"
         name="After Party" iconSrc={ICON.carneys}
@@ -645,42 +870,96 @@ export default function WeddingSite() {
           ['Time',    '10:30 PM — 2:00 AM'],
           ['Place',   "Carney's Restaurant & Bar"],
           ['Address', '411 Beach Ave, Cape May, NJ'],
-        ]} foot="No. 05 / After Party" />
+        ]} />
 
       <EventSection calId="beach" mapQuery="Cape+May+Beach+NJ" id="beach" tone="cream" eyebrow="Saturday · June 19"
         name="Beach Day" iconSrc={ICON.beach}
         rows={[
           ['Time', '10 AM onward'],
-          ['Note', 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia — or stay the weekend.'],
-        ]} foot="No. 06 / Beach Day" />
+          ['Note', 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia! Or stick around and enjoy a few extra days in Cape May.'],
+        ]} />
 
-      <SectionShell id="accommodations" tone="ink" foot="More options on FAQ ↓">
-        <NumEyebrow>No. 07</NumEyebrow>
-        <Title>The Accommodations</Title>
-        <Lede>A few favorites in town. Cape May fills up fast in summer — book sooner than later.</Lede>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 28 }} className="hotels-grid">
-          <HotelTile name="La Mer Beachfront Resort" address="1317 Beach Avenue" note="This is also where Welcome Drinks are happening." />
-          <HotelTile name="The Beach Club on Madison" address="605 Madison Avenue" />
-          <HotelTile name="Grand Hotel of Cape May" address="1045 Beach Avenue" note="Use code 744882 when booking to be in the room block." />
-          <HotelTile name="Marquis de Lafayette Hotel" address="501 Beach Avenue" />
-          <HotelTile name="The Inn of Cape May" address="7 Ocean Street" />
-          <HotelTile name="ICONA Cape May" address="1101 Beach Avenue" />
+      {/* RSVP */}
+      <section
+        id="rsvp"
+        style={{
+          minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
+          backgroundColor: CREAM, backgroundImage: "url('/photos/trellis.jpg')",
+          backgroundSize: '540px auto', backgroundRepeat: 'repeat',
+          padding: '110px 24px 70px',
+          display: 'flex', flexDirection: 'column', justifyContent: 'center',
+          color: DEEP_DARK, position: 'relative',
+        }}
+      >
+        <div style={{
+          maxWidth: 720, margin: '0 auto', width: '100%',
+          background: CREAM,
+          padding: 'clamp(48px, 6vw, 72px) clamp(32px, 5vw, 56px)',
+          boxShadow: '0 14px 40px rgba(20,30,45,.12), 0 2px 8px rgba(20,30,45,.08)',
+        }}>
+          <div style={{ position: 'relative', width: '100%', maxWidth: 520, margin: '24px auto 0', aspectRatio: '600 / 480' }}>
+            <svg viewBox="0 0 600 480" preserveAspectRatio="xMidYMid meet" aria-hidden="true"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }}>
+              <defs>
+                <linearGradient id="envGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#5d7488" />
+                  <stop offset="100%" stopColor="#3d5469" />
+                </linearGradient>
+                <filter id="envShadow" x="-15%" y="-15%" width="130%" height="130%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="6" />
+                  <feOffset dx="0" dy="10" />
+                  <feComponentTransfer><feFuncA type="linear" slope="0.22" /></feComponentTransfer>
+                  <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+              </defs>
+              <g filter="url(#envShadow)">
+                <rect x="30" y="200" width="540" height="260" rx="5" fill="url(#envGrad)" />
+                <path d="M 30 200 L 300 360 L 570 200" stroke="rgba(255,255,255,.18)" strokeWidth={1} fill="none" />
+                <line x1="30" y1="460" x2="570" y2="460" stroke="rgba(0,0,0,.18)" strokeWidth={0.5} />
+              </g>
+            </svg>
+            <div style={{
+              position: 'absolute', top: '5%', left: '11%', right: '11%', bottom: '36%',
+              background: CREAM,
+              padding: 'clamp(22px, 4vw, 34px) clamp(20px, 3.5vw, 28px)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              textAlign: 'center',
+              transform: 'rotate(-1.5deg)',
+              boxShadow: '0 10px 28px rgba(20,30,45,.20), 0 2px 5px rgba(20,30,45,.08)',
+              color: DEEP_DARK,
+            }}>
+              <h3 className="heading" style={{
+                fontSize: 'clamp(48px, 7vw, 68px)', lineHeight: 1, letterSpacing: '-.01em', margin: '0 0 12px',
+                fontWeight: 400,
+              }}>RSVP</h3>
+              <div style={{ width: 36, height: 1, background: 'currentColor', opacity: .35, margin: '0 0 14px' }} />
+              <p style={{
+                fontSize: 'clamp(11px, 1.4vw, 12.5px)', lineHeight: 1.6, opacity: .85,
+                fontWeight: 400, letterSpacing: '-.005em', margin: 0, maxWidth: 320,
+              }}>
+                We are so excited to celebrate with you. Enclosed in your invitation there is an RSVP card and envelope. We kindly ask that you mark your response, enclose, and drop it in a mailbox.
+              </p>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <SectionShell id="accommodations" tone="ink" wide foot="More options on FAQ ↓">
+        <Title>The Accommodations</Title>
+        <AccommodationsBody />
       </SectionShell>
 
       <SectionShell id="getting-there" tone="pattern">
-        <NumEyebrow>No. 08</NumEyebrow>
-        <Title>Getting There</Title>
+        <Title>Travel Options</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginTop: 8 }} className="pair-grid">
-          <Tile heading="By Car"      body="Cape May is at the southern tip of NJ. ~2.5 hrs from NYC, ~1.75 hrs from Philly. Garden State Parkway south to Exit 0." />
-          <Tile heading="By Air"      body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). Rentals recommended." />
-          <Tile heading="By Ferry"    body="Cape May–Lewes Ferry from Delaware. Walk-on or drive-on." />
-          <Tile heading="Around Town" body="Walkable downtown. Trolleys, bikes, and Uber operate locally." />
+          <Tile tone="pattern" heading="By Car"      body="Cape May is at the southern tip of New Jersey. ~2.5 hrs from New York City, ~1.75 hrs from Philadelphia. Garden State Parkway south to Exit 0." />
+          <Tile tone="pattern" heading="By Air"      body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). If flying, rental car recommended." />
+          <Tile tone="pattern" heading="By Ferry"    body="Cape May–Lewes Ferry from Delaware. Walk-on or drive-on." />
+          <Tile tone="pattern" heading="Around Town" body="Walkable downtown. Trolleys, bikes, and Uber operate locally." />
         </div>
       </SectionShell>
 
       <SectionShell id="things" tone="cream">
-        <NumEyebrow>No. 09</NumEyebrow>
         <Title>Places to Eat</Title>
         <Lede>A few of our favorite spots in town. Reservations recommended for dinners.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 22px' }} className="things-grid">
@@ -688,31 +967,30 @@ export default function WeddingSite() {
             { name: 'The Buoy Coffee Shop', address: '722 Beach Avenue', note: 'A morning must!' },
           { name: 'Avalon Coffee of Cape May', address: '7 Gurney Street', note: 'Coffee, a breakfast sandwich, or an acai bowl.' },
           { name: "Uncle Bill's Pancake House", address: '261 Beach Avenue', note: "Sit-down breakfast you won't forget — bonus points for the gluten-free pancakes." },
-          { name: 'The Mad Batter', address: '19 Jackson Street', note: 'Great breakfast — best omelettes in town.' },
-          { name: 'Ugly Mug Bar & Restaurant', address: '426 Washington Street', note: 'A perfect Irish pub for a Guinness and a burger.' },
+          { name: 'The Mad Batter', address: '19 Jackson Street', note: 'Great for mimosas and omelettes!' },
+          { name: 'Ugly Mug Bar & Restaurant', address: '426 Washington Street', note: 'A perfect Irish pub for a beer and a burger.' },
           { name: 'Ocean Club Hotel', address: '1035 Beach Avenue', note: 'Quick lunch on their pool deck.' },
           { name: "Harry's Ocean Bar & Grille", address: '1025 Beach Avenue', note: 'Quick stop for brunch or lunch.' },
           { name: 'Rusty Nail', address: '205 Beach Avenue', note: 'Live music, good drinks, appetizers, feet in the sand.' },
           { name: "George's Place Beachfront", address: '301 Beach Avenue', note: "The Groom's favorite — gyros, salads, and smoothies." },
-          { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', note: 'Worth driving to. Farm-fresh food, picnic tables, indoor market.' },
+          { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', note: 'Worth the short drive.' },
           { name: 'Westside Market', address: '517 Broadway, West Cape May', note: 'Best deli in town.' },
-          ].map(eat => <EatTile key={eat.name} {...eat} />)}
+          ].map(eat => <EatTile key={eat.name} tone="cream" {...eat} />)}
         </div>
       </SectionShell>
 
       <SectionShell id="dress" tone="ink">
-        <NumEyebrow>No. 10</NumEyebrow>
         <Title>The Dress Code</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
-          <Tile heading="Welcome Drinks"        body="Summer cocktail. Dresses (any length) for women, button-down and pants for men. Jackets preferred but not required." />
-          <Tile heading="Ceremony & Reception" body="Black tie optional. Tux or dark suit for men. Floor-length gowns for women — bright, summery colors and patterns encouraged. The reception is fully outdoors on grass; block heels are strongly recommended." />
+          <Tile tone="ink" heading="Welcome Drinks"  body={<>Summer Cocktail.<br/><br/>We ask that ladies wear a dress of any length, and gentleman wear a button down and pants. Jackets are preferred, but not required.</>} />
+          <Tile tone="ink" heading="Mass & Reception" body={<>Black Tie Optional.<br/><br/>We ask that ladies wear a floor-length gown. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
         </div>
       </SectionShell>
 
+      {/* Registry section temporarily disabled
       <SectionShell id="registry" tone="pattern">
-        <NumEyebrow>No. 11</NumEyebrow>
         <Title>Registry</Title>
-        <Lede>Your presence is the gift. If you&apos;d like to celebrate further, we&apos;ve put a few things together.</Lede>
+        <Lede>Your presence is the gift. If you'd like to celebrate further, we've put a few things together.</Lede>
         <a href="https://www.zola.com/wedding/haleyandgeorge2027/registry" target="_blank" rel="noopener noreferrer"
           style={{
             display: 'inline-flex', padding: '12px 26px', border: '1px solid currentColor',
@@ -722,9 +1000,9 @@ export default function WeddingSite() {
             color: 'inherit', textDecoration: 'none',
           }}>View Registry →</a>
       </SectionShell>
+      */}
 
       <SectionShell id="faq" tone="cream">
-        <NumEyebrow>No. 12</NumEyebrow>
         <Title>FAQ</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <FaqRow q='How far in advance should I book my hotel?' a='As soon as possible — hotels in Cape May in summer go fast.' />
@@ -756,9 +1034,9 @@ export default function WeddingSite() {
         }}>
           <svg viewBox="0 0 800 480" preserveAspectRatio="none"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
+            <path d={WAVY_PATH} fill={DEEP_DARK} stroke="rgba(242,239,233,.5)" strokeWidth={1} vectorEffect="non-scaling-stroke" />
           </svg>
-          <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%' }}>
+          <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%', color: CREAM }}>
             <div style={{ fontSize: 14, letterSpacing: '0.4em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 14, opacity: .75 }}>
               Any questions?
             </div>
@@ -767,7 +1045,7 @@ export default function WeddingSite() {
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, whiteSpace: 'nowrap',
             }}>
               <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
-              Shoot us a note!
+              Send us a note!
               <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
             </h2>
             <a

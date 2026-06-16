@@ -4,9 +4,8 @@ const LINKS = [
   { label: 'Schedule', href: '#agenda' },
   { label: 'Stay',     href: '#accommodations' },
   { label: 'Travel',   href: '#getting-there' },
-  { label: 'Things',   href: '#things' },
-  { label: 'Dress',    href: '#dress' },
-  { label: 'Registry', href: '#registry' },
+  { label: 'Dining',   href: '#things' },
+  { label: 'Attire',   href: '#dress' },
   { label: 'FAQ',      href: '#faq' },
 ];
 
