@@ -110,7 +110,7 @@ export default function LandingPage({ onSuccess }: Props) {
           style={{
             position: 'relative',
             width: 'clamp(300px, 36vw, 380px)',
-            height: 'clamp(460px, 56vw, 600px)',
+            height: 'clamp(380px, 44vw, 480px)',
             background: '#f2efe9',
             borderRadius: '50%',
             boxShadow: '0 30px 80px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.18)',
@@ -204,14 +204,7 @@ export default function LandingPage({ onSuccess }: Props) {
         </motion.div>
       </div>
 
-      {/* Hint */}
-      <div style={{
-        position: 'absolute', bottom: 36, left: '50%', transform: 'translateX(-50%)',
-        fontSize: 9, letterSpacing: '0.42em', textTransform: 'uppercase',
-        color: 'rgba(242,239,233,.5)', fontWeight: 300,
-      }}>
-        The more you look, the more you find
-      </div>
+
     </motion.div>
   );
 }
