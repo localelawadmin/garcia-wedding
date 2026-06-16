@@ -706,20 +706,17 @@ export default function WeddingSite() {
             src={HG}
             alt="Haley & George"
             style={{
-              width: 176, height: 'auto', display: 'block',
+              height: 140, width: 'auto', display: 'block',
               filter: 'brightness(0) invert(.95)',
             }}
           />
           <div style={{
             textAlign: 'right',
-            display: 'flex', flexDirection: 'column', alignItems: 'flex-end',
-            gap: 6,
-            fontFamily: "'Inter Tight', -apple-system, sans-serif",
-            fontSize: 13, letterSpacing: '0.18em', textTransform: 'uppercase',
-            fontWeight: 400, lineHeight: 1.5,
+            display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center',
+            gap: 12,
           }}>
-            <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 32, width: 'auto', display: 'block' }} />
-            <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 32, width: 'auto', display: 'block' }} />
+            <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 64, width: 'auto', display: 'block' }} />
+            <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 64, width: 'auto', display: 'block' }} />
           </div>
         </div>
 
