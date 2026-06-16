@@ -712,13 +712,15 @@ export default function WeddingSite() {
           />
           <div style={{
             textAlign: 'right',
+            display: 'flex', flexDirection: 'column', alignItems: 'flex-end',
+            gap: 6,
             fontFamily: "'Inter Tight', -apple-system, sans-serif",
             fontSize: 13, letterSpacing: '0.18em', textTransform: 'uppercase',
             fontWeight: 400, lineHeight: 1.5,
           }}>
             <span style={{ display: 'block' }}>The Garcia Wedding</span>
-            <span style={{ display: 'block' }}>Cape May,</span>
-            <span style={{ display: 'block' }}>June 2027</span>
+            <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 32, width: 'auto', display: 'block' }} />
+            <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 32, width: 'auto', display: 'block' }} />
           </div>
         </div>
 
