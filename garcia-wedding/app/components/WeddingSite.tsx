@@ -716,6 +716,7 @@ export default function WeddingSite() {
             fontSize: 13, letterSpacing: '0.18em', textTransform: 'uppercase',
             fontWeight: 400, lineHeight: 1.5,
           }}>
+            <span style={{ display: 'block', marginBottom: 4 }}>The Garcia Wedding</span>
             <span style={{ display: 'block' }}>Cape May,</span>
             <span style={{ display: 'block' }}>June 2027</span>
           </div>
@@ -788,9 +789,9 @@ export default function WeddingSite() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 28, marginTop: 28 }} className="agenda-grid">
           {[
             { src: ICON.pier,    name: 'Welcome',     meta: ['Thu · 8 PM', 'The Pier House'] },
-            { src: ICON.osos,    name: 'Nuptial Mass', meta: ['Fri · 1:30 PM', 'OLSOS'] },
+            { src: ICON.osos,    name: 'Nuptial Mass', meta: ['Fri · 1:30 PM', 'Our Lady Star of the Sea'] },
             { src: ICON.tent,    name: 'Reception',   meta: ['Fri · 5 PM', 'Isaac Smith Vineyard'] },
-            { src: ICON.carneys, name: 'After Party', meta: ['Fri · 10:30', "Carney's Restaurant & Bar"] },
+            { src: ICON.carneys, name: 'After Party', meta: ['Fri · 10:30', "Carney's"] },
             { src: ICON.beach,   name: 'Beach Day',   meta: ['Sat · 10 AM', 'Cape May'] },
           ].map(card => (
             <div key={card.name} style={{
