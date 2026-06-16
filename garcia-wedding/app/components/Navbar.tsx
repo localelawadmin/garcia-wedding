@@ -33,7 +33,7 @@ export default function Navbar() {
             src="/photos/agenda/haley-and-george.png"
             alt="Haley & George"
             style={{
-              height: 46, width: 'auto', display: 'block',
+              height: 64, width: 'auto', display: 'block',
               filter: 'brightness(0) invert(.95)',
             }}
           />

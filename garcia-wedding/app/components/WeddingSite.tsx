@@ -706,7 +706,7 @@ export default function WeddingSite() {
             src={HG}
             alt="Haley & George"
             style={{
-              width: 130, height: 'auto', display: 'block',
+              width: 220, height: 'auto', display: 'block',
               filter: 'brightness(0) invert(.95)',
             }}
           />
