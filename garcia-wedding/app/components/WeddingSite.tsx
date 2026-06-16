@@ -716,7 +716,7 @@ export default function WeddingSite() {
             fontSize: 13, letterSpacing: '0.18em', textTransform: 'uppercase',
             fontWeight: 400, lineHeight: 1.5,
           }}>
-            <span style={{ display: 'block', marginBottom: 4 }}>The Garcia Wedding</span>
+            <span style={{ display: 'block' }}>The Garcia Wedding</span>
             <span style={{ display: 'block' }}>Cape May,</span>
             <span style={{ display: 'block' }}>June 2027</span>
           </div>
