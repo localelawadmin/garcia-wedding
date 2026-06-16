@@ -28,13 +28,13 @@ export default function Navbar() {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}
       >
-        <a href="#hero" aria-label="Haley & George — home" style={{ display: 'block' }}>
+        <a href="#hero" aria-label="Haley & George — home" style={{ display: 'block', position: 'relative', zIndex: 1 }}>
           <img
             src="/photos/agenda/haley-and-george.png"
             alt="Haley & George"
             style={{
               height: 52, width: 'auto', display: 'block',
-              filter: 'brightness(0) invert(.95)',
+              position: 'relative', zIndex: 1,
             }}
           />
         </a>
