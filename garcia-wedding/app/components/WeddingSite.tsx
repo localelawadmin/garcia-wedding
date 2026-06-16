@@ -683,12 +683,12 @@ export default function WeddingSite() {
           style={{
             position: 'absolute', inset: 0, width: '100%', height: '100%',
             objectFit: 'cover', objectPosition: 'center 40%',
-            filter: 'saturate(.5) brightness(.88) contrast(1.04)',
+            filter: 'saturate(1.05) brightness(.95) contrast(1.06)',
           }}
         />
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,.35) 0%, rgba(0,0,0,.05) 40%, rgba(0,0,0,.55) 100%)',
+          background: 'linear-gradient(to bottom, rgba(0,0,0,.20) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.35) 100%)',
         }} />
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
