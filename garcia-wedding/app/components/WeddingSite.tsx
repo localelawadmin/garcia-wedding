@@ -718,7 +718,6 @@ export default function WeddingSite() {
             fontSize: 13, letterSpacing: '0.18em', textTransform: 'uppercase',
             fontWeight: 400, lineHeight: 1.5,
           }}>
-            <span style={{ display: 'block' }}>The Garcia Wedding</span>
             <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 32, width: 'auto', display: 'block' }} />
             <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 32, width: 'auto', display: 'block' }} />
           </div>
