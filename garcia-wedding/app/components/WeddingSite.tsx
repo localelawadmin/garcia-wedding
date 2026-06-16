@@ -197,9 +197,10 @@ const AccommodationsBody: React.FC = () => {
   return (
     <>
       <div style={{ maxWidth: 720, margin: '0 auto 28px' }}>
-        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>Get ready for a fun weekend in Cape May. We&apos;ve secured room blocks at several local hotels and resorts — from beachfront classics to boutique stays, at a range of price points. Cape May is small enough that no matter where you stay, you&apos;ll be close to the action.</p>
-        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>If hotels aren&apos;t your vibe, the area is full of Airbnbs and rental properties too.</p>
-        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400 }}>A few things to note: scheduled transportation to the venue won&apos;t stop at every single hotel. We&apos;ll be sharing trolley pickup points closer to the date, and we kindly ask you meet us at the nearest one.</p>
+        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>Get ready for a fun stay in Cape May!</p>
+        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>We&apos;ve secured room blocks at several local hotels and resorts — from beachfront classics to boutique stays, at a range of price points. Cape May is small enough that no matter where you stay, you&apos;ll be close to the action and events.</p>
+        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>If you wish to book elsewhere, the area is full of Airbnbs and rental properties as well.</p>
+        <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400 }}>We will be sharing trolley pickup points and schedule closer to the date.</p>
       </div>
       <div style={{ maxWidth: 720, margin: '0 auto 12px', display: 'flex', justifyContent: 'flex-end' }}>
         <button type="button" onClick={() => setSortByPrice(v => !v)}
@@ -514,7 +515,7 @@ const Bracket: React.FC<{ pos: 'tl' | 'br' }> = ({ pos }) => (
   }} />
 );
 
-const Tile: React.FC<{ heading: string; body: string; tone?: CardTone }> = ({ heading, body, tone = 'ink' }) => {
+const Tile: React.FC<{ heading: string; body: React.ReactNode; tone?: CardTone }> = ({ heading, body, tone = 'ink' }) => {
   const { bg, fg } = cardColors(tone);
   return (
     <div style={{ padding: '32px 30px', background: bg, color: fg }}>
@@ -782,15 +783,14 @@ export default function WeddingSite() {
 
       {/* AGENDA */}
       <SectionShell id="agenda" tone="ink" wide foot="↓ scroll for each event">
-        <NumEyebrow>No. 01</NumEyebrow>
         <Title>The Agenda</Title>
-        <Lede>Three days in Cape May. Here&apos;s the shape of it — each event has its own page below.</Lede>
+        <Lede>We can&apos;t wait to see you and celebrate in Cape May! Please see below for the details on each event.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 28, marginTop: 28 }} className="agenda-grid">
           {[
-            { src: ICON.pier,    name: 'Welcome',     meta: ['Thu · 8 PM', 'La Mer'] },
-            { src: ICON.osos,    name: 'Ceremony',    meta: ['Fri · 2 PM', 'Star of the Sea'] },
-            { src: ICON.tent,    name: 'Reception',   meta: ['Fri · 5 PM', 'Isaac Smith'] },
-            { src: ICON.carneys, name: 'After Party', meta: ['Fri · 10:30', "Carney's"] },
+            { src: ICON.pier,    name: 'Welcome',     meta: ['Thu · 8 PM', 'The Pier House'] },
+            { src: ICON.osos,    name: 'Nuptial Mass', meta: ['Fri · 1:30 PM', 'OLSOS'] },
+            { src: ICON.tent,    name: 'Reception',   meta: ['Fri · 5 PM', 'Isaac Smith Vineyard'] },
+            { src: ICON.carneys, name: 'After Party', meta: ['Fri · 10:30', "Carney's Restaurant & Bar"] },
             { src: ICON.beach,   name: 'Beach Day',   meta: ['Sat · 10 AM', 'Cape May'] },
           ].map(card => (
             <div key={card.name} style={{
@@ -843,17 +843,17 @@ export default function WeddingSite() {
           ['Time',   '8:00 — 10:00 PM'],
           ['Place',  'The Pier House at La Mer Beachfront Resort'],
           ['Attire', 'Summer Cocktail'],
-          ['Note',   'Welcome to Cape May — come grab a drink with us before the weekend takes off.'],
-        ]} foot="No. 02 / Welcome Drinks" />
+          ['Note',   'Welcome to Cape May! Come grab a drink with the Bride and Groom to kick off their wedding weekend.'],
+        ]} />
 
       <EventSection calId="ceremony" mapQuery="Our+Lady+Star+of+the+Sea+525+Washington+Street+Cape+May+NJ" id="ceremony" tone="cream" eyebrow="Friday · June 18"
-        name="Ceremony" iconSrc={ICON.osos}
+        name="Nuptial Mass" iconSrc={ICON.osos}
         rows={[
-          ['Time',    '2:00 PM'],
+          ['Time',    '1:30 PM'],
           ['Place',   'Our Lady Star of the Sea'],
           ['Address', '525 Washington Street, Cape May, NJ'],
-          ['Note',    'Mass starts promptly. Please arrive 15–30 minutes early.'],
-        ]} foot="No. 03 / Ceremony" />
+          ['Note',    'Mass will begin promptly. We kindly ask that you are seated 15–30 minutes prior.'],
+        ]} />
 
       <EventSection calId="reception" mapQuery="Isaac+Smith+Vineyard+1039+Seashore+Road+Cape+May+NJ" id="reception" tone="ink" eyebrow="Friday · June 18"
         name="Reception" iconSrc={ICON.tent}
@@ -861,7 +861,8 @@ export default function WeddingSite() {
           ['Time',    '5:00 — 10:00 PM'],
           ['Place',   'Isaac Smith Vineyard'],
           ['Address', '1039 Seashore Road, Cape May, NJ'],
-        ]} foot="No. 04 / Reception" />
+          ['Note',    'Please review the Travel section for information on arranged transportation.'],
+        ]} />
 
       <EventSection calId="afterparty" mapQuery="Carneys+Restaurant+Bar+411+Beach+Ave+Cape+May+NJ" id="afterparty" tone="pattern" eyebrow="Friday · June 18"
         name="After Party" iconSrc={ICON.carneys}
@@ -869,14 +870,14 @@ export default function WeddingSite() {
           ['Time',    '10:30 PM — 2:00 AM'],
           ['Place',   "Carney's Restaurant & Bar"],
           ['Address', '411 Beach Ave, Cape May, NJ'],
-        ]} foot="No. 05 / After Party" />
+        ]} />
 
       <EventSection calId="beach" mapQuery="Cape+May+Beach+NJ" id="beach" tone="cream" eyebrow="Saturday · June 19"
         name="Beach Day" iconSrc={ICON.beach}
         rows={[
           ['Time', '10 AM onward'],
-          ['Note', 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia — or stay the weekend.'],
-        ]} foot="No. 06 / Beach Day" />
+          ['Note', 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia! Or stick around and enjoy a few extra days in Cape May.'],
+        ]} />
 
       {/* RSVP */}
       <section
@@ -896,7 +897,6 @@ export default function WeddingSite() {
           padding: 'clamp(48px, 6vw, 72px) clamp(32px, 5vw, 56px)',
           boxShadow: '0 14px 40px rgba(20,30,45,.12), 0 2px 8px rgba(20,30,45,.08)',
         }}>
-          <div className="heading" style={{ fontSize: 16, letterSpacing: '0.02em', opacity: .65, marginBottom: 10, fontWeight: 400 }}>No. 07</div>
           <div style={{ position: 'relative', width: '100%', maxWidth: 520, margin: '24px auto 0', aspectRatio: '600 / 480' }}>
             <svg viewBox="0 0 600 480" preserveAspectRatio="xMidYMid meet" aria-hidden="true"
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }}>
@@ -937,7 +937,7 @@ export default function WeddingSite() {
                 fontSize: 'clamp(11px, 1.4vw, 12.5px)', lineHeight: 1.6, opacity: .85,
                 fontWeight: 400, letterSpacing: '-.005em', margin: 0, maxWidth: 320,
               }}>
-                We are so excited to celebrate with you all, and thankful you&rsquo;re considering joining us! Enclosed in your invitation there is an RSVP card and envelope. Kindly mark your response, enclose, and drop it in a mailbox.
+                We are so excited to celebrate with you. Enclosed in your invitation there is an RSVP card and envelope. We kindly ask that you mark your response, enclose, and drop it in a mailbox.
               </p>
             </div>
           </div>
@@ -945,24 +945,21 @@ export default function WeddingSite() {
       </section>
 
       <SectionShell id="accommodations" tone="ink" wide foot="More options on FAQ ↓">
-        <NumEyebrow>No. 08</NumEyebrow>
         <Title>The Accommodations</Title>
         <AccommodationsBody />
       </SectionShell>
 
       <SectionShell id="getting-there" tone="pattern">
-        <NumEyebrow>No. 09</NumEyebrow>
-        <Title>Getting There</Title>
+        <Title>Travel Options</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginTop: 8 }} className="pair-grid">
-          <Tile tone="pattern" heading="By Car"      body="Cape May is at the southern tip of NJ. ~2.5 hrs from NYC, ~1.75 hrs from Philly. Garden State Parkway south to Exit 0." />
-          <Tile tone="pattern" heading="By Air"      body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). Rentals recommended." />
+          <Tile tone="pattern" heading="By Car"      body="Cape May is at the southern tip of New Jersey. ~2.5 hrs from New York City, ~1.75 hrs from Philadelphia. Garden State Parkway south to Exit 0." />
+          <Tile tone="pattern" heading="By Air"      body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). If flying, rental car recommended." />
           <Tile tone="pattern" heading="By Ferry"    body="Cape May–Lewes Ferry from Delaware. Walk-on or drive-on." />
           <Tile tone="pattern" heading="Around Town" body="Walkable downtown. Trolleys, bikes, and Uber operate locally." />
         </div>
       </SectionShell>
 
       <SectionShell id="things" tone="cream">
-        <NumEyebrow>No. 10</NumEyebrow>
         <Title>Places to Eat</Title>
         <Lede>A few of our favorite spots in town. Reservations recommended for dinners.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 22px' }} className="things-grid">
@@ -970,31 +967,30 @@ export default function WeddingSite() {
             { name: 'The Buoy Coffee Shop', address: '722 Beach Avenue', note: 'A morning must!' },
           { name: 'Avalon Coffee of Cape May', address: '7 Gurney Street', note: 'Coffee, a breakfast sandwich, or an acai bowl.' },
           { name: "Uncle Bill's Pancake House", address: '261 Beach Avenue', note: "Sit-down breakfast you won't forget — bonus points for the gluten-free pancakes." },
-          { name: 'The Mad Batter', address: '19 Jackson Street', note: 'Great breakfast — best omelettes in town.' },
-          { name: 'Ugly Mug Bar & Restaurant', address: '426 Washington Street', note: 'A perfect Irish pub for a Guinness and a burger.' },
+          { name: 'The Mad Batter', address: '19 Jackson Street', note: 'Great for mimosas and omelettes!' },
+          { name: 'Ugly Mug Bar & Restaurant', address: '426 Washington Street', note: 'A perfect Irish pub for a beer and a burger.' },
           { name: 'Ocean Club Hotel', address: '1035 Beach Avenue', note: 'Quick lunch on their pool deck.' },
           { name: "Harry's Ocean Bar & Grille", address: '1025 Beach Avenue', note: 'Quick stop for brunch or lunch.' },
           { name: 'Rusty Nail', address: '205 Beach Avenue', note: 'Live music, good drinks, appetizers, feet in the sand.' },
           { name: "George's Place Beachfront", address: '301 Beach Avenue', note: "The Groom's favorite — gyros, salads, and smoothies." },
-          { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', note: 'Worth driving to. Farm-fresh food, picnic tables, indoor market.' },
+          { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', note: 'Worth the short drive.' },
           { name: 'Westside Market', address: '517 Broadway, West Cape May', note: 'Best deli in town.' },
           ].map(eat => <EatTile key={eat.name} tone="cream" {...eat} />)}
         </div>
       </SectionShell>
 
       <SectionShell id="dress" tone="ink">
-        <NumEyebrow>No. 11</NumEyebrow>
         <Title>The Dress Code</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
-          <Tile tone="ink" heading="Welcome Drinks"        body="Summer cocktail. Dresses (any length) for women, button-down and pants for men. Jackets preferred but not required." />
-          <Tile tone="ink" heading="Ceremony & Reception" body="Black tie optional. Tux or dark suit for men. Floor-length gowns for women — bright, summery colors and patterns encouraged. The reception is fully outdoors on grass; block heels are strongly recommended." />
+          <Tile tone="ink" heading="Welcome Drinks"  body={<>Summer Cocktail.<br/><br/>We ask that ladies wear a dress of any length, and gentleman wear a button down and pants. Jackets are preferred, but not required.</>} />
+          <Tile tone="ink" heading="Mass & Reception" body={<>Black Tie Optional.<br/><br/>We ask that ladies wear a floor-length gown. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
         </div>
       </SectionShell>
 
+      {/* Registry section temporarily disabled
       <SectionShell id="registry" tone="pattern">
-        <NumEyebrow>No. 12</NumEyebrow>
         <Title>Registry</Title>
-        <Lede>Your presence is the gift. If you&apos;d like to celebrate further, we&apos;ve put a few things together.</Lede>
+        <Lede>Your presence is the gift. If you'd like to celebrate further, we've put a few things together.</Lede>
         <a href="https://www.zola.com/wedding/haleyandgeorge2027/registry" target="_blank" rel="noopener noreferrer"
           style={{
             display: 'inline-flex', padding: '12px 26px', border: '1px solid currentColor',
@@ -1004,9 +1000,9 @@ export default function WeddingSite() {
             color: 'inherit', textDecoration: 'none',
           }}>View Registry →</a>
       </SectionShell>
+      */}
 
       <SectionShell id="faq" tone="cream">
-        <NumEyebrow>No. 13</NumEyebrow>
         <Title>FAQ</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <FaqRow q='How far in advance should I book my hotel?' a='As soon as possible — hotels in Cape May in summer go fast.' />
@@ -1049,7 +1045,7 @@ export default function WeddingSite() {
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, whiteSpace: 'nowrap',
             }}>
               <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
-              Shoot us a note!
+              Send us a note!
               <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
             </h2>
             <a

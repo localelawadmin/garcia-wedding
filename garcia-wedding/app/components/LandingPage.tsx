@@ -87,105 +87,121 @@ export default function LandingPage({ onSuccess }: Props) {
         background: 'radial-gradient(circle at center, rgba(76,100,122,0) 30%, rgba(76,100,122,.3) 80%, rgba(76,100,122,.6) 100%)',
       }} />
 
-      {/* Content */}
+      {/* SVG defs for tinting the HG lockup to deep-dark on the cream card */}
+      <svg width="0" height="0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}>
+        <defs>
+          <filter id="lander-tint-deep-dark" colorInterpolationFilters="sRGB">
+            <feFlood floodColor="#4c647a" />
+            <feComposite in2="SourceAlpha" operator="in" />
+          </filter>
+        </defs>
+      </svg>
+
+      {/* Content — cream oval card with initials + password */}
       <div style={{
-        position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center', gap: 30,
-        color: '#f2efe9', padding: '0 24px',
+        position: 'absolute', inset: 0, display: 'flex',
+        alignItems: 'center', justifyContent: 'center',
+        color: '#4c647a', padding: '0 24px',
       }}>
-        <motion.img
-          src="/photos/agenda/hg.png"
-          alt="Haley & George"
-          width={160}
-          height={160}
-          style={{
-            width: 160, height: 'auto', display: 'block',
-            filter: 'brightness(0) invert(.95)',
-          }}
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        />
-
         <motion.div
-          style={{
-            fontSize: 10, letterSpacing: '0.42em', textTransform: 'uppercase',
-            opacity: .8, fontWeight: 300,
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.8 }}
-          transition={{ duration: 1, delay: 0.4 }}
-        >
-          Haley &nbsp;·&nbsp; George
-        </motion.div>
-
-        <motion.form
-          onSubmit={handleSubmit}
-          autoComplete="off"
-          style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'center', marginTop: 6 }}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.55 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            position: 'relative',
+            width: 'clamp(300px, 36vw, 380px)',
+            height: 'clamp(460px, 56vw, 600px)',
+            background: '#f2efe9',
+            borderRadius: '50%',
+            boxShadow: '0 30px 80px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.18)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            gap: 22,
+            padding: 'clamp(56px, 6vw, 76px) clamp(34px, 5vw, 48px)',
+            textAlign: 'center',
+            color: '#4c647a',
+          }}
         >
-          <input
-            type="password"
-            value={pw}
-            onChange={e => setPw(e.target.value)}
-            placeholder="Enter password"
-            className={shake ? 'shake' : ''}
+          <motion.img
+            src="/photos/agenda/hg.png"
+            alt="Haley & George"
+            width={150}
             style={{
-              background: 'rgba(255,255,255,.06)',
-              border: error ? '1px solid #d9a3a3' : '1px solid rgba(242,239,233,.55)',
-              color: '#f2efe9',
-              padding: '13px 24px',
-              minWidth: 280,
-              textAlign: 'center',
-              fontSize: 11,
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              outline: 'none',
-              backdropFilter: 'blur(4px)',
-              fontFamily: 'inherit',
-              fontWeight: 300,
+              width: 'clamp(120px, 14vw, 160px)', height: 'auto', display: 'block',
+              filter: 'url(#lander-tint-deep-dark)',
             }}
-            autoFocus
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
           />
-          <button
-            type="submit"
-            style={{
-              background: 'transparent',
-              border: '1px solid rgba(242,239,233,.55)',
-              color: '#f2efe9',
-              padding: '11px 34px',
-              fontSize: 10,
-              letterSpacing: '0.35em',
-              textTransform: 'uppercase',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              fontWeight: 300,
-              transition: 'all .25s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#f2efe9'; e.currentTarget.style.color = '#0a0a0a'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#f2efe9'; }}
+
+          <motion.form
+            onSubmit={handleSubmit}
+            autoComplete="off"
+            style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center', width: '100%' }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.55 }}
           >
-            Enter →
-          </button>
-          <AnimatePresence>
-            {error && (
-              <motion.span
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                style={{
-                  color: '#e8a4a4', fontSize: 9, letterSpacing: '0.3em',
-                  textTransform: 'uppercase', fontWeight: 300,
-                }}
-              >
-                Try again
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </motion.form>
+            <input
+              type="password"
+              value={pw}
+              onChange={e => setPw(e.target.value)}
+              placeholder="Password"
+              className={shake ? 'shake' : ''}
+              style={{
+                background: 'transparent',
+                border: error ? '1px solid #c05a68' : '1px solid #4c647a',
+                color: '#4c647a',
+                padding: '11px 18px',
+                width: '100%',
+                maxWidth: 220,
+                textAlign: 'center',
+                fontSize: 11,
+                letterSpacing: '0.3em',
+                textTransform: 'uppercase',
+                outline: 'none',
+                fontFamily: 'inherit',
+                fontWeight: 400,
+              }}
+              autoFocus
+            />
+            <button
+              type="submit"
+              style={{
+                background: 'transparent',
+                border: '1px solid #4c647a',
+                color: '#4c647a',
+                padding: '10px 28px',
+                fontSize: 10,
+                letterSpacing: '0.35em',
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                fontWeight: 400,
+                transition: 'all .25s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#4c647a'; e.currentTarget.style.color = '#f2efe9'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#4c647a'; }}
+            >
+              Enter →
+            </button>
+            <AnimatePresence>
+              {error && (
+                <motion.span
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  style={{
+                    color: '#c05a68', fontSize: 9, letterSpacing: '0.3em',
+                    textTransform: 'uppercase', fontWeight: 400,
+                  }}
+                >
+                  Try again
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.form>
+        </motion.div>
       </div>
 
       {/* Hint */}
