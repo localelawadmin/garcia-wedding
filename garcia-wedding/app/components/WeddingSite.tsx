@@ -713,10 +713,10 @@ export default function WeddingSite() {
           <div style={{
             textAlign: 'right',
             display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center',
-            gap: 12,
+            gap: 4,
           }}>
-            <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 64, width: 'auto', display: 'block' }} />
-            <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 64, width: 'auto', display: 'block' }} />
+            <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 52, width: 'auto', display: 'block' }} />
+            <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 52, width: 'auto', display: 'block' }} />
           </div>
         </div>
 
