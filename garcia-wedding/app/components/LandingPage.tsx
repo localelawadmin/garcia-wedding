@@ -29,7 +29,7 @@ export default function LandingPage({ onSuccess }: Props) {
   // Cycle B&W lander photos
   useEffectInterval(() => setIdx(i => (i + 1) % LANDER_PHOTOS.length), CYCLE_MS);
 
-  const correct = (process.env.NEXT_PUBLIC_PASSWORD || 'hdg3').toLowerCase();
+  const correct = (process.env.NEXT_PUBLIC_PASSWORD || 'ExitZero').toLowerCase();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
