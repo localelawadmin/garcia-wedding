@@ -21,9 +21,9 @@ const GRAIN_SVG =
 
 const CREAM = '#f2efe9';
 // Save-the-date palette (Haley's names): olive / pistachio / sky blue, plus a derived deep olive for ink
-const OLIVE = '#98A86B';      // "olive" — primary section fills + stripe bands
-const PISTACHIO = '#DCE4C7';  // "pistachio" — airy/lighter section fields
-const SKY = '#C6D8E4';        // "sky blue" — accent only (stripe pinstripe, hover)
+const OLIVE = '#AFB885';      // "olive" — ink-section fields + inverse-stripe ground
+const PISTACHIO = '#E2E8CE';  // "pistachio" — thick stripe band on light sections
+const SKY = '#DEE9F2';        // "sky blue" — the two thin stripe lines, accents
 const DEEP = OLIVE;           // section fills (was powder blue)
 const DEEP_DARK = '#4E5B37';  // derived deep olive — ink: text, dark cards, strokes
 
@@ -32,8 +32,8 @@ const NOISE_BG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/20
 const NOISE_CARD = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.95' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 
 // Stripe backgrounds with paper-grain texture layered on top via blend
-const stripeCream = `${NOISE_BG}, repeating-linear-gradient(90deg, ${OLIVE} 0 22px, ${CREAM} 22px 39px, ${SKY} 39px 42px, ${CREAM} 42px 56px)`;
-const stripeInk   = `${NOISE_BG}, repeating-linear-gradient(90deg, ${OLIVE} 0 22px, ${CREAM} 22px 39px, ${SKY} 39px 42px, ${CREAM} 42px 56px)`;
+const stripeCream = `${NOISE_BG}, repeating-linear-gradient(90deg, ${SKY} 0 3px, ${CREAM} 3px 8px, ${PISTACHIO} 8px 32px, ${CREAM} 32px 37px, ${SKY} 37px 40px, ${CREAM} 40px 80px)`;
+const stripeInk   = `${NOISE_BG}, repeating-linear-gradient(90deg, ${SKY} 0 3px, ${OLIVE} 3px 8px, ${CREAM} 8px 32px, ${OLIVE} 32px 37px, ${SKY} 37px 40px, ${OLIVE} 40px 80px)`;
 const stripeCreamSize = '280px 280px, auto';
 const stripeInkSize   = '280px 280px, auto';
 
@@ -252,11 +252,11 @@ const SectionShell: React.FC<{
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
         padding: '110px 24px 70px',
-        backgroundColor: isPattern ? CREAM : (tone === 'cream' ? PISTACHIO : DEEP),
+        backgroundColor: isPattern ? CREAM : (tone === 'cream' ? CREAM : DEEP),
         backgroundImage: sectionBg,
         backgroundSize: isPattern ? '540px auto' : '260px 260px, auto',
         backgroundRepeat: 'repeat',
-        backgroundBlendMode: isPattern ? 'normal' : 'soft-light',
+        backgroundBlendMode: isPattern ? 'normal' : 'soft-light, normal',
         color: fg,
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center',
@@ -746,7 +746,7 @@ export default function WeddingSite() {
         id="invite"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light', color: CREAM,
+          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light, normal', color: CREAM,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -1029,7 +1029,7 @@ export default function WeddingSite() {
         id="contact"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: PISTACHIO, backgroundImage: stripeCream, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light', color: DEEP_DARK,
+          backgroundColor: CREAM, backgroundImage: stripeCream, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
