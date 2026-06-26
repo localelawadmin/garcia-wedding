@@ -243,6 +243,8 @@ const SectionShell: React.FC<{
   const sectionBg  = isPattern ? "url('/photos/trellis.jpg')" : (tone === 'cream' ? stripeCream : stripeInk);
   const boxBg      = tone === 'ink' ? DEEP_DARK : CREAM;
   const fg         = tone === 'ink' ? CREAM : DEEP_DARK;
+  // hairline rim: soft olive on light panels, faint cream on dark panels
+  const boxBorder  = tone === 'ink' ? 'rgba(242,239,233,.20)' : 'rgba(175,184,133,.65)';
   const maxW       = wide ? 1080 : 720;
   return (
     <section
@@ -266,8 +268,9 @@ const SectionShell: React.FC<{
       <div style={{
         maxWidth: maxW, margin: '0 auto', width: '100%',
         background: boxBg,
+        border: `1px solid ${boxBorder}`,
         padding: 'clamp(48px, 6vw, 72px) clamp(32px, 5vw, 56px)',
-        boxShadow: '0 14px 40px rgba(20,30,45,.12), 0 2px 8px rgba(20,30,45,.08)',
+        boxShadow: '0 22px 60px rgba(40,48,28,.18), 0 4px 14px rgba(40,48,28,.12)',
       }}>
         {children}
       </div>
