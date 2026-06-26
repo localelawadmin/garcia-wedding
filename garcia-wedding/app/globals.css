@@ -18,11 +18,11 @@
 
 @theme {
   --color-cream: #f2efe9;
-  --color-deep:  #6a857f;
-  --color-deep-dark: #3f5953;
+  --color-deep:  #98A86B;
+  --color-deep-dark: #4E5B37;
   --color-ink:   #0a0a0a;
   --color-cream-soft: rgba(242,239,233,.55);
-  --color-deep-soft: rgba(63,89,83,.4);
+  --color-deep-soft: rgba(78,91,55,.4);
   --font-heading: 'Montmartre', 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Inter Tight', -apple-system, 'Helvetica Neue', sans-serif;
   --font-script: 'Black Editorial Script', cursive;

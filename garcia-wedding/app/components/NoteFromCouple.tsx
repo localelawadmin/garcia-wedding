@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 const CREAM = '#f2efe9';
-const DEEP_DARK = '#4c647a';
+const DEEP_DARK = '#4E5B37';
 const ACCENT = '#c8a96a'; // warm accent for the unread badge — soft gold against blue
 
 export default function NoteFromCouple({ onOpenChange }: { onOpenChange?: (open: boolean) => void }) {
@@ -49,7 +49,7 @@ export default function NoteFromCouple({ onOpenChange }: { onOpenChange?: (open:
         maxHeight: open ? 600 : 36,
         height: open ? 'auto' : 36,
         borderRadius: open ? 18 : '50%',
-        background: 'rgba(76, 100, 122, .65)',
+        background: 'rgba(78, 91, 55, .65)',
         border: '1px solid rgba(242, 239, 233, .45)',
         color: CREAM,
         backdropFilter: 'blur(14px) saturate(180%)',

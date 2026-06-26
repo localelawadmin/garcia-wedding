@@ -20,7 +20,7 @@ const GRAIN_SVG =
   "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>\")";
 
 // Portrait wavy-oval path (10-lobe scallop, matches the invite/contact cards inside the site)
-const LANDER_WAVY = "M 477.30 300.00 L 476.83 307.77 L 475.46 315.45 L 473.27 322.99 L 470.38 330.32 L 466.97 337.42 L 463.22 344.27 L 459.34 350.91 L 455.53 357.37 L 451.99 363.73 L 448.85 370.07 L 446.23 376.49 L 444.19 383.08 L 442.75 389.90 L 441.85 397.03 L 441.41 404.47 L 441.30 412.23 L 441.34 420.26 L 441.37 428.48 L 441.18 436.78 L 440.61 445.04 L 439.51 453.09 L 437.75 460.81 L 435.25 468.03 L 431.98 474.66 L 427.96 480.60 L 423.24 485.81 L 417.93 490.29 L 412.15 494.10 L 406.06 497.33 L 399.81 500.11 L 393.55 502.62 L 387.44 505.05 L 381.59 507.59 L 376.07 510.41 L 370.94 513.68 L 366.20 517.50 L 361.83 521.96 L 357.76 527.07 L 353.91 532.77 L 350.18 538.96 L 346.44 545.49 L 342.60 552.15 L 338.55 558.74 L 334.22 565.00 L 329.54 570.70 L 324.50 575.64 L 319.08 579.65 L 313.33 582.61 L 307.29 584.45 L 301.03 585.19 L 294.62 584.91 L 288.16 583.74 L 281.72 581.86 L 275.35 579.52 L 269.12 576.95 L 263.03 574.41 L 257.10 572.15 L 251.32 570.37 L 245.63 569.24 L 240.00 568.85 L 234.37 569.24 L 228.68 570.37 L 222.90 572.15 L 216.97 574.41 L 210.88 576.95 L 204.65 579.52 L 198.28 581.86 L 191.84 583.74 L 185.38 584.91 L 178.97 585.19 L 172.71 584.45 L 166.67 582.61 L 160.92 579.65 L 155.50 575.64 L 150.46 570.70 L 145.78 565.00 L 141.45 558.74 L 137.40 552.15 L 133.56 545.49 L 129.83 538.96 L 126.09 532.77 L 122.24 527.07 L 118.17 521.96 L 113.80 517.50 L 109.06 513.68 L 103.93 510.41 L 98.41 507.59 L 92.56 505.05 L 86.45 502.62 L 80.19 500.11 L 73.94 497.33 L 67.85 494.10 L 62.07 490.29 L 56.76 485.81 L 52.04 480.60 L 48.02 474.66 L 44.75 468.03 L 42.25 460.81 L 40.49 453.09 L 39.39 445.04 L 38.82 436.78 L 38.63 428.48 L 38.66 420.26 L 38.70 412.23 L 38.59 404.47 L 38.15 397.03 L 37.25 389.90 L 35.81 383.08 L 33.77 376.49 L 31.15 370.07 L 28.01 363.73 L 24.47 357.37 L 20.66 350.91 L 16.78 344.27 L 13.03 337.42 L 9.62 330.32 L 6.73 322.99 L 4.54 315.45 L 3.17 307.77 L 2.70 300.00 L 3.17 292.23 L 4.54 284.55 L 6.73 277.01 L 9.62 269.68 L 13.03 262.58 L 16.78 255.73 L 20.66 249.09 L 24.47 242.63 L 28.01 236.27 L 31.15 229.93 L 33.77 223.51 L 35.81 216.92 L 37.25 210.10 L 38.15 202.97 L 38.59 195.53 L 38.70 187.77 L 38.66 179.74 L 38.63 171.52 L 38.82 163.22 L 39.39 154.96 L 40.49 146.91 L 42.25 139.19 L 44.75 131.97 L 48.02 125.34 L 52.04 119.40 L 56.76 114.19 L 62.07 109.71 L 67.85 105.90 L 73.94 102.67 L 80.19 99.89 L 86.45 97.38 L 92.56 94.95 L 98.41 92.41 L 103.93 89.59 L 109.06 86.32 L 113.80 82.50 L 118.17 78.04 L 122.24 72.93 L 126.09 67.23 L 129.82 61.04 L 133.56 54.51 L 137.40 47.85 L 141.45 41.26 L 145.78 35.00 L 150.46 29.30 L 155.50 24.36 L 160.92 20.35 L 166.67 17.39 L 172.71 15.55 L 178.97 14.81 L 185.38 15.09 L 191.84 16.26 L 198.28 18.14 L 204.65 20.48 L 210.88 23.05 L 216.97 25.59 L 222.90 27.85 L 228.68 29.63 L 234.37 30.76 L 240.00 31.15 L 245.63 30.76 L 251.32 29.63 L 257.10 27.85 L 263.03 25.59 L 269.12 23.05 L 275.35 20.48 L 281.72 18.14 L 288.16 16.26 L 294.62 15.09 L 301.03 14.81 L 307.29 15.55 L 313.33 17.39 L 319.08 20.35 L 324.50 24.36 L 329.54 29.30 L 334.22 35.00 L 338.55 41.26 L 342.60 47.85 L 346.44 54.51 L 350.18 61.04 L 353.91 67.23 L 357.76 72.93 L 361.83 78.04 L 366.20 82.50 L 370.94 86.32 L 376.07 89.59 L 381.59 92.41 L 387.44 94.95 L 393.55 97.38 L 399.81 99.89 L 406.06 102.67 L 412.15 105.90 L 417.93 109.71 L 423.24 114.19 L 427.96 119.40 L 431.98 125.34 L 435.25 131.97 L 437.75 139.19 L 439.51 146.91 L 440.61 154.96 L 441.18 163.22 L 441.37 171.52 L 441.34 179.74 L 441.30 187.77 L 441.41 195.53 L 441.85 202.97 L 442.75 210.10 L 444.19 216.92 L 446.23 223.51 L 448.85 229.93 L 451.99 236.27 L 455.53 242.63 L 459.34 249.09 L 463.22 255.73 L 466.97 262.58 L 470.38 269.68 L 473.27 277.01 L 475.46 284.55 L 476.83 292.23 Z";
+const LANDER_WAVY = "M 454.70 300.00 L 455.01 306.98 L 455.92 314.02 L 457.34 321.19 L 459.14 328.54 L 461.17 336.07 L 463.22 343.80 L 465.09 351.69 L 466.59 359.67 L 467.53 367.68 L 467.75 375.61 L 467.16 383.37 L 465.69 390.85 L 463.33 397.98 L 460.13 404.69 L 456.18 410.94 L 451.62 416.73 L 446.62 422.10 L 441.37 427.12 L 436.04 431.88 L 430.83 436.50 L 425.88 441.13 L 421.33 445.90 L 417.26 450.93 L 413.70 456.35 L 410.64 462.22 L 408.03 468.58 L 405.78 475.42 L 403.75 482.67 L 401.81 490.25 L 399.81 497.99 L 397.58 505.73 L 395.00 513.28 L 391.96 520.44 L 388.38 527.02 L 384.22 532.87 L 379.48 537.85 L 374.19 541.90 L 368.42 545.00 L 362.26 547.18 L 355.83 548.55 L 349.23 549.25 L 342.60 549.48 L 336.04 549.45 L 329.62 549.40 L 323.43 549.54 L 317.48 550.08 L 311.80 551.19 L 306.35 552.98 L 301.09 555.50 L 295.96 558.75 L 290.89 562.64 L 285.81 567.03 L 280.65 571.75 L 275.35 576.55 L 269.88 581.20 L 264.21 585.43 L 258.36 589.01 L 252.34 591.72 L 246.20 593.42 L 240.00 594.00 L 233.80 593.42 L 227.66 591.72 L 221.64 589.01 L 215.79 585.43 L 210.12 581.20 L 204.65 576.55 L 199.35 571.75 L 194.19 567.03 L 189.11 562.64 L 184.04 558.75 L 178.91 555.50 L 173.65 552.98 L 168.20 551.19 L 162.52 550.08 L 156.57 549.54 L 150.38 549.40 L 143.96 549.45 L 137.40 549.48 L 130.77 549.25 L 124.18 548.55 L 117.74 547.18 L 111.58 545.00 L 105.81 541.90 L 100.52 537.85 L 95.78 532.87 L 91.62 527.02 L 88.04 520.44 L 85.00 513.28 L 82.42 505.73 L 80.19 497.99 L 78.19 490.25 L 76.25 482.67 L 74.22 475.42 L 71.97 468.58 L 69.36 462.22 L 66.30 456.35 L 62.74 450.93 L 58.67 445.90 L 54.12 441.13 L 49.17 436.50 L 43.96 431.88 L 38.63 427.12 L 33.38 422.10 L 28.38 416.73 L 23.82 410.94 L 19.87 404.69 L 16.67 397.98 L 14.31 390.85 L 12.84 383.37 L 12.25 375.61 L 12.47 367.68 L 13.41 359.67 L 14.91 351.69 L 16.78 343.80 L 18.83 336.07 L 20.86 328.54 L 22.66 321.19 L 24.08 314.02 L 24.99 306.98 L 25.30 300.00 L 24.99 293.02 L 24.08 285.98 L 22.66 278.81 L 20.86 271.46 L 18.83 263.93 L 16.78 256.20 L 14.91 248.31 L 13.41 240.33 L 12.47 232.32 L 12.25 224.39 L 12.84 216.63 L 14.31 209.15 L 16.67 202.02 L 19.87 195.31 L 23.82 189.06 L 28.38 183.27 L 33.38 177.90 L 38.63 172.88 L 43.96 168.12 L 49.17 163.50 L 54.12 158.87 L 58.67 154.10 L 62.74 149.07 L 66.30 143.65 L 69.36 137.78 L 71.97 131.42 L 74.22 124.58 L 76.25 117.33 L 78.19 109.75 L 80.19 102.01 L 82.42 94.27 L 85.00 86.72 L 88.04 79.56 L 91.62 72.98 L 95.78 67.13 L 100.52 62.15 L 105.81 58.10 L 111.58 55.00 L 117.74 52.82 L 124.17 51.45 L 130.77 50.75 L 137.40 50.52 L 143.96 50.55 L 150.38 50.60 L 156.57 50.46 L 162.52 49.92 L 168.20 48.81 L 173.65 47.02 L 178.91 44.50 L 184.04 41.25 L 189.11 37.36 L 194.19 32.97 L 199.35 28.25 L 204.65 23.45 L 210.12 18.80 L 215.79 14.57 L 221.64 10.99 L 227.66 8.28 L 233.80 6.58 L 240.00 6.00 L 246.20 6.58 L 252.34 8.28 L 258.36 10.99 L 264.21 14.57 L 269.88 18.80 L 275.35 23.45 L 280.65 28.25 L 285.81 32.97 L 290.89 37.36 L 295.96 41.25 L 301.09 44.50 L 306.35 47.02 L 311.80 48.81 L 317.48 49.92 L 323.43 50.46 L 329.62 50.60 L 336.04 50.55 L 342.60 50.52 L 349.23 50.75 L 355.83 51.45 L 362.26 52.82 L 368.42 55.00 L 374.19 58.10 L 379.48 62.15 L 384.22 67.13 L 388.38 72.98 L 391.96 79.56 L 395.00 86.72 L 397.58 94.27 L 399.81 102.01 L 401.81 109.75 L 403.75 117.33 L 405.78 124.58 L 408.03 131.42 L 410.64 137.78 L 413.70 143.65 L 417.26 149.07 L 421.33 154.10 L 425.88 158.87 L 430.83 163.50 L 436.04 168.12 L 441.37 172.88 L 446.62 177.90 L 451.62 183.27 L 456.18 189.06 L 460.13 195.31 L 463.33 202.02 L 465.69 209.15 L 467.16 216.63 L 467.75 224.39 L 467.53 232.32 L 466.59 240.33 L 465.09 248.31 L 463.22 256.20 L 461.17 263.93 L 459.14 271.46 L 457.34 278.81 L 455.92 285.98 L 455.01 293.02 Z";
 
 export default function LandingPage({ onSuccess }: Props) {
   const [pw, setPw] = useState('');
@@ -51,7 +51,7 @@ export default function LandingPage({ onSuccess }: Props) {
 
   return (
     <motion.div
-      style={{ position: 'fixed', inset: 0, background: '#3f5953', overflow: 'hidden' }}
+      style={{ position: 'fixed', inset: 0, background: '#4E5B37', overflow: 'hidden' }}
       animate={{ opacity: exiting ? 0 : 1 }}
       transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
     >
@@ -75,7 +75,7 @@ export default function LandingPage({ onSuccess }: Props) {
       </div>
 
       {/* Dark overlay */}
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(76, 100, 122, .42)', backdropFilter: 'saturate(180%)', WebkitBackdropFilter: 'saturate(180%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(78, 91, 55, .42)', backdropFilter: 'saturate(180%)', WebkitBackdropFilter: 'saturate(180%)' }} />
 
       {/* Grain */}
       <div style={{
@@ -87,14 +87,14 @@ export default function LandingPage({ onSuccess }: Props) {
       {/* Vignette */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(circle at center, rgba(76,100,122,0) 30%, rgba(76,100,122,.3) 80%, rgba(76,100,122,.6) 100%)',
+        background: 'radial-gradient(circle at center, rgba(78,91,55,0) 30%, rgba(78,91,55,.3) 80%, rgba(78,91,55,.6) 100%)',
       }} />
 
       {/* SVG defs for tinting the HG lockup to deep-dark on the cream card */}
       <svg width="0" height="0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}>
         <defs>
           <filter id="lander-tint-deep-dark" colorInterpolationFilters="sRGB">
-            <feFlood floodColor="#4c647a" />
+            <feFlood floodColor="#4E5B37" />
             <feComposite in2="SourceAlpha" operator="in" />
           </filter>
         </defs>
@@ -104,7 +104,7 @@ export default function LandingPage({ onSuccess }: Props) {
       <div style={{
         position: 'absolute', inset: 0, display: 'flex',
         alignItems: 'center', justifyContent: 'center',
-        color: '#4c647a', padding: '0 24px',
+        color: '#4E5B37', padding: '0 24px',
       }}>
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -118,7 +118,7 @@ export default function LandingPage({ onSuccess }: Props) {
             gap: 22,
             padding: 'clamp(64px, 7vw, 86px) clamp(46px, 6vw, 60px)',
             textAlign: 'center',
-            color: '#4c647a',
+            color: '#4E5B37',
           }}
         >
           {/* Wavy oval — same scalloped shape as the invite/contact cards inside the site */}
@@ -132,7 +132,7 @@ export default function LandingPage({ onSuccess }: Props) {
               filter: 'drop-shadow(0 30px 60px rgba(0,0,0,.40)) drop-shadow(0 6px 18px rgba(0,0,0,.18))',
             }}
           >
-            <path d={LANDER_WAVY} fill="#f2efe9" stroke="#4c647a" strokeWidth={1} vectorEffect="non-scaling-stroke" />
+            <path d={LANDER_WAVY} fill="#f2efe9" stroke="#4E5B37" strokeWidth={1} vectorEffect="non-scaling-stroke" />
           </svg>
           <motion.img
             src="/photos/agenda/hg.png"
@@ -164,8 +164,8 @@ export default function LandingPage({ onSuccess }: Props) {
               className={shake ? 'shake' : ''}
               style={{
                 background: 'transparent',
-                border: error ? '1px solid #c05a68' : '1px solid #4c647a',
-                color: '#4c647a',
+                border: error ? '1px solid #c05a68' : '1px solid #4E5B37',
+                color: '#4E5B37',
                 padding: '11px 18px',
                 width: '100%',
                 maxWidth: 220,
@@ -183,8 +183,8 @@ export default function LandingPage({ onSuccess }: Props) {
               type="submit"
               style={{
                 background: 'transparent',
-                border: '1px solid #4c647a',
-                color: '#4c647a',
+                border: '1px solid #4E5B37',
+                color: '#4E5B37',
                 padding: '10px 28px',
                 fontSize: 10,
                 letterSpacing: '0.35em',
@@ -194,8 +194,8 @@ export default function LandingPage({ onSuccess }: Props) {
                 fontWeight: 400,
                 transition: 'all .25s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#4c647a'; e.currentTarget.style.color = '#f2efe9'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#4c647a'; }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#4E5B37'; e.currentTarget.style.color = '#f2efe9'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#4E5B37'; }}
             >
               Enter →
             </button>

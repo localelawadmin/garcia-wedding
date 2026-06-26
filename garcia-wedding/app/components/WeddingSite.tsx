@@ -20,21 +20,25 @@ const GRAIN_SVG =
   "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>\")";
 
 const CREAM = '#f2efe9';
-const DEEP = '#99b0c2';
-const DEEP_DARK = '#4c647a';
+// Save-the-date palette (Haley's names): olive / pistachio / sky blue, plus a derived deep olive for ink
+const OLIVE = '#98A86B';      // "olive" — primary section fills + stripe bands
+const PISTACHIO = '#DCE4C7';  // "pistachio" — airy/lighter section fields
+const SKY = '#C6D8E4';        // "sky blue" — accent only (stripe pinstripe, hover)
+const DEEP = OLIVE;           // section fills (was powder blue)
+const DEEP_DARK = '#4E5B37';  // derived deep olive — ink: text, dark cards, strokes
 
 // Noise texture (SVG turbulence as data URI) — adds paper grain to backgrounds
 const NOISE_BG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 const NOISE_CARD = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.95' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 
 // Stripe backgrounds with paper-grain texture layered on top via blend
-const stripeCream = `${NOISE_BG}, repeating-linear-gradient(90deg, ${DEEP} 0 28px, ${CREAM} 28px 40px)`;
-const stripeInk   = `${NOISE_BG}, repeating-linear-gradient(90deg, ${DEEP} 0 28px, ${CREAM} 28px 40px)`;
+const stripeCream = `${NOISE_BG}, repeating-linear-gradient(90deg, ${OLIVE} 0 22px, ${CREAM} 22px 39px, ${SKY} 39px 42px, ${CREAM} 42px 56px)`;
+const stripeInk   = `${NOISE_BG}, repeating-linear-gradient(90deg, ${OLIVE} 0 22px, ${CREAM} 22px 39px, ${SKY} 39px 42px, ${CREAM} 42px 56px)`;
 const stripeCreamSize = '280px 280px, auto';
 const stripeInkSize   = '280px 280px, auto';
 
 // Wavy oval path for the invite section (generated from sin-wave perimeter)
-const WAVY_PATH = "M 780.00 240.00 L 783.49 245.83 L 786.47 251.78 L 788.70 257.82 L 789.98 263.90 L 790.16 269.98 L 789.15 275.98 L 786.93 281.85 L 783.56 287.54 L 779.13 293.01 L 773.81 298.23 L 767.83 303.22 L 761.40 307.98 L 754.79 312.57 L 748.23 317.05 L 741.93 321.48 L 736.07 325.96 L 730.78 330.55 L 726.11 335.34 L 722.07 340.37 L 718.59 345.67 L 715.56 351.26 L 712.82 357.10 L 710.18 363.14 L 707.43 369.31 L 704.35 375.50 L 700.76 381.60 L 696.48 387.47 L 691.41 393.00 L 685.45 398.09 L 678.60 402.63 L 670.88 406.59 L 662.38 409.93 L 653.22 412.67 L 643.55 414.86 L 633.54 416.59 L 623.36 417.98 L 613.18 419.17 L 603.15 420.31 L 593.38 421.55 L 583.94 423.03 L 574.87 424.85 L 566.16 427.11 L 557.77 429.85 L 549.63 433.07 L 541.63 436.72 L 533.67 440.72 L 525.64 444.94 L 517.43 449.23 L 508.95 453.42 L 500.16 457.33 L 491.02 460.80 L 481.53 463.66 L 471.71 465.81 L 461.64 467.17 L 451.37 467.69 L 440.99 467.41 L 430.59 466.37 L 420.25 464.69 L 410.04 462.51 L 400.00 460.00 L 390.15 457.34 L 380.48 454.71 L 370.96 452.27 L 361.55 450.18 L 352.17 448.54 L 342.74 447.41 L 333.21 446.82 L 323.51 446.72 L 313.60 447.05 L 303.46 447.67 L 293.10 448.46 L 282.57 449.23 L 271.94 449.82 L 261.31 450.06 L 250.79 449.79 L 240.51 448.89 L 230.58 447.29 L 221.13 444.93 L 212.23 441.83 L 203.94 438.03 L 196.28 433.61 L 189.22 428.70 L 182.71 423.44 L 176.64 417.98 L 170.88 412.48 L 165.26 407.09 L 159.64 401.91 L 153.84 397.06 L 147.73 392.58 L 141.20 388.49 L 134.17 384.79 L 126.62 381.41 L 118.57 378.29 L 110.12 375.30 L 101.40 372.35 L 92.57 369.31 L 83.85 366.08 L 75.43 362.54 L 67.56 358.64 L 60.41 354.33 L 54.17 349.58 L 48.94 344.42 L 44.81 338.87 L 41.78 333.00 L 39.78 326.90 L 38.70 320.63 L 38.38 314.30 L 38.60 307.98 L 39.12 301.75 L 39.71 295.65 L 40.13 289.71 L 40.16 283.94 L 39.66 278.33 L 38.51 272.85 L 36.66 267.45 L 34.14 262.09 L 31.04 256.71 L 27.51 251.25 L 23.75 245.69 L 20.00 240.00 L 16.51 234.17 L 13.53 228.22 L 11.30 222.18 L 10.02 216.10 L 9.84 210.02 L 10.85 204.02 L 13.07 198.15 L 16.44 192.46 L 20.87 186.99 L 26.19 181.77 L 32.17 176.78 L 38.60 172.02 L 45.21 167.43 L 51.77 162.95 L 58.07 158.52 L 63.93 154.04 L 69.22 149.45 L 73.89 144.66 L 77.93 139.63 L 81.41 134.33 L 84.44 128.74 L 87.18 122.90 L 89.82 116.86 L 92.57 110.69 L 95.65 104.50 L 99.24 98.40 L 103.52 92.53 L 108.59 87.00 L 114.55 81.91 L 121.40 77.37 L 129.12 73.41 L 137.62 70.07 L 146.78 67.33 L 156.45 65.14 L 166.46 63.41 L 176.64 62.02 L 186.82 60.83 L 196.85 59.69 L 206.62 58.45 L 216.06 56.97 L 225.13 55.15 L 233.84 52.89 L 242.23 50.15 L 250.37 46.93 L 258.37 43.28 L 266.33 39.28 L 274.36 35.06 L 282.57 30.77 L 291.05 26.58 L 299.84 22.67 L 308.98 19.20 L 318.47 16.34 L 328.29 14.19 L 338.36 12.83 L 348.63 12.31 L 359.01 12.59 L 369.41 13.63 L 379.75 15.31 L 389.96 17.49 L 400.00 20.00 L 409.85 22.66 L 419.52 25.29 L 429.04 27.73 L 438.45 29.82 L 447.83 31.46 L 457.26 32.59 L 466.79 33.18 L 476.49 33.28 L 486.40 32.95 L 496.54 32.33 L 506.90 31.54 L 517.43 30.77 L 528.06 30.18 L 538.69 29.94 L 549.21 30.21 L 559.49 31.11 L 569.42 32.71 L 578.87 35.07 L 587.77 38.17 L 596.06 41.97 L 603.72 46.39 L 610.78 51.30 L 617.29 56.56 L 623.36 62.02 L 629.12 67.52 L 634.74 72.91 L 640.36 78.09 L 646.16 82.94 L 652.27 87.42 L 658.80 91.51 L 665.83 95.21 L 673.38 98.59 L 681.43 101.71 L 689.88 104.70 L 698.60 107.65 L 707.43 110.69 L 716.15 113.92 L 724.57 117.46 L 732.44 121.36 L 739.59 125.67 L 745.83 130.42 L 751.06 135.58 L 755.19 141.13 L 758.22 147.00 L 760.22 153.10 L 761.30 159.37 L 761.62 165.70 L 761.40 172.02 L 760.88 178.25 L 760.29 184.35 L 759.87 190.29 L 759.84 196.06 L 760.34 201.67 L 761.49 207.15 L 763.34 212.55 L 765.86 217.91 L 768.96 223.29 L 772.49 228.75 L 776.25 234.31 Z";
+const WAVY_PATH = "M 789.55 240.00 L 788.78 246.09 L 786.53 252.12 L 782.93 258.03 L 778.19 263.79 L 772.59 269.35 L 766.43 274.73 L 760.07 279.93 L 753.82 285.00 L 747.99 289.99 L 742.84 294.97 L 738.54 300.01 L 735.20 305.17 L 732.83 310.53 L 731.36 316.11 L 730.64 321.95 L 730.45 328.04 L 730.53 334.34 L 730.56 340.79 L 730.26 347.30 L 729.33 353.77 L 727.51 360.10 L 724.62 366.15 L 720.52 371.82 L 715.15 377.01 L 708.55 381.67 L 700.81 385.76 L 692.08 389.27 L 682.60 392.26 L 672.60 394.79 L 662.34 396.98 L 652.07 398.95 L 642.04 400.85 L 632.43 402.84 L 623.37 405.06 L 614.94 407.62 L 607.16 410.62 L 599.99 414.12 L 593.31 418.12 L 586.99 422.59 L 580.86 427.45 L 574.74 432.57 L 568.43 437.80 L 561.79 442.97 L 554.67 447.88 L 547.00 452.35 L 538.71 456.23 L 529.82 459.37 L 520.38 461.69 L 510.46 463.14 L 500.18 463.72 L 489.67 463.50 L 479.06 462.58 L 468.48 461.11 L 458.04 459.27 L 447.80 457.25 L 437.81 455.26 L 428.08 453.49 L 418.58 452.10 L 409.24 451.21 L 400.00 450.90 L 390.76 451.21 L 381.42 452.10 L 371.92 453.49 L 362.19 455.26 L 352.20 457.25 L 341.96 459.27 L 331.52 461.11 L 320.94 462.58 L 310.33 463.50 L 299.82 463.72 L 289.54 463.14 L 279.62 461.69 L 270.18 459.37 L 261.29 456.23 L 253.00 452.35 L 245.33 447.88 L 238.21 442.97 L 231.57 437.80 L 225.26 432.57 L 219.14 427.45 L 213.01 422.59 L 206.69 418.12 L 200.01 414.12 L 192.84 410.62 L 185.06 407.62 L 176.63 405.06 L 167.57 402.84 L 157.96 400.85 L 147.93 398.95 L 137.66 396.98 L 127.40 394.79 L 117.40 392.26 L 107.92 389.27 L 99.19 385.76 L 91.45 381.67 L 84.85 377.01 L 79.48 371.82 L 75.38 366.15 L 72.49 360.10 L 70.67 353.77 L 69.74 347.30 L 69.44 340.79 L 69.47 334.34 L 69.55 328.04 L 69.36 321.95 L 68.64 316.11 L 67.17 310.53 L 64.80 305.17 L 61.46 300.01 L 57.16 294.97 L 52.01 289.99 L 46.18 285.00 L 39.93 279.93 L 33.57 274.73 L 27.41 269.35 L 21.81 263.79 L 17.07 258.03 L 13.47 252.12 L 11.22 246.09 L 10.45 240.00 L 11.22 233.91 L 13.47 227.88 L 17.07 221.97 L 21.81 216.21 L 27.41 210.65 L 33.57 205.27 L 39.93 200.07 L 46.18 195.00 L 52.01 190.01 L 57.16 185.03 L 61.46 179.99 L 64.80 174.83 L 67.17 169.47 L 68.64 163.89 L 69.36 158.05 L 69.55 151.96 L 69.47 145.66 L 69.44 139.21 L 69.74 132.70 L 70.67 126.23 L 72.49 119.90 L 75.38 113.85 L 79.48 108.18 L 84.85 102.99 L 91.45 98.33 L 99.19 94.24 L 107.92 90.73 L 117.40 87.74 L 127.40 85.21 L 137.66 83.02 L 147.93 81.05 L 157.96 79.15 L 167.57 77.16 L 176.63 74.94 L 185.06 72.38 L 192.84 69.38 L 200.01 65.88 L 206.69 61.88 L 213.01 57.41 L 219.14 52.55 L 225.26 47.43 L 231.57 42.20 L 238.21 37.03 L 245.33 32.12 L 253.00 27.65 L 261.29 23.77 L 270.18 20.63 L 279.62 18.31 L 289.54 16.86 L 299.82 16.28 L 310.33 16.50 L 320.94 17.42 L 331.52 18.89 L 341.96 20.73 L 352.20 22.75 L 362.19 24.74 L 371.92 26.51 L 381.42 27.90 L 390.76 28.79 L 400.00 29.10 L 409.24 28.79 L 418.58 27.90 L 428.08 26.51 L 437.81 24.74 L 447.80 22.75 L 458.04 20.73 L 468.48 18.89 L 479.06 17.42 L 489.67 16.50 L 500.18 16.28 L 510.46 16.86 L 520.38 18.31 L 529.82 20.63 L 538.71 23.77 L 547.00 27.65 L 554.67 32.12 L 561.79 37.03 L 568.43 42.20 L 574.74 47.43 L 580.86 52.55 L 586.99 57.41 L 593.31 61.88 L 599.99 65.88 L 607.16 69.38 L 614.94 72.38 L 623.37 74.94 L 632.43 77.16 L 642.04 79.15 L 652.07 81.05 L 662.34 83.02 L 672.60 85.21 L 682.60 87.74 L 692.08 90.73 L 700.81 94.24 L 708.55 98.33 L 715.15 102.99 L 720.52 108.18 L 724.62 113.85 L 727.51 119.90 L 729.33 126.23 L 730.26 132.70 L 730.56 139.21 L 730.53 145.66 L 730.45 151.96 L 730.64 158.05 L 731.36 163.89 L 732.83 169.47 L 735.20 174.83 L 738.54 179.99 L 742.84 185.03 L 747.99 190.01 L 753.82 195.00 L 760.07 200.07 L 766.43 205.27 L 772.59 210.65 L 778.19 216.21 L 782.93 221.97 L 786.53 227.88 L 788.78 233.91 Z";
 
 type Tone = 'cream' | 'ink' | 'pattern';
 
@@ -248,7 +252,7 @@ const SectionShell: React.FC<{
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
         padding: '110px 24px 70px',
-        backgroundColor: isPattern ? CREAM : (tone === 'cream' ? CREAM : DEEP),
+        backgroundColor: isPattern ? CREAM : (tone === 'cream' ? PISTACHIO : DEEP),
         backgroundImage: sectionBg,
         backgroundSize: isPattern ? '540px auto' : '260px 260px, auto',
         backgroundRepeat: 'repeat',
@@ -460,7 +464,7 @@ const EventSection: React.FC<{
 
 
 const HotelTile: React.FC<{ name: string; address: string; note?: string }> = ({ name, address, note }) => (
-  <div style={{ padding: '28px 26px', background: 'rgba(76, 100, 122, .03)', position: 'relative' }}>
+  <div style={{ padding: '28px 26px', background: 'rgba(78, 91, 55, .03)', position: 'relative' }}>
     <Bracket pos="tl" /><Bracket pos="br" />
     <h3 className="heading" style={{ fontSize: 22, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>{name}</h3>
     <p style={{ fontSize: 9.5, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: .55, margin: '10px 0 0', fontWeight: 400 }}>{address}</p>
@@ -630,7 +634,7 @@ export default function WeddingSite() {
           position: 'fixed', bottom: 78, right: 22,
           display: 'flex', alignItems: 'center', gap: 7,
           padding: '4px 22px 10px',
-          background: 'rgba(76, 100, 122, .65)', border: '1px solid rgba(242, 239, 233, .45)',
+          background: 'rgba(78, 91, 55, .65)', border: '1px solid rgba(242, 239, 233, .45)',
           borderRadius: 999, color: CREAM,
           backdropFilter: 'blur(14px) saturate(180%)', WebkitBackdropFilter: 'blur(14px) saturate(180%)',
           zIndex: 200,
@@ -652,7 +656,7 @@ export default function WeddingSite() {
         style={{
           position: 'fixed', bottom: 134, right: 70,
           width: 36, height: 36, borderRadius: '50%',
-          background: 'rgba(76, 100, 122, .65)', color: CREAM,
+          background: 'rgba(78, 91, 55, .65)', color: CREAM,
           border: '1px solid rgba(242, 239, 233, .45)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           backdropFilter: 'blur(14px) saturate(180%)', WebkitBackdropFilter: 'blur(14px) saturate(180%)',
@@ -662,7 +666,7 @@ export default function WeddingSite() {
           transition: 'opacity .35s ease, background .25s ease, color .25s ease',
         }}
         onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = DEEP_DARK; }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(76, 100, 122, .65)'; e.currentTarget.style.color = CREAM; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(78, 91, 55, .65)'; e.currentTarget.style.color = CREAM; }}
       >
         <svg viewBox="0 0 24 24" width={12} height={12} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 19V5M5 12l7-7 7 7" />
@@ -906,8 +910,8 @@ export default function WeddingSite() {
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }}>
               <defs>
                 <linearGradient id="envGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#5d7488" />
-                  <stop offset="100%" stopColor="#3d5469" />
+                  <stop offset="0%" stopColor="#647150" />
+                  <stop offset="100%" stopColor="#3E4A2C" />
                 </linearGradient>
                 <filter id="envShadow" x="-15%" y="-15%" width="130%" height="130%">
                   <feGaussianBlur in="SourceAlpha" stdDeviation="6" />
@@ -1025,7 +1029,7 @@ export default function WeddingSite() {
         id="contact"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: CREAM, backgroundImage: stripeCream, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light', color: DEEP_DARK,
+          backgroundColor: PISTACHIO, backgroundImage: stripeCream, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',

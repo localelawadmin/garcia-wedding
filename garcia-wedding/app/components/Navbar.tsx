@@ -14,7 +14,7 @@ export default function Navbar() {
     <nav
       style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-        background: 'rgba(76, 100, 122, 0.62)',
+        background: 'rgba(78, 91, 55, 0.62)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         borderBottom: '1px solid rgba(242, 239, 233, 0.12)',
