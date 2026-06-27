@@ -139,7 +139,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
           }}>
           <span className="heading" style={{ fontSize: 24, lineHeight: 1, fontStyle: 'italic', fontWeight: 400, letterSpacing: 0 }}>{hotel.price}</span>
           <span style={{
-            fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
+            fontSize: 10, letterSpacing: '0.07em', textTransform: 'uppercase',
             fontWeight: 400, opacity: 0.8, display: 'flex', alignItems: 'center', gap: 10,
           }}>
             Details
@@ -163,7 +163,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
               <a href={hotel.bookUrl} target="_blank" rel="noopener noreferrer"
                 style={{
                   display: 'inline-block',
-                  fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
+                  fontSize: 10, letterSpacing: '0.07em', textTransform: 'uppercase',
                   fontWeight: 400, opacity: 0.9, color: 'inherit', textDecoration: 'none',
                   borderBottom: '1px solid currentColor', paddingBottom: 2,
                 }}>Book →</a>
@@ -211,7 +211,7 @@ const AccommodationsBody: React.FC = () => {
           aria-pressed={sortByPrice}
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 10,
-            fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
+            fontSize: 10, letterSpacing: '0.07em', textTransform: 'uppercase',
             fontWeight: 400, opacity: 0.85, cursor: 'pointer', userSelect: 'none',
             background: 'transparent', border: 'none', color: 'inherit', padding: '4px 0',
           }}>
@@ -240,7 +240,7 @@ const SectionShell: React.FC<{
   wide?: boolean; foot?: React.ReactNode;
 }> = ({ id, tone, children, wide, foot }) => {
   const isPattern  = tone === 'pattern';
-  const sectionBg  = isPattern ? "url('/photos/trellis.jpg')" : (tone === 'cream' ? stripeCream : stripeInk);
+  const sectionBg  = isPattern ? "url('/photos/floral.jpg')" : (tone === 'cream' ? stripeCream : stripeInk);
   const boxBg      = tone === 'ink' ? DEEP_DARK : CREAM;
   const fg         = tone === 'ink' ? CREAM : DEEP_DARK;
   // hairline rim: soft olive on light panels, faint cream on dark panels
@@ -256,7 +256,7 @@ const SectionShell: React.FC<{
         padding: '110px 24px 70px',
         backgroundColor: isPattern ? CREAM : (tone === 'cream' ? CREAM : DEEP),
         backgroundImage: sectionBg,
-        backgroundSize: isPattern ? '540px auto' : '260px 260px, auto',
+        backgroundSize: isPattern ? '500px auto' : '260px 260px, auto',
         backgroundRepeat: 'repeat',
         backgroundBlendMode: isPattern ? 'normal' : 'soft-light, normal',
         color: fg,
@@ -277,7 +277,7 @@ const SectionShell: React.FC<{
       {foot && (
         <div style={{
           position: 'absolute', bottom: 28, left: 0, right: 0, textAlign: 'center',
-          fontSize: 9, letterSpacing: '0.4em', textTransform: 'uppercase',
+          fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase',
           opacity: .45,
         }}>{foot}</div>
       )}
@@ -287,7 +287,7 @@ const SectionShell: React.FC<{
 
 const Eyebrow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div style={{
-    fontSize: 10, letterSpacing: '0.42em', textTransform: 'uppercase',
+    fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase',
     opacity: .55, marginBottom: 14, fontWeight: 400,
   }}>{children}</div>
 );
@@ -449,7 +449,7 @@ const EventSection: React.FC<{
               fontSize: 15, letterSpacing: '-0.005em', lineHeight: 1.45, fontWeight: 400,
             }}>
               <div style={{
-                textTransform: 'uppercase', opacity: .5, letterSpacing: '0.3em',
+                textTransform: 'uppercase', opacity: .5, letterSpacing: '0.07em',
                 fontSize: 10, fontWeight: 400, paddingTop: 4,
               }}>{k}</div>
               <div>{v}</div>
@@ -470,7 +470,7 @@ const HotelTile: React.FC<{ name: string; address: string; note?: string }> = ({
   <div style={{ padding: '28px 26px', background: 'rgba(78, 91, 55, .03)', position: 'relative' }}>
     <Bracket pos="tl" /><Bracket pos="br" />
     <h3 className="heading" style={{ fontSize: 22, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>{name}</h3>
-    <p style={{ fontSize: 9.5, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: .55, margin: '10px 0 0', fontWeight: 400 }}>{address}</p>
+    <p style={{ fontSize: 9.5, letterSpacing: '0.07em', textTransform: 'uppercase', opacity: .55, margin: '10px 0 0', fontWeight: 400 }}>{address}</p>
     <div style={{ width: 24, height: 1, background: 'currentColor', opacity: .3, margin: '12px 0' }} />
     {note && <p style={{ fontSize: 13.5, lineHeight: 1.5, opacity: .82, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{note}</p>}
   </div>
@@ -479,7 +479,7 @@ const HotelTile: React.FC<{ name: string; address: string; note?: string }> = ({
 type CardTone = 'ink' | 'cream' | 'pattern';
 function cardColors(tone: CardTone) {
   // Card fill contrasts with section tone; text + icon are inverse of fill.
-  // Pattern section reads as cream-ish (trellis wallpaper) so it sides with cream.
+  // Pattern section reads as cream-ish (floral wallpaper) so it sides with cream.
   const isLightSection = tone === 'cream' || tone === 'pattern';
   return {
     bg: isLightSection ? DEEP_DARK : CREAM,
@@ -506,7 +506,7 @@ const EatTile: React.FC<{ name: string; address: string; note: string; mapUrl?: 
           </svg>
         </a>
       </div>
-      <p style={{ fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: .6, margin: '6px 0 8px', fontWeight: 400 }}>{address}</p>
+      <p style={{ fontSize: 9, letterSpacing: '0.06em', textTransform: 'uppercase', opacity: .6, margin: '6px 0 8px', fontWeight: 400 }}>{address}</p>
       <p style={{ margin: 0 }}>{note}</p>
     </div>
   );
@@ -737,7 +737,7 @@ export default function WeddingSite() {
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12,
           color: CREAM,
         }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.42em', textTransform: 'uppercase', opacity: .8, fontWeight: 400 }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: .8, fontWeight: 400 }}>
             Scroll
           </div>
           <div className="scroll-bob" style={{ width: 1, height: 40, background: CREAM, opacity: .55 }} />
@@ -783,7 +783,7 @@ export default function WeddingSite() {
               <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
             </h2>
             <div style={{
-              fontSize: 18, letterSpacing: '0.4em', textTransform: 'uppercase',
+              fontSize: 18, letterSpacing: '0.08em', textTransform: 'uppercase',
               fontWeight: 400, marginTop: 24, opacity: .8,
             }}>
               June 17–19, 2027
@@ -793,7 +793,7 @@ export default function WeddingSite() {
       </section>
 
       {/* AGENDA */}
-      <SectionShell id="agenda" tone="ink" wide foot="↓ scroll for each event">
+      <SectionShell id="agenda" tone="cream" wide foot="↓ scroll for each event">
         <Title>The Agenda</Title>
         <Lede>We can&apos;t wait to see you and celebrate in Cape May! Please see below for the details on each event.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 28, marginTop: 28 }} className="agenda-grid">
@@ -807,7 +807,7 @@ export default function WeddingSite() {
             <div key={card.name} style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 12,
             }}>
-              <Icon src={card.src} size={96} tone="ink" />
+              <Icon src={card.src} size={96} tone="cream" />
               <div className="heading" style={{ fontSize: 20, fontWeight: 400 }}>{card.name}</div>
               <div style={{
                 fontSize: 10, letterSpacing: '0.14em', opacity: .65,
@@ -827,7 +827,7 @@ export default function WeddingSite() {
               display: 'inline-flex', alignItems: 'center', gap: 10,
               padding: '12px 26px', border: '1px solid currentColor',
               borderRadius: 999,
-              fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase',
+              fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase',
               cursor: 'pointer', background: 'transparent', color: 'inherit',
               fontFamily: 'inherit', fontWeight: 400,
               transition: 'background .25s, color .25s',
@@ -857,7 +857,7 @@ export default function WeddingSite() {
           ['Note',   'Welcome to Cape May! Come grab a drink with the Bride and Groom to kick off their wedding weekend.'],
         ]} />
 
-      <EventSection calId="ceremony" mapQuery="Our+Lady+Star+of+the+Sea+525+Washington+Street+Cape+May+NJ" id="ceremony" tone="cream" eyebrow="Friday · June 18"
+      <EventSection calId="ceremony" mapQuery="Our+Lady+Star+of+the+Sea+525+Washington+Street+Cape+May+NJ" id="ceremony" tone="ink" eyebrow="Friday · June 18"
         name="Nuptial Mass" iconSrc={ICON.osos}
         rows={[
           ['Time',    '1:30 PM'],
@@ -866,7 +866,7 @@ export default function WeddingSite() {
           ['Note',    'Mass will begin promptly. We kindly ask that you are seated 15–30 minutes prior.'],
         ]} />
 
-      <EventSection calId="reception" mapQuery="Isaac+Smith+Vineyard+1039+Seashore+Road+Cape+May+NJ" id="reception" tone="ink" eyebrow="Friday · June 18"
+      <EventSection calId="reception" mapQuery="Isaac+Smith+Vineyard+1039+Seashore+Road+Cape+May+NJ" id="reception" tone="cream" eyebrow="Friday · June 18"
         name="Reception" iconSrc={ICON.tent}
         rows={[
           ['Time',    '5:00 — 10:00 PM'],
@@ -883,7 +883,7 @@ export default function WeddingSite() {
           ['Address', '411 Beach Ave, Cape May, NJ'],
         ]} />
 
-      <EventSection calId="beach" mapQuery="Cape+May+Beach+NJ" id="beach" tone="cream" eyebrow="Saturday · June 19"
+      <EventSection calId="beach" mapQuery="Cape+May+Beach+NJ" id="beach" tone="ink" eyebrow="Saturday · June 19"
         name="Beach Day" iconSrc={ICON.beach}
         rows={[
           ['Time', '10 AM onward'],
@@ -895,8 +895,9 @@ export default function WeddingSite() {
         id="rsvp"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: CREAM, backgroundImage: "url('/photos/trellis.jpg')",
-          backgroundSize: '540px auto', backgroundRepeat: 'repeat',
+          backgroundColor: CREAM, backgroundImage: stripeCream,
+          backgroundSize: '260px 260px, auto', backgroundRepeat: 'repeat',
+          backgroundBlendMode: 'soft-light, normal',
           padding: '110px 24px 70px',
           display: 'flex', flexDirection: 'column', justifyContent: 'center',
           color: DEEP_DARK, position: 'relative',
@@ -905,8 +906,9 @@ export default function WeddingSite() {
         <div style={{
           maxWidth: 720, margin: '0 auto', width: '100%',
           background: CREAM,
+          border: '1px solid rgba(175,184,133,.65)',
           padding: 'clamp(48px, 6vw, 72px) clamp(32px, 5vw, 56px)',
-          boxShadow: '0 14px 40px rgba(20,30,45,.12), 0 2px 8px rgba(20,30,45,.08)',
+          boxShadow: '0 22px 60px rgba(40,48,28,.18), 0 4px 14px rgba(40,48,28,.12)',
         }}>
           <div style={{ position: 'relative', width: '100%', maxWidth: 520, margin: '24px auto 0', aspectRatio: '600 / 480' }}>
             <svg viewBox="0 0 600 480" preserveAspectRatio="xMidYMid meet" aria-hidden="true"
@@ -955,18 +957,18 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      <SectionShell id="accommodations" tone="ink" wide foot="More options on FAQ ↓">
+      <SectionShell id="accommodations" tone="pattern" wide foot="More options on FAQ ↓">
         <Title>The Accommodations</Title>
         <AccommodationsBody />
       </SectionShell>
 
-      <SectionShell id="getting-there" tone="pattern">
+      <SectionShell id="getting-there" tone="ink">
         <Title>Travel Options</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginTop: 8 }} className="pair-grid">
-          <Tile tone="pattern" heading="By Car"      body="Cape May is at the southern tip of New Jersey. ~2.5 hrs from New York City, ~1.75 hrs from Philadelphia. Garden State Parkway south to Exit 0." />
-          <Tile tone="pattern" heading="By Air"      body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). If flying, rental car recommended." />
-          <Tile tone="pattern" heading="By Ferry"    body="Cape May–Lewes Ferry from Delaware. Walk-on or drive-on." />
-          <Tile tone="pattern" heading="Around Town" body="Walkable downtown. Trolleys, bikes, and Uber operate locally." />
+          <Tile tone="ink" heading="By Car"      body="Cape May is at the southern tip of New Jersey. ~2.5 hrs from New York City, ~1.75 hrs from Philadelphia. Garden State Parkway south to Exit 0." />
+          <Tile tone="ink" heading="By Air"      body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). If flying, rental car recommended." />
+          <Tile tone="ink" heading="By Ferry"    body="Cape May–Lewes Ferry from Delaware. Walk-on or drive-on." />
+          <Tile tone="ink" heading="Around Town" body="Walkable downtown. Trolleys, bikes, and Uber operate locally." />
         </div>
       </SectionShell>
 
@@ -990,11 +992,11 @@ export default function WeddingSite() {
         </div>
       </SectionShell>
 
-      <SectionShell id="dress" tone="ink">
+      <SectionShell id="dress" tone="pattern">
         <Title>The Dress Code</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
-          <Tile tone="ink" heading="Welcome Drinks"  body={<>Summer Cocktail.<br/><br/>We ask that ladies wear a dress of any length, and gentleman wear a button down and pants. Jackets are preferred, but not required.</>} />
-          <Tile tone="ink" heading="Mass & Reception" body={<>Black Tie Optional.<br/><br/>We ask that ladies wear a floor-length gown. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
+          <Tile tone="pattern" heading="Welcome Drinks"  body={<>Summer Cocktail.<br/><br/>We ask that ladies wear a dress of any length, and gentleman wear a button down and pants. Jackets are preferred, but not required.</>} />
+          <Tile tone="pattern" heading="Mass & Reception" body={<>Black Tie Optional.<br/><br/>We ask that ladies wear a floor-length gown. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
         </div>
       </SectionShell>
 
@@ -1006,14 +1008,14 @@ export default function WeddingSite() {
           style={{
             display: 'inline-flex', padding: '12px 26px', border: '1px solid currentColor',
             borderRadius: 999,
-            fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase',
+            fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase',
             cursor: 'pointer', marginTop: 16, fontWeight: 400, alignSelf: 'flex-start',
             color: 'inherit', textDecoration: 'none',
           }}>View Registry →</a>
       </SectionShell>
       */}
 
-      <SectionShell id="faq" tone="cream">
+      <SectionShell id="faq" tone="ink">
         <Title>FAQ</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <FaqRow q='How far in advance should I book my hotel?' a='As soon as possible — hotels in Cape May in summer go fast.' />
@@ -1048,7 +1050,7 @@ export default function WeddingSite() {
             <path d={WAVY_PATH} fill={DEEP_DARK} stroke="rgba(242,239,233,.5)" strokeWidth={1} vectorEffect="non-scaling-stroke" />
           </svg>
           <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%', color: CREAM }}>
-            <div style={{ fontSize: 14, letterSpacing: '0.4em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 14, opacity: .75 }}>
+            <div style={{ fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 14, opacity: .75 }}>
               Any questions?
             </div>
             <h2 className="heading" style={{
