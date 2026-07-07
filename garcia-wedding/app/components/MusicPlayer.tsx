@@ -143,6 +143,7 @@ export default function MusicPlayer() {
 
   return (
     <div
+      className="mp-pill"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -231,16 +232,42 @@ export default function MusicPlayer() {
         )}
       </button>
 
-      <span style={{ fontSize: 9, letterSpacing: '0.38em', textTransform: 'uppercase', opacity: .55, fontWeight: 400 }}>
-        Now Playing
-      </span>
-      <span style={{ width: 1, height: 12, background: 'rgba(242,239,233,.3)' }} />
-      <span
-        className="heading"
-        style={{ fontSize: 14, lineHeight: 1, fontWeight: 400, whiteSpace: 'nowrap' }}
-      >
-        {TRACKS[trackIdx].label}
-      </span>
+      <div className="mp-track" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: .55, fontWeight: 400, whiteSpace: 'nowrap' }}>
+          Now Playing
+        </span>
+        <span className="mp-divider" style={{ width: 1, height: 12, background: 'rgba(242,239,233,.3)', flexShrink: 0 }} />
+        <span
+          className="heading mp-title"
+          style={{ fontSize: 14, lineHeight: 1, fontWeight: 400, whiteSpace: 'nowrap' }}
+        >
+          {TRACKS[trackIdx].label}
+        </span>
+      </div>
+
+      <style jsx>{`
+        @media (max-width: 600px) {
+          :global(.mp-pill) {
+            max-width: calc(100vw - 24px) !important;
+            flex-wrap: wrap !important;
+            justify-content: flex-end !important;
+            border-radius: 20px !important;
+            padding: 8px 14px !important;
+          }
+          :global(.mp-track) {
+            flex-direction: column !important;
+            align-items: flex-end !important;
+            gap: 2px !important;
+          }
+          :global(.mp-divider) { display: none !important; }
+          :global(.mp-title) {
+            white-space: normal !important;
+            text-align: right !important;
+            max-width: 60vw !important;
+            line-height: 1.2 !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
