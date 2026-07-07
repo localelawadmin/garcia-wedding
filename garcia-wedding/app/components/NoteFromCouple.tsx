@@ -10,8 +10,9 @@ export default function NoteFromCouple({ onOpenChange }: { onOpenChange?: (open:
   const [open, setOpen] = useState(false);
   const [hasOpenedOnce, setHasOpenedOnce] = useState(false);
 
-  // Auto-open on first user interaction with the site
+  // Auto-open on first user interaction with the site (desktop only — not mobile)
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) return;
     let fired = false;
     const fire = () => {
       if (fired) return;

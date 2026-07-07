@@ -444,7 +444,7 @@ const EventSection: React.FC<{
           paddingTop: 22, borderTop: '1px solid currentColor',
         }}>
           {rows.map(([k, v]) => (
-            <div key={k} style={{
+            <div key={k} className="event-row" style={{
               display: 'grid', gridTemplateColumns: '110px 1fr', gap: 16,
               fontSize: 15, letterSpacing: '-0.005em', lineHeight: 1.45, fontWeight: 400,
             }}>
@@ -606,6 +606,7 @@ export default function WeddingSite() {
   return (
     <div
       ref={scrollerRef}
+      className="wedding-scroller"
       style={{
         position: 'fixed', inset: 0,
         overflowY: 'auto',
@@ -811,8 +812,8 @@ export default function WeddingSite() {
             }}>
               <Icon src={card.src} size={96} tone="cream" />
               <div className="agenda-text">
-                <div className="heading" style={{ fontSize: 20, fontWeight: 400 }}>{card.name}</div>
-                <div style={{
+                <div className="heading agenda-name" style={{ fontSize: 20, fontWeight: 400 }}>{card.name}</div>
+                <div className="agenda-meta" style={{
                   fontSize: 10, letterSpacing: '0.14em', opacity: .65,
                   lineHeight: 1.5, fontWeight: 400, textTransform: 'uppercase', marginTop: 6,
                 }}>
@@ -1021,23 +1022,25 @@ export default function WeddingSite() {
         @media (max-width: 768px) {
           :global(.agenda-grid) {
             grid-template-columns: 1fr !important;
-            gap: 2px !important;
-            max-width: 440px; margin-left: auto; margin-right: auto;
+            gap: 0 !important;
+            max-width: 470px; margin-left: auto; margin-right: auto;
           }
           :global(.agenda-item) {
             flex-direction: row !important;
             align-items: center !important;
             justify-content: flex-start !important;
             text-align: left !important;
-            gap: 22px !important;
-            padding: 12px 6px;
+            gap: 16px !important;
+            padding: 6px 4px !important;
           }
           :global(.agenda-item:nth-child(even)) {
             flex-direction: row-reverse !important;
             text-align: right !important;
           }
-          :global(.agenda-item img) { width: 66px !important; height: 66px !important; }
+          :global(.agenda-item img) { width: 96px !important; height: 96px !important; }
           :global(.agenda-text) { flex: 1 1 auto; min-width: 0; }
+          :global(.agenda-name) { font-size: 28px !important; }
+          :global(.agenda-meta) { font-size: 12.5px !important; line-height: 1.3 !important; letter-spacing: 0.1em !important; margin-top: 4px !important; }
           :global(.pair-grid)    { grid-template-columns: 1fr !important; gap: 16px !important; }
           :global(.things-grid)  { grid-template-columns: 1fr !important; gap: 16px !important; }
         }

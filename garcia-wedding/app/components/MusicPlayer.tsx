@@ -13,24 +13,55 @@ const CREAM = '#FDFDFC';
 export default function MusicPlayer() {
   const [trackIdx, setTrackIdx] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [volume, setVolume]   = useState(0.4);
+  const [volume, setVolume]   = useState(0.2);
   const [muted, setMuted]     = useState(true);
   const [hover, setHover]     = useState(false);
   const [mq, setMq]           = useState<{ on: boolean; shift: number; dur: number }>({ on: false, shift: 0, dur: 0 });
 
   const audioRef  = useRef<HTMLAudioElement | null>(null);
   const idxRef    = useRef(0);
-  const volRef    = useRef(0.4);
+  const volRef    = useRef(0.2);
   const mutedRef  = useRef(true);
   const boxRef    = useRef<HTMLDivElement | null>(null);
   const textRef   = useRef<HTMLSpanElement | null>(null);
+  const ctxRef    = useRef<AudioContext | null>(null);
+  const gainRef   = useRef<GainNode | null>(null);
+
+  // Route audio through a Web Audio gain node so we can start genuinely quiet
+  // even on iOS, where HTMLAudioElement.volume is ignored.
+  const applyVolume = () => {
+    const v = mutedRef.current ? 0 : volRef.current;
+    if (gainRef.current) gainRef.current.gain.value = v;
+    else if (audioRef.current) audioRef.current.volume = v;
+  };
+  const resumeCtx = () => { ctxRef.current?.resume?.().catch(() => {}); };
+  const ensureGraph = (audio: HTMLAudioElement) => {
+    const el = audio as HTMLAudioElement & { _graphed?: boolean };
+    if (el._graphed) { applyVolume(); return; }
+    try {
+      const W = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
+      const Ctx = W.AudioContext || W.webkitAudioContext;
+      if (!Ctx) { applyVolume(); return; }
+      if (!ctxRef.current) {
+        ctxRef.current = new Ctx();
+        gainRef.current = ctxRef.current.createGain();
+        gainRef.current.connect(ctxRef.current.destination);
+      }
+      ctxRef.current.createMediaElementSource(audio).connect(gainRef.current as GainNode);
+      el._graphed = true;
+      audio.volume = 1;
+      applyVolume();
+    } catch {
+      applyVolume();
+    }
+  };
 
   useEffect(() => {
     const startIdx = Math.floor(Math.random() * TRACKS.length);
     setTrackIdx(startIdx);
     idxRef.current = startIdx;
     const audio = new Audio(TRACKS[startIdx].src);
-    audio.volume = 0.4;
+    audio.volume = volRef.current;
     audioRef.current = audio;
     setMuted(false);
     mutedRef.current = false;
@@ -42,6 +73,8 @@ export default function MusicPlayer() {
     const fire = () => {
       if (fired || !audioRef.current) return;
       fired = true;
+      ensureGraph(audioRef.current);
+      resumeCtx();
       audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
       cleanup();
     };
@@ -85,11 +118,12 @@ export default function MusicPlayer() {
   const loadTrack = (idx: number) => {
     if (audioRef.current) audioRef.current.pause();
     const audio = new Audio(TRACKS[idx].src);
-    audio.muted = mutedRef.current;
     audio.volume = volRef.current;
     audioRef.current = audio;
     idxRef.current = idx;
     audio.addEventListener('ended', goNext);
+    ensureGraph(audio);
+    resumeCtx();
     audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
   };
 
@@ -110,9 +144,9 @@ export default function MusicPlayer() {
     if (mutedRef.current) {
       mutedRef.current = false;
       setMuted(false);
-      a.muted = false;
-      a.volume = volRef.current;
     }
+    applyVolume();
+    resumeCtx();
     if (a.paused) {
       a.play().then(() => setPlaying(true)).catch(() => {});
     } else {
@@ -125,12 +159,10 @@ export default function MusicPlayer() {
     const newMuted = !mutedRef.current;
     mutedRef.current = newMuted;
     setMuted(newMuted);
-    if (audioRef.current) {
-      audioRef.current.muted = newMuted;
-      audioRef.current.volume = volRef.current;
-      if (!newMuted && audioRef.current.paused) {
-        audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
-      }
+    applyVolume();
+    if (!newMuted && audioRef.current?.paused) {
+      resumeCtx();
+      audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
     }
   };
 
@@ -138,17 +170,11 @@ export default function MusicPlayer() {
     const v = parseFloat(e.target.value);
     volRef.current = v;
     setVolume(v);
-    if (v > 0 && mutedRef.current) {
-      mutedRef.current = false;
-      setMuted(false);
-      if (audioRef.current) {
-        audioRef.current.volume = v;
-        if (audioRef.current.paused) {
-          audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
-        }
-      }
-    } else if (audioRef.current) {
-      audioRef.current.volume = mutedRef.current ? 0 : v;
+    if (v > 0 && mutedRef.current) { mutedRef.current = false; setMuted(false); }
+    applyVolume();
+    if (v > 0 && audioRef.current?.paused) {
+      resumeCtx();
+      audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
     }
   };
 
@@ -220,11 +246,11 @@ export default function MusicPlayer() {
               {mq.on && <span aria-hidden="true" style={{ padding: '0 12px', opacity: .5, fontSize: 9, lineHeight: 1 }}>•</span>}
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div className="mp-vol-row" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {tbtn(toggleMute, muted ? 'Unmute' : 'Mute', muted
               ? <svg viewBox="0 0 12 12" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" /><path d="M9 4 L11 6 M11 4 L9 6" /></svg>
               : <svg viewBox="0 0 12 12" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" /><path d="M9 4 Q10 6 9 8 M10.5 3 Q12 6 10.5 9" /></svg>)}
-            <input type="range" min={0} max={1} step={0.02} value={muted ? 0 : volume} onChange={handleVolume} aria-label="Volume" className="vol-slider" style={{ flex: 1, width: 'auto', minWidth: 0 }} />
+            <input type="range" min={0} max={1} step={0.02} value={muted ? 0 : volume} onChange={handleVolume} aria-label="Volume" className="vol-slider mp-slider" style={{ flex: 1, width: 'auto', minWidth: 0 }} />
           </div>
         </div>
       </div>
