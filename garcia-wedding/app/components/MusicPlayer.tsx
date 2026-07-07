@@ -26,6 +26,7 @@ export default function MusicPlayer() {
   const textRef   = useRef<HTMLSpanElement | null>(null);
   const ctxRef    = useRef<AudioContext | null>(null);
   const gainRef   = useRef<GainNode | null>(null);
+  const discRef   = useRef<HTMLDivElement | null>(null);
 
   // Route audio through a Web Audio gain node so we can start genuinely quiet
   // even on iOS, where HTMLAudioElement.volume is ignored.
@@ -115,6 +116,31 @@ export default function MusicPlayer() {
     return () => ro.disconnect();
   }, [trackIdx]);
 
+  // Record decelerates to a stop when paused, resumes seamlessly (no harsh freeze)
+  useEffect(() => {
+    const d = discRef.current; if (!d) return;
+    const readDeg = () => {
+      const t = getComputedStyle(d).transform;
+      const m = t && t.startsWith('matrix') ? t.slice(7, -1).split(',').map(parseFloat) : null;
+      return m ? Math.atan2(m[1], m[0]) * 180 / Math.PI : 0;
+    };
+    if (playing) {
+      const deg = ((readDeg() % 360) + 360) % 360;
+      d.style.transition = 'none';
+      d.style.transform = 'none';
+      d.style.animation = 'mp-spin 3.4s linear infinite';
+      d.style.animationDelay = `${-(deg / 360) * 3.4}s`;
+    } else {
+      const deg = readDeg();
+      d.style.animation = 'none';
+      d.style.animationDelay = '0s';
+      d.style.transform = `rotate(${deg}deg)`;
+      void d.offsetHeight;
+      d.style.transition = 'transform 1.05s cubic-bezier(0.16, 0.5, 0.2, 1)';
+      d.style.transform = `rotate(${deg + 32}deg)`;
+    }
+  }, [playing]);
+
   const loadTrack = (idx: number) => {
     if (audioRef.current) audioRef.current.pause();
     const audio = new Audio(TRACKS[idx].src);
@@ -198,6 +224,22 @@ export default function MusicPlayer() {
       {svg}
     </button>
   );
+  const mIconBtn: React.CSSProperties = { ...iconBtn, width: 30, height: 30 };
+  const mtbtn = (onClick: () => void, label: string, svg: React.ReactNode) => (
+    <button onClick={onClick} aria-label={label} type="button" style={mIconBtn}
+      onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
+      onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}>
+      {svg}
+    </button>
+  );
+  const ICN = {
+    prev: (z: number) => <svg viewBox="0 0 12 12" width={z} height={z} fill="currentColor"><path d="M9 2 L9 10 L4 6 Z M3 2 L4 2 L4 10 L3 10 Z"/></svg>,
+    next: (z: number) => <svg viewBox="0 0 12 12" width={z} height={z} fill="currentColor"><path d="M3 2 L8 6 L3 10 Z M8 2 L9 2 L9 10 L8 10 Z"/></svg>,
+    play: (z: number) => <svg viewBox="0 0 12 12" width={z} height={z} fill="currentColor"><path d="M3 2 L10 6 L3 10 Z" /></svg>,
+    pause: (z: number) => <svg viewBox="0 0 12 12" width={z} height={z} fill="currentColor"><rect x="3" y="2" width="2" height="8"/><rect x="7" y="2" width="2" height="8"/></svg>,
+    muted: (z: number) => <svg viewBox="0 0 12 12" width={z} height={z} fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" /><path d="M9 4 L11 6 M11 4 L9 6" /></svg>,
+    unmuted: (z: number) => <svg viewBox="0 0 12 12" width={z} height={z} fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" /><path d="M9 4 Q10 6 9 8 M10.5 3 Q12 6 10.5 9" /></svg>,
+  };
 
   return (
     <div
@@ -225,32 +267,41 @@ export default function MusicPlayer() {
           transition: 'max-width .42s ease, opacity .3s ease, padding .42s ease',
         }}
       >
-        <div style={{ display: 'grid', gridTemplateColumns: 'auto 96px', columnGap: 16, rowGap: 6, alignItems: 'center' }}>
-          <span style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: .55, fontWeight: 400, whiteSpace: 'nowrap' }}>
-            Now Playing
-          </span>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            {tbtn(goPrev, 'Previous', <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M9 2 L9 10 L4 6 Z M3 2 L4 2 L4 10 L3 10 Z"/></svg>)}
-            {tbtn(togglePlay, playing && !muted ? 'Pause' : 'Play', playing && !muted
-              ? <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><rect x="3" y="2" width="2" height="8"/><rect x="7" y="2" width="2" height="8"/></svg>
-              : <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L10 6 L3 10 Z" /></svg>)}
-            {tbtn(goNext, 'Next', <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L8 6 L3 10 Z M8 2 L9 2 L9 10 L8 10 Z"/></svg>)}
-          </div>
-          <div ref={boxRef} style={{ overflow: 'hidden', minWidth: 0, maxWidth: 168 }}>
-            <div style={(mq.on
-              ? { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap', animation: `mp-marquee ${mq.dur}s linear infinite`, '--mq-shift': `-${mq.shift}px` }
-              : { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap' }) as React.CSSProperties}>
-              <span ref={textRef} className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400 }}>{nowText}</span>
-              {mq.on && <span aria-hidden="true" style={{ padding: '0 12px', opacity: .5, fontSize: 9, lineHeight: 1 }}>•</span>}
-              {mq.on && <span aria-hidden="true" className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400 }}>{nowText}</span>}
-              {mq.on && <span aria-hidden="true" style={{ padding: '0 12px', opacity: .5, fontSize: 9, lineHeight: 1 }}>•</span>}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          {/* Song info */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 3, minWidth: 0 }}>
+            <span style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: .55, fontWeight: 400, whiteSpace: 'nowrap' }}>Now Playing</span>
+            <div ref={boxRef} style={{ overflow: 'hidden', minWidth: 0, maxWidth: 168 }}>
+              <div style={(mq.on
+                ? { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap', animation: `mp-marquee ${mq.dur}s linear infinite`, '--mq-shift': `-${mq.shift}px` }
+                : { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap' }) as React.CSSProperties}>
+                <span ref={textRef} className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400 }}>{nowText}</span>
+                {mq.on && <span aria-hidden="true" style={{ padding: '0 12px', opacity: .5, fontSize: 9, lineHeight: 1 }}>•</span>}
+                {mq.on && <span aria-hidden="true" className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400 }}>{nowText}</span>}
+                {mq.on && <span aria-hidden="true" style={{ padding: '0 12px', opacity: .5, fontSize: 9, lineHeight: 1 }}>•</span>}
+              </div>
             </div>
           </div>
-          <div className="mp-vol-row" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            {tbtn(toggleMute, muted ? 'Unmute' : 'Mute', muted
-              ? <svg viewBox="0 0 12 12" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" /><path d="M9 4 L11 6 M11 4 L9 6" /></svg>
-              : <svg viewBox="0 0 12 12" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" /><path d="M9 4 Q10 6 9 8 M10.5 3 Q12 6 10.5 9" /></svg>)}
-            <input type="range" min={0} max={1} step={0.02} value={muted ? 0 : volume} onChange={handleVolume} aria-label="Volume" className="vol-slider mp-slider" style={{ flex: 1, width: 'auto', minWidth: 0 }} />
+
+          {/* Desktop controls: transport row + volume row */}
+          <div className="mp-ctrl-desktop" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              {tbtn(goPrev, 'Previous', ICN.prev(8))}
+              {tbtn(togglePlay, playing && !muted ? 'Pause' : 'Play', playing && !muted ? ICN.pause(8) : ICN.play(8))}
+              {tbtn(goNext, 'Next', ICN.next(8))}
+            </div>
+            <div className="mp-vol-row" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {tbtn(toggleMute, muted ? 'Unmute' : 'Mute', muted ? ICN.muted(8) : ICN.unmuted(8))}
+              <input type="range" min={0} max={1} step={0.02} value={muted ? 0 : volume} onChange={handleVolume} aria-label="Volume" className="vol-slider mp-slider" style={{ flex: 1, width: 'auto', minWidth: 0 }} />
+            </div>
+          </div>
+
+          {/* Mobile controls: 2x2 (rev/fwd, vol/play-pause) — bigger */}
+          <div className="mp-ctrl-mobile" style={{ display: 'none', gridTemplateColumns: '1fr 1fr', gap: 9 }}>
+            {mtbtn(goPrev, 'Previous', ICN.prev(10))}
+            {mtbtn(goNext, 'Next', ICN.next(10))}
+            {mtbtn(toggleMute, muted ? 'Unmute' : 'Mute', muted ? ICN.muted(10) : ICN.unmuted(10))}
+            {mtbtn(togglePlay, playing && !muted ? 'Pause' : 'Play', playing && !muted ? ICN.pause(10) : ICN.play(10))}
           </div>
         </div>
       </div>
@@ -272,13 +323,12 @@ export default function MusicPlayer() {
           }} />
         )}
         <div
+          ref={discRef}
           style={{
             width: '100%', height: '100%', borderRadius: '50%',
             background: 'repeating-radial-gradient(circle at 50% 50%, #3b4528 0 1.4px, #4E5B37 1.4px 3px)',
             boxShadow: '0 6px 16px rgba(40,48,28,.45)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            animation: 'mp-spin 3.4s linear infinite',
-            animationPlayState: spinning ? 'running' : 'paused',
           }}
         >
           <div style={{

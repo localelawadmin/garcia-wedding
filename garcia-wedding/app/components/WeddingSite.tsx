@@ -711,7 +711,7 @@ export default function WeddingSite() {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           color: CREAM,
         }}>
-          <div style={{
+          <div className="hero-desktop" style={{
             maxWidth: 1080, width: '100%', margin: '0 auto',
             padding: '0 24px',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -732,6 +732,15 @@ export default function WeddingSite() {
             <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 52, width: 'auto', display: 'block' }} />
             <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 52, width: 'auto', display: 'block' }} />
           </div>
+          </div>
+
+          <div className="hero-mobile" style={{
+            display: 'none', flexDirection: 'column', alignItems: 'center', gap: 20,
+            padding: '0 24px', textAlign: 'center',
+          }}>
+            <img src="/photos/agenda/haley-and-george.png" alt="Haley & George" style={{ width: 'min(82vw, 340px)', height: 'auto', display: 'block', filter: 'brightness(0) invert(.96)' }} />
+            <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 30, width: 'auto', display: 'block', filter: 'brightness(0) invert(.96)' }} />
+            <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 30, width: 'auto', display: 'block', filter: 'brightness(0) invert(.96)' }} />
           </div>
         </div>
 
