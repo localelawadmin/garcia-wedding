@@ -43,7 +43,7 @@ export default function NoteFromCouple({ onOpenChange }: { onOpenChange?: (open:
       aria-label="Note from Haley and George"
       style={{
         position: 'fixed',
-        bottom: 134,
+        bottom: 156,
         right: 22,
         width: open ? 'min(380px, calc(100vw - 44px))' : 36,
         maxHeight: open ? 600 : 36,
