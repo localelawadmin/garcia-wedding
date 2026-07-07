@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef } from 'react';
 
 const TRACKS = [
-  { src: '/audio/leon-bridges.mp3',  label: 'Coming Home' },
-  { src: '/audio/sam-cooke.mp3',     label: 'Bring It On Home' },
-  { src: '/audio/frankie-valli.mp3', label: "Can't Take My Eyes Off You" },
+  { src: '/audio/leon-bridges.mp3',  label: 'Coming Home',              artist: 'Leon Bridges' },
+  { src: '/audio/sam-cooke.mp3',     label: 'Bring It On Home',         artist: 'Sam Cooke' },
+  { src: '/audio/frankie-valli.mp3', label: "Can't Take My Eyes Off You", artist: 'Frankie Valli' },
 ];
 
 const CREAM = '#FDFDFC';
@@ -16,11 +16,14 @@ export default function MusicPlayer() {
   const [volume, setVolume]   = useState(0.4);
   const [muted, setMuted]     = useState(true);
   const [hover, setHover]     = useState(false);
+  const [mq, setMq]           = useState<{ on: boolean; shift: number; dur: number }>({ on: false, shift: 0, dur: 0 });
 
   const audioRef  = useRef<HTMLAudioElement | null>(null);
   const idxRef    = useRef(0);
   const volRef    = useRef(0.4);
   const mutedRef  = useRef(true);
+  const boxRef    = useRef<HTMLDivElement | null>(null);
+  const textRef   = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
     const startIdx = Math.floor(Math.random() * TRACKS.length);
@@ -61,6 +64,26 @@ export default function MusicPlayer() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Marquee: scroll the now-playing text only when it overflows its box
+  useEffect(() => {
+    const box = boxRef.current, txt = textRef.current;
+    if (!box || !txt) return;
+    const SEP_W = 34;
+    const evaluate = () => {
+      const bw = box.clientWidth, tw = txt.scrollWidth;
+      if (bw > 0 && tw > bw + 1) {
+        const shift = tw + SEP_W;
+        setMq({ on: true, shift, dur: Math.max(5, shift / 30) });
+      } else {
+        setMq(prev => (prev.on ? { on: false, shift: 0, dur: 0 } : prev));
+      }
+    };
+    evaluate();
+    const ro = new ResizeObserver(evaluate);
+    ro.observe(box);
+    return () => ro.disconnect();
+  }, [trackIdx]);
 
   const loadTrack = (idx: number) => {
     if (audioRef.current) audioRef.current.pause();
@@ -142,6 +165,8 @@ export default function MusicPlayer() {
   };
 
   const spinning = playing;
+  const track = TRACKS[trackIdx];
+  const nowText = track.artist ? `${track.label} · ${track.artist}` : track.label;
 
   const tbtn = (onClick: () => void, label: string, svg: React.ReactNode) => (
     <button onClick={onClick} aria-label={label} type="button" style={iconBtn}
@@ -188,9 +213,16 @@ export default function MusicPlayer() {
               : <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L10 6 L3 10 Z" /></svg>)}
             {tbtn(goNext, 'Next', <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L8 6 L3 10 Z M8 2 L9 2 L9 10 L8 10 Z"/></svg>)}
           </div>
-          <span className="heading" style={{ fontSize: 14, lineHeight: 1.1, fontWeight: 400, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 180 }}>
-            {TRACKS[trackIdx].label}
-          </span>
+          <div ref={boxRef} style={{ overflow: 'hidden', minWidth: 0, maxWidth: 152 }}>
+            <div style={(mq.on
+              ? { display: 'inline-flex', whiteSpace: 'nowrap', animation: `mp-marquee ${mq.dur}s linear infinite`, '--mq-shift': `-${mq.shift}px` }
+              : { display: 'inline-flex', whiteSpace: 'nowrap' }) as React.CSSProperties}>
+              <span ref={textRef} className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400 }}>{nowText}</span>
+              {mq.on && <span aria-hidden="true" style={{ padding: '0 14px', opacity: .5 }}>•</span>}
+              {mq.on && <span aria-hidden="true" className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400 }}>{nowText}</span>}
+              {mq.on && <span aria-hidden="true" style={{ padding: '0 14px', opacity: .5 }}>•</span>}
+            </div>
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {tbtn(toggleMute, muted ? 'Unmute' : 'Mute', muted
               ? <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" /><path d="M9 4 L11 6 M11 4 L9 6" /></svg>
@@ -227,11 +259,11 @@ export default function MusicPlayer() {
           }}
         >
           <div style={{
-            width: 26, height: 26, borderRadius: '50%', background: CREAM,
+            width: 30, height: 30, borderRadius: '50%', background: CREAM,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: 'inset 0 0 0 0.5px rgba(78,91,55,.35)',
           }}>
-            <img src="/photos/agenda/hg-monogram.png" alt="" style={{ width: 17, height: 'auto', display: 'block' }} />
+            <img src="/photos/agenda/hg-monogram.png" alt="" style={{ width: 33, height: 'auto', display: 'block' }} />
           </div>
         </div>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, borderRadius: '50%', pointerEvents: 'none', background: 'radial-gradient(circle at 34% 28%, rgba(255,255,255,.16), transparent 46%)' }} />
