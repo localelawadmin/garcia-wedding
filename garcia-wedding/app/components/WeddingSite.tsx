@@ -580,13 +580,14 @@ const COUNTDOWN_TARGET = new Date('2027-06-17T20:00:00-04:00').getTime();
 export default function WeddingSite() {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [showTop, setShowTop] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
   const [days, setDays] = useState<number | null>(null);
 
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
-    const onScroll = () => setShowTop(el.scrollTop > window.innerHeight * 0.6);
+    const onScroll = () => { setShowTop(el.scrollTop > window.innerHeight * 0.6); setScrolled(el.scrollTop > 8); };
     el.addEventListener('scroll', onScroll, { passive: true });
     return () => el.removeEventListener('scroll', onScroll);
   }, []);
@@ -783,9 +784,11 @@ export default function WeddingSite() {
         </div>
 
         <div style={{
-          position: 'absolute', bottom: 36, left: '50%', transform: 'translateX(-50%)',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12,
+          position: 'absolute', bottom: 36, left: 24,
+          display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12,
           color: CREAM,
+          opacity: scrolled ? 0 : 1, pointerEvents: 'none',
+          transition: 'opacity .4s ease',
         }}>
           <div style={{ fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: .8, fontWeight: 400 }}>
             Scroll
@@ -843,7 +846,7 @@ export default function WeddingSite() {
       </section>
 
       {/* AGENDA */}
-      <SectionShell id="agenda" tone="pattern" wide foot="↓ scroll for each event">
+      <SectionShell id="agenda" tone="pattern" wide>
         <Title>The Agenda</Title>
         <Lede>We can&apos;t wait to see you and celebrate in Cape May! Please see below for the details on each event.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 28, marginTop: 28 }} className="agenda-grid">
@@ -943,7 +946,7 @@ export default function WeddingSite() {
         ]} />
 
 
-      <SectionShell id="accommodations" tone="pattern" wide foot="More options on FAQ ↓">
+      <SectionShell id="accommodations" tone="pattern" wide>
         <Title>The Accommodations</Title>
         <AccommodationsBody />
       </SectionShell>
