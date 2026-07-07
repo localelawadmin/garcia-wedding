@@ -63,7 +63,7 @@ body {
 .vol-slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 56px; height: 16px;
+  width: auto; height: 16px;
   background: transparent; cursor: pointer;
 }
 .vol-slider::-webkit-slider-runnable-track {

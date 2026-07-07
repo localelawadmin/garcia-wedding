@@ -212,18 +212,18 @@ export default function MusicPlayer() {
           </div>
           <div ref={boxRef} style={{ overflow: 'hidden', minWidth: 0, maxWidth: 168 }}>
             <div style={(mq.on
-              ? { display: 'inline-flex', whiteSpace: 'nowrap', animation: `mp-marquee ${mq.dur}s linear infinite`, '--mq-shift': `-${mq.shift}px` }
-              : { display: 'inline-flex', whiteSpace: 'nowrap' }) as React.CSSProperties}>
+              ? { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap', animation: `mp-marquee ${mq.dur}s linear infinite`, '--mq-shift': `-${mq.shift}px` }
+              : { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap' }) as React.CSSProperties}>
               <span ref={textRef} className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400 }}>{nowText}</span>
-              {mq.on && <span aria-hidden="true" style={{ padding: '0 14px', opacity: .5 }}>•</span>}
+              {mq.on && <span aria-hidden="true" style={{ padding: '0 12px', opacity: .5, fontSize: 9, lineHeight: 1 }}>•</span>}
               {mq.on && <span aria-hidden="true" className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400 }}>{nowText}</span>}
-              {mq.on && <span aria-hidden="true" style={{ padding: '0 14px', opacity: .5 }}>•</span>}
+              {mq.on && <span aria-hidden="true" style={{ padding: '0 12px', opacity: .5, fontSize: 9, lineHeight: 1 }}>•</span>}
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {tbtn(toggleMute, muted ? 'Unmute' : 'Mute', muted
-              ? <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" /><path d="M9 4 L11 6 M11 4 L9 6" /></svg>
-              : <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" /><path d="M9 4 Q10 6 9 8 M10.5 3 Q12 6 10.5 9" /></svg>)}
+              ? <svg viewBox="0 0 12 12" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" /><path d="M9 4 L11 6 M11 4 L9 6" /></svg>
+              : <svg viewBox="0 0 12 12" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" /><path d="M9 4 Q10 6 9 8 M10.5 3 Q12 6 10.5 9" /></svg>)}
             <input type="range" min={0} max={1} step={0.02} value={muted ? 0 : volume} onChange={handleVolume} aria-label="Volume" className="vol-slider" style={{ flex: 1, width: 'auto', minWidth: 0 }} />
           </div>
         </div>
