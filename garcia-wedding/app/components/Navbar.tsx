@@ -18,7 +18,7 @@ export default function Navbar() {
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         borderBottom: '1px solid rgba(242, 239, 233, 0.12)',
-        color: '#f2efe9',
+        color: '#FDFDFC',
       }}
     >
       <div
@@ -46,7 +46,7 @@ export default function Navbar() {
               style={{
                 fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
                 opacity: .85, fontWeight: 400,
-                color: '#f2efe9', textDecoration: 'none',
+                color: '#FDFDFC', textDecoration: 'none',
                 transition: 'opacity .25s',
               }}
               onMouseEnter={e => { e.currentTarget.style.opacity = '1'; }}

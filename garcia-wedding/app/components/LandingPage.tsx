@@ -132,7 +132,7 @@ export default function LandingPage({ onSuccess }: Props) {
               filter: 'drop-shadow(0 30px 60px rgba(0,0,0,.40)) drop-shadow(0 6px 18px rgba(0,0,0,.18))',
             }}
           >
-            <path d={LANDER_WAVY} fill="#f2efe9" stroke="#4E5B37" strokeWidth={1} vectorEffect="non-scaling-stroke" />
+            <path d={LANDER_WAVY} fill="#FDFDFC" stroke="#4E5B37" strokeWidth={1} vectorEffect="non-scaling-stroke" />
           </svg>
           <motion.img
             src="/photos/agenda/hg.png"
@@ -194,7 +194,7 @@ export default function LandingPage({ onSuccess }: Props) {
                 fontWeight: 400,
                 transition: 'all .25s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#4E5B37'; e.currentTarget.style.color = '#f2efe9'; }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#4E5B37'; e.currentTarget.style.color = '#FDFDFC'; }}
               onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#4E5B37'; }}
             >
               Enter →

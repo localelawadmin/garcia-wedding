@@ -17,7 +17,7 @@
 }
 
 @theme {
-  --color-cream: #f2efe9;
+  --color-cream: #FDFDFC;
   --color-deep:  #AFB885;
   --color-deep-dark: #4E5B37;
   --color-ink:   #0a0a0a;
@@ -34,7 +34,7 @@ body {
   font-weight: 400;
   letter-spacing: -0.005em;
   line-height: 1.55;
-  color: #f2efe9;
+  color: #FDFDFC;
 }
 
 .heading {
@@ -72,12 +72,12 @@ body {
 .vol-slider::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
   width: 9px; height: 9px; border-radius: 50%;
-  background: #f2efe9; margin-top: -4px;
+  background: #FDFDFC; margin-top: -4px;
 }
 .vol-slider::-moz-range-track {
   height: 1px; background: rgba(242,239,233,.4); border-radius: 1px;
 }
 .vol-slider::-moz-range-thumb {
   width: 9px; height: 9px; border: none; border-radius: 50%;
-  background: #f2efe9;
+  background: #FDFDFC;
 }

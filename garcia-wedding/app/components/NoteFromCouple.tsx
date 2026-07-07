@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-const CREAM = '#f2efe9';
+const CREAM = '#FDFDFC';
 const DEEP_DARK = '#4E5B37';
 const ACCENT = '#c8a96a'; // warm accent for the unread badge — soft gold against blue
 

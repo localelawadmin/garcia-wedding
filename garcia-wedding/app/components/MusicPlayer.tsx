@@ -8,7 +8,7 @@ const TRACKS = [
   { src: '/audio/frankie-valli.mp3', label: "Can't Take My Eyes Off You" },
 ];
 
-const CREAM = '#f2efe9';
+const CREAM = '#FDFDFC';
 
 export default function MusicPlayer() {
   const [trackIdx, setTrackIdx] = useState(0);

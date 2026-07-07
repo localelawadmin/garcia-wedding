@@ -19,7 +19,7 @@ const ICON = {
 const GRAIN_SVG =
   "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>\")";
 
-const CREAM = '#f2efe9';
+const CREAM = '#FDFDFC';
 // Save-the-date palette (Haley's names): olive / pistachio / sky blue, plus a derived deep olive for ink
 const OLIVE = '#AFB885';      // "olive" — ink-section fields + inverse-stripe ground
 const PISTACHIO = '#E2E8CE';  // "pistachio" — thick stripe band on light sections
@@ -270,7 +270,7 @@ const SectionShell: React.FC<{
         background: boxBg,
         border: `1px solid ${boxBorder}`,
         padding: 'clamp(48px, 6vw, 72px) clamp(32px, 5vw, 56px)',
-        boxShadow: '0 22px 60px rgba(40,48,28,.18), 0 4px 14px rgba(40,48,28,.12)',
+        boxShadow: '0 6px 18px rgba(40,48,28,.13), 0 1px 3px rgba(40,48,28,.09)',
       }}>
         {children}
       </div>
@@ -751,7 +751,7 @@ export default function WeddingSite() {
         id="invite"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: CREAM, backgroundImage: "url('/photos/floral.jpg')", backgroundSize: '700px auto', backgroundRepeat: 'repeat', color: DEEP_DARK,
+          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -795,7 +795,7 @@ export default function WeddingSite() {
       </section>
 
       {/* AGENDA */}
-      <SectionShell id="agenda" tone="ink" wide foot="↓ scroll for each event">
+      <SectionShell id="agenda" tone="pattern" wide foot="↓ scroll for each event">
         <Title>The Agenda</Title>
         <Lede>We can&apos;t wait to see you and celebrate in Cape May! Please see below for the details on each event.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 28, marginTop: 28 }} className="agenda-grid">
@@ -850,7 +850,7 @@ export default function WeddingSite() {
         </div>
       </SectionShell>
 
-      <EventSection calId="welcome" mapQuery="The+Pier+House+at+La+Mer+Beachfront+Resort+1317+Beach+Avenue+Cape+May+NJ" id="welcome" tone="pattern" eyebrow="Thursday · June 17"
+      <EventSection calId="welcome" mapQuery="The+Pier+House+at+La+Mer+Beachfront+Resort+1317+Beach+Avenue+Cape+May+NJ" id="welcome" tone="cream" eyebrow="Thursday · June 17"
         name="Welcome Drinks" iconSrc={ICON.pier}
         rows={[
           ['Time',   '8:00 — 10:00 PM'],
@@ -859,7 +859,7 @@ export default function WeddingSite() {
           ['Note',   'Welcome to Cape May! Come grab a drink with the Bride and Groom to kick off their wedding weekend.'],
         ]} />
 
-      <EventSection calId="ceremony" mapQuery="Our+Lady+Star+of+the+Sea+525+Washington+Street+Cape+May+NJ" id="ceremony" tone="cream" eyebrow="Friday · June 18"
+      <EventSection calId="ceremony" mapQuery="Our+Lady+Star+of+the+Sea+525+Washington+Street+Cape+May+NJ" id="ceremony" tone="pattern" eyebrow="Friday · June 18"
         name="Nuptial Mass" iconSrc={ICON.osos}
         rows={[
           ['Time',    '1:30 PM'],
@@ -868,7 +868,7 @@ export default function WeddingSite() {
           ['Note',    'Mass will begin promptly. We kindly ask that you are seated 15–30 minutes prior.'],
         ]} />
 
-      <EventSection calId="reception" mapQuery="Isaac+Smith+Vineyard+1039+Seashore+Road+Cape+May+NJ" id="reception" tone="pattern" eyebrow="Friday · June 18"
+      <EventSection calId="reception" mapQuery="Isaac+Smith+Vineyard+1039+Seashore+Road+Cape+May+NJ" id="reception" tone="ink" eyebrow="Friday · June 18"
         name="Reception" iconSrc={ICON.tent}
         rows={[
           ['Time',    '5:00 — 10:00 PM'],
@@ -877,7 +877,7 @@ export default function WeddingSite() {
           ['Note',    'Please review the Travel section for information on arranged transportation.'],
         ]} />
 
-      <EventSection calId="afterparty" mapQuery="Carneys+Restaurant+Bar+411+Beach+Ave+Cape+May+NJ" id="afterparty" tone="ink" eyebrow="Friday · June 18"
+      <EventSection calId="afterparty" mapQuery="Carneys+Restaurant+Bar+411+Beach+Ave+Cape+May+NJ" id="afterparty" tone="pattern" eyebrow="Friday · June 18"
         name="After Party" iconSrc={ICON.carneys}
         rows={[
           ['Time',    '10:30 PM — 2:00 AM'],
@@ -885,7 +885,7 @@ export default function WeddingSite() {
           ['Address', '411 Beach Ave, Cape May, NJ'],
         ]} />
 
-      <EventSection calId="beach" mapQuery="Cape+May+Beach+NJ" id="beach" tone="pattern" eyebrow="Saturday · June 19"
+      <EventSection calId="beach" mapQuery="Cape+May+Beach+NJ" id="beach" tone="cream" eyebrow="Saturday · June 19"
         name="Beach Day" iconSrc={ICON.beach}
         rows={[
           ['Time', '10 AM onward'],
@@ -897,9 +897,8 @@ export default function WeddingSite() {
         id="rsvp"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: CREAM, backgroundImage: stripeCream,
-          backgroundSize: '260px 260px, auto', backgroundRepeat: 'repeat',
-          backgroundBlendMode: 'soft-light, normal',
+          backgroundColor: CREAM, backgroundImage: "url('/photos/floral.jpg')",
+          backgroundSize: '700px auto', backgroundRepeat: 'repeat',
           padding: '110px 24px 70px',
           display: 'flex', flexDirection: 'column', justifyContent: 'center',
           color: DEEP_DARK, position: 'relative',
@@ -907,10 +906,10 @@ export default function WeddingSite() {
       >
         <div style={{
           maxWidth: 720, margin: '0 auto', width: '100%',
-          background: PISTACHIO,
+          background: CREAM,
           border: '1px solid rgba(175,184,133,.65)',
           padding: 'clamp(48px, 6vw, 72px) clamp(32px, 5vw, 56px)',
-          boxShadow: '0 22px 60px rgba(40,48,28,.18), 0 4px 14px rgba(40,48,28,.12)',
+          boxShadow: '0 6px 18px rgba(40,48,28,.13), 0 1px 3px rgba(40,48,28,.09)',
         }}>
           <div style={{ position: 'relative', width: '100%', maxWidth: 520, margin: '24px auto 0', aspectRatio: '600 / 480' }}>
             <svg viewBox="0 0 600 480" preserveAspectRatio="xMidYMid meet" aria-hidden="true"
@@ -940,7 +939,7 @@ export default function WeddingSite() {
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               textAlign: 'center',
               transform: 'rotate(-1.5deg)',
-              boxShadow: '0 10px 28px rgba(20,30,45,.20), 0 2px 5px rgba(20,30,45,.08)',
+              boxShadow: '0 6px 16px rgba(40,48,28,.15), 0 1px 3px rgba(40,48,28,.10)',
               color: DEEP_DARK,
             }}>
               <h3 className="heading" style={{
@@ -959,12 +958,12 @@ export default function WeddingSite() {
         </div>
       </section>
 
-      <SectionShell id="accommodations" tone="pattern" wide foot="More options on FAQ ↓">
+      <SectionShell id="accommodations" tone="ink" wide foot="More options on FAQ ↓">
         <Title>The Accommodations</Title>
         <AccommodationsBody />
       </SectionShell>
 
-      <SectionShell id="getting-there" tone="ink">
+      <SectionShell id="getting-there" tone="pattern">
         <Title>Travel Options</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginTop: 8 }} className="pair-grid">
           <Tile tone="ink" heading="By Car"      body="Cape May is at the southern tip of New Jersey. ~2.5 hrs from New York City, ~1.75 hrs from Philadelphia. Garden State Parkway south to Exit 0." />
@@ -974,7 +973,7 @@ export default function WeddingSite() {
         </div>
       </SectionShell>
 
-      <SectionShell id="things" tone="pattern">
+      <SectionShell id="things" tone="cream">
         <Title>Places to Eat</Title>
         <Lede>A few of our favorite spots in town. Reservations recommended for dinners.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 22px' }} className="things-grid">
@@ -990,15 +989,15 @@ export default function WeddingSite() {
           { name: "George's Place Beachfront", address: '301 Beach Avenue', note: "The Groom's favorite — gyros, salads, and smoothies." },
           { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', note: 'Worth the short drive.' },
           { name: 'Westside Market', address: '517 Broadway, West Cape May', note: 'Best deli in town.' },
-          ].map(eat => <EatTile key={eat.name} tone="pattern" {...eat} />)}
+          ].map(eat => <EatTile key={eat.name} tone="cream" {...eat} />)}
         </div>
       </SectionShell>
 
-      <SectionShell id="dress" tone="cream">
+      <SectionShell id="dress" tone="pattern">
         <Title>The Dress Code</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
-          <Tile tone="cream" heading="Welcome Drinks"  body={<>Summer Cocktail.<br/><br/>We ask that ladies wear a dress of any length, and gentleman wear a button down and pants. Jackets are preferred, but not required.</>} />
-          <Tile tone="cream" heading="Mass & Reception" body={<>Black Tie Optional.<br/><br/>We ask that ladies wear a floor-length gown. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
+          <Tile tone="pattern" heading="Welcome Drinks"  body={<>Summer Cocktail.<br/><br/>We ask that ladies wear a dress of any length, and gentleman wear a button down and pants. Jackets are preferred, but not required.</>} />
+          <Tile tone="pattern" heading="Mass & Reception" body={<>Black Tie Optional.<br/><br/>We ask that ladies wear a floor-length gown. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
         </div>
       </SectionShell>
 
@@ -1017,7 +1016,7 @@ export default function WeddingSite() {
       </SectionShell>
       */}
 
-      <SectionShell id="faq" tone="pattern">
+      <SectionShell id="faq" tone="ink">
         <Title>FAQ</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <FaqRow q='How far in advance should I book my hotel?' a='As soon as possible — hotels in Cape May in summer go fast.' />
@@ -1036,7 +1035,7 @@ export default function WeddingSite() {
         id="contact"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
+          backgroundColor: CREAM, backgroundImage: "url('/photos/floral.jpg')", backgroundSize: '700px auto', backgroundRepeat: 'repeat', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
