@@ -601,29 +601,35 @@ export default function WeddingSite() {
     return () => clearInterval(id);
   }, []);
 
-  // Gentle snap to the "Meet us in Cape May" section on mobile once scrolling settles near it
+  // Mobile: scrolling DOWN only — once the next section is ~60% on screen and scrolling settles,
+  // ease it up to the top. Scrolling up stays free.
   useEffect(() => {
     if (typeof window === 'undefined' || window.innerWidth > 768) return;
     const scroller = scrollerRef.current;
     if (!scroller) return;
     let t: ReturnType<typeof setTimeout>;
+    let lastTop = scroller.scrollTop;
     let cooldown = false;
     const onScroll = () => {
+      const top = scroller.scrollTop;
+      const goingDown = top > lastTop + 1;
+      lastTop = top;
       clearTimeout(t);
+      if (!goingDown || cooldown) return;
       t = setTimeout(() => {
-        if (cooldown) return;
-        const invite = document.getElementById('invite');
-        if (!invite) return;
-        const r = invite.getBoundingClientRect();
         const vh = window.innerHeight;
-        const visible = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
-        const ratio = visible / Math.min(r.height, vh);
-        if (ratio > 0.6 && Math.abs(r.top) > 8) {
-          cooldown = true;
-          invite.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          setTimeout(() => { cooldown = false; }, 900);
+        const sections = Array.from(scroller.querySelectorAll('section')) as HTMLElement[];
+        for (const sec of sections) {
+          const r = sec.getBoundingClientRect();
+          // section coming up from below, >=60% of the viewport now showing it, not yet aligned
+          if (r.top > 8 && r.top < vh * 0.4) {
+            cooldown = true;
+            sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => { cooldown = false; }, 800);
+            break;
+          }
         }
-      }, 160);
+      }, 140);
     };
     scroller.addEventListener('scroll', onScroll, { passive: true });
     return () => { scroller.removeEventListener('scroll', onScroll); clearTimeout(t); };
