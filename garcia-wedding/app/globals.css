@@ -83,3 +83,5 @@ body {
 }
 
 @keyframes mp-spin { to { transform: rotate(360deg); } }
+
+@keyframes rec-pulse { 0% { transform: scale(1); opacity: .5; } 70% { opacity: 0; } 100% { transform: scale(1.6); opacity: 0; } }
