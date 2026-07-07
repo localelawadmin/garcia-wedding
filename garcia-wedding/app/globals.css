@@ -81,3 +81,5 @@ body {
   width: 9px; height: 9px; border: none; border-radius: 50%;
   background: #FDFDFC;
 }
+
+@keyframes mp-spin { to { transform: rotate(360deg); } }

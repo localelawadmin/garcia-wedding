@@ -141,133 +141,121 @@ export default function MusicPlayer() {
     flexShrink: 0,
   };
 
+  const spinning = playing;
+
   return (
     <div
-      className="mp-pill"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
-        position: 'fixed', bottom: 22, right: 22,
-        display: 'flex', alignItems: 'center', gap: 10,
-        padding: '7px 18px 7px 12px',
-        background: 'rgba(78, 91, 55, .65)',
-        border: '1px solid rgba(242, 239, 233, .45)',
-        borderRadius: 999,
-        color: CREAM,
-        backdropFilter: 'blur(14px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(14px) saturate(180%)',
-        zIndex: 200,
-        transition: 'padding .3s ease, gap .3s ease',
+        position: 'fixed', bottom: 22, right: 22, zIndex: 200,
+        display: 'flex', alignItems: 'flex-end', gap: 12,
       }}
     >
-      {/* Expanded controls — appear on hover (LEFT of play, so play stays put) */}
+      {/* Control panel — unfurls to the LEFT on hover */}
       <div
         style={{
-          display: 'flex', alignItems: 'center', gap: 8,
-          maxWidth: hover ? 220 : 0,
+          display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 9,
+          maxWidth: hover ? 'min(300px, calc(100vw - 96px))' : 0,
           opacity: hover ? 1 : 0,
           overflow: 'hidden',
-          marginRight: hover ? 0 : -10,
-          transition: 'max-width .35s ease, opacity .25s ease, margin-right .35s ease',
+          padding: hover ? '12px 16px' : '12px 0',
+          background: 'rgba(78, 91, 55, .65)',
+          border: `1px solid ${hover ? 'rgba(253,253,252,.32)' : 'transparent'}`,
+          borderRadius: 16,
+          backdropFilter: 'blur(14px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(14px) saturate(180%)',
+          color: CREAM,
+          transition: 'max-width .4s ease, opacity .3s ease, padding .4s ease',
         }}
       >
-        <input
-          type="range" min={0} max={1} step={0.02}
-          value={muted ? 0 : volume}
-          onChange={handleVolume}
-          aria-label="Volume"
-          className="vol-slider"
-        />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1, minWidth: 0 }}>
+          <span style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: .55, fontWeight: 400, whiteSpace: 'nowrap' }}>
+            Now Playing
+          </span>
+          <span className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400, textAlign: 'right' }}>
+            {TRACKS[trackIdx].label}
+          </span>
+        </div>
 
-        <button onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'} type="button"
-          style={iconBtn}
-          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
-        >
-          {muted ? (
-            <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
-              <path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" />
-              <path d="M9 4 L11 6 M11 4 L9 6" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
-              <path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" />
-              <path d="M9 4 Q10 6 9 8 M10.5 3 Q12 6 10.5 9" />
-            </svg>
-          )}
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+          <button onClick={goPrev} aria-label="Previous" type="button" style={iconBtn}
+            onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}>
+            <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M9 2 L9 10 L4 6 Z M3 2 L4 2 L4 10 L3 10 Z"/></svg>
+          </button>
+          <button onClick={togglePlay} aria-label={playing && !muted ? 'Pause' : 'Play'} type="button" style={iconBtn}
+            onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}>
+            {playing && !muted ? (
+              <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><rect x="3" y="2" width="2" height="8"/><rect x="7" y="2" width="2" height="8"/></svg>
+            ) : (
+              <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L10 6 L3 10 Z" /></svg>
+            )}
+          </button>
+          <button onClick={goNext} aria-label="Next" type="button" style={iconBtn}
+            onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}>
+            <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L8 6 L3 10 Z M8 2 L9 2 L9 10 L8 10 Z"/></svg>
+          </button>
+        </div>
 
-        <button onClick={goNext} aria-label="Next" type="button"
-          style={iconBtn}
-          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
-        >
-          <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L8 6 L3 10 Z M8 2 L9 2 L9 10 L8 10 Z"/></svg>
-        </button>
-
-        <button onClick={goPrev} aria-label="Previous" type="button"
-          style={iconBtn}
-          onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
-        >
-          <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M9 2 L9 10 L4 6 Z M3 2 L4 2 L4 10 L3 10 Z"/></svg>
-        </button>
-
-        <span style={{ width: 1, height: 12, background: 'rgba(242,239,233,.3)', flexShrink: 0 }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'} type="button" style={iconBtn}
+            onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}>
+            {muted ? (
+              <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
+                <path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" />
+                <path d="M9 4 L11 6 M11 4 L9 6" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
+                <path d="M2 4 L4 4 L7 2 L7 10 L4 8 L2 8 Z" fill="currentColor" />
+                <path d="M9 4 Q10 6 9 8 M10.5 3 Q12 6 10.5 9" />
+              </svg>
+            )}
+          </button>
+          <input type="range" min={0} max={1} step={0.02} value={muted ? 0 : volume} onChange={handleVolume} aria-label="Volume" className="vol-slider" />
+        </div>
       </div>
 
-      {/* Play / Pause */}
-      <button
+      {/* Spinning record — HG label in the center; click toggles play */}
+      <div
         onClick={togglePlay}
+        role="button"
+        tabIndex={0}
         aria-label={playing && !muted ? 'Pause' : 'Play'}
-        type="button"
-        style={iconBtn}
-        onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); togglePlay(); } }}
+        style={{ position: 'relative', width: 56, height: 56, flexShrink: 0, cursor: 'pointer' }}
       >
-        {playing && !muted ? (
-          <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><rect x="3" y="2" width="2" height="8"/><rect x="7" y="2" width="2" height="8"/></svg>
-        ) : (
-          <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L10 6 L3 10 Z" /></svg>
-        )}
-      </button>
-
-      <div className="mp-track" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: .55, fontWeight: 400, whiteSpace: 'nowrap' }}>
-          Now Playing
-        </span>
-        <span className="mp-divider" style={{ width: 1, height: 12, background: 'rgba(242,239,233,.3)', flexShrink: 0 }} />
-        <span
-          className="heading mp-title"
-          style={{ fontSize: 14, lineHeight: 1, fontWeight: 400, whiteSpace: 'nowrap' }}
+        <div
+          style={{
+            width: '100%', height: '100%', borderRadius: '50%',
+            background: 'repeating-radial-gradient(circle at 50% 50%, #3b4528 0 1.4px, #4E5B37 1.4px 3px)',
+            boxShadow: '0 6px 16px rgba(40,48,28,.45)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            animation: 'mp-spin 3.4s linear infinite',
+            animationPlayState: spinning ? 'running' : 'paused',
+          }}
         >
-          {TRACKS[trackIdx].label}
-        </span>
+          <div style={{
+            width: 26, height: 26, borderRadius: '50%', background: CREAM,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: 'inset 0 0 0 0.5px rgba(78,91,55,.35)',
+          }}>
+            <img src="/photos/agenda/hg-monogram.png" alt="" style={{ width: 17, height: 'auto', display: 'block' }} />
+          </div>
+        </div>
+        <div aria-hidden="true" style={{
+          position: 'absolute', inset: 0, borderRadius: '50%', pointerEvents: 'none',
+          background: 'radial-gradient(circle at 34% 28%, rgba(255,255,255,.16), transparent 46%)',
+        }} />
+        <div aria-hidden="true" style={{
+          position: 'absolute', inset: 0, borderRadius: '50%', pointerEvents: 'none',
+          border: '1px solid rgba(40,48,28,.5)',
+        }} />
       </div>
-
-      <style jsx>{`
-        @media (max-width: 600px) {
-          :global(.mp-pill) {
-            max-width: calc(100vw - 24px) !important;
-            flex-wrap: wrap !important;
-            justify-content: flex-end !important;
-            border-radius: 20px !important;
-            padding: 8px 14px !important;
-          }
-          :global(.mp-track) {
-            flex-direction: column !important;
-            align-items: flex-end !important;
-            gap: 2px !important;
-          }
-          :global(.mp-divider) { display: none !important; }
-          :global(.mp-title) {
-            white-space: normal !important;
-            text-align: right !important;
-            max-width: 60vw !important;
-            line-height: 1.2 !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }
