@@ -241,10 +241,10 @@ const SectionShell: React.FC<{
 }> = ({ id, tone, children, wide, foot }) => {
   const isPattern  = tone === 'pattern';
   const sectionBg  = isPattern ? "url('/photos/floral.jpg')" : (tone === 'cream' ? stripeCream : stripeInk);
-  const boxBg      = tone === 'ink' ? DEEP_DARK : CREAM;
-  const fg         = tone === 'ink' ? CREAM : DEEP_DARK;
+  const boxBg      = tone === 'ink' ? PISTACHIO : CREAM;
+  const fg         = DEEP_DARK;
   // hairline rim: soft olive on light panels, faint cream on dark panels
-  const boxBorder  = tone === 'ink' ? 'rgba(242,239,233,.20)' : 'rgba(175,184,133,.65)';
+  const boxBorder  = 'rgba(175,184,133,.65)';
   const maxW       = wide ? 1080 : 720;
   return (
     <section
@@ -318,7 +318,7 @@ const Icon: React.FC<{ src: string; size?: number; tone: Tone }> = ({ src, size 
     alt=""
     style={{
       width: size, height: size, objectFit: 'contain', display: 'block',
-      filter: tone === 'ink' ? 'url(#tint-cream)' : 'url(#tint-deep-dark)',
+      filter: 'url(#tint-deep-dark)',
     }}
   />
 );
@@ -377,9 +377,9 @@ function downloadICS(id: string) {
   setTimeout(() => URL.revokeObjectURL(url), 200);
 }
 
-const EventActions: React.FC<{ calId: string; mapQuery: string; tone: Tone }> = ({ calId, mapQuery, tone }) => {
-  const hoverBg = tone === 'cream' ? DEEP_DARK : CREAM;
-  const hoverFg = tone === 'cream' ? CREAM : DEEP_DARK;
+const EventActions: React.FC<{ calId: string; mapQuery: string; tone: Tone }> = ({ calId, mapQuery }) => {
+  const hoverBg = DEEP_DARK;
+  const hoverFg = CREAM;
   const baseStyle: React.CSSProperties = {
     width: 30, height: 30, borderRadius: '50%',
     border: '1px solid currentColor', background: 'transparent',
@@ -480,20 +480,22 @@ type CardTone = 'ink' | 'cream' | 'pattern';
 function cardColors(tone: CardTone) {
   // Card fill contrasts with section tone; text + icon are inverse of fill.
   // Pattern section reads as cream-ish (floral wallpaper) so it sides with cream.
-  const isLightSection = tone === 'cream' || tone === 'pattern';
+  // ink sections now have a PISTACHIO panel, so their cards are cream; light/pattern
+  // sections have a cream panel, so their cards are pistachio. Text is always olive-deep.
   return {
-    bg: isLightSection ? DEEP_DARK : CREAM,
-    fg: isLightSection ? CREAM : DEEP_DARK,
+    bg: tone === 'ink' ? CREAM : PISTACHIO,
+    fg: DEEP_DARK,
+    border: 'rgba(175,184,133,.65)',
   };
 }
 
 const EatTile: React.FC<{ name: string; address: string; note: string; mapUrl?: string; tone?: CardTone }> = ({ name, address, note, mapUrl, tone = 'cream' }) => {
-  const { bg, fg } = cardColors(tone);
+  const { bg, fg, border } = cardColors(tone);
   // Default Google Maps URL: include the business NAME so Maps lands on the listing,
   // not just an address search. mapUrl prop can override with a real place URL.
   const href = mapUrl ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}, ${address}, Cape May, NJ`)}`;
   return (
-    <div style={{ padding: '22px 24px', background: bg, color: fg, fontSize: 13.5, lineHeight: 1.5, fontWeight: 400, letterSpacing: '-0.005em' }}>
+    <div style={{ padding: '22px 24px', background: bg, color: fg, border: `1px solid ${border}`, fontSize: 13.5, lineHeight: 1.5, fontWeight: 400, letterSpacing: '-0.005em' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
         <strong className="heading" style={{ display: 'block', fontSize: 19, opacity: .94, margin: 0, fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.005em' }}>{name}</strong>
         <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`Open ${name} in Google Maps`}
@@ -523,9 +525,9 @@ const Bracket: React.FC<{ pos: 'tl' | 'br' }> = ({ pos }) => (
 );
 
 const Tile: React.FC<{ heading: string; body: React.ReactNode; tone?: CardTone }> = ({ heading, body, tone = 'ink' }) => {
-  const { bg, fg } = cardColors(tone);
+  const { bg, fg, border } = cardColors(tone);
   return (
-    <div style={{ padding: '32px 30px', background: bg, color: fg }}>
+    <div style={{ padding: '32px 30px', background: bg, color: fg, border: `1px solid ${border}` }}>
       <h3 className="heading" style={{ fontSize: 26, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>{heading}</h3>
       <div style={{ width: 26, height: 1, background: 'currentColor', opacity: .35, margin: '12px 0 14px' }} />
       <p style={{ fontSize: 14, lineHeight: 1.55, opacity: .85, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{body}</p>
@@ -1047,9 +1049,9 @@ export default function WeddingSite() {
         }}>
           <svg viewBox="0 0 800 480" preserveAspectRatio="none"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-            <path d={WAVY_PATH} fill={DEEP_DARK} stroke="rgba(242,239,233,.5)" strokeWidth={1} vectorEffect="non-scaling-stroke" />
+            <path d={WAVY_PATH} fill={PISTACHIO} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
           </svg>
-          <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%', color: CREAM }}>
+          <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%', color: DEEP_DARK }}>
             <div style={{ fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 14, opacity: .75 }}>
               Any questions?
             </div>
