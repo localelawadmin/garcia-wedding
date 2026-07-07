@@ -256,7 +256,7 @@ const SectionShell: React.FC<{
         padding: '110px 24px 70px',
         backgroundColor: isPattern ? CREAM : (tone === 'cream' ? CREAM : DEEP),
         backgroundImage: sectionBg,
-        backgroundSize: isPattern ? '640px auto' : '260px 260px, auto',
+        backgroundSize: isPattern ? '700px auto' : '260px 260px, auto',
         backgroundRepeat: 'repeat',
         backgroundBlendMode: isPattern ? 'normal' : 'soft-light, normal',
         color: fg,
@@ -751,7 +751,7 @@ export default function WeddingSite() {
         id="invite"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: CREAM, backgroundImage: "url('/photos/floral.jpg')", backgroundSize: '640px auto', backgroundRepeat: 'repeat', color: DEEP_DARK,
+          backgroundColor: CREAM, backgroundImage: "url('/photos/floral.jpg')", backgroundSize: '700px auto', backgroundRepeat: 'repeat', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
