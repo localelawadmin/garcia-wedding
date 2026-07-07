@@ -806,16 +806,18 @@ export default function WeddingSite() {
             { src: ICON.carneys, name: 'After Party', meta: ['Fri · 10:30', "Carney's"] },
             { src: ICON.beach,   name: 'Beach Day',   meta: ['Sat · 10 AM', 'Cape May'] },
           ].map(card => (
-            <div key={card.name} style={{
+            <div key={card.name} className="agenda-item" style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 12,
             }}>
               <Icon src={card.src} size={96} tone="cream" />
-              <div className="heading" style={{ fontSize: 20, fontWeight: 400 }}>{card.name}</div>
-              <div style={{
-                fontSize: 10, letterSpacing: '0.14em', opacity: .65,
-                lineHeight: 1.5, fontWeight: 400, textTransform: 'uppercase',
-              }}>
-                {card.meta[0]}<br />{card.meta[1]}
+              <div className="agenda-text">
+                <div className="heading" style={{ fontSize: 20, fontWeight: 400 }}>{card.name}</div>
+                <div style={{
+                  fontSize: 10, letterSpacing: '0.14em', opacity: .65,
+                  lineHeight: 1.5, fontWeight: 400, textTransform: 'uppercase', marginTop: 6,
+                }}>
+                  {card.meta[0]}<br />{card.meta[1]}
+                </div>
               </div>
             </div>
           ))}
@@ -1017,7 +1019,25 @@ export default function WeddingSite() {
 
       <style jsx>{`
         @media (max-width: 768px) {
-          :global(.agenda-grid)  { grid-template-columns: repeat(5, 1fr) !important; gap: 8px !important; }
+          :global(.agenda-grid) {
+            grid-template-columns: 1fr !important;
+            gap: 2px !important;
+            max-width: 440px; margin-left: auto; margin-right: auto;
+          }
+          :global(.agenda-item) {
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            text-align: left !important;
+            gap: 22px !important;
+            padding: 12px 6px;
+          }
+          :global(.agenda-item:nth-child(even)) {
+            flex-direction: row-reverse !important;
+            text-align: right !important;
+          }
+          :global(.agenda-item img) { width: 66px !important; height: 66px !important; }
+          :global(.agenda-text) { flex: 1 1 auto; min-width: 0; }
           :global(.pair-grid)    { grid-template-columns: 1fr !important; gap: 16px !important; }
           :global(.things-grid)  { grid-template-columns: 1fr !important; gap: 16px !important; }
         }
