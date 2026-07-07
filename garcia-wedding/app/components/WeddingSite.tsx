@@ -241,7 +241,7 @@ const SectionShell: React.FC<{
 }> = ({ id, tone, children, wide, foot }) => {
   const isPattern  = tone === 'pattern';
   const sectionBg  = isPattern ? "url('/photos/floral.jpg')" : (tone === 'cream' ? stripeCream : stripeInk);
-  const boxBg      = tone === 'ink' ? PISTACHIO : CREAM;
+  const boxBg      = tone === 'cream' ? PISTACHIO : CREAM;
   const fg         = DEEP_DARK;
   // hairline rim: soft olive on light panels, faint cream on dark panels
   const boxBorder  = 'rgba(175,184,133,.65)';
@@ -256,7 +256,7 @@ const SectionShell: React.FC<{
         padding: '110px 24px 70px',
         backgroundColor: isPattern ? CREAM : (tone === 'cream' ? CREAM : DEEP),
         backgroundImage: sectionBg,
-        backgroundSize: isPattern ? '500px auto' : '260px 260px, auto',
+        backgroundSize: isPattern ? '640px auto' : '260px 260px, auto',
         backgroundRepeat: 'repeat',
         backgroundBlendMode: isPattern ? 'normal' : 'soft-light, normal',
         color: fg,
@@ -480,10 +480,10 @@ type CardTone = 'ink' | 'cream' | 'pattern';
 function cardColors(tone: CardTone) {
   // Card fill contrasts with section tone; text + icon are inverse of fill.
   // Pattern section reads as cream-ish (floral wallpaper) so it sides with cream.
-  // ink sections now have a PISTACHIO panel, so their cards are cream; light/pattern
-  // sections have a cream panel, so their cards are pistachio. Text is always olive-deep.
+  // light-stripe (cream) sections have a PISTACHIO panel -> cards are cream;
+  // dark-stripe (ink) & pattern sections have a cream panel -> cards are pistachio. Text always olive-deep.
   return {
-    bg: tone === 'ink' ? CREAM : PISTACHIO,
+    bg: tone === 'cream' ? CREAM : PISTACHIO,
     fg: DEEP_DARK,
     border: 'rgba(175,184,133,.65)',
   };
@@ -751,7 +751,7 @@ export default function WeddingSite() {
         id="invite"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light, normal', color: CREAM,
+          backgroundColor: CREAM, backgroundImage: "url('/photos/floral.jpg')", backgroundSize: '640px auto', backgroundRepeat: 'repeat', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -795,7 +795,7 @@ export default function WeddingSite() {
       </section>
 
       {/* AGENDA */}
-      <SectionShell id="agenda" tone="cream" wide foot="↓ scroll for each event">
+      <SectionShell id="agenda" tone="ink" wide foot="↓ scroll for each event">
         <Title>The Agenda</Title>
         <Lede>We can&apos;t wait to see you and celebrate in Cape May! Please see below for the details on each event.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 28, marginTop: 28 }} className="agenda-grid">
@@ -859,7 +859,7 @@ export default function WeddingSite() {
           ['Note',   'Welcome to Cape May! Come grab a drink with the Bride and Groom to kick off their wedding weekend.'],
         ]} />
 
-      <EventSection calId="ceremony" mapQuery="Our+Lady+Star+of+the+Sea+525+Washington+Street+Cape+May+NJ" id="ceremony" tone="ink" eyebrow="Friday · June 18"
+      <EventSection calId="ceremony" mapQuery="Our+Lady+Star+of+the+Sea+525+Washington+Street+Cape+May+NJ" id="ceremony" tone="cream" eyebrow="Friday · June 18"
         name="Nuptial Mass" iconSrc={ICON.osos}
         rows={[
           ['Time',    '1:30 PM'],
@@ -868,7 +868,7 @@ export default function WeddingSite() {
           ['Note',    'Mass will begin promptly. We kindly ask that you are seated 15–30 minutes prior.'],
         ]} />
 
-      <EventSection calId="reception" mapQuery="Isaac+Smith+Vineyard+1039+Seashore+Road+Cape+May+NJ" id="reception" tone="cream" eyebrow="Friday · June 18"
+      <EventSection calId="reception" mapQuery="Isaac+Smith+Vineyard+1039+Seashore+Road+Cape+May+NJ" id="reception" tone="pattern" eyebrow="Friday · June 18"
         name="Reception" iconSrc={ICON.tent}
         rows={[
           ['Time',    '5:00 — 10:00 PM'],
@@ -877,7 +877,7 @@ export default function WeddingSite() {
           ['Note',    'Please review the Travel section for information on arranged transportation.'],
         ]} />
 
-      <EventSection calId="afterparty" mapQuery="Carneys+Restaurant+Bar+411+Beach+Ave+Cape+May+NJ" id="afterparty" tone="pattern" eyebrow="Friday · June 18"
+      <EventSection calId="afterparty" mapQuery="Carneys+Restaurant+Bar+411+Beach+Ave+Cape+May+NJ" id="afterparty" tone="ink" eyebrow="Friday · June 18"
         name="After Party" iconSrc={ICON.carneys}
         rows={[
           ['Time',    '10:30 PM — 2:00 AM'],
@@ -885,7 +885,7 @@ export default function WeddingSite() {
           ['Address', '411 Beach Ave, Cape May, NJ'],
         ]} />
 
-      <EventSection calId="beach" mapQuery="Cape+May+Beach+NJ" id="beach" tone="ink" eyebrow="Saturday · June 19"
+      <EventSection calId="beach" mapQuery="Cape+May+Beach+NJ" id="beach" tone="pattern" eyebrow="Saturday · June 19"
         name="Beach Day" iconSrc={ICON.beach}
         rows={[
           ['Time', '10 AM onward'],
@@ -907,7 +907,7 @@ export default function WeddingSite() {
       >
         <div style={{
           maxWidth: 720, margin: '0 auto', width: '100%',
-          background: CREAM,
+          background: PISTACHIO,
           border: '1px solid rgba(175,184,133,.65)',
           padding: 'clamp(48px, 6vw, 72px) clamp(32px, 5vw, 56px)',
           boxShadow: '0 22px 60px rgba(40,48,28,.18), 0 4px 14px rgba(40,48,28,.12)',
@@ -974,7 +974,7 @@ export default function WeddingSite() {
         </div>
       </SectionShell>
 
-      <SectionShell id="things" tone="cream">
+      <SectionShell id="things" tone="pattern">
         <Title>Places to Eat</Title>
         <Lede>A few of our favorite spots in town. Reservations recommended for dinners.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 22px' }} className="things-grid">
@@ -990,15 +990,15 @@ export default function WeddingSite() {
           { name: "George's Place Beachfront", address: '301 Beach Avenue', note: "The Groom's favorite — gyros, salads, and smoothies." },
           { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', note: 'Worth the short drive.' },
           { name: 'Westside Market', address: '517 Broadway, West Cape May', note: 'Best deli in town.' },
-          ].map(eat => <EatTile key={eat.name} tone="cream" {...eat} />)}
+          ].map(eat => <EatTile key={eat.name} tone="pattern" {...eat} />)}
         </div>
       </SectionShell>
 
-      <SectionShell id="dress" tone="pattern">
+      <SectionShell id="dress" tone="cream">
         <Title>The Dress Code</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
-          <Tile tone="pattern" heading="Welcome Drinks"  body={<>Summer Cocktail.<br/><br/>We ask that ladies wear a dress of any length, and gentleman wear a button down and pants. Jackets are preferred, but not required.</>} />
-          <Tile tone="pattern" heading="Mass & Reception" body={<>Black Tie Optional.<br/><br/>We ask that ladies wear a floor-length gown. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
+          <Tile tone="cream" heading="Welcome Drinks"  body={<>Summer Cocktail.<br/><br/>We ask that ladies wear a dress of any length, and gentleman wear a button down and pants. Jackets are preferred, but not required.</>} />
+          <Tile tone="cream" heading="Mass & Reception" body={<>Black Tie Optional.<br/><br/>We ask that ladies wear a floor-length gown. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
         </div>
       </SectionShell>
 
@@ -1017,7 +1017,7 @@ export default function WeddingSite() {
       </SectionShell>
       */}
 
-      <SectionShell id="faq" tone="ink">
+      <SectionShell id="faq" tone="pattern">
         <Title>FAQ</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <FaqRow q='How far in advance should I book my hotel?' a='As soon as possible — hotels in Cape May in summer go fast.' />
@@ -1036,7 +1036,7 @@ export default function WeddingSite() {
         id="contact"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: CREAM, backgroundImage: stripeCream, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
+          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -1049,7 +1049,7 @@ export default function WeddingSite() {
         }}>
           <svg viewBox="0 0 800 480" preserveAspectRatio="none"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-            <path d={WAVY_PATH} fill={PISTACHIO} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
+            <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
           </svg>
           <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%', color: DEEP_DARK }}>
             <div style={{ fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 14, opacity: .75 }}>
