@@ -308,7 +308,7 @@ export default function MusicPlayer() {
       {!drawerOpen && (
         <button className="mp-open" type="button" aria-label="Open player controls" onClick={() => setPinned(true)}
           style={{ display: 'none', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, borderRadius: '50%', border: '1px solid rgba(253,253,252,.4)', background: 'rgba(78, 91, 55, .55)', color: CREAM, cursor: 'pointer', padding: 0, flexShrink: 0, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
-          <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 2 L5 6 L9 10"/></svg>
+          <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2 L4 6 L8 10"/></svg>
         </button>
       )}
 

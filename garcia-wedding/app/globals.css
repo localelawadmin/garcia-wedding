@@ -108,6 +108,7 @@ body {
 @media (max-width: 600px) {
   .hero-desktop { display: none !important; }
   .hero-mobile { display: flex !important; }
+  .contact-email { font-size: 10.5px !important; letter-spacing: 0.03em !important; }
 }
 
 @keyframes note-pulse { 0% { transform: scale(1); opacity: .6; } 70% { opacity: 0; } 100% { transform: scale(1.85); opacity: 0; } }

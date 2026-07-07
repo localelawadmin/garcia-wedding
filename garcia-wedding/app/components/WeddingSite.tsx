@@ -622,9 +622,9 @@ export default function WeddingSite() {
         for (const sec of sections) {
           const r = sec.getBoundingClientRect();
           // section coming up from below, >=60% of the viewport now showing it, not yet aligned
-          if (r.top > 8 && r.top < vh * 0.4) {
+          if (r.top > 6 && r.top < vh * 0.45) {
             cooldown = true;
-            sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            scroller.scrollTo({ top: scroller.scrollTop + r.top, behavior: 'smooth' });
             setTimeout(() => { cooldown = false; }, 800);
             break;
           }
@@ -1045,6 +1045,7 @@ export default function WeddingSite() {
             </h2>
             <a
               href="mailto:thegarciawedding.2027@gmail.com"
+              className="contact-email"
               style={{
                 display: 'inline-block', marginTop: 28,
                 fontSize: 13, letterSpacing: '0.15em', color: 'inherit', textDecoration: 'none',
