@@ -13,14 +13,15 @@ const CREAM = '#FDFDFC';
 export default function MusicPlayer() {
   const [trackIdx, setTrackIdx] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [volume, setVolume]   = useState(0.2);
+  const [volume, setVolume]   = useState(0.1);
   const [muted, setMuted]     = useState(true);
   const [hover, setHover]     = useState(false);
+  const [pinned, setPinned]   = useState(false);
   const [mq, setMq]           = useState<{ on: boolean; shift: number; dur: number }>({ on: false, shift: 0, dur: 0 });
 
   const audioRef  = useRef<HTMLAudioElement | null>(null);
   const idxRef    = useRef(0);
-  const volRef    = useRef(0.2);
+  const volRef    = useRef(0.1);
   const mutedRef  = useRef(true);
   const boxRef    = useRef<HTMLDivElement | null>(null);
   const textRef   = useRef<HTMLSpanElement | null>(null);
@@ -205,6 +206,7 @@ export default function MusicPlayer() {
   };
 
   const spinning = playing;
+  const drawerOpen = hover || pinned;
   const track = TRACKS[trackIdx];
   const nowText = track.artist ? `${track.label} · ${track.artist}` : track.label;
 
@@ -234,8 +236,8 @@ export default function MusicPlayer() {
 
   return (
     <div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onPointerEnter={e => { if (e.pointerType === 'mouse') setHover(true); }}
+      onPointerLeave={e => { if (e.pointerType === 'mouse') setHover(false); }}
       style={{
         position: 'fixed', bottom: 22, right: 22, zIndex: 200,
         display: 'flex', alignItems: 'flex-end', gap: 14,
@@ -245,12 +247,12 @@ export default function MusicPlayer() {
       <div
         style={{
           display: 'flex', alignItems: 'center',
-          maxWidth: hover ? 'min(340px, calc(100vw - 88px))' : 0,
-          opacity: hover ? 1 : 0,
+          maxWidth: drawerOpen ? 'min(340px, calc(100vw - 88px))' : 0,
+          opacity: drawerOpen ? 1 : 0,
           overflow: 'hidden',
-          padding: hover ? '9px 16px' : '9px 0',
+          padding: drawerOpen ? '9px 16px' : '9px 0',
           background: 'rgba(78, 91, 55, .68)',
-          border: `1px solid ${hover ? 'rgba(253,253,252,.30)' : 'transparent'}`,
+          border: `1px solid ${drawerOpen ? 'rgba(253,253,252,.30)' : 'transparent'}`,
           borderRadius: 16,
           backdropFilter: 'blur(14px) saturate(180%)',
           WebkitBackdropFilter: 'blur(14px) saturate(180%)',
@@ -295,12 +297,19 @@ export default function MusicPlayer() {
             {mtbtn(togglePlay, playing && !muted ? 'Pause' : 'Play', playing && !muted ? ICN.pause(10) : ICN.play(10))}
           </div>
 
-          <button className="mp-close" onClick={() => setHover(false)} aria-label="Close player" type="button"
-            style={{ display: 'none', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, borderRadius: '50%', border: '1px solid rgba(253,253,252,.4)', background: 'transparent', color: CREAM, cursor: 'pointer', padding: 0, flexShrink: 0 }}>
-            <svg viewBox="0 0 12 12" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><path d="M3 3 L9 9 M9 3 L3 9"/></svg>
+          <button className="mp-close" onClick={() => { setPinned(false); setHover(false); }} aria-label="Close player" type="button"
+            style={{ display: 'none', alignItems: 'center', justifyContent: 'center', width: 18, height: 18, borderRadius: '50%', border: '1px solid rgba(253,253,252,.4)', background: 'transparent', color: CREAM, cursor: 'pointer', padding: 0, flexShrink: 0 }}>
+            <svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M3 3 L9 9 M9 3 L3 9"/></svg>
           </button>
         </div>
       </div>
+
+      {!drawerOpen && (
+        <button className="mp-open" type="button" aria-label="Open player controls" onClick={() => setPinned(true)}
+          style={{ display: 'none', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, borderRadius: '50%', border: '1px solid rgba(253,253,252,.4)', background: 'rgba(78, 91, 55, .55)', color: CREAM, cursor: 'pointer', padding: 0, flexShrink: 0, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+          <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2 L4 6 L8 10"/></svg>
+        </button>
+      )}
 
       {/* Spinning record — HG label; pulse when playing; tonearm from top-right; click toggles play */}
       <div
