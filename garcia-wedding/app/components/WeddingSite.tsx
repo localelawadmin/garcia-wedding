@@ -701,7 +701,7 @@ export default function WeddingSite() {
           position: 'fixed', bottom: 156, right: 70,
           width: 36, height: 36, borderRadius: '50%',
           background: 'rgba(78, 91, 55, .65)', color: CREAM,
-          border: '1px solid rgba(242, 239, 233, .45)',
+          border: '1.5px solid rgba(242, 239, 233, .45)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           backdropFilter: 'blur(14px) saturate(180%)', WebkitBackdropFilter: 'blur(14px) saturate(180%)',
           cursor: 'pointer', padding: 0, zIndex: 200,

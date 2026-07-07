@@ -28,6 +28,7 @@ export default function MusicPlayer() {
   const discRef   = useRef<HTMLDivElement | null>(null);
   const ctxRef    = useRef<AudioContext | null>(null);
   const gainRef   = useRef<GainNode | null>(null);
+  const wantRef   = useRef(false);
 
   // Web Audio gain so we can start genuinely quiet even on iOS (element.volume is ignored there).
   const setGain = () => {
@@ -53,11 +54,32 @@ export default function MusicPlayer() {
   };
   const play = () => {
     const a = audioRef.current; if (!a) return;
+    wantRef.current = true;
     const start = () => a.play().then(() => setPlaying(true)).catch(() => {});
     const ctx = ctxRef.current;
     if (ctx && ctx.state === 'suspended') ctx.resume().then(start).catch(start);
     else start();
   };
+
+  // Keep the music alive on mobile — iOS may pause it (backgrounding, interruptions).
+  // If it should be playing but got paused, resume on return-to-tab or the next tap.
+  useEffect(() => {
+    const resume = () => {
+      const a = audioRef.current;
+      if (wantRef.current && a && a.paused) {
+        ctxRef.current?.resume?.().catch(() => {});
+        a.play().then(() => setPlaying(true)).catch(() => {});
+      }
+    };
+    document.addEventListener('visibilitychange', resume);
+    document.addEventListener('pointerdown', resume);
+    document.addEventListener('touchstart', resume);
+    return () => {
+      document.removeEventListener('visibilitychange', resume);
+      document.removeEventListener('pointerdown', resume);
+      document.removeEventListener('touchstart', resume);
+    };
+  }, []);
 
   useEffect(() => {
     const startIdx = Math.floor(Math.random() * TRACKS.length);
@@ -176,6 +198,7 @@ export default function MusicPlayer() {
     } else {
       a.pause();
       setPlaying(false);
+      wantRef.current = false;
     }
   };
 
@@ -277,8 +300,8 @@ export default function MusicPlayer() {
           </div>
 
           {/* Desktop controls: transport row + volume row */}
-          <div className="mp-ctrl-desktop" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="mp-ctrl-desktop" style={{ display: 'flex', flexDirection: 'column', gap: 6, width: 92 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               {tbtn(goPrev, 'Previous', ICN.prev(8))}
               {tbtn(togglePlay, playing && !muted ? 'Pause' : 'Play', playing && !muted ? ICN.pause(8) : ICN.play(8))}
               {tbtn(goNext, 'Next', ICN.next(8))}
