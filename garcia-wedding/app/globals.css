@@ -94,7 +94,7 @@ body {
   .mp-ctrl-desktop { display: none !important; }
   .mp-ctrl-mobile { display: grid !important; }
   .mp-close { display: flex !important; }
-  .mp-open { display: flex !important; }
+  .mp-prompt { display: flex !important; }
   .mp-info-box { max-width: 130px !important; }
 }
 

@@ -17,6 +17,7 @@ export default function MusicPlayer() {
   const [muted, setMuted]     = useState(true);
   const [hover, setHover]     = useState(false);
   const [pinned, setPinned]   = useState(false);
+  const [revealed, setRevealed] = useState(false);
   const [mq, setMq]           = useState<{ on: boolean; shift: number; dur: number }>({ on: false, shift: 0, dur: 0 });
 
   const audioRef  = useRef<HTMLAudioElement | null>(null);
@@ -110,11 +111,14 @@ export default function MusicPlayer() {
       document.removeEventListener('keydown', fire);
       document.removeEventListener('scroll', fire, true);
     };
-    document.addEventListener('pointerdown', fire);
-    document.addEventListener('wheel', fire);
-    document.addEventListener('touchstart', fire);
-    document.addEventListener('keydown', fire);
-    document.addEventListener('scroll', fire, true);
+    const isTouch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+    if (!isTouch) {
+      document.addEventListener('pointerdown', fire);
+      document.addEventListener('wheel', fire);
+      document.addEventListener('touchstart', fire);
+      document.addEventListener('keydown', fire);
+      document.addEventListener('scroll', fire, true);
+    }
 
     return () => {
       audio.pause();
@@ -124,6 +128,14 @@ export default function MusicPlayer() {
   }, []);
 
   // Marquee: the now-playing line always side-scrolls (iPod-style, seamless loop)
+  useEffect(() => {
+    const hero = document.getElementById('hero');
+    if (!hero) return;
+    const io = new IntersectionObserver(([e]) => { if (e.intersectionRatio < 0.5) { setRevealed(true); io.disconnect(); } }, { threshold: [0, 0.5, 1] });
+    io.observe(hero);
+    return () => io.disconnect();
+  }, []);
+
   useEffect(() => {
     const txt = textRef.current;
     if (!txt) return;
@@ -188,6 +200,8 @@ export default function MusicPlayer() {
 
   const togglePlay = () => {
     const a = audioRef.current; if (!a) return;
+    setupGraph();
+    setRevealed(true);
     if (mutedRef.current) {
       mutedRef.current = false;
       setMuted(false);
@@ -329,10 +343,27 @@ export default function MusicPlayer() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       {!drawerOpen && (
-        <button className="mp-open" type="button" aria-label="Open player controls" onClick={() => setPinned(true)}
-          style={{ display: 'none', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, borderRadius: '50%', border: '1px solid rgba(253,253,252,.4)', background: 'rgba(78, 91, 55, .55)', color: CREAM, cursor: 'pointer', padding: 0, flexShrink: 0, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
-          <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2 L4 6 L8 10"/></svg>
-        </button>
+        <div className="mp-prompt" style={{
+          display: 'none', position: 'relative', alignItems: 'center', justifyContent: 'flex-end',
+          width: revealed ? 24 : 104, height: 30, flexShrink: 0, transition: 'width .45s ease',
+        }}>
+          <span aria-hidden={revealed} style={{
+            position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)',
+            opacity: revealed ? 0 : 0.85, transition: 'opacity .35s ease',
+            whiteSpace: 'nowrap', textAlign: 'right', lineHeight: 1.3,
+            fontSize: 9.5, letterSpacing: '0.05em', textTransform: 'uppercase', color: CREAM, pointerEvents: 'none',
+          }}>Tap the record<br />to play HG&nbsp;Radio</span>
+          <button type="button" aria-label="Open player controls" onClick={() => setPinned(true)} style={{
+            position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)',
+            opacity: revealed ? 1 : 0, pointerEvents: revealed ? 'auto' : 'none', transition: 'opacity .35s ease',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: 22, height: 22, borderRadius: '50%', border: '1px solid rgba(253,253,252,.4)',
+            background: 'rgba(78, 91, 55, .55)', color: CREAM, cursor: 'pointer', padding: 0,
+            backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+          }}>
+            <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2 L4 6 L8 10"/></svg>
+          </button>
+        </div>
       )}
 
       {/* Spinning record — HG label; pulse when playing; tonearm from top-right; click toggles play */}
