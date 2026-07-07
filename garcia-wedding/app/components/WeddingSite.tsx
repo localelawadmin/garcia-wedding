@@ -892,78 +892,13 @@ export default function WeddingSite() {
           ['Note', 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia! Or stick around and enjoy a few extra days in Cape May.'],
         ]} />
 
-      {/* RSVP */}
-      <section
-        id="rsvp"
-        style={{
-          minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: CREAM, backgroundImage: "url('/photos/floral.jpg')",
-          backgroundSize: '700px auto', backgroundRepeat: 'repeat',
-          padding: '110px 24px 70px',
-          display: 'flex', flexDirection: 'column', justifyContent: 'center',
-          color: DEEP_DARK, position: 'relative',
-        }}
-      >
-        <div style={{
-          maxWidth: 720, margin: '0 auto', width: '100%',
-          background: CREAM,
-          border: '1px solid rgba(175,184,133,.65)',
-          padding: 'clamp(48px, 6vw, 72px) clamp(32px, 5vw, 56px)',
-          boxShadow: '0 6px 18px rgba(40,48,28,.13), 0 1px 3px rgba(40,48,28,.09)',
-        }}>
-          <div style={{ position: 'relative', width: '100%', maxWidth: 520, margin: '24px auto 0', aspectRatio: '600 / 480' }}>
-            <svg viewBox="0 0 600 480" preserveAspectRatio="xMidYMid meet" aria-hidden="true"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }}>
-              <defs>
-                <linearGradient id="envGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#647150" />
-                  <stop offset="100%" stopColor="#3E4A2C" />
-                </linearGradient>
-                <filter id="envShadow" x="-15%" y="-15%" width="130%" height="130%">
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="6" />
-                  <feOffset dx="0" dy="10" />
-                  <feComponentTransfer><feFuncA type="linear" slope="0.22" /></feComponentTransfer>
-                  <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
-                </filter>
-              </defs>
-              <g filter="url(#envShadow)">
-                <rect x="30" y="200" width="540" height="260" rx="5" fill="url(#envGrad)" />
-                <path d="M 30 200 L 300 360 L 570 200" stroke="rgba(255,255,255,.18)" strokeWidth={1} fill="none" />
-                <line x1="30" y1="460" x2="570" y2="460" stroke="rgba(0,0,0,.18)" strokeWidth={0.5} />
-              </g>
-            </svg>
-            <div style={{
-              position: 'absolute', top: '5%', left: '11%', right: '11%', bottom: '36%',
-              background: CREAM,
-              padding: 'clamp(22px, 4vw, 34px) clamp(20px, 3.5vw, 28px)',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-              textAlign: 'center',
-              transform: 'rotate(-1.5deg)',
-              boxShadow: '0 6px 16px rgba(40,48,28,.15), 0 1px 3px rgba(40,48,28,.10)',
-              color: DEEP_DARK,
-            }}>
-              <h3 className="heading" style={{
-                fontSize: 'clamp(48px, 7vw, 68px)', lineHeight: 1, letterSpacing: '-.01em', margin: '0 0 12px',
-                fontWeight: 400,
-              }}>RSVP</h3>
-              <div style={{ width: 36, height: 1, background: 'currentColor', opacity: .35, margin: '0 0 14px' }} />
-              <p style={{
-                fontSize: 'clamp(11px, 1.4vw, 12.5px)', lineHeight: 1.6, opacity: .85,
-                fontWeight: 400, letterSpacing: '-.005em', margin: 0, maxWidth: 320,
-              }}>
-                We are so excited to celebrate with you. Enclosed in your invitation there is an RSVP card and envelope. We kindly ask that you mark your response, enclose, and drop it in a mailbox.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <SectionShell id="accommodations" tone="ink" wide foot="More options on FAQ ↓">
+      <SectionShell id="accommodations" tone="pattern" wide foot="More options on FAQ ↓">
         <Title>The Accommodations</Title>
         <AccommodationsBody />
       </SectionShell>
 
-      <SectionShell id="getting-there" tone="pattern">
+      <SectionShell id="getting-there" tone="ink">
         <Title>Travel Options</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginTop: 8 }} className="pair-grid">
           <Tile tone="ink" heading="By Car"      body="Cape May is at the southern tip of New Jersey. ~2.5 hrs from New York City, ~1.75 hrs from Philadelphia. Garden State Parkway south to Exit 0." />
@@ -973,7 +908,7 @@ export default function WeddingSite() {
         </div>
       </SectionShell>
 
-      <SectionShell id="things" tone="cream">
+      <SectionShell id="things" tone="pattern">
         <Title>Places to Eat</Title>
         <Lede>A few of our favorite spots in town. Reservations recommended for dinners.</Lede>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 22px' }} className="things-grid">
@@ -989,15 +924,15 @@ export default function WeddingSite() {
           { name: "George's Place Beachfront", address: '301 Beach Avenue', note: "The Groom's favorite — gyros, salads, and smoothies." },
           { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', note: 'Worth the short drive.' },
           { name: 'Westside Market', address: '517 Broadway, West Cape May', note: 'Best deli in town.' },
-          ].map(eat => <EatTile key={eat.name} tone="cream" {...eat} />)}
+          ].map(eat => <EatTile key={eat.name} tone="pattern" {...eat} />)}
         </div>
       </SectionShell>
 
-      <SectionShell id="dress" tone="pattern">
+      <SectionShell id="dress" tone="cream">
         <Title>The Dress Code</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
-          <Tile tone="pattern" heading="Welcome Drinks"  body={<>Summer Cocktail.<br/><br/>We ask that ladies wear a dress of any length, and gentleman wear a button down and pants. Jackets are preferred, but not required.</>} />
-          <Tile tone="pattern" heading="Mass & Reception" body={<>Black Tie Optional.<br/><br/>We ask that ladies wear a floor-length gown. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
+          <Tile tone="cream" heading="Welcome Drinks"  body={<>Summer Cocktail.<br/><br/>We ask that ladies wear a dress of any length, and gentleman wear a button down and pants. Jackets are preferred, but not required.</>} />
+          <Tile tone="cream" heading="Mass & Reception" body={<>Black Tie Optional.<br/><br/>We ask that ladies wear a floor-length gown. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
         </div>
       </SectionShell>
 
@@ -1016,7 +951,7 @@ export default function WeddingSite() {
       </SectionShell>
       */}
 
-      <SectionShell id="faq" tone="ink">
+      <SectionShell id="faq" tone="pattern">
         <Title>FAQ</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <FaqRow q='How far in advance should I book my hotel?' a='As soon as possible — hotels in Cape May in summer go fast.' />
@@ -1035,7 +970,7 @@ export default function WeddingSite() {
         id="contact"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: CREAM, backgroundImage: "url('/photos/floral.jpg')", backgroundSize: '700px auto', backgroundRepeat: 'repeat', color: DEEP_DARK,
+          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',

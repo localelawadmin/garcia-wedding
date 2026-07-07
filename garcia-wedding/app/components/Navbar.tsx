@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 const LINKS = [
   { label: 'Schedule', href: '#agenda' },
   { label: 'Stay',     href: '#accommodations' },
@@ -9,7 +11,12 @@ const LINKS = [
   { label: 'FAQ',      href: '#faq' },
 ];
 
+const CREAM = '#FDFDFC';
+const bar: React.CSSProperties = { display: 'block', width: 22, height: 1.5, background: CREAM, borderRadius: 2 };
+
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
+
   return (
     <nav
       style={{
@@ -17,8 +24,8 @@ export default function Navbar() {
         background: 'rgba(78, 91, 55, 0.62)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(242, 239, 233, 0.12)',
-        color: '#FDFDFC',
+        borderBottom: '1px solid rgba(253, 253, 252, 0.12)',
+        color: CREAM,
       }}
     >
       <div
@@ -32,12 +39,11 @@ export default function Navbar() {
           <img
             src="/photos/agenda/haley-and-george.png"
             alt="Haley & George"
-            style={{
-              height: 52, width: 'auto', display: 'block',
-              position: 'relative', zIndex: 1,
-            }}
+            style={{ height: 52, width: 'auto', display: 'block', position: 'relative', zIndex: 1 }}
           />
         </a>
+
+        {/* Desktop inline links */}
         <div style={{ display: 'flex', gap: 26 }} className="nav-links">
           {LINKS.map(l => (
             <a
@@ -45,8 +51,7 @@ export default function Navbar() {
               href={l.href}
               style={{
                 fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase',
-                opacity: .85, fontWeight: 400,
-                color: '#FDFDFC', textDecoration: 'none',
+                opacity: .85, fontWeight: 400, color: CREAM, textDecoration: 'none',
                 transition: 'opacity .25s',
               }}
               onMouseEnter={e => { e.currentTarget.style.opacity = '1'; }}
@@ -56,10 +61,63 @@ export default function Navbar() {
             </a>
           ))}
         </div>
+
+        {/* Tablet / mobile hamburger */}
+        <button
+          type="button"
+          className="nav-burger"
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-expanded={open}
+          onClick={() => setOpen(o => !o)}
+          style={{
+            display: 'none', flexDirection: 'column', justifyContent: 'center',
+            gap: 5, width: 34, height: 34, padding: 0,
+            background: 'transparent', border: 'none', cursor: 'pointer',
+            position: 'relative', zIndex: 2,
+          }}
+        >
+          <span style={{ ...bar, transition: 'transform .3s ease, opacity .3s ease', transform: open ? 'translateY(6.5px) rotate(45deg)' : 'none' }} />
+          <span style={{ ...bar, transition: 'opacity .2s ease', opacity: open ? 0 : 1 }} />
+          <span style={{ ...bar, transition: 'transform .3s ease, opacity .3s ease', transform: open ? 'translateY(-6.5px) rotate(-45deg)' : 'none' }} />
+        </button>
       </div>
+
+      {/* Tablet / mobile dropdown menu */}
+      <div
+        className="nav-menu"
+        style={{
+          display: open ? 'flex' : 'none',
+          flexDirection: 'column',
+          background: 'rgba(78, 91, 55, 0.92)',
+          backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+          borderTop: '1px solid rgba(253, 253, 252, 0.12)',
+          padding: '4px 24px 16px',
+        }}
+      >
+        {LINKS.map(l => (
+          <a
+            key={l.href}
+            href={l.href}
+            onClick={() => setOpen(false)}
+            style={{
+              color: CREAM, textDecoration: 'none',
+              fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 400,
+              padding: '15px 2px', borderBottom: '1px solid rgba(253, 253, 252, 0.10)',
+            }}
+          >
+            {l.label}
+          </a>
+        ))}
+      </div>
+
       <style jsx>{`
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
           :global(.nav-links) { display: none !important; }
+          :global(.nav-burger) { display: flex !important; }
+        }
+        @media (min-width: 901px) {
+          :global(.nav-burger) { display: none !important; }
+          :global(.nav-menu) { display: none !important; }
         }
       `}</style>
     </nav>
