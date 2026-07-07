@@ -3,9 +3,14 @@
 import { useState, useEffect, useRef } from 'react';
 
 const TRACKS = [
-  { src: '/audio/leon-bridges.mp3',  label: 'Coming Home',              artist: 'Leon Bridges' },
-  { src: '/audio/sam-cooke.mp3',     label: 'Bring It On Home',         artist: 'Sam Cooke' },
-  { src: '/audio/frankie-valli.mp3', label: "Can't Take My Eyes Off You", artist: 'Frankie Valli' },
+  { src: '/audio/leon-bridges.mp3',                 label: 'Coming Home',                          artist: 'Leon Bridges' },
+  { src: '/audio/sam-cooke.mp3',                    label: 'Bring It On Home',                     artist: 'Sam Cooke' },
+  { src: '/audio/frankie-valli.mp3',                label: "Can't Take My Eyes Off You",           artist: 'Frankie Valli' },
+  { src: '/audio/nat-king-cole-love.mp3',           label: 'L-O-V-E',                              artist: 'Nat King Cole' },
+  { src: '/audio/natalie-cole-this-will-be.mp3',    label: 'This Will Be (An Everlasting Love)',   artist: 'Natalie Cole' },
+  { src: '/audio/van-morrison-crazy-love.mp3',      label: 'Crazy Love',                           artist: 'Van Morrison' },
+  { src: '/audio/stevie-wonder-isnt-she-lovely.mp3', label: "Isn't She Lovely",                    artist: 'Stevie Wonder' },
+  { src: '/audio/james-taylor-how-sweet-it-is.mp3', label: 'How Sweet It Is (To Be Loved by You)', artist: 'James Taylor' },
 ];
 
 const CREAM = '#FDFDFC';
