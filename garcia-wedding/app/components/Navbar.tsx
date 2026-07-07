@@ -121,13 +121,15 @@ export default function Navbar() {
         @media (max-width: 900px) {
           :global(.nav-links) { display: none !important; }
           :global(.nav-burger) { display: flex !important; }
-          :global(.nav-logo-full) { display: none !important; }
-          :global(.nav-logo-mark) { display: block !important; }
         }
         @media (min-width: 901px) {
           :global(.nav-burger) { display: none !important; }
           :global(.nav-menu) { display: none !important; }
-          :global(.nav-logo-mark) { display: none !important; }
+        }
+        /* Logo swaps to the compact HG monogram on phones only (not tablet) */
+        @media (max-width: 600px) {
+          :global(.nav-logo-full) { display: none !important; }
+          :global(.nav-logo-mark) { display: block !important; }
         }
       `}</style>
     </nav>
