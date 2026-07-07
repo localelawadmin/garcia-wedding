@@ -37,9 +37,16 @@ export default function Navbar() {
       >
         <a href="#hero" aria-label="Haley & George — home" style={{ display: 'block', position: 'relative', zIndex: 1 }}>
           <img
+            className="nav-logo-full"
             src="/photos/agenda/haley-and-george.png"
             alt="Haley & George"
             style={{ height: 52, width: 'auto', display: 'block', position: 'relative', zIndex: 1 }}
+          />
+          <img
+            className="nav-logo-mark"
+            src="/photos/agenda/hg-monogram-cream.png"
+            alt="Haley & George"
+            style={{ height: 40, width: 'auto', display: 'none', position: 'relative', zIndex: 1 }}
           />
         </a>
 
@@ -114,10 +121,13 @@ export default function Navbar() {
         @media (max-width: 900px) {
           :global(.nav-links) { display: none !important; }
           :global(.nav-burger) { display: flex !important; }
+          :global(.nav-logo-full) { display: none !important; }
+          :global(.nav-logo-mark) { display: block !important; }
         }
         @media (min-width: 901px) {
           :global(.nav-burger) { display: none !important; }
           :global(.nav-menu) { display: none !important; }
+          :global(.nav-logo-mark) { display: none !important; }
         }
       `}</style>
     </nav>
