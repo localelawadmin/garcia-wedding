@@ -143,6 +143,14 @@ export default function NoteFromCouple({ onOpenChange }: { onOpenChange?: (open:
         </div>
       </div>
 
+      {/* Pulsing ring while unread */}
+      {!open && !hasOpenedOnce && (
+        <span aria-hidden="true" style={{
+          position: 'absolute', inset: 0, borderRadius: '50%', pointerEvents: 'none',
+          border: `2px solid ${ACCENT}`,
+          animation: 'note-pulse 2s ease-out infinite',
+        }} />
+      )}
       {/* iOS-style unread badge — only visible when closed AND never been opened */}
       {!open && !hasOpenedOnce && (
         <span

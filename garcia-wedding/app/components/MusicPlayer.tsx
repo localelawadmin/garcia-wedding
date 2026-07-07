@@ -25,6 +25,38 @@ export default function MusicPlayer() {
   const boxRef    = useRef<HTMLDivElement | null>(null);
   const textRef   = useRef<HTMLSpanElement | null>(null);
   const discRef   = useRef<HTMLDivElement | null>(null);
+  const ctxRef    = useRef<AudioContext | null>(null);
+  const gainRef   = useRef<GainNode | null>(null);
+
+  // Web Audio gain so we can start genuinely quiet even on iOS (element.volume is ignored there).
+  const setGain = () => {
+    const v = mutedRef.current ? 0 : volRef.current;
+    if (gainRef.current) gainRef.current.gain.value = v;
+    else if (audioRef.current) audioRef.current.volume = v;
+  };
+  const setupGraph = () => {
+    if (ctxRef.current || !audioRef.current) return;
+    try {
+      const W = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
+      const Ctx = W.AudioContext || W.webkitAudioContext;
+      if (!Ctx) return;
+      const ctx = new Ctx();
+      const gain = ctx.createGain();
+      gain.gain.value = mutedRef.current ? 0 : volRef.current;
+      gain.connect(ctx.destination);
+      ctx.createMediaElementSource(audioRef.current).connect(gain);
+      audioRef.current.volume = 1;
+      ctxRef.current = ctx;
+      gainRef.current = gain;
+    } catch { /* keep element.volume fallback */ }
+  };
+  const play = () => {
+    const a = audioRef.current; if (!a) return;
+    const start = () => a.play().then(() => setPlaying(true)).catch(() => {});
+    const ctx = ctxRef.current;
+    if (ctx && ctx.state === 'suspended') ctx.resume().then(start).catch(start);
+    else start();
+  };
 
   useEffect(() => {
     const startIdx = Math.floor(Math.random() * TRACKS.length);
@@ -43,7 +75,9 @@ export default function MusicPlayer() {
     const fire = () => {
       if (fired || !audioRef.current) return;
       fired = true;
-      audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+      setupGraph();
+      setGain();
+      play();
       cleanup();
     };
     const cleanup = () => {
@@ -109,14 +143,12 @@ export default function MusicPlayer() {
   }, [playing]);
 
   const loadTrack = (idx: number) => {
-    if (audioRef.current) audioRef.current.pause();
-    const audio = new Audio(TRACKS[idx].src);
-    audio.muted = mutedRef.current;
-    audio.volume = volRef.current;
-    audioRef.current = audio;
+    const a = audioRef.current; if (!a) return;
+    a.pause();
+    a.src = TRACKS[idx].src;
     idxRef.current = idx;
-    audio.addEventListener('ended', goNext);
-    audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    setGain();
+    play();
   };
 
   const goNext = () => {
@@ -136,11 +168,10 @@ export default function MusicPlayer() {
     if (mutedRef.current) {
       mutedRef.current = false;
       setMuted(false);
-      a.muted = false;
-      a.volume = volRef.current;
     }
+    setGain();
     if (a.paused) {
-      a.play().then(() => setPlaying(true)).catch(() => {});
+      play();
     } else {
       a.pause();
       setPlaying(false);
@@ -151,31 +182,17 @@ export default function MusicPlayer() {
     const newMuted = !mutedRef.current;
     mutedRef.current = newMuted;
     setMuted(newMuted);
-    if (audioRef.current) {
-      audioRef.current.muted = newMuted;
-      audioRef.current.volume = volRef.current;
-      if (!newMuted && audioRef.current.paused) {
-        audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
-      }
-    }
+    setGain();
+    if (!newMuted && audioRef.current?.paused) play();
   };
 
   const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = parseFloat(e.target.value);
     volRef.current = v;
     setVolume(v);
-    if (v > 0 && mutedRef.current) {
-      mutedRef.current = false;
-      setMuted(false);
-      if (audioRef.current) {
-        audioRef.current.volume = v;
-        if (audioRef.current.paused) {
-          audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
-        }
-      }
-    } else if (audioRef.current) {
-      audioRef.current.volume = mutedRef.current ? 0 : v;
-    }
+    if (v > 0 && mutedRef.current) { mutedRef.current = false; setMuted(false); }
+    setGain();
+    if (v > 0 && audioRef.current?.paused) play();
   };
 
   const iconBtn: React.CSSProperties = {
@@ -245,7 +262,7 @@ export default function MusicPlayer() {
           {/* Song info */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 3, minWidth: 0 }}>
             <span style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: .55, fontWeight: 400, whiteSpace: 'nowrap' }}>Now Playing</span>
-            <div ref={boxRef} style={{ overflow: 'hidden', minWidth: 0, maxWidth: 168 }}>
+            <div ref={boxRef} className="mp-info-box" style={{ overflow: 'hidden', minWidth: 0, maxWidth: 168 }}>
               <div style={(mq.on
                 ? { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap', animation: `mp-marquee ${mq.dur}s linear infinite`, '--mq-shift': `-${mq.shift}px` }
                 : { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap' }) as React.CSSProperties}>
@@ -277,6 +294,11 @@ export default function MusicPlayer() {
             {mtbtn(toggleMute, muted ? 'Unmute' : 'Mute', muted ? ICN.muted(10) : ICN.unmuted(10))}
             {mtbtn(togglePlay, playing && !muted ? 'Pause' : 'Play', playing && !muted ? ICN.pause(10) : ICN.play(10))}
           </div>
+
+          <button className="mp-close" onClick={() => setHover(false)} aria-label="Close player" type="button"
+            style={{ display: 'none', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, borderRadius: '50%', border: '1px solid rgba(253,253,252,.4)', background: 'transparent', color: CREAM, cursor: 'pointer', padding: 0, flexShrink: 0 }}>
+            <svg viewBox="0 0 12 12" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><path d="M3 3 L9 9 M9 3 L3 9"/></svg>
+          </button>
         </div>
       </div>
 
