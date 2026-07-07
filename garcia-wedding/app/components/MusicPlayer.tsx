@@ -179,7 +179,7 @@ export default function MusicPlayer() {
       onMouseLeave={() => setHover(false)}
       style={{
         position: 'fixed', bottom: 22, right: 22, zIndex: 200,
-        display: 'flex', alignItems: 'center', gap: 14,
+        display: 'flex', alignItems: 'flex-end', gap: 14,
       }}
     >
       {/* Control panel — unfurls to the LEFT on hover */}
@@ -189,7 +189,7 @@ export default function MusicPlayer() {
           maxWidth: hover ? 'min(340px, calc(100vw - 88px))' : 0,
           opacity: hover ? 1 : 0,
           overflow: 'hidden',
-          padding: hover ? '13px 18px' : '13px 0',
+          padding: hover ? '9px 16px' : '9px 0',
           background: 'rgba(78, 91, 55, .68)',
           border: `1px solid ${hover ? 'rgba(253,253,252,.30)' : 'transparent'}`,
           borderRadius: 16,
@@ -199,7 +199,7 @@ export default function MusicPlayer() {
           transition: 'max-width .42s ease, opacity .3s ease, padding .42s ease',
         }}
       >
-        <div style={{ display: 'grid', gridTemplateColumns: 'auto 96px', columnGap: 16, rowGap: 9, alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'auto 96px', columnGap: 16, rowGap: 6, alignItems: 'center' }}>
           <span style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: .55, fontWeight: 400, whiteSpace: 'nowrap' }}>
             Now Playing
           </span>
