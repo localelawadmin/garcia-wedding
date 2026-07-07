@@ -65,23 +65,20 @@ export default function MusicPlayer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Marquee: scroll the now-playing text only when it overflows its box
+  // Marquee: the now-playing line always side-scrolls (iPod-style, seamless loop)
   useEffect(() => {
-    const box = boxRef.current, txt = textRef.current;
-    if (!box || !txt) return;
-    const SEP_W = 34;
-    const evaluate = () => {
-      const bw = box.clientWidth, tw = txt.scrollWidth;
-      if (bw > 0 && tw > bw + 1) {
-        const shift = tw + SEP_W;
-        setMq({ on: true, shift, dur: Math.max(5, shift / 30) });
-      } else {
-        setMq(prev => (prev.on ? { on: false, shift: 0, dur: 0 } : prev));
+    const txt = textRef.current;
+    if (!txt) return;
+    const measure = () => {
+      const tw = txt.scrollWidth;
+      if (tw > 4) {
+        const shift = tw + 34;
+        setMq({ on: true, shift, dur: Math.max(6, shift / 32) });
       }
     };
-    evaluate();
-    const ro = new ResizeObserver(evaluate);
-    ro.observe(box);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(txt);
     return () => ro.disconnect();
   }, [trackIdx]);
 
@@ -213,7 +210,7 @@ export default function MusicPlayer() {
               : <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L10 6 L3 10 Z" /></svg>)}
             {tbtn(goNext, 'Next', <svg viewBox="0 0 12 12" width="8" height="8" fill="currentColor"><path d="M3 2 L8 6 L3 10 Z M8 2 L9 2 L9 10 L8 10 Z"/></svg>)}
           </div>
-          <div ref={boxRef} style={{ overflow: 'hidden', minWidth: 0, maxWidth: 152 }}>
+          <div ref={boxRef} style={{ overflow: 'hidden', minWidth: 0, maxWidth: 168 }}>
             <div style={(mq.on
               ? { display: 'inline-flex', whiteSpace: 'nowrap', animation: `mp-marquee ${mq.dur}s linear infinite`, '--mq-shift': `-${mq.shift}px` }
               : { display: 'inline-flex', whiteSpace: 'nowrap' }) as React.CSSProperties}>
