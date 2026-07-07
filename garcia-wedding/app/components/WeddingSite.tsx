@@ -637,7 +637,7 @@ export default function WeddingSite() {
       {/* Countdown pill */}
       <div
         style={{
-          position: 'fixed', bottom: 100, right: 22,
+          position: 'fixed', bottom: 108, right: 22,
           display: 'flex', alignItems: 'center', gap: 7,
           padding: '4px 22px 10px',
           background: 'rgba(78, 91, 55, .65)', border: '1px solid rgba(242, 239, 233, .45)',

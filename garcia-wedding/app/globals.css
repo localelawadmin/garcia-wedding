@@ -96,9 +96,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  .wedding-scroller { scroll-snap-type: y proximity !important; }
-  .wedding-scroller > section { scroll-snap-align: none !important; }
-  #invite { scroll-snap-align: start !important; }
+  .wedding-scroller { scroll-snap-type: none !important; }
   .wedding-scroller > section + section { border-top: 1px solid #DEE9F2; }
   .event-row { grid-template-columns: 1fr !important; gap: 3px !important; }
   .event-row > div:first-child { padding-top: 0 !important; }

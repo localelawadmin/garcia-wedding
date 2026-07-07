@@ -24,38 +24,7 @@ export default function MusicPlayer() {
   const mutedRef  = useRef(true);
   const boxRef    = useRef<HTMLDivElement | null>(null);
   const textRef   = useRef<HTMLSpanElement | null>(null);
-  const ctxRef    = useRef<AudioContext | null>(null);
-  const gainRef   = useRef<GainNode | null>(null);
   const discRef   = useRef<HTMLDivElement | null>(null);
-
-  // Route audio through a Web Audio gain node so we can start genuinely quiet
-  // even on iOS, where HTMLAudioElement.volume is ignored.
-  const applyVolume = () => {
-    const v = mutedRef.current ? 0 : volRef.current;
-    if (gainRef.current) gainRef.current.gain.value = v;
-    else if (audioRef.current) audioRef.current.volume = v;
-  };
-  const resumeCtx = () => { ctxRef.current?.resume?.().catch(() => {}); };
-  const ensureGraph = (audio: HTMLAudioElement) => {
-    const el = audio as HTMLAudioElement & { _graphed?: boolean };
-    if (el._graphed) { applyVolume(); return; }
-    try {
-      const W = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
-      const Ctx = W.AudioContext || W.webkitAudioContext;
-      if (!Ctx) { applyVolume(); return; }
-      if (!ctxRef.current) {
-        ctxRef.current = new Ctx();
-        gainRef.current = ctxRef.current.createGain();
-        gainRef.current.connect(ctxRef.current.destination);
-      }
-      ctxRef.current.createMediaElementSource(audio).connect(gainRef.current as GainNode);
-      el._graphed = true;
-      audio.volume = 1;
-      applyVolume();
-    } catch {
-      applyVolume();
-    }
-  };
 
   useEffect(() => {
     const startIdx = Math.floor(Math.random() * TRACKS.length);
@@ -74,8 +43,6 @@ export default function MusicPlayer() {
     const fire = () => {
       if (fired || !audioRef.current) return;
       fired = true;
-      ensureGraph(audioRef.current);
-      resumeCtx();
       audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
       cleanup();
     };
@@ -144,12 +111,11 @@ export default function MusicPlayer() {
   const loadTrack = (idx: number) => {
     if (audioRef.current) audioRef.current.pause();
     const audio = new Audio(TRACKS[idx].src);
+    audio.muted = mutedRef.current;
     audio.volume = volRef.current;
     audioRef.current = audio;
     idxRef.current = idx;
     audio.addEventListener('ended', goNext);
-    ensureGraph(audio);
-    resumeCtx();
     audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
   };
 
@@ -170,9 +136,9 @@ export default function MusicPlayer() {
     if (mutedRef.current) {
       mutedRef.current = false;
       setMuted(false);
+      a.muted = false;
+      a.volume = volRef.current;
     }
-    applyVolume();
-    resumeCtx();
     if (a.paused) {
       a.play().then(() => setPlaying(true)).catch(() => {});
     } else {
@@ -185,10 +151,12 @@ export default function MusicPlayer() {
     const newMuted = !mutedRef.current;
     mutedRef.current = newMuted;
     setMuted(newMuted);
-    applyVolume();
-    if (!newMuted && audioRef.current?.paused) {
-      resumeCtx();
-      audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+    if (audioRef.current) {
+      audioRef.current.muted = newMuted;
+      audioRef.current.volume = volRef.current;
+      if (!newMuted && audioRef.current.paused) {
+        audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+      }
     }
   };
 
@@ -196,11 +164,17 @@ export default function MusicPlayer() {
     const v = parseFloat(e.target.value);
     volRef.current = v;
     setVolume(v);
-    if (v > 0 && mutedRef.current) { mutedRef.current = false; setMuted(false); }
-    applyVolume();
-    if (v > 0 && audioRef.current?.paused) {
-      resumeCtx();
-      audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+    if (v > 0 && mutedRef.current) {
+      mutedRef.current = false;
+      setMuted(false);
+      if (audioRef.current) {
+        audioRef.current.volume = v;
+        if (audioRef.current.paused) {
+          audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+        }
+      }
+    } else if (audioRef.current) {
+      audioRef.current.volume = mutedRef.current ? 0 : v;
     }
   };
 
@@ -224,7 +198,7 @@ export default function MusicPlayer() {
       {svg}
     </button>
   );
-  const mIconBtn: React.CSSProperties = { ...iconBtn, width: 30, height: 30 };
+  const mIconBtn: React.CSSProperties = { ...iconBtn, width: 26, height: 26 };
   const mtbtn = (onClick: () => void, label: string, svg: React.ReactNode) => (
     <button onClick={onClick} aria-label={label} type="button" style={mIconBtn}
       onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
@@ -297,7 +271,7 @@ export default function MusicPlayer() {
           </div>
 
           {/* Mobile controls: 2x2 (rev/fwd, vol/play-pause) — bigger */}
-          <div className="mp-ctrl-mobile" style={{ display: 'none', gridTemplateColumns: '1fr 1fr', gap: 9 }}>
+          <div className="mp-ctrl-mobile" style={{ display: 'none', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
             {mtbtn(goPrev, 'Previous', ICN.prev(10))}
             {mtbtn(goNext, 'Next', ICN.next(10))}
             {mtbtn(toggleMute, muted ? 'Unmute' : 'Mute', muted ? ICN.muted(10) : ICN.unmuted(10))}
