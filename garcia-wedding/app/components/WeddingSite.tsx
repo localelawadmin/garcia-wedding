@@ -601,38 +601,42 @@ export default function WeddingSite() {
     return () => clearInterval(id);
   }, []);
 
-  // Mobile: scrolling DOWN only — once the next section is ~60% on screen and scrolling settles,
-  // ease it up to the top. Scrolling up stays free.
+  // Mobile: scrolling DOWN only — when scrolling fully stops with the next section >=50% on
+  // screen, ease it up to the top. Driven by scrollend so it never fights an in-progress flick.
   useEffect(() => {
     if (typeof window === 'undefined' || window.innerWidth > 768) return;
     const scroller = scrollerRef.current;
     if (!scroller) return;
-    let t: ReturnType<typeof setTimeout>;
-    let lastTop = scroller.scrollTop;
+    let restTop = scroller.scrollTop;
     let cooldown = false;
-    const onScroll = () => {
-      const top = scroller.scrollTop;
-      const goingDown = top > lastTop + 1;
-      lastTop = top;
-      clearTimeout(t);
-      if (!goingDown || cooldown) return;
-      t = setTimeout(() => {
-        const vh = window.innerHeight;
-        const sections = Array.from(scroller.querySelectorAll('section')) as HTMLElement[];
-        for (const sec of sections) {
-          const r = sec.getBoundingClientRect();
-          // section coming up from below, >=60% of the viewport now showing it, not yet aligned
-          if (r.top > 6 && r.top < vh * 0.45) {
-            cooldown = true;
-            scroller.scrollTo({ top: scroller.scrollTop + r.top, behavior: 'smooth' });
-            setTimeout(() => { cooldown = false; }, 800);
-            break;
-          }
+    const trySnap = () => {
+      if (cooldown) return;
+      const now = scroller.scrollTop;
+      const down = now > restTop + 4;
+      restTop = now;
+      if (!down) return;
+      const vh = window.innerHeight;
+      const sections = Array.from(scroller.querySelectorAll('section')) as HTMLElement[];
+      for (const sec of sections) {
+        const r = sec.getBoundingClientRect();
+        if (r.top > 6 && r.top < vh * 0.5) {
+          cooldown = true;
+          scroller.scrollTo({ top: now + r.top, behavior: 'smooth' });
+          setTimeout(() => { cooldown = false; restTop = scroller.scrollTop; }, 750);
+          break;
         }
-      }, 140);
+      }
     };
-    scroller.addEventListener('scroll', onScroll, { passive: true });
-    return () => { scroller.removeEventListener('scroll', onScroll); clearTimeout(t); };
+    let t: ReturnType<typeof setTimeout> | undefined;
+    const onScroll = () => { clearTimeout(t); t = setTimeout(trySnap, 150); };
+    const hasScrollEnd = 'onscrollend' in window;
+    if (hasScrollEnd) scroller.addEventListener('scrollend', trySnap);
+    else scroller.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      scroller.removeEventListener('scrollend', trySnap);
+      scroller.removeEventListener('scroll', onScroll);
+      clearTimeout(t);
+    };
   }, []);
 
   const scrollTop = () => scrollerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
