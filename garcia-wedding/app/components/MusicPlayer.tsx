@@ -401,7 +401,7 @@ export default function MusicPlayer() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: 'inset 0 0 0 0.5px rgba(78,91,55,.35)',
           }}>
-            <img src="/photos/agenda/hg-monogram.png" alt="" style={{ width: 33, height: 'auto', display: 'block' }} />
+            <img src="/photos/agenda/hg-monogram.png" alt="" style={{ width: 24, height: 'auto', display: 'block' }} />
           </div>
         </div>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, borderRadius: '50%', pointerEvents: 'none', background: 'radial-gradient(circle at 34% 28%, rgba(255,255,255,.16), transparent 46%)' }} />
