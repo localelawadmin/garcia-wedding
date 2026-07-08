@@ -133,6 +133,7 @@ export default function LandingPage({ onSuccess }: Props) {
             }}
           >
             <path d={LANDER_WAVY} fill="#FDFDFC" stroke="#4E5B37" strokeWidth={1} vectorEffect="non-scaling-stroke" />
+            <path d={LANDER_WAVY} fill="none" stroke="#DEE9F2" strokeWidth={1} vectorEffect="non-scaling-stroke" transform="translate(240 300) scale(0.94) translate(-240 -300)" />
           </svg>
           <motion.img
             src="/photos/agenda/hg.png"
