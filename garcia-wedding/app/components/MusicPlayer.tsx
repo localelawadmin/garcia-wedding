@@ -349,7 +349,7 @@ export default function MusicPlayer() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       {!drawerOpen && (
         <div className="mp-prompt" style={{
-          display: 'none', position: 'relative', alignItems: 'center', justifyContent: 'flex-end',
+          display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'flex-end',
           width: revealed ? 24 : 104, height: 30, flexShrink: 0, transition: 'width .45s ease',
         }}>
           <span aria-hidden={revealed} style={{

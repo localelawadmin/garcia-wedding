@@ -120,13 +120,13 @@ export default function NoteFromCouple({ onOpenChange }: { onOpenChange?: (open:
             fontSize: 13.5, lineHeight: 1.55, margin: '0 0 12px',
             letterSpacing: '-0.005em', fontWeight: 400, color: 'inherit',
           }}>
-            Hi, we can&apos;t wait to celebrate with you all!
+            Hi! We can&apos;t wait to celebrate with you all in our favorite place!
           </p>
           <p style={{
             fontSize: 13.5, lineHeight: 1.55, margin: '0 0 12px',
             letterSpacing: '-0.005em', fontWeight: 400, color: 'inherit',
           }}>
-            Thanks for checking out our wedding website. All of your essential information is here — from locations and timing, to accommodation options, and more. Take a look, and always feel free to drop us an email, text, or call if there&apos;s something that hasn&apos;t been addressed here.
+            Welcome to our wedding website! All of your essential information can be found here - from locations and timing to accommodation options and more. Always feel free to send us an email, text, or call if there&apos;s something that hasn&apos;t been addressed here.
           </p>
           <p style={{
             fontSize: 13.5, lineHeight: 1.55, margin: '0 0 14px',
