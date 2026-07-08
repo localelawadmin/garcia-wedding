@@ -32,8 +32,8 @@ const NOISE_BG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/20
 const NOISE_CARD = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.95' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 
 // Stripe backgrounds with paper-grain texture layered on top via blend
-const stripeCream = `${NOISE_BG}, repeating-linear-gradient(90deg, ${SKY} 0 3px, ${CREAM} 3px 8.5px, ${PISTACHIO} 8.5px 32.7px, ${CREAM} 32.7px 38.5px, ${SKY} 38.5px 41.5px, ${CREAM} 41.5px 74px)`;
-const stripeInk   = `${NOISE_BG}, repeating-linear-gradient(90deg, ${SKY} 0 3px, ${OLIVE} 3px 8.5px, ${CREAM} 8.5px 32.7px, ${OLIVE} 32.7px 38.5px, ${SKY} 38.5px 41.5px, ${OLIVE} 41.5px 74px)`;
+const stripeCream = `${NOISE_BG}, linear-gradient(90deg, ${SKY} 0 3px, ${CREAM} 3px 9px, ${PISTACHIO} 9px 34px, ${CREAM} 34px 40px, ${SKY} 40px 43px, ${CREAM} 43px 76px)`;
+const stripeInk   = `${NOISE_BG}, linear-gradient(90deg, ${SKY} 0 3px, ${OLIVE} 3px 9px, ${CREAM} 9px 34px, ${OLIVE} 34px 40px, ${SKY} 40px 43px, ${OLIVE} 43px 76px)`;
 const stripeCreamSize = '280px 280px, auto';
 const stripeInkSize   = '280px 280px, auto';
 
@@ -256,7 +256,7 @@ const SectionShell: React.FC<{
         padding: '110px 24px 70px',
         backgroundColor: isPattern ? CREAM : (tone === 'cream' ? CREAM : DEEP),
         backgroundImage: sectionBg,
-        backgroundSize: isPattern ? '700px auto' : '260px 260px, auto',
+        backgroundSize: isPattern ? '700px auto' : '260px 260px, 76px 100%',
         backgroundRepeat: 'repeat',
         backgroundBlendMode: isPattern ? 'normal' : 'soft-light, normal',
         color: fg,
@@ -802,7 +802,7 @@ export default function WeddingSite() {
         id="invite"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
+          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, 76px 100%', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -819,7 +819,7 @@ export default function WeddingSite() {
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
           >
             <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
-            <path d={WAVY_PATH} fill="none" stroke={SKY} strokeWidth={1} vectorEffect="non-scaling-stroke" transform="translate(400 240) scale(0.94) translate(-400 -240)" />
+            <path d={WAVY_PATH} fill="none" stroke={SKY} strokeWidth={1.5} vectorEffect="non-scaling-stroke" transform="translate(400 240) scale(0.94) translate(-400 -240)" />
           </svg>
           <img src="/photos/agenda/hg-monogram.png" alt="" aria-hidden="true" style={{ position: 'absolute', bottom: '10.5%', left: '50%', transform: 'translateX(-50%)', height: 34, width: 'auto', zIndex: 1, opacity: .92, pointerEvents: 'none' }} />
           <div style={{
@@ -1025,7 +1025,7 @@ export default function WeddingSite() {
         id="contact"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, auto', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
+          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, 76px 100%', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -1039,7 +1039,7 @@ export default function WeddingSite() {
           <svg viewBox="0 0 800 480" preserveAspectRatio="none"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
             <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
-            <path d={WAVY_PATH} fill="none" stroke={SKY} strokeWidth={1} vectorEffect="non-scaling-stroke" transform="translate(400 240) scale(0.94) translate(-400 -240)" />
+            <path d={WAVY_PATH} fill="none" stroke={SKY} strokeWidth={1.5} vectorEffect="non-scaling-stroke" transform="translate(400 240) scale(0.94) translate(-400 -240)" />
           </svg>
           <img src="/photos/agenda/hg-monogram.png" alt="" aria-hidden="true" style={{ position: 'absolute', bottom: '10.5%', left: '50%', transform: 'translateX(-50%)', height: 34, width: 'auto', zIndex: 1, opacity: .92, pointerEvents: 'none' }} />
           <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%', color: DEEP_DARK }}>
