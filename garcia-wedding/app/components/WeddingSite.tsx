@@ -820,7 +820,7 @@ export default function WeddingSite() {
           >
             <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
           </svg>
-          <img src="/photos/agenda/hg-monogram.png" alt="" aria-hidden="true" style={{ position: 'absolute', bottom: '8.5%', left: '50%', transform: 'translateX(-50%)', height: 34, width: 'auto', zIndex: 1, opacity: .92, pointerEvents: 'none' }} />
+          <img src="/photos/agenda/hg-monogram.png" alt="" aria-hidden="true" style={{ position: 'absolute', bottom: '10.5%', left: '50%', transform: 'translateX(-50%)', height: 34, width: 'auto', zIndex: 1, opacity: .92, pointerEvents: 'none' }} />
           <div style={{
             position: 'relative', zIndex: 1,
             padding: '0 clamp(48px, 8vw, 96px)',
@@ -1039,7 +1039,7 @@ export default function WeddingSite() {
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
             <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
           </svg>
-          <img src="/photos/agenda/hg-monogram.png" alt="" aria-hidden="true" style={{ position: 'absolute', bottom: '8.5%', left: '50%', transform: 'translateX(-50%)', height: 34, width: 'auto', zIndex: 1, opacity: .92, pointerEvents: 'none' }} />
+          <img src="/photos/agenda/hg-monogram.png" alt="" aria-hidden="true" style={{ position: 'absolute', bottom: '10.5%', left: '50%', transform: 'translateX(-50%)', height: 34, width: 'auto', zIndex: 1, opacity: .92, pointerEvents: 'none' }} />
           <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%', color: DEEP_DARK }}>
             <div style={{ fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 14, opacity: .75 }}>
               Any questions?

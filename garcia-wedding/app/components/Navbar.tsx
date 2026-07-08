@@ -21,7 +21,7 @@ export default function Navbar() {
     <nav
       style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-        background: 'rgba(78, 91, 55, 0.62)',
+        background: 'rgba(79, 110, 142, 0.74)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         borderBottom: '1px solid rgba(253, 253, 252, 0.12)',
@@ -95,7 +95,7 @@ export default function Navbar() {
         style={{
           display: open ? 'flex' : 'none',
           flexDirection: 'column',
-          background: 'rgba(78, 91, 55, 0.92)',
+          background: 'rgba(79, 110, 142, 0.94)',
           backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
           borderTop: '1px solid rgba(253, 253, 252, 0.12)',
           padding: '4px 24px 16px',

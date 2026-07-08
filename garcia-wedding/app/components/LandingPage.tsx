@@ -51,7 +51,7 @@ export default function LandingPage({ onSuccess }: Props) {
 
   return (
     <motion.div
-      style={{ position: 'fixed', inset: 0, background: '#4E5B37', overflow: 'hidden' }}
+      style={{ position: 'fixed', inset: 0, background: '#364C63', overflow: 'hidden' }}
       animate={{ opacity: exiting ? 0 : 1 }}
       transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
     >
@@ -75,7 +75,7 @@ export default function LandingPage({ onSuccess }: Props) {
       </div>
 
       {/* Dark overlay */}
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(78, 91, 55, .42)', backdropFilter: 'saturate(180%)', WebkitBackdropFilter: 'saturate(180%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(79, 110, 142, .42)', backdropFilter: 'saturate(180%)', WebkitBackdropFilter: 'saturate(180%)' }} />
 
       {/* Grain */}
       <div style={{
@@ -87,7 +87,7 @@ export default function LandingPage({ onSuccess }: Props) {
       {/* Vignette */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(circle at center, rgba(78,91,55,0) 30%, rgba(78,91,55,.3) 80%, rgba(78,91,55,.6) 100%)',
+        background: 'radial-gradient(circle at center, rgba(54,76,99,0) 30%, rgba(54,76,99,.3) 80%, rgba(54,76,99,.6) 100%)',
       }} />
 
       {/* SVG defs for tinting the HG lockup to deep-dark on the cream card */}
