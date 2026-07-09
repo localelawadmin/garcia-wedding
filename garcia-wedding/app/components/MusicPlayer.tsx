@@ -11,6 +11,9 @@ const TRACKS = [
   { src: '/audio/van-morrison-crazy-love.mp3',      label: 'Crazy Love',                           artist: 'Van Morrison' },
   { src: '/audio/stevie-wonder-isnt-she-lovely.mp3', label: "Isn't She Lovely",                    artist: 'Stevie Wonder' },
   { src: '/audio/james-taylor-how-sweet-it-is.mp3', label: 'How Sweet It Is (To Be Loved by You)', artist: 'James Taylor' },
+  { src: '/audio/elvis-presley-cant-help-falling-in-love.mp3', label: "Can't Help Falling in Love", artist: 'Elvis Presley' },
+  { src: '/audio/luther-vandross-so-amazing.mp3',   label: 'So Amazing',                           artist: 'Luther Vandross' },
+  { src: '/audio/perry-como-more.mp3',              label: 'More',                                 artist: 'Perry Como' },
 ];
 
 const CREAM = '#FDFDFC';
