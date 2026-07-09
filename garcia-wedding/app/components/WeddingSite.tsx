@@ -807,7 +807,7 @@ export default function WeddingSite() {
           position: 'relative',
         }}
       >
-        <div style={{
+        <div className="wavy-card" style={{
           position: 'relative', width: '100%', maxWidth: 760,
           aspectRatio: '800 / 480',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -820,27 +820,31 @@ export default function WeddingSite() {
             <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
             <path d={WAVY_PATH} fill="none" stroke={SKY} strokeWidth={1.5} vectorEffect="non-scaling-stroke" transform="translate(400 240) scale(0.94) translate(-400 -240)" />
           </svg>
-          <img src="/photos/agenda/hg-monogram.png" alt="" aria-hidden="true" style={{ position: 'absolute', bottom: '10.5%', left: '50%', transform: 'translateX(-50%)', height: 34, width: 'auto', zIndex: 1, opacity: .92, pointerEvents: 'none' }} />
+          <img src="/photos/agenda/hg-monogram.png" alt="" aria-hidden="true" className="oval-hg" style={{ position: 'absolute', bottom: '10.5%', left: '50%', transform: 'translateX(-50%)', height: 34, width: 'auto', zIndex: 1, opacity: .92, pointerEvents: 'none' }} />
           <div style={{
             position: 'relative', zIndex: 1,
             padding: '0 clamp(48px, 8vw, 96px)',
             textAlign: 'center', width: '100%', color: DEEP_DARK,
           }}>
-            <h2 className="heading" style={{
-              fontSize: 'clamp(40px, 5.5vw, 68px)', lineHeight: 1,
-              margin: 0, letterSpacing: '-0.005em', paddingTop: '0.12em',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18,
-              whiteSpace: 'nowrap',
-            }}>
-              <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
-              Meet us in Cape May!
-              <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
-            </h2>
-            <div style={{
-              fontSize: 18, letterSpacing: '0.08em', textTransform: 'uppercase',
-              fontWeight: 400, marginTop: 24, opacity: .8,
-            }}>
-              June 17–19, 2027
+            {/* heading is the only in-flow child, so it sits dead-center; sub-line floats beneath it */}
+            <div style={{ position: 'relative' }}>
+              <h2 className="heading" style={{
+                fontSize: 'clamp(40px, 5.5vw, 68px)', lineHeight: 1,
+                margin: 0, letterSpacing: '-0.005em', paddingTop: '0.12em',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18,
+                whiteSpace: 'nowrap',
+              }}>
+                <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
+                Meet us in Cape May!
+                <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
+              </h2>
+              <div style={{
+                position: 'absolute', top: '100%', left: 0, right: 0,
+                fontSize: 18, letterSpacing: '0.08em', textTransform: 'uppercase',
+                fontWeight: 400, marginTop: 14, opacity: .8,
+              }}>
+                June 17–19, 2027
+              </div>
             </div>
           </div>
         </div>
@@ -1029,7 +1033,7 @@ export default function WeddingSite() {
           position: 'relative',
         }}
       >
-        <div style={{
+        <div className="wavy-card" style={{
           position: 'relative', width: '100%', maxWidth: 760,
           aspectRatio: '800 / 480',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -1039,33 +1043,38 @@ export default function WeddingSite() {
             <path d={WAVY_PATH} fill={CREAM} stroke={DEEP_DARK} strokeWidth={1} vectorEffect="non-scaling-stroke" />
             <path d={WAVY_PATH} fill="none" stroke={SKY} strokeWidth={1.5} vectorEffect="non-scaling-stroke" transform="translate(400 240) scale(0.94) translate(-400 -240)" />
           </svg>
-          <img src="/photos/agenda/hg-monogram.png" alt="" aria-hidden="true" style={{ position: 'absolute', bottom: '10.5%', left: '50%', transform: 'translateX(-50%)', height: 34, width: 'auto', zIndex: 1, opacity: .92, pointerEvents: 'none' }} />
+          <img src="/photos/agenda/hg-monogram.png" alt="" aria-hidden="true" className="oval-hg" style={{ position: 'absolute', bottom: '10.5%', left: '50%', transform: 'translateX(-50%)', height: 34, width: 'auto', zIndex: 1, opacity: .92, pointerEvents: 'none' }} />
           <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%', color: DEEP_DARK }}>
-            <div style={{ fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 14, opacity: .75 }}>
-              Any questions?
+            {/* heading is the only in-flow child, so it sits dead-center; eyebrow + email float above/below */}
+            <div style={{ position: 'relative' }}>
+              <div style={{ position: 'absolute', bottom: '100%', left: 0, right: 0, fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 10, opacity: .75 }}>
+                Any questions?
+              </div>
+              <h2 className="heading" style={{
+                fontSize: 'clamp(40px, 5.5vw, 68px)', lineHeight: 1, margin: 0, letterSpacing: '-0.005em', paddingTop: '0.12em',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, whiteSpace: 'nowrap',
+              }}>
+                <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
+                Send us a note!
+                <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
+              </h2>
+              <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 14 }}>
+              <a
+                href="mailto:thegarciawedding.2027@gmail.com"
+                className="contact-email"
+                style={{
+                  display: 'inline-block',
+                  fontSize: 13, letterSpacing: '0.15em', color: 'inherit', textDecoration: 'none',
+                  borderBottom: '1px solid currentColor', paddingBottom: 2,
+                  transition: 'opacity .25s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.opacity = '0.65'; }}
+                onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+              >
+                thegarciawedding.2027@gmail.com
+              </a>
+              </div>
             </div>
-            <h2 className="heading" style={{
-              fontSize: 'clamp(40px, 5.5vw, 68px)', lineHeight: 1, margin: 0, letterSpacing: '-0.005em', paddingTop: '0.12em',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, whiteSpace: 'nowrap',
-            }}>
-              <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
-              Send us a note!
-              <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
-            </h2>
-            <a
-              href="mailto:thegarciawedding.2027@gmail.com"
-              className="contact-email"
-              style={{
-                display: 'inline-block', marginTop: 28,
-                fontSize: 13, letterSpacing: '0.15em', color: 'inherit', textDecoration: 'none',
-                borderBottom: '1px solid currentColor', paddingBottom: 2,
-                transition: 'opacity .25s',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.opacity = '0.65'; }}
-              onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
-            >
-              thegarciawedding.2027@gmail.com
-            </a>
           </div>
         </div>
       </section>
