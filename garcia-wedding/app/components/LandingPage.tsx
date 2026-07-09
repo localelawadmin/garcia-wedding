@@ -144,8 +144,8 @@ export default function LandingPage({ onSuccess }: Props) {
               width: 'clamp(120px, 14vw, 160px)', height: 'auto', display: 'block',
               filter: 'url(#lander-tint-deep-dark)',
             }}
-            initial={{ opacity: 0, y: -8, x: -8 }}
-            animate={{ opacity: 1, y: 0, x: -8 }}
+            initial={{ opacity: 0, y: -8, x: '-7.5%' }}
+            animate={{ opacity: 1, y: 0, x: '-7.5%' }}
             transition={{ duration: 0.8, delay: 0.3 }}
           />
 
