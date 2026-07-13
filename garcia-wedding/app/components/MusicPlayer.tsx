@@ -30,6 +30,18 @@ export default function MusicPlayer() {
 
   const audioRef  = useRef<HTMLAudioElement | null>(null);
   const idxRef    = useRef(0);
+  const queueRef  = useRef<number[]>([]);   // shuffled play order (a "bag")
+  const posRef    = useRef(0);              // position within the bag
+
+  // Fisher-Yates shuffle of all track indices
+  const shuffleBag = () => {
+    const a = TRACKS.map((_, i) => i);
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
   const volRef    = useRef(0.1);
   const mutedRef  = useRef(true);
   const boxRef    = useRef<HTMLDivElement | null>(null);
@@ -91,7 +103,10 @@ export default function MusicPlayer() {
   }, []);
 
   useEffect(() => {
-    const startIdx = Math.floor(Math.random() * TRACKS.length);
+    const bag = shuffleBag();
+    queueRef.current = bag;
+    posRef.current = 0;
+    const startIdx = bag[0];
     setTrackIdx(startIdx);
     idxRef.current = startIdx;
     const audio = new Audio(TRACKS[startIdx].src);
@@ -195,13 +210,23 @@ export default function MusicPlayer() {
   };
 
   const goNext = () => {
-    const next = (idxRef.current + Math.floor(Math.random() * (TRACKS.length - 1)) + 1) % TRACKS.length;
+    posRef.current += 1;
+    if (posRef.current >= queueRef.current.length) {
+      const last = idxRef.current;
+      const bag = shuffleBag();
+      // avoid the same song playing twice across the reshuffle seam
+      if (bag.length > 1 && bag[0] === last) { [bag[0], bag[1]] = [bag[1], bag[0]]; }
+      queueRef.current = bag;
+      posRef.current = 0;
+    }
+    const next = queueRef.current[posRef.current];
     setTrackIdx(next);
     loadTrack(next);
   };
 
   const goPrev = () => {
-    const prev = (idxRef.current - 1 + TRACKS.length) % TRACKS.length;
+    posRef.current = Math.max(0, posRef.current - 1);
+    const prev = queueRef.current[posRef.current] ?? idxRef.current;
     setTrackIdx(prev);
     loadTrack(prev);
   };

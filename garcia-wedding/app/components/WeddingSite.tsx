@@ -323,12 +323,12 @@ const Icon: React.FC<{ src: string; size?: number; tone: Tone }> = ({ src, size 
 );
 
 
-const EVENT_DATA: Record<string, { summary: string; start: string; end: string; location: string; description: string }> = {
+const EVENT_DATA: Record<string, { summary: string; start: string; end: string; location: string; description: string; allDay?: boolean }> = {
   welcome:    { summary: 'Welcome Drinks — Haley & George', start: '20270618T000000Z', end: '20270618T020000Z', location: 'The Pier House at La Mer Beachfront Resort, 1317 Beach Avenue, Cape May, NJ', description: 'Welcome to Cape May — come grab a drink with us before the weekend takes off.' },
-  ceremony:   { summary: 'Wedding Ceremony — Haley & George', start: '20270618T180000Z', end: '20270618T193000Z', location: 'Our Lady Star of the Sea, 525 Washington Street, Cape May, NJ', description: 'Mass starts promptly. Please arrive 15-30 minutes early.' },
+  ceremony:   { summary: 'Wedding Ceremony — Haley & George', start: '20270618T173000Z', end: '20270618T190000Z', location: 'Our Lady Star of the Sea, 525 Washington Street, Cape May, NJ', description: 'Mass starts promptly. Please arrive 15-30 minutes early.' },
   reception:  { summary: 'Wedding Reception — Haley & George', start: '20270618T210000Z', end: '20270619T020000Z', location: 'Isaac Smith Vineyard, 1039 Seashore Road, Cape May, NJ', description: '' },
   afterparty: { summary: 'After Party — Haley & George', start: '20270619T023000Z', end: '20270619T060000Z', location: "Carney's Restaurant & Bar, 411 Beach Ave, Cape May, NJ", description: '' },
-  beach:      { summary: 'Beach Day — Haley & George', start: '20270619T140000Z', end: '20270619T180000Z', location: 'Cape May Beach, Cape May, NJ', description: 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia — or stay the weekend.' },
+  beach:      { summary: 'Beach Day — Haley & George', start: '20270619', end: '20270620', allDay: true, location: 'Cape May Beach, Cape May, NJ', description: 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia — or stay the weekend.' },
 };
 
 function downloadAllICS() {
@@ -339,7 +339,8 @@ function downloadAllICS() {
       'BEGIN:VEVENT',
       'UID:' + id + '@garcia-wedding',
       'DTSTAMP:' + stamp,
-      'DTSTART:' + ev.start, 'DTEND:' + ev.end,
+      (ev.allDay ? 'DTSTART;VALUE=DATE:' + ev.start : 'DTSTART:' + ev.start),
+      (ev.allDay ? 'DTEND;VALUE=DATE:' + ev.end : 'DTEND:' + ev.end),
       'SUMMARY:' + ev.summary,
       'LOCATION:' + ev.location.replace(/,/g, '\\,'),
       'DESCRIPTION:' + ev.description.replace(/,/g, '\\,'),
@@ -362,7 +363,8 @@ function downloadICS(id: string) {
     'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Garcia Wedding//EN','BEGIN:VEVENT',
     'UID:' + id + '@garcia-wedding',
     'DTSTAMP:' + stamp,
-    'DTSTART:' + ev.start, 'DTEND:' + ev.end,
+    (ev.allDay ? 'DTSTART;VALUE=DATE:' + ev.start : 'DTSTART:' + ev.start),
+    (ev.allDay ? 'DTEND;VALUE=DATE:' + ev.end : 'DTEND:' + ev.end),
     'SUMMARY:' + ev.summary,
     'LOCATION:' + ev.location.replace(/,/g, '\\,'),
     'DESCRIPTION:' + ev.description.replace(/,/g, '\\,'),
