@@ -965,23 +965,32 @@ export default function WeddingSite() {
         <Title>Transportation &amp; Travel</Title>
         <Lede>How to get to Cape May — and how to get around once you&apos;re here.</Lede>
 
+        {/* --- Getting to Cape May --- */}
+        <h3 className="heading" style={{ fontSize: 'clamp(30px, 4vw, 42px)', lineHeight: 1, margin: '0 0 18px', letterSpacing: '-0.005em', paddingTop: '0.1em' }}>Getting to Cape May</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24 }}>
+          <Tile tone="ink" heading="By Car"   body="Cape May is at the southern tip of New Jersey — about 2.5 hrs from New York City and 1.75 hrs from Philadelphia. Take the Garden State Parkway south to Exit 0." />
+          <Tile tone="ink" heading="By Air"   body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). If you fly, a rental car is recommended." />
+          <Tile tone="ink" heading="By Ferry" body="The Cape May–Lewes Ferry runs from Delaware — walk-on or drive-on." />
+        </div>
+
+        {/* --- Getting Around --- */}
+        <h3 className="heading" style={{ fontSize: 'clamp(30px, 4vw, 42px)', lineHeight: 1, margin: '48px 0 18px', letterSpacing: '-0.005em', paddingTop: '0.1em' }}>Getting Around</h3>
+
         {/* Wedding shuttle — the provided transportation (jitneys, reception + return); details TBD */}
         <div style={{
           background: CREAM, color: DEEP_DARK, border: '1px solid rgba(175,184,133,.65)',
-          padding: '28px 30px', marginTop: 8, marginBottom: 28, textAlign: 'center',
+          padding: '28px 30px', marginBottom: 24, textAlign: 'center',
         }}>
-          <h3 className="heading" style={{ fontSize: 26, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>The Wedding Shuttle</h3>
+          <h4 className="heading" style={{ fontSize: 26, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>The Wedding Shuttle</h4>
           <div style={{ width: 26, height: 1, background: 'currentColor', opacity: .35, margin: '12px auto 14px' }} />
           <p style={{ fontSize: 15, lineHeight: 1.6, opacity: .85, fontWeight: 400, letterSpacing: '-0.005em', margin: '0 auto', maxWidth: 560 }}>
             We&apos;ll be running a shuttle to and from the Reception. Please check back closer to the wedding for the full shuttle schedule &amp; pickup points!
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginTop: 8 }} className="pair-grid">
-          <Tile tone="ink" heading="By Car"      body="Cape May is at the southern tip of New Jersey. ~2.5 hrs from New York City, ~1.75 hrs from Philadelphia. Garden State Parkway south to Exit 0." />
-          <Tile tone="ink" heading="By Air"      body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). If flying, rental car recommended." />
-          <Tile tone="ink" heading="By Ferry"    body="Cape May–Lewes Ferry from Delaware. Walk-on or drive-on." />
-          <Tile tone="ink" heading="Around Town" body="Walkable downtown, with bikes and Uber/Lyft around. A local golf-cart shuttle service runs around town, too — details to come." />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
+          <Tile tone="ink" heading="Around Town"       body="Downtown Cape May is walkable, with bikes and Uber/Lyft around to fill in the gaps." />
+          <Tile tone="ink" heading="Golf-Cart Shuttle" body="A couple of local golf-cart shuttle services run around town, too — details to come." />
         </div>
       </SectionShell>
 
