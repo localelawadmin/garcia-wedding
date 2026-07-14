@@ -937,7 +937,7 @@ export default function WeddingSite() {
           ['Time',    '5:00 — 10:00 PM'],
           ['Place',   'Isaac Smith Vineyard'],
           ['Address', '1039 Seashore Road, Cape May, NJ'],
-          ['Note',    'There will be shuttles provided to the Reception. Please review the Transportation section for the shuttle schedule and pickup spots.'],
+          ['Note',    'There will be shuttles provided to and from the Reception. See the Transportation & Travel section for the schedule and pickup points, coming closer to the date.'],
         ]} />
 
       <EventSection calId="afterparty" mapQuery="Carneys+Restaurant+Bar+411+Beach+Ave+Cape+May+NJ" id="afterparty" tone="pattern" eyebrow="Friday · June 18"
@@ -962,12 +962,26 @@ export default function WeddingSite() {
       </SectionShell>
 
       <SectionShell id="getting-there" tone="ink">
-        <Title>Travel Options</Title>
+        <Title>Transportation &amp; Travel</Title>
+        <Lede>How to get to Cape May — and how to get around once you&apos;re here.</Lede>
+
+        {/* Wedding shuttle — the provided transportation (jitneys, reception + return); details TBD */}
+        <div style={{
+          background: CREAM, color: DEEP_DARK, border: '1px solid rgba(175,184,133,.65)',
+          padding: '28px 30px', marginTop: 8, marginBottom: 28, textAlign: 'center',
+        }}>
+          <h3 className="heading" style={{ fontSize: 26, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>The Wedding Shuttle</h3>
+          <div style={{ width: 26, height: 1, background: 'currentColor', opacity: .35, margin: '12px auto 14px' }} />
+          <p style={{ fontSize: 15, lineHeight: 1.6, opacity: .85, fontWeight: 400, letterSpacing: '-0.005em', margin: '0 auto', maxWidth: 560 }}>
+            We&apos;ll be running a shuttle to and from the Reception. Please check back closer to the wedding for the full shuttle schedule &amp; pickup points!
+          </p>
+        </div>
+
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginTop: 8 }} className="pair-grid">
           <Tile tone="ink" heading="By Car"      body="Cape May is at the southern tip of New Jersey. ~2.5 hrs from New York City, ~1.75 hrs from Philadelphia. Garden State Parkway south to Exit 0." />
           <Tile tone="ink" heading="By Air"      body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). If flying, rental car recommended." />
           <Tile tone="ink" heading="By Ferry"    body="Cape May–Lewes Ferry from Delaware. Walk-on or drive-on." />
-          <Tile tone="ink" heading="Around Town" body="Walkable downtown. Trolleys, bikes, and Uber operate locally." />
+          <Tile tone="ink" heading="Around Town" body="Walkable downtown, with bikes and Uber/Lyft around. A local golf-cart shuttle service runs around town, too — details to come." />
         </div>
       </SectionShell>
 
@@ -1023,7 +1037,7 @@ export default function WeddingSite() {
           <FaqRow q='Can I bring a plus-one?' a='We kindly ask that only guests listed on the formal invitation attend.' />
           <FaqRow q='Will there be transportation to the Mass?' a="There will not be transportation provided to the Church. We recommend Ubering or using your hotel's shuttle service." />
           <FaqRow q='How early should I get to the Church?' a='The mass starts promptly at 1:30 PM — please arrive 15–30 minutes early to find your seat.' />
-          <FaqRow q='Will there be transportation to the reception?' a='Yes - there will be a shuttle service provided. This schedule will be posted in the Transportation section closer to the date.' />
+          <FaqRow q='Will there be transportation to the reception?' a='Yes - a shuttle will run to and from the reception. The full schedule and pickup points will be posted in the Transportation & Travel section closer to the date.' />
           <FaqRow q='Can I add an extra day to the hotel room block?' a='Absolutely! Many of us are staying through the weekend. Please call the hotel to extend your stay, and book early to secure your room!' />
         </div>
       </SectionShell>
