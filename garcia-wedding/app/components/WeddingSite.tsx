@@ -6,7 +6,16 @@ import MusicPlayer from './MusicPlayer';
 import NoteFromCouple from './NoteFromCouple';
 
 const HG = '/photos/agenda/hg.png';
-const HERO_PHOTO = '/photos/hero-beach.jpg';
+// Hero slideshow — engagement shoot, crossfading every 2.5s.
+// Landscape frames lead; portraits are center-cropped by object-fit.
+const HERO_PHOTOS = [
+  '/photos/eng-beach-walk.jpg',
+  '/photos/eng-bikes-motion.jpg',
+  '/photos/eng-dunes-sitting.jpg',
+  '/photos/eng-beach-lift.jpg',
+  '/photos/eng-bike-together.jpg',
+];
+const HERO_MS = 2500;
 
 const ICON = {
   pier:    '/photos/agenda/pier-house.png',
@@ -585,6 +594,13 @@ export default function WeddingSite() {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [showTop, setShowTop] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [heroIdx, setHeroIdx] = useState(0);
+
+  // Hero slideshow timer
+  useEffect(() => {
+    const t = setInterval(() => setHeroIdx(i => (i + 1) % HERO_PHOTOS.length), HERO_MS);
+    return () => clearInterval(t);
+  }, []);
   const [noteOpen, setNoteOpen] = useState(false);
   const [days, setDays] = useState<number | null>(null);
 
@@ -730,15 +746,20 @@ export default function WeddingSite() {
           position: 'relative', overflow: 'hidden',
         }}
       >
-        <img
-          src={HERO_PHOTO}
-          alt=""
-          style={{
-            position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: 'cover', objectPosition: 'center 40%',
-            filter: 'saturate(1.05) brightness(.95) contrast(1.06)',
-          }}
-        />
+        {HERO_PHOTOS.map((src, i) => (
+          <img
+            key={src}
+            src={src}
+            alt=""
+            style={{
+              position: 'absolute', inset: 0, width: '100%', height: '100%',
+              objectFit: 'cover', objectPosition: 'center 40%',
+              filter: 'saturate(1.05) brightness(.95) contrast(1.06)',
+              opacity: i === heroIdx ? 1 : 0,
+              transition: 'opacity 1.1s ease',
+            }}
+          />
+        ))}
         <div style={{
           position: 'absolute', inset: 0,
           background: 'linear-gradient(to bottom, rgba(0,0,0,.20) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.35) 100%)',

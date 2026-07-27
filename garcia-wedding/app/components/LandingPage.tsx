@@ -4,12 +4,13 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const LANDER_PHOTOS = [
-  '/photos/walking-bw.jpg',
-  '/photos/cheek-kiss-bw.jpg',
-  '/photos/lift-bw.jpg',
-  '/photos/proposal-bw-closeup.jpg',
-  '/photos/pouring-champagne-bw.jpg',
-  '/photos/bouquet-bw.jpg',
+  '/photos/eng-beach-walk-bw.jpg',
+  '/photos/eng-beach-lift-bw.jpg',
+  '/photos/eng-bikes-motion-bw.jpg',
+  '/photos/eng-dunes-sitting-bw.jpg',
+  '/photos/eng-bike-together-bw.jpg',
+  '/photos/eng-beach-standing-bw.jpg',
+  '/photos/eng-bikes-street-bw.jpg',
 ];
 
 const CYCLE_MS = 2400;
