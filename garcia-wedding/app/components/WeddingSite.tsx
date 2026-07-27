@@ -98,7 +98,11 @@ const HOTELS: Hotel[] = [
       'Check back closer to the date for the booking link and code.',
     ] },
   { name: 'Ocean Club Hotel', frame: 20, logo: 'ocean-club', price: '$$$',
-    details: ['Still in conversation — details to come.'] },
+    details: [
+      'Beachfront, with a pool deck overlooking the ocean.',
+      <>Select your dates first, then enter Group ID <strong>69765</strong> to unlock the block.</>,
+    ],
+    bookUrl: 'https://oceanclubhotel.com' },
   { name: 'The Inn of Cape May', frame: 18, logo: 'inn', price: '$$$',
     details: ['Still in conversation — details to come.'] },
 ];
