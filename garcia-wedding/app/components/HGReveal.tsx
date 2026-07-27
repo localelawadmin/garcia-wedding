@@ -65,8 +65,8 @@ export default function HGReveal({
           position: 'fixed', inset: 0, background: OLIVE, zIndex: 260,
           opacity: phase === 'lander' ? 0 : phase === 'reveal' ? 0 : 1,
           transition: phase === 'reveal'
-            ? 'opacity 1s cubic-bezier(.22,1,.36,1)'
-            : 'opacity .85s cubic-bezier(.22,1,.36,1)',
+            ? 'opacity 1.1s cubic-bezier(.22,1,.36,1)'
+            : 'opacity 1.35s cubic-bezier(.4,0,.2,1)',
           pointerEvents: 'none',
         }}
       />

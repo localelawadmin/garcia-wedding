@@ -22,7 +22,7 @@ export default function Home() {
   const onSuccess = useCallback(() => {
     setAuthenticated(true);
     setPhase('green');
-    setTimeout(() => setPhase('move'), 950);
+    setTimeout(() => setPhase('move'), 1500);   // let the colour settle before it travels
   }, []);
 
   const onArrived = useCallback(() => {

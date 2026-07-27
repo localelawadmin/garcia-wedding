@@ -103,7 +103,7 @@ export default function HGDraw({
     <svg
       viewBox={`${BX} ${BY} ${BW} ${BH}`}
       style={{ width, height: 'auto', display: 'block', overflow: 'visible',
-               fill: color, transition: 'fill .7s cubic-bezier(.22,1,.36,1)' }}
+               fill: color, transition: 'fill 1.35s cubic-bezier(.4,0,.2,1)' }}
       aria-label="Haley & George"
       role="img"
     >

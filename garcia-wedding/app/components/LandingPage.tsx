@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const LANDER_PHOTOS = [
   '/photos/eng-beach-walk-bw.jpg',
@@ -201,21 +201,21 @@ export default function LandingPage({ onSuccess }: Props) {
             >
               Enter →
             </button>
-            <AnimatePresence>
-              {error && (
-                <motion.span
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  style={{
-                    color: '#c05a68', fontSize: 9, letterSpacing: '0.3em',
-                    textTransform: 'uppercase', fontWeight: 400,
-                  }}
-                >
-                  Try again
-                </motion.span>
-              )}
-            </AnimatePresence>
+            {/* sits outside the flow so a wrong password can't nudge the card */}
+            <span
+              aria-live="polite"
+              style={{
+                position: 'absolute', top: '100%', left: 0, right: 0,
+                marginTop: 10, textAlign: 'center',
+                color: '#c05a68', fontSize: 9, letterSpacing: '0.3em',
+                textTransform: 'uppercase', fontWeight: 400,
+                opacity: error ? 1 : 0,
+                transition: 'opacity .4s ease',
+                pointerEvents: 'none',
+              }}
+            >
+              Try again
+            </span>
           </motion.form>
         </motion.div>
       </div>
