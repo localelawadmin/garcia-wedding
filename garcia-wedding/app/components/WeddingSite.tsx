@@ -17,7 +17,7 @@ const HERO_PHOTOS = [
   { src: '/photos/eng-beach-lift.jpg',    pos: 'center 70%' },
   { src: '/photos/eng-bike-together.jpg', pos: 'center 50%' },
 ];
-const HERO_MS = 2500;
+const HERO_MS = 3750;   // 50% longer per frame
 
 const ICON = {
   pier:    '/photos/agenda/pier-house.png',
@@ -766,7 +766,7 @@ export default function WeddingSite() {
             }}
           />
         ))}
-        <div style={{
+        <div className="hero-scrim" style={{
           position: 'absolute', inset: 0,
           background: 'linear-gradient(to bottom, rgba(0,0,0,.20) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.35) 100%)',
         }} />
@@ -776,7 +776,7 @@ export default function WeddingSite() {
           backgroundImage: GRAIN_SVG,
         }} />
 
-        <div style={{
+        <div className="hero-content" style={{
           position: 'absolute', inset: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           color: CREAM,
@@ -859,25 +859,22 @@ export default function WeddingSite() {
             padding: '0 clamp(48px, 8vw, 96px)',
             textAlign: 'center', width: '100%', color: DEEP_DARK,
           }}>
-            {/* heading is the only in-flow child, so it sits dead-center; sub-line floats beneath it */}
-            <div style={{ position: 'relative' }}>
-              <h2 className="heading" style={{
-                fontSize: 'clamp(40px, 5.5vw, 68px)', lineHeight: 1,
-                margin: 0, letterSpacing: '-0.005em', paddingTop: '0.12em',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18,
-                whiteSpace: 'nowrap',
-              }}>
-                <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
-                Meet us in Cape May!
-                <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
-              </h2>
-              <div style={{
-                position: 'absolute', top: '100%', left: 0, right: 0,
-                fontSize: 18, letterSpacing: '0.08em', textTransform: 'uppercase',
-                fontWeight: 400, marginTop: 14, opacity: .8,
-              }}>
-                June 17–19, 2027
-              </div>
+            {/* heading + date read as one block, centred together in the oval */}
+            <h2 className="heading" style={{
+              fontSize: 'clamp(40px, 5.5vw, 68px)', lineHeight: 1,
+              margin: 0, letterSpacing: '-0.005em', paddingTop: '0.12em',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18,
+              whiteSpace: 'nowrap',
+            }}>
+              <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
+              Meet us in Cape May!
+              <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
+            </h2>
+            <div style={{
+              fontSize: 18, letterSpacing: '0.08em', textTransform: 'uppercase',
+              fontWeight: 400, marginTop: 14, opacity: .8,
+            }}>
+              June 17–19, 2027
             </div>
           </div>
         </div>
@@ -1101,9 +1098,9 @@ export default function WeddingSite() {
           </svg>
           <img src="/photos/agenda/hg-monogram.png" alt="" aria-hidden="true" className="oval-hg" style={{ position: 'absolute', bottom: '10.5%', left: '50%', transform: 'translateX(-50%)', height: 34, width: 'auto', zIndex: 1, opacity: .92, pointerEvents: 'none' }} />
           <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(48px, 8vw, 96px)', textAlign: 'center', width: '100%', color: DEEP_DARK }}>
-            {/* heading is the only in-flow child, so it sits dead-center; eyebrow + email float above/below */}
-            <div style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', bottom: '100%', left: 0, right: 0, fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 10, opacity: .75 }}>
+            {/* eyebrow, heading and email read as one centred block */}
+            <div>
+              <div style={{ fontSize: 14, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 400, marginBottom: 12, opacity: .75 }}>
                 Any questions?
               </div>
               <h2 className="heading" style={{
@@ -1114,7 +1111,7 @@ export default function WeddingSite() {
                 Send us a note!
                 <span style={{ flex: 1, height: 1, background: 'currentColor', opacity: .3, maxWidth: 32 }} aria-hidden="true" />
               </h2>
-              <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 14 }}>
+              <div style={{ marginTop: 16 }}>
               <a
                 href="mailto:thegarciawedding.2027@gmail.com"
                 className="contact-email"

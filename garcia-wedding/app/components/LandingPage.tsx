@@ -179,7 +179,7 @@ export default function LandingPage({ onSuccess }: Props) {
                 fontFamily: 'inherit',
                 fontWeight: 400,
               }}
-              autoFocus
+              autoFocus={typeof window !== 'undefined' && !window.matchMedia('(pointer: coarse)').matches}
             />
             <button
               type="submit"
