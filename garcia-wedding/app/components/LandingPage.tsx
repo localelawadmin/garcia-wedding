@@ -43,7 +43,7 @@ export default function LandingPage({ onSuccess }: Props) {
     if (pw.toLowerCase() === correct) {
       setExiting(true);
       sessionStorage.setItem('garcia-auth', 'true');
-      await new Promise(r => setTimeout(r, 1050));   // let the panel clear the screen first
+      await new Promise(r => setTimeout(r, 40));
       onSuccess();
     } else {
       setError(true);
@@ -56,8 +56,8 @@ export default function LandingPage({ onSuccess }: Props) {
   return (
     <motion.div
       style={{ position: 'fixed', inset: 0, background: '#364C63', overflow: 'hidden' }}
-      animate={{ y: exiting ? '-100%' : '0%' }}
-      transition={{ duration: 1.05, ease: [0.7, 0, 0.28, 1] }}
+      animate={{ opacity: exiting ? 0 : 1 }}
+      transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
     >
       {/* Crossfading B&W photos */}
       <div style={{ position: 'absolute', inset: 0 }}>
@@ -139,18 +139,15 @@ export default function LandingPage({ onSuccess }: Props) {
             <path d={LANDER_WAVY} fill="#FDFDFC" stroke="#4E5B37" strokeWidth={1} vectorEffect="non-scaling-stroke" />
             <path d={LANDER_WAVY_INNER} fill="none" stroke="#DEE9F2" strokeWidth={3} vectorEffect="non-scaling-stroke" />
           </svg>
-          <motion.img
-            src="/photos/agenda/hg.png"
-            alt="Haley & George"
-            width={150}
+          <div
+            id="lander-hg-slot"
+            aria-hidden="true"
             style={{
               position: 'relative', zIndex: 1,
-              width: 'clamp(120px, 14vw, 160px)', height: 'auto', display: 'block',
-              filter: 'url(#lander-tint-deep-dark)',
+              width: 'clamp(120px, 14vw, 160px)',
+              aspectRatio: '58.875 / 73.5',
+              transform: 'translateX(-7.5%)',
             }}
-            initial={{ opacity: 0, y: -8, x: '-7.5%' }}
-            animate={{ opacity: 1, y: 0, x: '-7.5%' }}
-            transition={{ duration: 0.8, delay: 0.3 }}
           />
 
           <motion.form

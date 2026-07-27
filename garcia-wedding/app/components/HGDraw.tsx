@@ -102,7 +102,8 @@ export default function HGDraw({
   return (
     <svg
       viewBox={`${BX} ${BY} ${BW} ${BH}`}
-      style={{ width, height: 'auto', display: 'block', overflow: 'visible' }}
+      style={{ width, height: 'auto', display: 'block', overflow: 'visible',
+               fill: color, transition: 'fill .7s cubic-bezier(.22,1,.36,1)' }}
       aria-label="Haley & George"
       role="img"
     >
@@ -120,7 +121,7 @@ export default function HGDraw({
       {HG_PHASES.map((ph, i) => {
         const art = ph.tag === 'B' ? G : H;
         const inner = (
-          <g ref={el => { grps.current[i] = el; }} clipPath={`url(#hg-sweep-${uid}-${i})`} fill={color}>
+          <g ref={el => { grps.current[i] = el; }} clipPath={`url(#hg-sweep-${uid}-${i})`}>
             {art}
           </g>
         );

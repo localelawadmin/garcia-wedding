@@ -1,56 +1,66 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import LandingPage from './components/LandingPage';
 import WeddingSite from './components/WeddingSite';
-import HGIntro from './components/HGIntro';
+import HGReveal from './components/HGReveal';
+
+type Phase = 'lander' | 'green' | 'move' | 'reveal' | 'done';
 
 export default function Home() {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
-  const [intro, setIntro] = useState(false);      // runs only right after the password
-  const [revealed, setRevealed] = useState(false);
+  const [phase, setPhase] = useState<Phase>('lander');
 
   useEffect(() => {
     const auth = sessionStorage.getItem('garcia-auth') === 'true';
     setAuthenticated(auth);
-    if (auth) setRevealed(true);                  // already in this session: no intro
+    if (auth) setPhase('done');          // already in this session: straight to the site
+  }, []);
+
+  // password accepted -> hold the monogram, turn the page olive, then move it
+  const onSuccess = useCallback(() => {
+    setAuthenticated(true);
+    setPhase('green');
+    setTimeout(() => setPhase('move'), 950);
+  }, []);
+
+  const onArrived = useCallback(() => {
+    setPhase('reveal');
+    setTimeout(() => setPhase('done'), 1100);
   }, []);
 
   if (authenticated === null) return null;
+  const showSite = authenticated;
+  const siteVisible = phase === 'reveal' || phase === 'done';
 
   return (
     <>
-      {/* solid olive field sits behind the lander so the slide-up reveals colour, not the site */}
-      {(!revealed || intro) && (
-        <div style={{ position: 'fixed', inset: 0, background: '#4E5B37', zIndex: 250 }} aria-hidden="true" />
-      )}
-
-      {authenticated && (
+      {showSite && (
         <div style={{
-          opacity: revealed ? 1 : 0,
-          transition: 'opacity 1.1s cubic-bezier(.22,1,.36,1)',
+          opacity: siteVisible ? 1 : 0,
+          transition: 'opacity 1s cubic-bezier(.22,1,.36,1)',
         }}>
           <WeddingSite />
         </div>
       )}
 
-      {intro && <HGIntro onDone={() => { setIntro(false); setRevealed(true); }} />}
-
       <AnimatePresence>
         {!authenticated && (
           <motion.div
             key="landing"
-            style={{ position: 'relative', zIndex: 400 }}
+            style={{ position: 'relative', zIndex: 280 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.01 }}
           >
-            <LandingPage
-              onSuccess={() => { setIntro(true); setAuthenticated(true); }}
-            />
+            <LandingPage onSuccess={onSuccess} />
           </motion.div>
         )}
       </AnimatePresence>
+
+      {phase !== 'done' && (
+        <HGReveal phase={phase as Exclude<Phase, 'done'>} onArrived={onArrived} />
+      )}
     </>
   );
 }

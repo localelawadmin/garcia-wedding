@@ -44,6 +44,7 @@ export default function Navbar() {
           />
           <img
             className="nav-logo-mark"
+            data-hg-target="nav"
             src="/photos/agenda/hg-monogram-cream.png"
             alt="Haley & George"
             style={{ height: 40, width: 'auto', display: 'none', position: 'relative', zIndex: 1 }}

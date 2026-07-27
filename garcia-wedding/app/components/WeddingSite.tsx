@@ -789,6 +789,7 @@ export default function WeddingSite() {
           <img
             src={HG}
             alt="Haley & George"
+            data-hg-target="hero"
             style={{
               height: 140, width: 'auto', display: 'block',
               filter: 'brightness(0) invert(.95)',
