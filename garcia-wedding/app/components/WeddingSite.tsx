@@ -6,16 +6,20 @@ import MusicPlayer from './MusicPlayer';
 import NoteFromCouple from './NoteFromCouple';
 
 const HG = '/photos/agenda/hg.png';
+const CREAM_ = '#FDFDFC';
+const DEEP_DARK_ = '#4E5B37';
 // Hero slideshow — engagement shoot, crossfading every 2.5s.
 // Landscape frames lead; portraits are center-cropped by object-fit.
 // Each frame carries its own focal point — portraits need a lower focus so bodies
 // (not just heads) sit centered when cropped into the wide hero.
+// `ink` is chosen from the measured luminance behind the mobile wordmarks:
+// pale sky wants olive ink, the darker frame wants cream.
 const HERO_PHOTOS = [
-  { src: '/photos/eng-beach-walk.jpg',    pos: 'center 40%' },
-  { src: '/photos/eng-bikes-motion.jpg',  pos: 'center 45%' },
-  { src: '/photos/eng-dunes-sitting.jpg', pos: 'center 45%' },
-  { src: '/photos/eng-beach-lift.jpg',    pos: 'center 70%' },
-  { src: '/photos/eng-bike-together.jpg', pos: 'center 50%' },
+  { src: '/photos/eng-beach-walk.jpg',    pos: 'center 40%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-bikes-motion.jpg',  pos: 'center 45%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-dunes-sitting.jpg', pos: 'center 45%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-beach-lift.jpg',    pos: 'center 70%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-bike-together.jpg', pos: 'center 50%', ink: CREAM_ },
 ];
 const HERO_MS = 3750;   // 50% longer per frame
 
@@ -315,6 +319,28 @@ const NumEyebrow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   }}>{children}</div>
 );
 
+const Wordmark: React.FC<{
+  src: string; alt: string; ratio: number; ink: string;
+  width?: string; height?: number; style?: React.CSSProperties;
+}> = ({ src, alt, ratio, ink, width, height, style }) => (
+  <div
+    role="img"
+    aria-label={alt}
+    style={{
+      ...(width ? { width } : { height, width: (height ?? 0) * ratio }),
+      aspectRatio: `${ratio}`,
+      backgroundColor: ink,
+      WebkitMaskImage: `url(${src})`, maskImage: `url(${src})`,
+      WebkitMaskSize: 'contain', maskSize: 'contain',
+      WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat',
+      WebkitMaskPosition: 'center', maskPosition: 'center',
+      transition: 'background-color 1.1s ease',
+      display: 'block',
+      ...style,
+    }}
+  />
+);
+
 const Title: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <h2 className="heading" style={{
     fontSize: 'clamp(64px, 8vw, 110px)', lineHeight: 0.8,
@@ -601,6 +627,7 @@ export default function WeddingSite() {
   const [showTop, setShowTop] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [heroIdx, setHeroIdx] = useState(0);
+  const heroInk = HERO_PHOTOS[heroIdx].ink;
 
   // Hero slideshow timer
   useEffect(() => {
@@ -809,12 +836,15 @@ export default function WeddingSite() {
             display: 'none', flexDirection: 'column', alignItems: 'center', gap: 12,
             padding: '0 24px', textAlign: 'center',
           }}>
-            <img src="/photos/agenda/haley-and-george.png" alt="Haley & George" style={{ width: 'min(66vw, 258px)', height: 'auto', display: 'block', filter: 'brightness(0) invert(.96)' }} />
+            <Wordmark src="/photos/agenda/haley-and-george.png" alt="Haley & George"
+                      ratio={4.087} width="min(66vw, 258px)" ink={heroInk} />
             {/* Cape May carries far more swash than June, so equal box heights read
                 as different sizes — these are matched on letter size, not box */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 38, width: 'auto', display: 'block', filter: 'brightness(0) invert(.96)' }} />
-              <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 26, width: 'auto', display: 'block', marginTop: -5, filter: 'brightness(0) invert(.96)' }} />
+              <Wordmark src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ"
+                        ratio={3.1485} height={38} ink={heroInk} />
+              <Wordmark src="/photos/agenda/june-2027.png" alt="June 2027"
+                        ratio={3.0436} height={26} ink={heroInk} style={{ marginTop: -5 }} />
             </div>
           </div>
         </div>
