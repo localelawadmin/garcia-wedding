@@ -800,18 +800,22 @@ export default function WeddingSite() {
             display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center',
             gap: 4,
           }}>
-            <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 52, width: 'auto', display: 'block' }} />
-            <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 52, width: 'auto', display: 'block' }} />
+            <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 66, width: 'auto', display: 'block' }} />
+            <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 45, width: 'auto', display: 'block', marginTop: -6 }} />
           </div>
           </div>
 
           <div className="hero-mobile" style={{
-            display: 'none', flexDirection: 'column', alignItems: 'center', gap: 20,
+            display: 'none', flexDirection: 'column', alignItems: 'center', gap: 12,
             padding: '0 24px', textAlign: 'center',
           }}>
-            <img src="/photos/agenda/haley-and-george.png" alt="Haley & George" style={{ width: 'min(82vw, 340px)', height: 'auto', display: 'block', filter: 'brightness(0) invert(.96)' }} />
-            <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 30, width: 'auto', display: 'block', filter: 'brightness(0) invert(.96)' }} />
-            <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 30, width: 'auto', display: 'block', filter: 'brightness(0) invert(.96)' }} />
+            <img src="/photos/agenda/haley-and-george.png" alt="Haley & George" style={{ width: 'min(66vw, 258px)', height: 'auto', display: 'block', filter: 'brightness(0) invert(.96)' }} />
+            {/* Cape May carries far more swash than June, so equal box heights read
+                as different sizes — these are matched on letter size, not box */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <img src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ" style={{ height: 38, width: 'auto', display: 'block', filter: 'brightness(0) invert(.96)' }} />
+              <img src="/photos/agenda/june-2027.png" alt="June 2027" style={{ height: 26, width: 'auto', display: 'block', marginTop: -5, filter: 'brightness(0) invert(.96)' }} />
+            </div>
           </div>
         </div>
 

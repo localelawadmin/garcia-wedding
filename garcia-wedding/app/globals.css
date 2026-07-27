@@ -110,13 +110,13 @@ body {
   .hero-mobile { display: flex !important; }
   /* the shoot is centre-weighted, so drop the wordmarks to the lower third
      where there's sky/sand behind them, and deepen the scrim under them */
-  .hero-content { align-items: flex-end !important; padding-bottom: 140px; }
+  /* the shoot is centre-weighted — sit the wordmarks in the top third, over sky */
+  .hero-content { align-items: flex-start !important; padding-top: 112px; }
   .hero-scrim {
     background: linear-gradient(to bottom,
-      rgba(0,0,0,.22) 0%, rgba(0,0,0,0) 26%,
-      rgba(0,0,0,.30) 58%, rgba(0,0,0,.62) 100%) !important;
+      rgba(0,0,0,.52) 0%, rgba(0,0,0,.30) 30%,
+      rgba(0,0,0,0) 58%, rgba(0,0,0,.38) 100%) !important;
   }
-  .hero-mobile { gap: 14px !important; }
   .contact-email { font-size: 10.5px !important; letter-spacing: 0.03em !important; }
   /* Wavy ovals: a landscape oval gets very short on phones, crowding the sub-line
      and the HG. Give it more height and shrink the monogram proportionally. */
