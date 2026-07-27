@@ -22,6 +22,7 @@ export default function HGReveal({
   onArrived: () => void;
 }) {
   const [box, setBox] = useState<Box | null>(null);
+  const [creamInk, setCreamInk] = useState(false);
   const boxRef = useRef<Box | null>(null);
   boxRef.current = box;
 
@@ -52,6 +53,14 @@ export default function HGReveal({
     return () => cancelAnimationFrame(raf);
   }, [phase]);
 
+  // the card is still fading for a beat after the password, and cream ink on the
+  // cream card would vanish — hold olive until the olive field is actually showing
+  useEffect(() => {
+    if (phase === 'lander') { setCreamInk(false); return; }
+    const t = setTimeout(() => setCreamInk(true), 480);
+    return () => clearTimeout(t);
+  }, [phase]);
+
   // travel to the hero's monogram
   useEffect(() => {
     if (phase !== 'move') return;
@@ -72,10 +81,10 @@ export default function HGReveal({
         aria-hidden="true"
         style={{
           position: 'fixed', inset: 0, background: OLIVE, zIndex: 260,
-          opacity: phase === 'lander' ? 0 : phase === 'reveal' ? 0 : 1,
-          transition: phase === 'reveal'
-            ? 'opacity 1.1s cubic-bezier(.22,1,.36,1)'
-            : 'opacity 1.35s cubic-bezier(.4,0,.2,1)',
+          // already opaque while the lander covers it — the lander fades to reveal it,
+          // rather than two colours cross-fading through a gap
+          opacity: phase === 'reveal' ? 0 : 1,
+          transition: 'opacity 1.2s cubic-bezier(.22,1,.36,1)',
           pointerEvents: 'none',
         }}
       />
@@ -95,7 +104,7 @@ export default function HGReveal({
         }}
       >
         <HGDraw
-          color={phase === 'lander' ? '#4E5B37' : CREAM}
+          color={creamInk ? CREAM : '#4E5B37'}
           width={BASE}
           speed={1.2}
           delay={420}

@@ -22,7 +22,7 @@ export default function Home() {
   const onSuccess = useCallback(() => {
     setAuthenticated(true);
     setPhase('green');
-    setTimeout(() => setPhase('move'), 1500);   // let the colour settle before it travels
+    setTimeout(() => setPhase('move'), 1900);   // let the lander finish dissolving first
   }, []);
 
   const onArrived = useCallback(() => {
@@ -51,7 +51,7 @@ export default function Home() {
             key="landing"
             style={{ position: 'relative', zIndex: 280 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.01 }}
+            transition={{ duration: 1.15, ease: [0.33, 0, 0.2, 1] }}
           >
             <LandingPage onSuccess={onSuccess} />
           </motion.div>

@@ -56,7 +56,7 @@ export default function LandingPage({ onSuccess }: Props) {
   return (
     <motion.div
       style={{ position: 'fixed', inset: 0, background: '#364C63', overflow: 'hidden' }}
-      animate={{ opacity: exiting ? 0 : 1 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
     >
       {/* Crossfading B&W photos */}
@@ -183,6 +183,7 @@ export default function LandingPage({ onSuccess }: Props) {
             />
             <button
               type="submit"
+              disabled={exiting}
               style={{
                 background: 'transparent',
                 border: '1px solid #4E5B37',
