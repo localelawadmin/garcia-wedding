@@ -8,12 +8,14 @@ import NoteFromCouple from './NoteFromCouple';
 const HG = '/photos/agenda/hg.png';
 // Hero slideshow — engagement shoot, crossfading every 2.5s.
 // Landscape frames lead; portraits are center-cropped by object-fit.
+// Each frame carries its own focal point — portraits need a lower focus so bodies
+// (not just heads) sit centered when cropped into the wide hero.
 const HERO_PHOTOS = [
-  '/photos/eng-beach-walk.jpg',
-  '/photos/eng-bikes-motion.jpg',
-  '/photos/eng-dunes-sitting.jpg',
-  '/photos/eng-beach-lift.jpg',
-  '/photos/eng-bike-together.jpg',
+  { src: '/photos/eng-beach-walk.jpg',    pos: 'center 40%' },
+  { src: '/photos/eng-bikes-motion.jpg',  pos: 'center 45%' },
+  { src: '/photos/eng-dunes-sitting.jpg', pos: 'center 45%' },
+  { src: '/photos/eng-beach-lift.jpg',    pos: 'center 70%' },
+  { src: '/photos/eng-bike-together.jpg', pos: 'center 50%' },
 ];
 const HERO_MS = 2500;
 
@@ -746,14 +748,14 @@ export default function WeddingSite() {
           position: 'relative', overflow: 'hidden',
         }}
       >
-        {HERO_PHOTOS.map((src, i) => (
+        {HERO_PHOTOS.map((p, i) => (
           <img
-            key={src}
-            src={src}
+            key={p.src}
+            src={p.src}
             alt=""
             style={{
               position: 'absolute', inset: 0, width: '100%', height: '100%',
-              objectFit: 'cover', objectPosition: 'center 40%',
+              objectFit: 'cover', objectPosition: p.pos,
               filter: 'saturate(1.05) brightness(.95) contrast(1.06)',
               opacity: i === heroIdx ? 1 : 0,
               transition: 'opacity 1.1s ease',
