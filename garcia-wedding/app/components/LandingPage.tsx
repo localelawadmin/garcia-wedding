@@ -43,7 +43,7 @@ export default function LandingPage({ onSuccess }: Props) {
     if (pw.toLowerCase() === correct) {
       setExiting(true);
       sessionStorage.setItem('garcia-auth', 'true');
-      await new Promise(r => setTimeout(r, 900));
+      await new Promise(r => setTimeout(r, 1050));   // let the panel clear the screen first
       onSuccess();
     } else {
       setError(true);
@@ -56,8 +56,8 @@ export default function LandingPage({ onSuccess }: Props) {
   return (
     <motion.div
       style={{ position: 'fixed', inset: 0, background: '#364C63', overflow: 'hidden' }}
-      animate={{ opacity: exiting ? 0 : 1 }}
-      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      animate={{ y: exiting ? '-100%' : '0%' }}
+      transition={{ duration: 1.05, ease: [0.7, 0, 0.28, 1] }}
     >
       {/* Crossfading B&W photos */}
       <div style={{ position: 'absolute', inset: 0 }}>
