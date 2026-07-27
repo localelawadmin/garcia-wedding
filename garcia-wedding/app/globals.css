@@ -111,7 +111,7 @@ body {
   /* the shoot is centre-weighted, so drop the wordmarks to the lower third
      where there's sky/sand behind them, and deepen the scrim under them */
   /* wordmarks sit in the second quarter — a little air above, twice as much below */
-  .hero-content { align-items: flex-start !important; padding-top: 25vh; }
+  .hero-content { align-items: flex-start !important; padding-top: 21vh; }
   /* ink is chosen per photo now, so the scrim only needs to steady the sky */
   .hero-scrim {
     background: linear-gradient(to bottom,

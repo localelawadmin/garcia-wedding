@@ -320,9 +320,9 @@ const NumEyebrow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 );
 
 const Wordmark: React.FC<{
-  src: string; alt: string; ratio: number; ink: string;
+  src: string; alt: string; ratio: number; ink: string; halo?: string;
   width?: string; height?: number; style?: React.CSSProperties;
-}> = ({ src, alt, ratio, ink, width, height, style }) => (
+}> = ({ src, alt, ratio, ink, halo, width, height, style }) => (
   <div
     role="img"
     aria-label={alt}
@@ -334,7 +334,8 @@ const Wordmark: React.FC<{
       WebkitMaskSize: 'contain', maskSize: 'contain',
       WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat',
       WebkitMaskPosition: 'center', maskPosition: 'center',
-      transition: 'background-color 1.1s ease',
+      filter: halo,
+      transition: 'background-color 1.1s ease, filter 1.1s ease',
       display: 'block',
       ...style,
     }}
@@ -628,6 +629,11 @@ export default function WeddingSite() {
   const [scrolled, setScrolled] = useState(false);
   const [heroIdx, setHeroIdx] = useState(0);
   const heroInk = HERO_PHOTOS[heroIdx].ink;
+  // a soft halo in the opposite tone: the lower lines can land on a treeline or
+  // on the couple, where ink colour alone isn't enough
+  const heroHalo = heroInk === CREAM_
+    ? 'drop-shadow(0 0 5px rgba(26,32,18,.55)) drop-shadow(0 1px 10px rgba(26,32,18,.40))'
+    : 'drop-shadow(0 0 4px rgba(253,253,252,.90)) drop-shadow(0 0 9px rgba(253,253,252,.55))';
 
   // Hero slideshow timer
   useEffect(() => {
@@ -837,14 +843,14 @@ export default function WeddingSite() {
             padding: '0 24px', textAlign: 'center',
           }}>
             <Wordmark src="/photos/agenda/haley-and-george.png" alt="Haley & George"
-                      ratio={4.087} width="min(66vw, 258px)" ink={heroInk} />
+                      ratio={4.087} width="min(66vw, 258px)" ink={heroInk} halo={heroHalo} />
             {/* Cape May carries far more swash than June, so equal box heights read
                 as different sizes — these are matched on letter size, not box */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Wordmark src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ"
-                        ratio={3.1485} height={38} ink={heroInk} />
+                        ratio={3.1485} height={38} ink={heroInk} halo={heroHalo} />
               <Wordmark src="/photos/agenda/june-2027.png" alt="June 2027"
-                        ratio={3.0436} height={26} ink={heroInk} style={{ marginTop: -5 }} />
+                        ratio={3.0436} height={26} ink={heroInk} halo={heroHalo} style={{ marginTop: -5 }} />
             </div>
           </div>
         </div>
