@@ -839,7 +839,7 @@ export default function WeddingSite() {
           </div>
 
           <div className="hero-mobile" style={{
-            display: 'none', flexDirection: 'column', alignItems: 'flex-end', gap: 10,
+            display: 'none', flexDirection: 'column', alignItems: 'flex-end', gap: 4,
             textAlign: 'right',
           }}>
             <Wordmark src="/photos/agenda/haley-and-george.png" alt="Haley & George"
@@ -848,9 +848,9 @@ export default function WeddingSite() {
                 as different sizes — these are matched on letter size, not box */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
               <Wordmark src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ"
-                        ratio={3.1485} height={36} ink={heroInk} halo={heroHalo} />
+                        ratio={3.1485} height={32} ink={heroInk} halo={heroHalo} />
               <Wordmark src="/photos/agenda/june-2027.png" alt="June 2027"
-                        ratio={3.0436} height={27} ink={heroInk} halo={heroHalo} style={{ marginTop: -4 }} />
+                        ratio={3.0436} height={29} ink={heroInk} halo={heroHalo} style={{ marginTop: -3 }} />
             </div>
           </div>
         </div>
