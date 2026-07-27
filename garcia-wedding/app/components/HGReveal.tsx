@@ -34,14 +34,23 @@ export default function HGReveal({
     return null;
   };
 
-  // sit over the lander's slot to begin with
+  // Sit over the lander's slot — and keep sitting on it. The card animates in,
+  // fonts settle, and mobile browsers resize the viewport as the URL bar hides,
+  // so a one-shot measurement drifts. Track it until the monogram starts moving.
   useLayoutEffect(() => {
-    const put = () => { const b = measure('#lander-hg-slot'); if (b) setBox(b); };
-    put();
-    const t = setTimeout(put, 60);        // after the card's entrance settles
-    window.addEventListener('resize', put);
-    return () => { clearTimeout(t); window.removeEventListener('resize', put); };
-  }, []);
+    if (phase !== 'lander') return;
+    let raf = 0;
+    const tick = () => {
+      const b = measure('#lander-hg-slot');
+      const cur = boxRef.current;
+      if (b && (!cur || Math.abs(b.x - cur.x) > 0.5 || Math.abs(b.y - cur.y) > 0.5 || Math.abs(b.w - cur.w) > 0.5)) {
+        setBox(b);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [phase]);
 
   // travel to the hero's monogram
   useEffect(() => {

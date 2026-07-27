@@ -19,7 +19,7 @@ const HERO_PHOTOS = [
   { src: '/photos/eng-bikes-motion.jpg',  pos: 'center 45%', ink: DEEP_DARK_ },
   { src: '/photos/eng-dunes-sitting.jpg', pos: 'center 45%', ink: DEEP_DARK_ },
   { src: '/photos/eng-beach-lift.jpg',    pos: 'center 70%', ink: DEEP_DARK_ },
-  { src: '/photos/eng-bike-together.jpg', pos: 'center 50%', ink: CREAM_ },
+  { src: '/photos/eng-bike-together.jpg', pos: 'center 50%', ink: DEEP_DARK_ },
 ];
 const HERO_MS = 3750;   // 50% longer per frame
 
@@ -632,8 +632,8 @@ export default function WeddingSite() {
   // a soft halo in the opposite tone: the lower lines can land on a treeline or
   // on the couple, where ink colour alone isn't enough
   const heroHalo = heroInk === CREAM_
-    ? 'drop-shadow(0 0 5px rgba(26,32,18,.55)) drop-shadow(0 1px 10px rgba(26,32,18,.40))'
-    : 'drop-shadow(0 0 4px rgba(253,253,252,.90)) drop-shadow(0 0 9px rgba(253,253,252,.55))';
+    ? 'drop-shadow(0 0 6px rgba(26,32,18,.60)) drop-shadow(0 1px 12px rgba(26,32,18,.45))'
+    : 'drop-shadow(0 0 6px rgba(253,253,252,.95)) drop-shadow(0 0 12px rgba(253,253,252,.60))';
 
   // Hero slideshow timer
   useEffect(() => {
@@ -839,18 +839,18 @@ export default function WeddingSite() {
           </div>
 
           <div className="hero-mobile" style={{
-            display: 'none', flexDirection: 'column', alignItems: 'center', gap: 12,
-            padding: '0 24px', textAlign: 'center',
+            display: 'none', flexDirection: 'column', alignItems: 'flex-end', gap: 10,
+            textAlign: 'right',
           }}>
             <Wordmark src="/photos/agenda/haley-and-george.png" alt="Haley & George"
-                      ratio={4.087} width="min(66vw, 258px)" ink={heroInk} halo={heroHalo} />
+                      ratio={4.087} width="min(56vw, 206px)" ink={heroInk} halo={heroHalo} />
             {/* Cape May carries far more swash than June, so equal box heights read
                 as different sizes — these are matched on letter size, not box */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
               <Wordmark src="/photos/agenda/cape-may-nj.png" alt="Cape May, NJ"
-                        ratio={3.1485} height={38} ink={heroInk} halo={heroHalo} />
+                        ratio={3.1485} height={36} ink={heroInk} halo={heroHalo} />
               <Wordmark src="/photos/agenda/june-2027.png" alt="June 2027"
-                        ratio={3.0436} height={26} ink={heroInk} halo={heroHalo} style={{ marginTop: -5 }} />
+                        ratio={3.0436} height={27} ink={heroInk} halo={heroHalo} style={{ marginTop: -4 }} />
             </div>
           </div>
         </div>
