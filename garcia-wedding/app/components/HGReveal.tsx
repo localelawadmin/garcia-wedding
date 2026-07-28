@@ -3,7 +3,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import HGDraw from './HGDraw';
 
-const OLIVE = '#4E5B37';
+const OLIVE = '#AFB885';        // Haley's Olive — the entrance field
+const OLIVE_DEEP = '#4E5B37';   // ink: the monogram while it sits on the olive
 const CREAM = '#FDFDFC';
 const BASE = 200;               // the monogram is rendered at this width, then scaled
 
@@ -49,12 +50,12 @@ export default function HGReveal({
     }
   }, [phase]);
 
-  // the card is still fading for a beat after the password, and cream ink on the
-  // cream card would vanish — hold olive until the olive field is actually showing
+  // Olive deep on the olive field is 3.5:1 — the monogram stays ink-coloured for the
+  // whole hold, and only turns cream as it travels, so it arrives already matching the
+  // hero's cream monogram underneath it. (Cream on olive would be 2.1:1 — far too weak
+  // to sit still on.)
   useEffect(() => {
-    if (phase === 'lander') { setCreamInk(false); return; }
-    const t = setTimeout(() => setCreamInk(true), 480);
-    return () => clearTimeout(t);
+    setCreamInk(phase === 'move' || phase === 'reveal');
   }, [phase]);
 
   // travel to the hero's monogram
@@ -102,7 +103,7 @@ export default function HGReveal({
         }}
       >
         {/* already finished — the drawing happened on the card */}
-        <HGDraw color={creamInk ? CREAM : '#4E5B37'} width={BASE} draw={false} />
+        <HGDraw color={creamInk ? CREAM : OLIVE_DEEP} width={BASE} draw={false} />
       </div>
     </>
   );
