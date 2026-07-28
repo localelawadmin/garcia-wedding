@@ -167,6 +167,7 @@ export default function LandingPage({ onSuccess }: Props) {
             style={{
               position: 'absolute',
               left: '-31.25%', top: '-25%', width: '162.5%', height: '150%',
+              maxWidth: 'none',   // the global img reset clamps to 100% and squashes it
               pointerEvents: 'none', userSelect: 'none',
             }}
           />
