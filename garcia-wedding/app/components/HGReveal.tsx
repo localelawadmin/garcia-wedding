@@ -50,12 +50,13 @@ export default function HGReveal({
     }
   }, [phase]);
 
-  // Olive deep on the olive field is 3.5:1 — the monogram stays ink-coloured for the
-  // whole hold, and only turns cream as it travels, so it arrives already matching the
-  // hero's cream monogram underneath it. (Cream on olive would be 2.1:1 — far too weak
-  // to sit still on.)
+  // The monogram turns cream once the olive field is up and holds it through the
+  // travel, so it's already matching the hero's cream monogram on arrival. Cream on
+  // Olive is a soft 2.1:1 — deliberately tonal rather than high-contrast.
   useEffect(() => {
-    setCreamInk(phase === 'move' || phase === 'reveal');
+    if (phase === 'lander') { setCreamInk(false); return; }
+    const t = setTimeout(() => setCreamInk(true), 420);
+    return () => clearTimeout(t);
   }, [phase]);
 
   // travel to the hero's monogram
