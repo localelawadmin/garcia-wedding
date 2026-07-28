@@ -42,13 +42,18 @@ const SKY = '#DEE9F2';        // "sky blue" — the two thin stripe lines, accen
 const DEEP = OLIVE;           // section fills (was powder blue)
 const DEEP_DARK = '#4E5B37';  // derived deep olive — ink: text, dark cards, strokes
 
-// Noise texture (SVG turbulence as data URI) — adds paper grain to backgrounds
+// Widest viewport still treated as a touch device (iPad Pro portrait is 1024).
+// Governs scroll behaviour, not layout — see globals.css.
+const TOUCH_MAX = 1024;
+
+// Noise texture (SVG turbulence as data URI). NO LONGER used on section backgrounds —
+// blended over the stripes it muddied the pistachio and greyed the cream. Kept for reference.
 const NOISE_BG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 const NOISE_CARD = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.95' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 
-// Stripe backgrounds with paper-grain texture layered on top via blend
-const stripeCream = `${NOISE_BG}, linear-gradient(90deg, ${SKY} 0 3px, ${CREAM} 3px 9px, ${PISTACHIO} 9px 34px, ${CREAM} 34px 40px, ${SKY} 40px 43px, ${CREAM} 43px 76px)`;
-const stripeInk   = `${NOISE_BG}, linear-gradient(90deg, ${SKY} 0 3px, ${OLIVE} 3px 9px, ${CREAM} 9px 34px, ${OLIVE} 34px 40px, ${SKY} 40px 43px, ${OLIVE} 43px 76px)`;
+// Stripe backgrounds — clean gradient, no grain layer
+const stripeCream = `linear-gradient(90deg, ${SKY} 0 3px, ${CREAM} 3px 9px, ${PISTACHIO} 9px 34px, ${CREAM} 34px 40px, ${SKY} 40px 43px, ${CREAM} 43px 76px)`;
+const stripeInk   = `linear-gradient(90deg, ${SKY} 0 3px, ${OLIVE} 3px 9px, ${CREAM} 9px 34px, ${OLIVE} 34px 40px, ${SKY} 40px 43px, ${OLIVE} 43px 76px)`;
 const stripeCreamSize = '280px 280px, auto';
 const stripeInkSize   = '280px 280px, auto';
 
@@ -277,9 +282,9 @@ const SectionShell: React.FC<{
         padding: '110px 24px 70px',
         backgroundColor: isPattern ? CREAM : (tone === 'cream' ? CREAM : DEEP),
         backgroundImage: sectionBg,
-        backgroundSize: isPattern ? '700px auto' : '260px 260px, 76px 100%',
+        backgroundSize: isPattern ? '700px auto' : '76px 100%',
         backgroundRepeat: 'repeat',
-        backgroundBlendMode: isPattern ? 'normal' : 'soft-light, normal',
+        backgroundBlendMode: 'normal',
         color: fg,
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center',
@@ -661,10 +666,11 @@ export default function WeddingSite() {
     return () => clearInterval(id);
   }, []);
 
-  // Mobile: scrolling DOWN only — when scrolling fully stops with the next section >=50% on
-  // screen, ease it up to the top. Driven by scrollend so it never fights an in-progress flick.
+  // Touch (phone AND tablet): scrolling DOWN only — when scrolling fully stops with the next
+  // section >=50% on screen, ease it up to the top. Driven by scrollend so it never fights an
+  // in-progress flick. Replaces CSS scroll-snap, which snaps too abruptly under a finger.
   useEffect(() => {
-    if (typeof window === 'undefined' || window.innerWidth > 768) return;
+    if (typeof window === 'undefined' || window.innerWidth > TOUCH_MAX) return;
     const scroller = scrollerRef.current;
     if (!scroller) return;
     let restTop = scroller.scrollTop;
@@ -740,7 +746,7 @@ export default function WeddingSite() {
           padding: '4px 22px 10px',
           background: 'rgba(78, 91, 55, .65)', border: '1px solid rgba(242, 239, 233, .45)',
           borderRadius: 999, color: CREAM,
-          backdropFilter: 'blur(14px) saturate(180%)', WebkitBackdropFilter: 'blur(14px) saturate(180%)',
+          backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
           zIndex: 200,
           fontFamily: "'Montmartre','Cormorant Garamond',Georgia,serif",
           fontStyle: 'italic', fontWeight: 400, lineHeight: 1,
@@ -763,7 +769,7 @@ export default function WeddingSite() {
           background: 'rgba(78, 91, 55, .65)', color: CREAM,
           border: '1.5px solid rgba(242, 239, 233, .45)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backdropFilter: 'blur(14px) saturate(180%)', WebkitBackdropFilter: 'blur(14px) saturate(180%)',
+          backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
           cursor: 'pointer', padding: 0, zIndex: 200,
           opacity: (showTop && !noteOpen) ? 1 : 0,
           pointerEvents: (showTop && !noteOpen) ? 'auto' : 'none',
@@ -874,7 +880,7 @@ export default function WeddingSite() {
         id="invite"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, 76px 100%', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
+          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '76px 100%', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',
@@ -1120,7 +1126,7 @@ export default function WeddingSite() {
         id="contact"
         style={{
           minHeight: '100vh', scrollSnapAlign: 'start', scrollSnapStop: 'always',
-          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '260px 260px, 76px 100%', backgroundBlendMode: 'soft-light, normal', color: DEEP_DARK,
+          backgroundColor: DEEP, backgroundImage: stripeInk, backgroundSize: '76px 100%', color: DEEP_DARK,
           padding: '110px 24px 70px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           position: 'relative',

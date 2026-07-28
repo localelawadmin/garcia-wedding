@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const LANDER_PHOTOS = [
@@ -32,18 +32,48 @@ export default function LandingPage({ onSuccess }: Props) {
   const [shake, setShake] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [idx, setIdx] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Cycle B&W lander photos
   useEffectInterval(() => setIdx(i => (i + 1) % LANDER_PHOTOS.length), CYCLE_MS);
 
   const correct = (process.env.NEXT_PUBLIC_PASSWORD || 'ExitZero').toLowerCase();
 
+  // With the soft keyboard up the viewport is short, so the card — and the monogram
+  // tracking it — sit high. Starting the reveal there makes the logo jump. Drop the
+  // keyboard first and wait for the viewport to come back to full height; the monogram
+  // rides the card back down, then the animation starts from its resting place.
+  const settleViewport = () =>
+    new Promise<void>(resolve => {
+      const vv = window.visualViewport;
+      const full = () => !vv || vv.height >= window.innerHeight - 40;
+      if (full()) { resolve(); return; }
+      let done = false;
+      let debounce: ReturnType<typeof setTimeout> | undefined;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        vv?.removeEventListener('resize', onResize);
+        clearTimeout(debounce); clearTimeout(cap);
+        resolve();
+      };
+      // resize fires repeatedly as the keyboard slides away — act on the last one
+      const onResize = () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => { if (full()) finish(); }, 90);
+      };
+      vv?.addEventListener('resize', onResize);
+      const cap = setTimeout(finish, 800);   // never let this hang the transition
+    });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (pw.toLowerCase() === correct) {
       setExiting(true);
       sessionStorage.setItem('garcia-auth', 'true');
-      await new Promise(r => setTimeout(r, 40));
+      inputRef.current?.blur();
+      await settleViewport();
+      await new Promise(r => setTimeout(r, 140));   // one beat so the slot measures stable
       onSuccess();
     } else {
       setError(true);
@@ -69,7 +99,7 @@ export default function LandingPage({ onSuccess }: Props) {
             style={{
               position: 'absolute', inset: 0, width: '100%', height: '100%',
               objectFit: 'cover',
-              filter: 'blur(10px) brightness(.7) contrast(1.05) saturate(.65)',
+              filter: 'blur(10px) brightness(.7) contrast(1.05) saturate(1.17)',  // .65 x the overlay's old backdrop saturate(1.8)
               transform: 'scale(1.08)',
               opacity: i === idx ? 1 : 0,
               transition: 'opacity 1.4s ease',
@@ -79,7 +109,7 @@ export default function LandingPage({ onSuccess }: Props) {
       </div>
 
       {/* Dark overlay */}
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(79, 110, 142, .42)', backdropFilter: 'saturate(180%)', WebkitBackdropFilter: 'saturate(180%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(79, 110, 142, .42)' }} />
 
       {/* Grain */}
       <div style={{
@@ -179,6 +209,7 @@ export default function LandingPage({ onSuccess }: Props) {
                 fontFamily: 'inherit',
                 fontWeight: 400,
               }}
+              ref={inputRef}
               autoFocus={typeof window !== 'undefined' && !window.matchMedia('(pointer: coarse)').matches}
             />
             <button

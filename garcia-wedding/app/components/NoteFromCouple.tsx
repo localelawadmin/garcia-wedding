@@ -12,7 +12,7 @@ export default function NoteFromCouple({ onOpenChange }: { onOpenChange?: (open:
 
   // Auto-open on first user interaction with the site (desktop only — not mobile)
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth <= 768) return;
+    if (typeof window !== 'undefined' && window.innerWidth <= 1024) return;   // touch incl. tablet
     let fired = false;
     const fire = () => {
       if (fired) return;
@@ -53,9 +53,8 @@ export default function NoteFromCouple({ onOpenChange }: { onOpenChange?: (open:
         background: 'rgba(78, 91, 55, .65)',
         border: '1px solid rgba(242, 239, 233, .45)',
         color: CREAM,
-        backdropFilter: 'blur(14px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(14px) saturate(180%)',
-        zIndex: 200,
+        backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
+                zIndex: 200,
         overflow: 'visible',
         transition: 'width .4s ease, max-height .4s ease, border-radius .4s ease',
       }}

@@ -24,6 +24,7 @@ export default function Navbar() {
         background: 'rgba(78, 91, 55, 0.62)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
+        transform: 'translateZ(0)', willChange: 'backdrop-filter', isolation: 'isolate',
         borderBottom: '1px solid rgba(253, 253, 252, 0.12)',
         color: CREAM,
       }}
@@ -98,6 +99,7 @@ export default function Navbar() {
           flexDirection: 'column',
           background: 'rgba(78, 91, 55, 0.92)',
           backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+          transform: 'translateZ(0)', willChange: 'backdrop-filter',
           borderTop: '1px solid rgba(253, 253, 252, 0.12)',
           padding: '4px 24px 16px',
         }}
@@ -119,11 +121,11 @@ export default function Navbar() {
       </div>
 
       <style jsx>{`
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
           :global(.nav-links) { display: none !important; }
           :global(.nav-burger) { display: flex !important; }
         }
-        @media (min-width: 901px) {
+        @media (min-width: 1025px) {
           :global(.nav-burger) { display: none !important; }
           :global(.nav-menu) { display: none !important; }
         }

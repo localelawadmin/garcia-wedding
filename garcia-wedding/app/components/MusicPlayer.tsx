@@ -324,9 +324,8 @@ export default function MusicPlayer() {
           background: 'rgba(78, 91, 55, .68)',
           border: `1px solid ${drawerOpen ? 'rgba(253,253,252,.30)' : 'transparent'}`,
           borderRadius: 16,
-          backdropFilter: 'blur(14px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(14px) saturate(180%)',
-          color: CREAM,
+          backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
+                    color: CREAM,
           transition: 'max-width .42s ease, opacity .3s ease, padding .42s ease',
         }}
       >
