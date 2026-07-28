@@ -12,7 +12,7 @@ export default function NoteFromCouple({ onOpenChange }: { onOpenChange?: (open:
 
   // Auto-open on first user interaction with the site (desktop only — not mobile)
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth <= 1024) return;   // touch incl. tablet
+    if (typeof window !== 'undefined' && (window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 1024)) return;
     let fired = false;
     const fire = () => {
       if (fired) return;

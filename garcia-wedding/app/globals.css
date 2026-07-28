@@ -98,10 +98,11 @@ body {
   .mp-info-box { max-width: 130px !important; }
 }
 
-/* Scroll feel: tablets are touch devices and hard section-snapping reads as a jerk
-   on a swipe, so everything at or below tablet width gets the phone's free scroll
-   plus the gentle assist in WeddingSite. Desktop keeps the snap. */
-@media (max-width: 1024px) {
+/* Scroll feel: hard section-snapping reads as a jerk under a finger, so every touch
+   device gets the phone's free scroll plus the gentle assist in WeddingSite.
+   Keyed off the pointer, not the viewport — iPad Pro in landscape is 1366px wide,
+   so any width-based gate misses it entirely. Desktop keeps the snap. */
+@media (pointer: coarse), (max-width: 1024px) {
   .wedding-scroller { scroll-snap-type: none !important; }
   .wedding-scroller > section + section { border-top: 1px solid #DEE9F2; }
 }

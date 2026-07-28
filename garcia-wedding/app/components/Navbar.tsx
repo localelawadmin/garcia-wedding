@@ -121,11 +121,11 @@ export default function Navbar() {
       </div>
 
       <style jsx>{`
-        @media (max-width: 1024px) {
+        @media (pointer: coarse), (max-width: 1024px) {
           :global(.nav-links) { display: none !important; }
           :global(.nav-burger) { display: flex !important; }
         }
-        @media (min-width: 1025px) {
+        @media (pointer: fine) and (min-width: 1025px) {
           :global(.nav-burger) { display: none !important; }
           :global(.nav-menu) { display: none !important; }
         }

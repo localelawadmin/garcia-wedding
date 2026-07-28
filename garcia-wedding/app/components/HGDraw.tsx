@@ -22,6 +22,30 @@ const C_LEN = TOTAL - PRE_LEN;
 const BASE_MS = 3600;   // full draw at 1x
 const PAUSE = 0.14;     // beat before the final stroke
 
+// The sweep is a run of quads, one per step of the pen. Rebuilding the whole run
+// every frame meant handing the parser a ~32,000-character `d` 60 times a second,
+// which is what made this stutter on tablets. Instead the quads are baked into
+// fixed chunks once, at module load: a chunk that is fully drawn never gets touched
+// again, and only the single chunk straddling the pen tip is rebuilt per frame.
+const CHUNK = 24;       // quads per chunk
+
+const quadOf = (ph: (typeof HG_PHASES)[number], j: number) =>
+  `M ${ph.L[2 * j]} ${ph.L[2 * j + 1]} L ${ph.L[2 * j + 2]} ${ph.L[2 * j + 3]} `
+  + `L ${ph.R[2 * j + 2]} ${ph.R[2 * j + 3]} L ${ph.R[2 * j]} ${ph.R[2 * j + 1]} Z`;
+
+const CHUNKS: { d: string; n: number }[][] = HG_PHASES.map(ph => {
+  const quads = ph.L.length / 2 - 1;
+  const out: { d: string; n: number }[] = [];
+  for (let c = 0; c * CHUNK < quads; c++) {
+    const lo = c * CHUNK;
+    const hi = Math.min(lo + CHUNK, quads);
+    let d = '';
+    for (let j = lo; j < hi; j++) d += quadOf(ph, j);
+    out.push({ d, n: hi - lo });
+  }
+  return out;
+});
+
 export default function HGDraw({
   color = '#FDFDFC',
   width = 260,
@@ -35,7 +59,7 @@ export default function HGDraw({
   delay?: number;
   onDone?: () => void;
 }) {
-  const refs = useRef<(SVGPathElement | null)[]>([]);
+  const chunkRefs = useRef<(SVGPathElement | null)[][]>(HG_PHASES.map(() => []));
   const grps = useRef<(SVGGElement | null)[]>([]);
   const uid = useId().replace(/[^a-zA-Z0-9]/g, '');
   const doneRef = useRef(onDone);
@@ -49,23 +73,40 @@ export default function HGDraw({
     const mD = dur * (PRE_LEN / TOTAL);
     const sD = dur * (C_LEN / TOTAL);
 
+    // how many quads each chunk currently has on screen; -1 forces a first write
+    const drawn = CHUNKS.map(cs => cs.map(() => -1));
+    const shown = HG_PHASES.map(() => -1);
+
     const setPhase = (i: number, f: number) => {
       const g = grps.current[i];
-      const p = refs.current[i];
-      if (!g || !p) return;
-      if (f <= 0) { g.style.display = 'none'; return; }
-      g.style.display = '';
+      if (!g) return;
       const ph = HG_PHASES[i];
-      const n = ph.L.length / 2;
-      const k = Math.max(2, Math.min(n, Math.round(n * f)));
-      let d = '';
-      for (let j = 0; j < k - 1; j++) {
-        // one quad per step: a single long ribbon self-intersects where the pen
-        // doubles back, and the opposite windings cancel into holes
-        d += `M ${ph.L[2 * j]} ${ph.L[2 * j + 1]} L ${ph.L[2 * j + 2]} ${ph.L[2 * j + 3]} `
-           + `L ${ph.R[2 * j + 2]} ${ph.R[2 * j + 3]} L ${ph.R[2 * j]} ${ph.R[2 * j + 1]} Z`;
+      const steps = ph.L.length / 2;
+      const k = f <= 0 ? 0 : Math.max(2, Math.min(steps, Math.round(steps * f)));
+      const quads = Math.max(0, k - 1);
+
+      const vis = quads > 0 ? 1 : 0;
+      if (shown[i] !== vis) { g.style.display = vis ? '' : 'none'; shown[i] = vis; }
+      if (!vis) return;
+
+      const cs = CHUNKS[i];
+      const st = drawn[i];
+      for (let c = 0; c < cs.length; c++) {
+        const want = Math.max(0, Math.min(cs[c].n, quads - c * CHUNK));
+        if (st[c] === want) continue;          // settled — the common case, costs nothing
+        const el = chunkRefs.current[i][c];
+        if (el) {
+          if (want === 0) el.setAttribute('d', 'M 0 0 Z');
+          else if (want === cs[c].n) el.setAttribute('d', cs[c].d);
+          else {
+            let d = '';
+            const lo = c * CHUNK;
+            for (let j = lo; j < lo + want; j++) d += quadOf(ph, j);
+            el.setAttribute('d', d);
+          }
+        }
+        st[c] = want;
       }
-      p.setAttribute('d', d || 'M 0 0 Z');
     };
 
     const render = (pre: number, c: number) => {
@@ -113,8 +154,13 @@ export default function HGDraw({
           <path clipRule="evenodd" d={`${RECT} ${HG_VBAND}`} />
         </clipPath>
         {HG_PHASES.map((_, i) => (
+          // a clipPath unions its children, so splitting the sweep across chunk paths
+          // is not just cheaper — it also removes any chance of two quads winding
+          // against each other and cancelling into a hole
           <clipPath key={i} id={`hg-sweep-${uid}-${i}`}>
-            <path ref={el => { refs.current[i] = el; }} d="M 0 0 Z" />
+            {CHUNKS[i].map((_, c) => (
+              <path key={c} ref={el => { chunkRefs.current[i][c] = el; }} d="M 0 0 Z" />
+            ))}
           </clipPath>
         ))}
       </defs>

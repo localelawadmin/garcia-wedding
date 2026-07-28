@@ -2,12 +2,14 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import HGDraw from './HGDraw';
+import { LANDER_WAVY_INNER } from './LandingPage';
 
 const OLIVE = '#4E5B37';
 const CREAM = '#FDFDFC';
 const BASE = 200;               // the monogram is rendered at this width, then scaled
 
 type Box = { x: number; y: number; w: number };
+type Rect = { x: number; y: number; w: number; h: number };
 
 /**
  * The monogram is one continuous element across the whole entrance:
@@ -23,6 +25,9 @@ export default function HGReveal({
 }) {
   const [box, setBox] = useState<Box | null>(null);
   const [creamInk, setCreamInk] = useState(false);
+  const [card, setCard] = useState<Rect | null>(null);
+  const cardRef = useRef<Rect | null>(null);
+  cardRef.current = card;
   const boxRef = useRef<Box | null>(null);
   boxRef.current = box;
 
@@ -46,6 +51,15 @@ export default function HGReveal({
       const cur = boxRef.current;
       if (b && (!cur || Math.abs(b.x - cur.x) > 0.5 || Math.abs(b.y - cur.y) > 0.5 || Math.abs(b.w - cur.w) > 0.5)) {
         setBox(b);
+      }
+      // the card's own frame too, so its outline can outlive the card itself
+      const el = document.querySelector<HTMLElement>('#lander-card-slot');
+      if (el) {
+        const r = el.getBoundingClientRect();
+        const cc = cardRef.current;
+        if (r.width > 4 && (!cc || Math.abs(r.left - cc.x) > 0.5 || Math.abs(r.top - cc.y) > 0.5 || Math.abs(r.width - cc.w) > 0.5)) {
+          setCard({ x: r.left, y: r.top, w: r.width, h: r.height });
+        }
       }
       raf = requestAnimationFrame(tick);
     };
@@ -88,6 +102,24 @@ export default function HGReveal({
           pointerEvents: 'none',
         }}
       />
+      {/* The card dissolves, but a copy of its blue outline is held at full strength
+          underneath — so the shape stays while the photos and copy go. It leaves
+          quickly, and only once the monogram starts travelling. */}
+      {card && phase !== 'lander' && (
+        <svg
+          viewBox="0 0 480 600"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          style={{
+            position: 'fixed', left: card.x, top: card.y, width: card.w, height: card.h,
+            zIndex: 300, pointerEvents: 'none',
+            opacity: phase === 'green' ? 1 : 0,
+            transition: 'opacity .34s ease',
+          }}
+        >
+          <path d={LANDER_WAVY_INNER} fill="none" stroke="#DEE9F2" strokeWidth={3} vectorEffect="non-scaling-stroke" />
+        </svg>
+      )}
       <div
         aria-hidden="true"
         style={{

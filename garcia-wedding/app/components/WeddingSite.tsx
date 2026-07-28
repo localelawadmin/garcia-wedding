@@ -42,9 +42,12 @@ const SKY = '#DEE9F2';        // "sky blue" — the two thin stripe lines, accen
 const DEEP = OLIVE;           // section fills (was powder blue)
 const DEEP_DARK = '#4E5B37';  // derived deep olive — ink: text, dark cards, strokes
 
-// Widest viewport still treated as a touch device (iPad Pro portrait is 1024).
-// Governs scroll behaviour, not layout — see globals.css.
-const TOUCH_MAX = 1024;
+// "Is this a finger?" — the primary pointer, with a width fallback for desktop
+// browsers narrowed to tablet size. iPad Pro landscape is 1366px, so width alone
+// misses it. Governs scroll behaviour, not layout — see globals.css.
+const isTouchLayout = () =>
+  typeof window !== 'undefined' &&
+  (window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 1024);
 
 // Noise texture (SVG turbulence as data URI). NO LONGER used on section backgrounds —
 // blended over the stripes it muddied the pistachio and greyed the cream. Kept for reference.
@@ -176,12 +179,18 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
             </span>
           </span>
         </button>
+        {/* One animated property, not four. The panel's height is fixed, so height
+            alone does the job; the padding moved inside so it no longer reflows every
+            frame, and `contain` keeps the browser from re-laying-out the whole section
+            on each step. */}
         <div id={`hotel-${hotel.logo}-details`} style={{
-          maxHeight: open ? 180 : 0, minHeight: open ? 180 : 0, overflow: 'hidden',
-          opacity: open ? 1 : 0, paddingBottom: open ? 16 : 0,
-          transition: 'max-height .35s ease, min-height .35s ease, opacity .35s ease, padding .35s ease',
-          display: 'flex', flexDirection: 'column',
+          height: open ? 196 : 0, overflow: 'hidden',
+          opacity: open ? 1 : 0,
+          transition: 'height .35s ease, opacity .28s ease',
+          contain: 'layout paint',
+          willChange: 'height',
         }}>
+        <div style={{ height: 180, paddingBottom: 16, display: 'flex', flexDirection: 'column' }}>
           {hotel.details.map((line, i) => (
             <p key={i} style={{ fontSize: 13, lineHeight: 1.55, opacity: .85, margin: '0 0 8px', letterSpacing: '-0.005em' }}>{line}</p>
           ))}
@@ -211,6 +220,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
               </svg>
             </a>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -588,6 +598,21 @@ const Tile: React.FC<{ heading: string; body: React.ReactNode; tone?: CardTone }
 
 const FaqRow: React.FC<{ q: string; a: string }> = ({ q, a }) => {
   const [open, setOpen] = useState(false);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const [bodyH, setBodyH] = useState(0);
+
+  // answers vary in length, so animate to the real height rather than a max-height
+  // guess — a max-height that overshoots makes the tail of the transition look dead
+  useEffect(() => {
+    const el = bodyRef.current;
+    if (!el) return;
+    const read = () => setBodyH(el.scrollHeight);
+    read();
+    const ro = new ResizeObserver(read);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [a]);
+
   return (
     <div style={{ borderBottom: '1px solid currentColor' }}>
       <button
@@ -615,11 +640,15 @@ const FaqRow: React.FC<{ q: string; a: string }> = ({ q, a }) => {
         </span>
       </button>
       <div style={{
-        maxHeight: open ? 240 : 0, overflow: 'hidden',
-        transition: 'max-height .35s ease, opacity .35s ease, padding .35s ease',
-        opacity: open ? 1 : 0, paddingBottom: open ? 20 : 0,
+        height: open ? bodyH : 0, overflow: 'hidden',
+        transition: 'height .35s ease, opacity .28s ease',
+        opacity: open ? 1 : 0,
+        contain: 'layout paint',
+        willChange: 'height',
       }}>
-        <p style={{ fontSize: 15, lineHeight: 1.55, opacity: .8, margin: 0, maxWidth: 580, fontWeight: 400, letterSpacing: '-0.005em' }}>{a}</p>
+        <div ref={bodyRef} style={{ paddingBottom: 20 }}>
+          <p style={{ fontSize: 15, lineHeight: 1.55, opacity: .8, margin: 0, maxWidth: 580, fontWeight: 400, letterSpacing: '-0.005em' }}>{a}</p>
+        </div>
       </div>
     </div>
   );
@@ -670,7 +699,7 @@ export default function WeddingSite() {
   // section >=50% on screen, ease it up to the top. Driven by scrollend so it never fights an
   // in-progress flick. Replaces CSS scroll-snap, which snaps too abruptly under a finger.
   useEffect(() => {
-    if (typeof window === 'undefined' || window.innerWidth > TOUCH_MAX) return;
+    if (!isTouchLayout()) return;
     const scroller = scrollerRef.current;
     if (!scroller) return;
     let restTop = scroller.scrollTop;
