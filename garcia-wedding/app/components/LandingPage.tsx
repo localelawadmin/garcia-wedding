@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import HGDraw from './HGDraw';
 
 const LANDER_PHOTOS = [
   '/photos/eng-beach-walk-bw.jpg',
@@ -147,7 +148,6 @@ export default function LandingPage({ onSuccess }: Props) {
         color: '#4E5B37', padding: '0 24px',
       }}>
         <motion.div
-          id="lander-card-slot"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
@@ -192,7 +192,13 @@ export default function LandingPage({ onSuccess }: Props) {
               aspectRatio: '58.875 / 73.5',
               transform: 'translateX(-7.5%)',
             }}
-          />
+          >
+            {/* The monogram draws itself right here, as an ordinary child of the card.
+                It used to be a fixed overlay tracking this slot's screen position every
+                frame, which meant the soft keyboard, pinch-zoom or any viewport change
+                could slide it off on its own. As a child it simply moves with the card. */}
+            <HGDraw color="#4E5B37" width="100%" speed={1.2} delay={420} />
+          </div>
 
           <motion.form
             onSubmit={handleSubmit}

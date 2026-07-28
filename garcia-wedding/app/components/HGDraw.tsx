@@ -33,15 +33,23 @@ const quadOf = (ph: (typeof HG_PHASES)[number], j: number) =>
   `M ${ph.L[2 * j]} ${ph.L[2 * j + 1]} L ${ph.L[2 * j + 2]} ${ph.L[2 * j + 3]} `
   + `L ${ph.R[2 * j + 2]} ${ph.R[2 * j + 3]} L ${ph.R[2 * j]} ${ph.R[2 * j + 1]} Z`;
 
+const OVERLAP = 2;      // quads each finished chunk borrows from the next
+
+// A clipPath unions its children, but each child is anti-aliased on its own — where
+// two chunks butt up against each other their edge coverage doesn't sum back to 1
+// and a hairline shows through. Overlapping by whole quads means the seam is fully
+// covered by both chunks, so it disappears. (A single path had no seams because it
+// rasterised as one region; that's the behaviour being restored here.)
 const CHUNKS: { d: string; n: number }[][] = HG_PHASES.map(ph => {
   const quads = ph.L.length / 2 - 1;
   const out: { d: string; n: number }[] = [];
   for (let c = 0; c * CHUNK < quads; c++) {
     const lo = c * CHUNK;
-    const hi = Math.min(lo + CHUNK, quads);
+    const own = Math.min(lo + CHUNK, quads);          // quads this chunk owns
+    const hi = Math.min(own + OVERLAP, quads);        // plus the seam cover
     let d = '';
     for (let j = lo; j < hi; j++) d += quadOf(ph, j);
-    out.push({ d, n: hi - lo });
+    out.push({ d, n: own - lo });
   }
   return out;
 });
@@ -51,12 +59,14 @@ export default function HGDraw({
   width = 260,
   speed = 1.2,
   delay = 0,
+  draw = true,
   onDone,
 }: {
   color?: string;
   width?: number | string;
   speed?: number;
   delay?: number;
+  draw?: boolean;
   onDone?: () => void;
 }) {
   const chunkRefs = useRef<(SVGPathElement | null)[][]>(HG_PHASES.map(() => []));
@@ -119,6 +129,8 @@ export default function HGDraw({
       });
     };
 
+    if (!draw) { render(PRE_LEN, C_LEN); return; }   // already-complete, no rAF at all
+
     render(0, 0);
 
     const frame = (ts: number) => {
@@ -135,7 +147,7 @@ export default function HGDraw({
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [speed, delay]);
+  }, [speed, delay, draw]);
 
   const H = HG_H.map(i => <path key={`h${i}`} d={HG_PATHS[i]} />);
   const G = HG_G.map(i => <path key={`g${i}`} d={HG_PATHS[i]} />);
