@@ -4,14 +4,18 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import HGDraw from './HGDraw';
 
+// Pre-blurred and pre-graded at build time (see /photos/lander). These used to be the
+// full-size photos with `filter: blur(10px) brightness(.7) …` applied live — seven
+// filter layers the compositor had to re-rasterise on any state change, which is where
+// the ghosting on tablet came from. Baked in, they're 12x smaller and carry no filter.
 const LANDER_PHOTOS = [
-  '/photos/eng-beach-walk-bw.jpg',
-  '/photos/eng-beach-lift-bw.jpg',
-  '/photos/eng-bikes-motion-bw.jpg',
-  '/photos/eng-dunes-sitting-bw.jpg',
-  '/photos/eng-bike-together-bw.jpg',
-  '/photos/eng-beach-standing-bw.jpg',
-  '/photos/eng-bikes-street-bw.jpg',
+  '/photos/lander/eng-beach-walk-bw.jpg',
+  '/photos/lander/eng-beach-lift-bw.jpg',
+  '/photos/lander/eng-bikes-motion-bw.jpg',
+  '/photos/lander/eng-dunes-sitting-bw.jpg',
+  '/photos/lander/eng-bike-together-bw.jpg',
+  '/photos/lander/eng-beach-standing-bw.jpg',
+  '/photos/lander/eng-bikes-street-bw.jpg',
 ];
 
 const CYCLE_MS = 2400;
@@ -113,7 +117,6 @@ export default function LandingPage({ onSuccess }: Props) {
             style={{
               position: 'absolute', inset: 0, width: '100%', height: '100%',
               objectFit: 'cover',
-              filter: 'blur(10px) brightness(.7) contrast(1.05) saturate(1.17)',  // .65 x the overlay's old backdrop saturate(1.8)
               transform: 'scale(1.08)',
               opacity: i === idx ? 1 : 0,
               transition: 'opacity 1.4s ease',
@@ -130,16 +133,6 @@ export default function LandingPage({ onSuccess }: Props) {
         position: 'absolute', inset: 0, pointerEvents: 'none',
         background: 'radial-gradient(circle at center, rgba(54,76,99,0) 30%, rgba(54,76,99,.3) 80%, rgba(54,76,99,.6) 100%)',
       }} />
-
-      {/* SVG defs for tinting the HG lockup to deep-dark on the cream card */}
-      <svg width="0" height="0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}>
-        <defs>
-          <filter id="lander-tint-deep-dark" colorInterpolationFilters="sRGB">
-            <feFlood floodColor="#4E5B37" />
-            <feComposite in2="SourceAlpha" operator="in" />
-          </filter>
-        </defs>
-      </svg>
 
       {/* Content — cream oval card with initials + password */}
       <div style={{
@@ -163,13 +156,20 @@ export default function LandingPage({ onSuccess }: Props) {
           }}
         >
           {/* Wavy oval — same scalloped shape as the invite/contact cards inside the site */}
-          {/* the shadow lives on a wrapping div, not on the <svg>: WebKit clips an SVG
-              element's filter output to its own viewport, which sliced the shadow off
-              square along the edge of the card */}
-          <div style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            filter: 'drop-shadow(0 30px 60px rgba(0,0,0,.40)) drop-shadow(0 6px 18px rgba(0,0,0,.18))',
-          }}>
+          {/* Shadow as a pre-rendered image rather than a live drop-shadow: a 60px blur
+              radius is re-rasterised by the compositor on every state change, and on
+              iPad that pass is low-res enough to show a ghost edge. The PNG is padded
+              by 31.25% / 25% of the card box, hence the negative insets. */}
+          <img
+            src="/photos/lander/card-shadow.png"
+            alt=""
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              left: '-31.25%', top: '-25%', width: '162.5%', height: '150%',
+              pointerEvents: 'none', userSelect: 'none',
+            }}
+          />
           <svg
             viewBox="0 0 480 600"
             preserveAspectRatio="none"
@@ -182,7 +182,6 @@ export default function LandingPage({ onSuccess }: Props) {
             <path d={LANDER_WAVY} fill="#FDFDFC" stroke="#4E5B37" strokeWidth={1} vectorEffect="non-scaling-stroke" />
             <path d={LANDER_WAVY_INNER} fill="none" stroke="#DEE9F2" strokeWidth={3} vectorEffect="non-scaling-stroke" />
           </svg>
-          </div>
           <div
             id="lander-hg-slot"
             aria-hidden="true"
