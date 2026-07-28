@@ -33,16 +33,17 @@ export default function LandingPage({ onSuccess }: Props) {
 
   // Nothing on the lander scrolls, but the document behind it still rubber-bands,
   // and the monogram — which tracks the card's screen position — drifts with it.
+  // Deliberately NOT overflow:hidden on <html>: the lander's only in-flow ancestor
+  // is a zero-height wrapper, so the root collapses and WebKit then clips the
+  // fixed-position lander to that empty box — it stops painting entirely.
   useEffect(() => {
-    const b = document.body, d = document.documentElement;
-    const prev = [b.style.overflow, d.style.overflow, b.style.overscrollBehavior] as const;
+    const b = document.body;
+    const prev = [b.style.overflow, b.style.overscrollBehavior] as const;
     b.style.overflow = 'hidden';
-    d.style.overflow = 'hidden';
     b.style.overscrollBehavior = 'none';
     return () => {
       b.style.overflow = prev[0];
-      d.style.overflow = prev[1];
-      b.style.overscrollBehavior = prev[2];
+      b.style.overscrollBehavior = prev[1];
     };
   }, []);
 
@@ -97,7 +98,7 @@ export default function LandingPage({ onSuccess }: Props) {
 
   return (
     <motion.div
-      style={{ position: 'fixed', inset: 0, background: '#364C63', overflow: 'hidden', touchAction: 'none', overscrollBehavior: 'none' }}
+      style={{ position: 'fixed', inset: 0, background: '#364C63', overflow: 'hidden', touchAction: 'manipulation', overscrollBehavior: 'none' }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
     >

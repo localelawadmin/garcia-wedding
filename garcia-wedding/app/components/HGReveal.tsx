@@ -95,10 +95,12 @@ export default function HGReveal({
         aria-hidden="true"
         style={{
           position: 'fixed', inset: 0, background: OLIVE, zIndex: 260,
-          // already opaque while the lander covers it — the lander fades to reveal it,
-          // rather than two colours cross-fading through a gap
-          opacity: phase === 'reveal' ? 0 : 1,
-          transition: 'opacity 1.2s cubic-bezier(.22,1,.36,1)',
+          // Transparent while the lander owns the screen, then opaque INSTANTLY the
+          // moment it starts dissolving — so the lander still fades onto solid colour
+          // with no cross-fade gap, but nothing full-screen is ever stacked under the
+          // lander waiting to show through if anything goes wrong with it.
+          opacity: phase === 'lander' || phase === 'reveal' ? 0 : 1,
+          transition: phase === 'reveal' ? 'opacity 1.2s cubic-bezier(.22,1,.36,1)' : 'none',
           pointerEvents: 'none',
         }}
       />
