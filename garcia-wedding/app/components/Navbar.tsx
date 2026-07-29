@@ -24,7 +24,6 @@ export default function Navbar() {
         background: 'rgba(78, 91, 55, 0.62)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        transform: 'translateZ(0)', willChange: 'backdrop-filter', isolation: 'isolate',
         borderBottom: '1px solid rgba(253, 253, 252, 0.12)',
         color: CREAM,
       }}
@@ -99,7 +98,6 @@ export default function Navbar() {
           flexDirection: 'column',
           background: 'rgba(78, 91, 55, 0.92)',
           backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-          transform: 'translateZ(0)', willChange: 'backdrop-filter',
           borderTop: '1px solid rgba(253, 253, 252, 0.12)',
           padding: '4px 24px 16px',
         }}

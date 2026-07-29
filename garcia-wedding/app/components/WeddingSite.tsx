@@ -747,6 +747,13 @@ export default function WeddingSite() {
         scrollBehavior: 'smooth',
         WebkitOverflowScrolling: 'touch',
         background: CREAM,
+        // The navbar lives inside this scroller and blurs whatever is behind it. By
+        // default the "backdrop root" it samples is the whole viewport, which includes
+        // browser-level compositing surfaces — so when the pointer leaves the page and
+        // the overlay scrollbar fades, the snapshot is retaken and the bar visibly
+        // shifts. `isolate` scopes the backdrop to this element's own content, so only
+        // the page can affect it.
+        isolation: 'isolate',
       }}
     >
       {/* Hidden SVG filter defs for line-art alpha colorization */}

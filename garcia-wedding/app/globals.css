@@ -107,6 +107,13 @@ body {
   .wedding-scroller > section + section { border-top: 1px solid #DEE9F2; }
 }
 
+/* The overlay scrollbar fading in and out as the pointer enters/leaves the page is a
+   compositing change, and it forces the navbar's backdrop-filter to re-sample — which
+   is what made the bar shift colour when the mouse moved to the browser toolbar.
+   On macOS these are hidden until you scroll anyway, so little is lost. */
+.wedding-scroller { scrollbar-width: none; }
+.wedding-scroller::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
 /* Layout stacking is still a phone-width concern — tablets have room for two columns */
 @media (max-width: 768px) {
   .event-row { grid-template-columns: 1fr !important; gap: 3px !important; }
