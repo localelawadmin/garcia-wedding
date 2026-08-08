@@ -77,49 +77,25 @@ type Hotel = {
 
 const HOTELS: Hotel[] = [
   { name: 'La Mer Beachfront Resort', frame: 20, logo: 'la-mer', price: '$$$',
-    details: [
-      'Where our welcome drinks will take place.',
-      'Starts at $564/night. Check-in at 4 PM.',
-      <>Room block code: <strong>270617DWRB</strong></>,
-    ],
+    details: [<>Room block code: <strong>270617DWRB</strong></>],
     bookUrl: 'https://capemaylamer.com' },
   { name: 'The Beach Club on Madison', frame: 18, logo: 'beach-club', price: '$',
-    details: [
-      'A bit further back from the beach.',
-      'Starts at $294/night. Check-in at 4 PM.',
-      <>Group code: <strong>2706DRISCO</strong></>,
-    ],
+    details: [<>Group code: <strong>2706DRISCO</strong></>],
     bookUrl: 'https://www.beachclubcapemay.com' },
   { name: 'The Grand Hotel', frame: 19, logo: 'grand', price: '$$',
-    details: [
-      'Beachfront classic — 28 rooms reserved for our block.',
-      'Starts at $406/night. Select your dates first to unlock the block.',
-      <>Group ID: <strong>744882</strong></>,
-    ],
+    details: [<>Group ID: <strong>744882</strong></>],
     bookUrl: 'https://www.grandhotelcapemay.com' },
   { name: 'Marquis de Lafayette', frame: 20, logo: 'marquis', price: '$$',
-    details: [
-      '50 rooms reserved for our wedding block.',
-      'Starts at $389/night. If booking by phone, mention the Driscoll Garcia Wedding Room Block.',
-      <>Group Code: <strong>DRISGAR6</strong></>,
-    ],
+    details: [<>Group Code: <strong>DRISGAR6</strong></>],
     bookUrl: 'https://www.marquiscapemay.com' },
   { name: 'Montreal Beach Resort', frame: 18, logo: 'montreal', price: '$$',
-    details: [
-      '10% off all rooms for our guests.',
-      <>Code: <strong>garcia2027</strong></>,
-    ],
+    details: [<>Code: <strong>garcia2027</strong></>],
     bookUrl: 'https://www.montrealbeachresort.com' },
   { name: 'ICONA Cape May', frame: 19, logo: 'icona', price: '$$$',
-    details: [
-      <>To book a room at Icona, please call the front desk at <strong>609-551-0100</strong> and mention the Driscoll-Garcia Wedding room block.</>,
-    ],
+    details: [<>To book a room at Icona, please call the front desk at <strong>609-551-0100</strong> and mention the Driscoll-Garcia Wedding room block.</>],
     bookUrl: 'https://www.icona.com/cape-may/' },
   { name: 'Ocean Club Hotel', frame: 20, logo: 'ocean-club', price: '$$$',
-    details: [
-      'Beachfront, with a pool deck overlooking the ocean.',
-      <>To book a room at the Ocean Club, please first select the dates you wish to stay. There is a 2 night minimum. Then, enter the Group Code: <strong>69765</strong>.</>,
-    ],
+    details: [<>To book a room at the Ocean Club, please first select the dates you wish to stay. There is a 2 night minimum. Then, enter the Group Code: <strong>69765</strong>.</>],
     bookUrl: 'https://capemayoceanclubhotel.com' },
 ];
 
@@ -406,9 +382,7 @@ const EVENT_DATA: Record<string, { summary: string; start: string; end: string; 
   ceremony:   { summary: 'Wedding Ceremony — Haley & George', start: '20270618T173000Z', end: '20270618T190000Z', location: 'Our Lady Star of the Sea, 525 Washington Street, Cape May, NJ', description: 'Mass starts promptly. Please arrive 15-30 minutes early.' },
   reception:  { summary: 'Wedding Reception — Haley & George', start: '20270618T210000Z', end: '20270619T020000Z', location: 'Isaac Smith Vineyard, 1039 Seashore Road, Cape May, NJ', description: '' },
   afterparty: { summary: 'After Party — Haley & George', start: '20270619T023000Z', end: '20270619T060000Z', location: "Carney's Restaurant & Bar, 411 Beach Ave, Cape May, NJ", description: '' },
-  // the page says "All Day", so the invite is an all-day event to match; DTEND is
-  // exclusive in iCalendar, hence the 20th
-  beach:      { summary: 'Beach Day — Haley & George', start: '20270619', end: '20270620', allDay: true, location: 'Cape May Beach, Cape May, NJ', description: 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia — or stay the weekend.' },
+  beach:      { summary: 'Beach Day — Haley & George', start: '20270619T140000Z', end: '20270619T180000Z', location: 'Cape May Beach, Cape May, NJ', description: 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia — or stay the weekend.' },
 };
 
 function downloadAllICS() {
@@ -1078,7 +1052,7 @@ export default function WeddingSite() {
       <EventSection calId="beach" mapQuery="Cape+May+Beach+NJ" id="beach" tone="cream" eyebrow="Saturday · June 19"
         name="Beach Day" iconSrc={ICON.beach}
         rows={[
-          ['Time', 'All Day'],
+          ['Time', '10:00 AM — 2:00 PM'],
           ['Note', 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia! Or stick around and enjoy a few extra days in Cape May.'],
         ]} />
 
