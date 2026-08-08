@@ -20,6 +20,7 @@ const HERO_PHOTOS = [
   { src: '/photos/eng-dunes-sitting.jpg', pos: 'center 45%', ink: DEEP_DARK_ },
   { src: '/photos/eng-beach-lift.jpg',    pos: 'center 70%', ink: DEEP_DARK_ },
   { src: '/photos/eng-bike-together.jpg', pos: 'center 50%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-beach-standing.jpg', pos: 'center 55%', ink: DEEP_DARK_ },
 ];
 const HERO_MS = 3750;   // 50% longer per frame
 
@@ -405,7 +406,9 @@ const EVENT_DATA: Record<string, { summary: string; start: string; end: string; 
   ceremony:   { summary: 'Wedding Ceremony — Haley & George', start: '20270618T173000Z', end: '20270618T190000Z', location: 'Our Lady Star of the Sea, 525 Washington Street, Cape May, NJ', description: 'Mass starts promptly. Please arrive 15-30 minutes early.' },
   reception:  { summary: 'Wedding Reception — Haley & George', start: '20270618T210000Z', end: '20270619T020000Z', location: 'Isaac Smith Vineyard, 1039 Seashore Road, Cape May, NJ', description: '' },
   afterparty: { summary: 'After Party — Haley & George', start: '20270619T023000Z', end: '20270619T060000Z', location: "Carney's Restaurant & Bar, 411 Beach Ave, Cape May, NJ", description: '' },
-  beach:      { summary: 'Beach Day — Haley & George', start: '20270619T140000Z', end: '20270619T180000Z', location: 'Cape May Beach, Cape May, NJ', description: 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia — or stay the weekend.' },
+  // the page says "All Day", so the invite is an all-day event to match; DTEND is
+  // exclusive in iCalendar, hence the 20th
+  beach:      { summary: 'Beach Day — Haley & George', start: '20270619', end: '20270620', allDay: true, location: 'Cape May Beach, Cape May, NJ', description: 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia — or stay the weekend.' },
 };
 
 function downloadAllICS() {
