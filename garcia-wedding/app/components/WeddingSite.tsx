@@ -77,7 +77,10 @@ type Hotel = {
 
 const HOTELS: Hotel[] = [
   { name: 'La Mer Beachfront Resort', frame: 20, logo: 'la-mer', price: '$$$',
-    details: [<>Room block code: <strong>270617DWRB</strong></>],
+    details: [
+      'Where our welcome drinks will take place.',
+      <>Room block code: <strong>270617DWRB</strong></>,
+    ],
     bookUrl: 'https://capemaylamer.com' },
   { name: 'The Beach Club on Madison', frame: 18, logo: 'beach-club', price: '$',
     details: [<>Group code: <strong>2706DRISCO</strong></>],
@@ -1052,7 +1055,7 @@ export default function WeddingSite() {
       <EventSection calId="beach" mapQuery="Cape+May+Beach+NJ" id="beach" tone="cream" eyebrow="Saturday · June 19"
         name="Beach Day" iconSrc={ICON.beach}
         rows={[
-          ['Time', '10:00 AM — 2:00 PM'],
+          ['Time', 'All Day'],
           ['Note', 'Stop by the beach on your way out to say goodbye to the new Mr. and Mrs. Garcia! Or stick around and enjoy a few extra days in Cape May.'],
         ]} />
 
