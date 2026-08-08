@@ -107,6 +107,17 @@ body {
   .wedding-scroller > section + section { border-top: 1px solid #DEE9F2; }
 }
 
+/* Three travel tiles in a two-up grid: centre the lone Ferry card across both columns
+   rather than letting it hang left. Above the phone breakpoint only — below it the
+   grid is a single column and there is no orphan to fix. */
+@media (min-width: 769px) {
+  .trio-grid > *:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 12px);   /* half the row minus half the 24px gap */
+  }
+}
+
 /* Seven hotels in a two-up grid leaves a lone card on the last row — centre it across
    both columns at the same width as its neighbours rather than letting it hang left.
    `:nth-child(odd)` means this only kicks in when the count is actually odd. */

@@ -1071,14 +1071,14 @@ export default function WeddingSite() {
 
         {/* --- Getting to Cape May --- */}
         <h3 className="heading" style={{ fontSize: 'clamp(30px, 4vw, 42px)', lineHeight: 1, margin: '0 0 18px', letterSpacing: '-0.005em', paddingTop: '0.1em' }}>Getting to Cape May</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }} className="pair-grid trio-grid">
           <Tile tone="ink" heading="By Car"   body="Cape May is at the southern tip of New Jersey — about 2.5 hrs from New York City and 1.75 hrs from Philadelphia. Take the Garden State Parkway south to Exit 0." />
           <Tile tone="ink" heading="By Air"   body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). If you fly, a rental car is recommended." />
           <Tile tone="ink" heading="By Ferry" body="The Cape May–Lewes Ferry runs from Delaware — walk-on or drive-on." />
         </div>
 
         {/* --- Getting Around --- */}
-        <h3 className="heading" style={{ fontSize: 'clamp(30px, 4vw, 42px)', lineHeight: 1, margin: '48px 0 18px', letterSpacing: '-0.005em', paddingTop: '0.1em' }}>Getting Around</h3>
+        <h3 className="heading" style={{ fontSize: 'clamp(30px, 4vw, 42px)', lineHeight: 1, margin: '48px 0 18px', letterSpacing: '-0.005em', paddingTop: '0.1em' }}>Getting Around Cape May</h3>
 
         {/* Wedding shuttle — the provided transportation (jitneys, reception + return); details TBD */}
         <div style={{
