@@ -81,14 +81,14 @@ const HOTELS: Hotel[] = [
       'Starts at $564/night. Check-in at 4 PM.',
       <>Room block code: <strong>270617DWRB</strong></>,
     ],
-    bookUrl: 'https://capemaylamer.com/?selfbook=true&hotel=2032&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=270617DWRB' },
+    bookUrl: 'https://capemaylamer.com' },
   { name: 'The Beach Club on Madison', frame: 18, logo: 'beach-club', price: '$',
     details: [
       'A bit further back from the beach.',
       'Starts at $294/night. Check-in at 4 PM.',
       <>Group code: <strong>2706DRISCO</strong></>,
     ],
-    bookUrl: 'https://www.beachclubcapemay.com/?selfbook=true&hotel=42068&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=2706DRISCO' },
+    bookUrl: 'https://www.beachclubcapemay.com' },
   { name: 'The Grand Hotel', frame: 19, logo: 'grand', price: '$$',
     details: [
       'Beachfront classic — 28 rooms reserved for our block.',
@@ -102,22 +102,24 @@ const HOTELS: Hotel[] = [
       'Starts at $389/night. If booking by phone, mention the Driscoll Garcia Wedding Room Block.',
       <>Group Code: <strong>DRISGAR6</strong></>,
     ],
-    bookUrl: 'https://marquiscapemay.com' },
+    bookUrl: 'https://www.marquiscapemay.com' },
   { name: 'Hotel Montreal', frame: 18, logo: 'montreal', price: '$$',
     details: [
       '10% off all rooms for our guests.',
       <>Code: <strong>garcia2027</strong></>,
-    ] },
+    ],
+    bookUrl: 'https://www.montrealbeachresort.com' },
   { name: 'ICONA Cape May', frame: 19, logo: 'icona', price: '$$$',
     details: [
       <>To book a room at Icona, please call the front desk at <strong>609-551-0100</strong> and mention the Driscoll-Garcia Wedding room block.</>,
-    ] },
+    ],
+    bookUrl: 'https://www.icona.com/cape-may/' },
   { name: 'Ocean Club Hotel', frame: 20, logo: 'ocean-club', price: '$$$',
     details: [
       'Beachfront, with a pool deck overlooking the ocean.',
       <>To book a room at the Ocean Club, please first select the dates you wish to stay. There is a 2 night minimum. Then, enter the Group Code: <strong>69765</strong>.</>,
     ],
-    bookUrl: 'https://oceanclubhotel.com' },
+    bookUrl: 'https://capemayoceanclubhotel.com' },
 ];
 
 const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
