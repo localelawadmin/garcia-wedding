@@ -103,7 +103,7 @@ const HOTELS: Hotel[] = [
       <>Group Code: <strong>DRISGAR6</strong></>,
     ],
     bookUrl: 'https://www.marquiscapemay.com' },
-  { name: 'Hotel Montreal', frame: 18, logo: 'montreal', price: '$$',
+  { name: 'Montreal Beach Resort', frame: 18, logo: 'montreal', price: '$$',
     details: [
       '10% off all rooms for our guests.',
       <>Code: <strong>garcia2027</strong></>,
