@@ -78,49 +78,65 @@ const HOTELS: Hotel[] = [
   { name: 'La Mer Beachfront Resort', frame: 20, logo: 'la-mer', price: '$$$',
     details: [
       'Where our welcome drinks will take place.',
-      <>Starts at $564/night. Use code <strong>270617DWRB</strong> to access the block. Check-in at 4 PM.</>,
+      'Starts at $564/night. Check-in at 4 PM.',
+      <>Room block code: <strong>270617DWRB</strong></>,
     ],
     bookUrl: 'https://capemaylamer.com/?selfbook=true&hotel=2032&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=270617DWRB' },
   { name: 'The Beach Club on Madison', frame: 18, logo: 'beach-club', price: '$',
     details: [
       'A bit further back from the beach.',
       'Starts at $294/night. Check-in at 4 PM.',
+      <>Group code: <strong>2706DRISCO</strong></>,
     ],
     bookUrl: 'https://www.beachclubcapemay.com/?selfbook=true&hotel=42068&startdate=2027-06-17&enddate=2027-06-19&adult=2&child=0&group=2706DRISCO' },
   { name: 'The Grand Hotel', frame: 19, logo: 'grand', price: '$$',
     details: [
       'Beachfront classic — 28 rooms reserved for our block.',
-      <>Starts at $406/night. Select your dates first, then enter Group ID <strong>744882</strong> to unlock the block.</>,
+      'Starts at $406/night. Select your dates first to unlock the block.',
+      <>Group ID: <strong>744882</strong></>,
     ],
     bookUrl: 'https://www.grandhotelcapemay.com' },
   { name: 'Marquis de Lafayette', frame: 20, logo: 'marquis', price: '$$',
     details: [
       '50 rooms reserved for our wedding block.',
-      <>Starts at $389/night. Use code <strong>DRISGAR6</strong>. If booking by phone, mention the Driscoll Garcia Wedding Room Block.</>,
+      'Starts at $389/night. If booking by phone, mention the Driscoll Garcia Wedding Room Block.',
+      <>Group Code: <strong>DRISGAR6</strong></>,
     ],
     bookUrl: 'https://marquiscapemay.com' },
   { name: 'Hotel Montreal', frame: 18, logo: 'montreal', price: '$$',
     details: [
       '10% off all rooms for our guests.',
-      'Booking code coming soon — we\'ll update this card once we have it.',
+      <>Code: <strong>garcia2027</strong></>,
     ] },
   { name: 'ICONA Cape May', frame: 19, logo: 'icona', price: '$$$',
     details: [
-      'Reaching back out in summer to lock the block.',
-      'Check back closer to the date for the booking link and code.',
+      <>To book a room at Icona, please call the front desk at <strong>609-551-0100</strong> and mention the Driscoll-Garcia Wedding room block.</>,
     ] },
   { name: 'Ocean Club Hotel', frame: 20, logo: 'ocean-club', price: '$$$',
     details: [
       'Beachfront, with a pool deck overlooking the ocean.',
-      <>Select your dates first, then enter Group ID <strong>69765</strong> to unlock the block.</>,
+      <>To book a room at the Ocean Club, please first select the dates you wish to stay. There is a 2 night minimum. Then, enter the Group Code: <strong>69765</strong>.</>,
     ],
     bookUrl: 'https://oceanclubhotel.com' },
-  { name: 'The Inn of Cape May', frame: 18, logo: 'inn', price: '$$$',
-    details: ['Still in conversation — details to come.'] },
 ];
 
 const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
   const [open, setOpen] = useState(false);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const [bodyH, setBodyH] = useState(0);
+
+  // Booking instructions vary a lot in length — Icona and Ocean Club are a paragraph,
+  // Montreal is one line — so the panel measures its own content instead of animating
+  // to a fixed height that would clip the long ones.
+  useEffect(() => {
+    const el = bodyRef.current;
+    if (!el) return;
+    const read = () => setBodyH(el.scrollHeight);
+    read();
+    const ro = new ResizeObserver(read);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const frameSrc = `/photos/accommodations/frames/${hotel.frame}.png`;
   const fillSrc  = `/photos/accommodations/frames/${hotel.frame}-fill.png`;
   const logoSrc  = `/photos/accommodations/logos/${hotel.logo}.png`;
@@ -179,22 +195,21 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
             </span>
           </span>
         </button>
-        {/* One animated property, not four. The panel's height is fixed, so height
-            alone does the job; the padding moved inside so it no longer reflows every
-            frame, and `contain` keeps the browser from re-laying-out the whole section
-            on each step. */}
+        {/* One animated property, not four — the padding lives inside so it doesn't
+            reflow every frame, and `contain` keeps the browser from re-laying-out the
+            whole section on each step. */}
         <div id={`hotel-${hotel.logo}-details`} style={{
-          height: open ? 196 : 0, overflow: 'hidden',
+          height: open ? bodyH : 0, overflow: 'hidden',
           opacity: open ? 1 : 0,
           transition: 'height .35s ease, opacity .28s ease',
           contain: 'layout paint',
           willChange: 'height',
         }}>
-        <div style={{ height: 180, paddingBottom: 16, display: 'flex', flexDirection: 'column' }}>
+        <div ref={bodyRef} style={{ paddingBottom: 16, display: 'flex', flexDirection: 'column' }}>
           {hotel.details.map((line, i) => (
             <p key={i} style={{ fontSize: 13, lineHeight: 1.55, opacity: .85, margin: '0 0 8px', letterSpacing: '-0.005em' }}>{line}</p>
           ))}
-          <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 12, paddingTop: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingTop: 10 }}>
             {hotel.bookUrl && (
               <a href={hotel.bookUrl} target="_blank" rel="noopener noreferrer"
                 style={{

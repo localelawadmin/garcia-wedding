@@ -107,6 +107,15 @@ body {
   .wedding-scroller > section + section { border-top: 1px solid #DEE9F2; }
 }
 
+/* Seven hotels in a two-up grid leaves a lone card on the last row — centre it across
+   both columns at the same width as its neighbours rather than letting it hang left.
+   `:nth-child(odd)` means this only kicks in when the count is actually odd. */
+.hotels-grid > *:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: calc(50% - 14px);   /* half the row minus half the 28px column gap */
+}
+
 /* The overlay scrollbar fading in and out as the pointer enters/leaves the page is a
    compositing change, and it forces the navbar's backdrop-filter to re-sample — which
    is what made the bar shift colour when the mouse moved to the browser toolbar.
