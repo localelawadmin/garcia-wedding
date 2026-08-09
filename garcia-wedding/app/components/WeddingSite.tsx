@@ -83,7 +83,7 @@ const HOTELS: Hotel[] = [
     ],
     bookUrl: 'https://capemaylamer.com' },
   { name: 'The Beach Club on Madison', frame: 18, logo: 'beach-club', price: '$',
-    details: [<>Group code: <strong>2706DRISCO</strong></>],
+    details: [<>Group Code: <strong>2706DRISCO</strong></>],
     bookUrl: 'https://www.beachclubcapemay.com' },
   { name: 'The Grand Hotel', frame: 19, logo: 'grand', price: '$$',
     details: [<>Group Code: <strong>744882</strong></>],
