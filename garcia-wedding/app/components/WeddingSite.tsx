@@ -1125,7 +1125,7 @@ export default function WeddingSite() {
         <Title>The Dress Code</Title>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
           <Tile tone="cream" heading="Welcome Drinks"  body={<>Summer Cocktail<br/><br/>We ask that ladies wear a dress of any length, and gentleman wear a button down and pants. Jackets are preferred, but not required.</>} />
-          <Tile tone="cream" heading="Mass & Reception" body={<>Black Tie Optional<br/><br/>We ask that ladies wear a floor-length gown. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
+          <Tile tone="cream" heading="Mass & Reception" body={<>Black-tie Optional<br/><br/>We ask that ladies wear a floor-length dress. Bright, summery colors and patterns are encouraged. For gentlemen, a black tuxedo or dark suit is preferred. The reception is fully outdoors on grass; block heels are strongly recommended.</>} />
         </div>
       </SectionShell>
 
@@ -1149,8 +1149,8 @@ export default function WeddingSite() {
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <FaqRow q='How far in advance should I book my hotel?' a='As soon as possible! Cape May hotels book up quickly in the summer.' />
           <FaqRow q="What's the dress code for Welcome Drinks?" a='Summer cocktail. Dresses (any length) for women, button-down and pants for men. Jackets preferred but not required.' />
-          <FaqRow q='Where is a good spot to grab dinner on Thursday?' a='Please check out the Places to Eat section for our local favorites. We highly recommend making a reservation in advance.' />
-          <FaqRow q="What's the dress code for the Ceremony and Reception?" a='Our wedding dress code is Black tie optional. We ask that ladies wear floor-length gowns, with bright, summery colors encouraged. We ask that gentlemen wear tuxedos or dark suits. The reception is outdoors on grass, so block heels are strongly recommended.' />
+          <FaqRow q='Where is a good spot to grab dinner on Thursday?' a='Please check out the Dining section for our local favorites. We highly recommend making a reservation in advance.' />
+          <FaqRow q="What's the dress code for the Ceremony and Reception?" a='Our wedding dress code is black-tie optional. We ask that ladies wear floor-length dresses, with bright, summery colors encouraged. We ask that gentlemen wear tuxedos or dark suits. The reception is outdoors on grass, so block heels are strongly recommended.' />
           <FaqRow q='Can I bring a plus-one?' a='We kindly ask that only guests listed on the formal invitation attend.' />
           <FaqRow q='Will there be transportation to the Mass?' a="There will not be transportation provided to the Church. We recommend Ubering or using your hotel's shuttle service." />
           <FaqRow q='How early should I get to the Church?' a='The mass starts promptly at 1:30 PM — please arrive 15–30 minutes early to find your seat.' />
