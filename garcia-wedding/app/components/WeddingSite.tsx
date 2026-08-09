@@ -94,7 +94,7 @@ const HOTELS: Hotel[] = [
   { name: 'Montreal Beach Resort', frame: 18, logo: 'montreal', price: '$$',
     details: [<>Code: <strong>garcia2027</strong></>],
     bookUrl: 'https://www.montrealbeachresort.com' },
-  { name: 'ICONA Cape May', frame: 19, logo: 'icona', price: '$$$',
+  { name: 'ICONA Cape May', frame: 19, logo: 'icona', price: '$$',
     details: [<>To book a room at Icona, please call the front desk at <strong>609-551-0100</strong> and mention the Driscoll-Garcia Wedding room block.</>],
     bookUrl: 'https://www.icona.com/cape-may/' },
   { name: 'Ocean Club Hotel', frame: 20, logo: 'ocean-club', price: '$$$',
@@ -1041,7 +1041,7 @@ export default function WeddingSite() {
           ['Time',    '5:00 — 10:00 PM'],
           ['Place',   'Isaac Smith Vineyard'],
           ['Address', '1039 Seashore Road, Cape May, NJ'],
-          ['Note',    'There will be shuttles provided to and from the Reception. See the Transportation & Travel section for the schedule and pickup points, coming closer to the date.'],
+          ['Note',    'There will be shuttles provided to and from the Reception. See the Transportation & Travel section for additional details.'],
         ]} />
 
       <EventSection calId="afterparty" mapQuery="Carneys+Restaurant+Bar+411+Beach+Ave+Cape+May+NJ" id="afterparty" tone="pattern" eyebrow="Friday · June 18"
@@ -1093,8 +1093,8 @@ export default function WeddingSite() {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
-          <Tile tone="ink" heading="Around Town"       body="Downtown Cape May is walkable, with bikes and Uber/Lyft around to fill in the gaps." />
-          <Tile tone="ink" heading="Golf-Cart Shuttle" body="A couple of local golf-cart shuttle services run around town, too — details to come." />
+          <Tile tone="ink" heading="Around Town" body="Cape May is a walkable town, with bikes available for rent, and ride share apps available as needed." />
+          <Tile tone="ink" heading="Golf Carts and Shuttles" body={<>Separate from our wedding shuttle, Cape May has a few free rides of its own. The <strong>Cape May Jitney</strong> runs a set route — hop on and hop off wherever you like. <strong>Cape May Free Ride</strong> (609) 435-2680 and <strong>Cape May Beach Buggy</strong> (609) 846-6678 are golf carts you text or call for a pickup.</>} />
         </div>
       </SectionShell>
 
@@ -1107,12 +1107,16 @@ export default function WeddingSite() {
           { name: 'Avalon Coffee of Cape May', address: '7 Gurney Street', note: 'Grab a coffee, a breakfast sandwich, or an acai bowl.' },
           { name: "Uncle Bill's Pancake House", address: '261 Beach Avenue', note: "Sit-down breakfast you won't forget — bonus points for the gluten-free pancakes." },
           { name: 'The Mad Batter', address: '19 Jackson Street', note: 'Great for mimosas and omelettes!' },
-          { name: 'Ugly Mug Bar & Restaurant', address: '426 Washington Street', note: 'A perfect Irish pub for a beer and a burger.' },
-          { name: 'Ocean Club Hotel', address: '1035 Beach Avenue', note: 'Quick lunch on their pool deck with ocean views.' },
-          { name: 'Rusty Nail', address: '205 Beach Avenue', note: 'Live music, good drinks, appetizers, feet in the sand.' },
+          { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', note: 'Farm fresh breakfast and market.' },
+          { name: "Hot Dog Tommy's", address: '319 Beach Avenue', note: 'A Cape May staple.' },
           { name: "George's Place Beachfront", address: '301 Beach Avenue', note: "The Groom's favorite — gyros, salads, and smoothies." },
-          { name: 'Beach Plum Farm', address: '140 Stevens Street, West Cape May', note: 'Worth the short drive for a farm fresh breakfast!' },
           { name: 'Westside Market', address: '517 Broadway, West Cape May', note: 'Best deli in town.' },
+          { name: 'Taco Caballito', address: '429 Beach Avenue', note: 'Tacos and Margs, and a good hang.' },
+          { name: 'Ugly Mug Bar & Restaurant', address: '426 Washington Street', note: 'A perfect Irish pub for a beer and a burger.' },
+          { name: 'Rusty Nail', address: '205 Beach Avenue', note: 'Live music, good drinks, appetizers, feet in the sand.' },
+          { name: 'Fish House', address: '502 Sunset Boulevard', note: 'No reservations. Best sunset view in the area.' },
+          { name: "Panico's Bistro", address: '422 Broadway', note: 'Classic BYOB Italian.' },
+          { name: 'Congress Hall', address: '200 Congress Place', note: 'A local favorite. Dinner at The Blue Pig, and a nightcap at The Brown Room.' },
           ].map(eat => <EatTile key={eat.name} tone="pattern" {...eat} />)}
         </div>
       </SectionShell>
