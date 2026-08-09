@@ -1152,7 +1152,7 @@ export default function WeddingSite() {
           <FaqRow q='Where is a good spot to grab dinner on Thursday?' a='Please check out the Dining section for our local favorites. We highly recommend making a reservation in advance.' />
           <FaqRow q="What's the dress code for the Ceremony and Reception?" a='Our wedding dress code is black-tie optional. We ask that ladies wear floor-length dresses, with bright, summery colors encouraged. We ask that gentlemen wear tuxedos or dark suits. The reception is outdoors on grass, so block heels are strongly recommended.' />
           <FaqRow q='Can I bring a plus-one?' a='We kindly ask that only guests listed on the formal invitation attend.' />
-          <FaqRow q='Will there be transportation to the Mass?' a="There will not be transportation provided to the Church. We recommend Ubering or using your hotel's shuttle service." />
+          <FaqRow q='Will there be transportation to the Mass?' a='There will not be transportation provided to the Church. Please see the Getting Around Cape May section for a few easy options.' />
           <FaqRow q='How early should I get to the Church?' a='The mass starts promptly at 1:30 PM — please arrive 15–30 minutes early to find your seat.' />
           <FaqRow q='Will there be transportation to the reception?' a='Yes - a shuttle will run to and from the reception. The full schedule and pickup points will be posted in the Transportation & Travel section closer to the date.' />
           <FaqRow q='Can I add an extra day to the hotel room block?' a='Absolutely! Many of us are staying through the weekend. Please call the hotel to extend your stay, and book early to secure your room!' />
