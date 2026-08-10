@@ -21,7 +21,7 @@ const CREAM = '#FDFDFC';
 export default function MusicPlayer() {
   const [trackIdx, setTrackIdx] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [volume, setVolume]   = useState(0.1);
+  const [volume, setVolume]   = useState(0.25);
   const [muted, setMuted]     = useState(true);
   const [hover, setHover]     = useState(false);
   const [pinned, setPinned]   = useState(false);
@@ -42,7 +42,7 @@ export default function MusicPlayer() {
     }
     return a;
   };
-  const volRef    = useRef(0.1);
+  const volRef    = useRef(0.25);
   const mutedRef  = useRef(true);
   const boxRef    = useRef<HTMLDivElement | null>(null);
   const textRef   = useRef<HTMLSpanElement | null>(null);
