@@ -8,6 +8,13 @@ import HGReveal from './components/HGReveal';
 
 type Phase = 'lander' | 'green' | 'move' | 'reveal' | 'done';
 
+type UmamiProps = Record<string, unknown>;
+declare global {
+  interface Window {
+    umami?: { track: (fn: (props: UmamiProps) => UmamiProps) => void };
+  }
+}
+
 export default function Home() {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
   const [phase, setPhase] = useState<Phase>('lander');
@@ -17,6 +24,25 @@ export default function Home() {
     setAuthenticated(auth);
     if (auth) setPhase('done');          // already in this session: straight to the site
   }, []);
+
+  // The site never changes URL, so report the wedding site to Umami as its own
+  // virtual page. "/" is everyone who arrives, "/welcome" is everyone who got past
+  // the password — the two are directly comparable as a funnel.
+  useEffect(() => {
+    if (!authenticated) return;
+    let tries = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    const send = () => {
+      // the tracker is loaded afterInteractive, so it may not be up yet
+      if (window.umami?.track) {
+        window.umami.track(props => ({ ...props, url: '/welcome', title: 'Wedding Site' }));
+        return;
+      }
+      if (tries++ < 40) timer = setTimeout(send, 150);   // give up after ~6s
+    };
+    send();
+    return () => clearTimeout(timer);
+  }, [authenticated]);
 
   // password accepted -> hold the monogram, turn the page olive, then move it
   const onSuccess = useCallback(() => {
