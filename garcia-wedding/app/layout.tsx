@@ -23,6 +23,9 @@ export default function RootLayout({
         <Script
           src="https://cloud.umami.is/script.js"
           data-website-id="1091e1ca-e116-4cae-bcee-cceddca68fc1"
+          // Only report from the live domains. Vercel gives every branch a preview URL,
+          // and without this our own testing would land in the real visitor numbers.
+          data-domains="thegarcias2027.com,www.thegarcias2027.com,garcia-wedding.vercel.app"
           strategy="afterInteractive"
         />
       </body>
