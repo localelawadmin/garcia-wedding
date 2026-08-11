@@ -80,6 +80,7 @@ const HOTELS: Hotel[] = [
     details: [
       'Where our welcome drinks will take place.',
       <>Group Code: <strong>270617DWRB</strong></>,
+      'If you wish to extend your stay beyond two nights, please call the front desk. It cannot be done online.',
     ],
     bookUrl: 'https://capemaylamer.com' },
   { name: 'The Beach Club on Madison', frame: 18, logo: 'beach-club', price: '$',
