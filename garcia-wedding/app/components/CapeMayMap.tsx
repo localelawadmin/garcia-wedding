@@ -22,11 +22,11 @@ const HOTELS: Hotel[] = [
   { n:'La Mer',                addr:'1317 Beach Ave', stop:true },
 ];
 
-type Ev = { n:string; sub:string; img:string; place?:string; dy?:number };
+type Ev = { n:string; sub:string; img:string; place?:string; dx?:number; dy?:number };
 const ON_MAP: Ev[] = [
   { n:'Welcome Drinks', sub:'The Pier House at La Mer', img:'pier-house.png', place:'La Mer', dy:-78 },
   { n:'Nuptial Mass',   sub:'Our Lady Star of the Sea', img:'osos.png',       place:'Nuptial Mass' },
-  { n:'After Party',    sub:"Carney's",                 img:'carneys.png',    place:'After Party', dy:64 },
+  { n:'After Party',    sub:"Carney's",                 img:'carneys.png',    place:'After Party', dx:-66, dy:-58 },
 ];
 const KEY_ONLY: Ev[] = [
   { n:'Reception', sub:'Isaac Smith Vineyard', img:'reception-tent.png' },
@@ -87,20 +87,23 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 <path d={MAP_PATHS.coast} fill={CREAM} stroke={SAND} strokeWidth={9} />
                 <path d={MAP_PATHS.coast} fill="none" stroke={INK} strokeWidth={1.1} strokeOpacity={.45} />
                 <path d={MAP_PATHS.water} fill={SKY} stroke={INK} strokeWidth={.8} strokeOpacity={.3} />
-                <path d={MAP_PATHS.lafayette}  fill="none" stroke={INK} strokeWidth={.8} strokeOpacity={.25} />
-                <path d={MAP_PATHS.madison}    fill="none" stroke={INK} strokeWidth={.8} strokeOpacity={.3} />
-                <path d={MAP_PATHS.washington} fill="none" stroke={INK} strokeWidth={1}  strokeOpacity={.4} />
+                <path d={MAP_PATHS.streets}    fill="none" stroke={INK} strokeWidth={.7} strokeOpacity={.22} />
+                <path d={MAP_PATHS.washington} fill="none" stroke={INK} strokeWidth={1.2} strokeOpacity={.42} />
                 <path d={MAP_PATHS.beachAve}   fill="none" stroke={INK} strokeWidth={2.4} />
               </g>
 
               {ON_MAP.map(e=>{
-                const p = at(e.place as string); const y = p.y + (e.dy ?? 0);
+                const p = at(e.place as string);
+                const x = p.x + (e.dx ?? 0), y = p.y + (e.dy ?? 0);
+                const moved = (e.dx ?? 0) !== 0 || (e.dy ?? 0) !== 0;
                 return (
                   <g key={e.n}>
-                    {e.dy ? <line x1={p.x} y1={p.y-12} x2={p.x} y2={y+26} stroke={INK} strokeOpacity={.4} strokeDasharray="3 3" /> : null}
-                    <image href={ICON+e.img} x={p.x-26} y={y-26} width={52} height={52} filter="url(#cmm-ink)" opacity={.92} />
-                    <text x={p.x} y={y+44} textAnchor="middle" fontSize={12} fontWeight={500} fill={INK}>{e.n}</text>
-                    <text x={p.x} y={y+55} textAnchor="middle" fontSize={8.6} fill={INK} opacity={.55} letterSpacing=".7">{e.sub.toUpperCase()}</text>
+                    {/* leader back to the true position when the icon has been moved for room */}
+                    {moved && <line x1={x} y1={y} x2={p.x} y2={p.y} stroke={INK} strokeOpacity={.35} strokeDasharray="3 3" />}
+                    {moved && <circle cx={p.x} cy={p.y} r={2.6} fill={INK} opacity={.5} />}
+                    <image href={ICON+e.img} x={x-26} y={y-26} width={52} height={52} filter="url(#cmm-ink)" opacity={.92} />
+                    <text x={x} y={y+44} textAnchor="middle" fontSize={12} fontWeight={500} fill={INK}>{e.n}</text>
+                    <text x={x} y={y+55} textAnchor="middle" fontSize={8.6} fill={INK} opacity={.55} letterSpacing=".7">{e.sub.toUpperCase()}</text>
                   </g>
                 );
               })}
@@ -121,11 +124,12 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               })}
 
               {/* the vineyard is the only thing off the island — locator inset */}
-              <g transform={'translate(16 '+(MAP_H-INSET_H-16)+')'}>
+              <g transform={'translate('+(MAP_W-INSET_W-16)+' '+(MAP_H-INSET_H-14)+')'}>
                 <g clipPath="url(#cmm-inset-clip)">
                   <rect width={INSET_W} height={INSET_H} fill={SKY} />
                   <path d={INSET_PATHS.coast} fill={PISTACHIO} stroke={INK} strokeWidth={.7} strokeOpacity={.35} />
                   <path d={INSET_PATHS.water} fill={SKY} stroke={INK} strokeWidth={.5} strokeOpacity={.25} />
+                  <path d={INSET_PATHS.streets} fill="none" stroke={INK} strokeWidth={.4} strokeOpacity={.18} />
                   <path d={INSET_PATHS.canal} fill="none" stroke={SKY} strokeWidth={4} />
                 </g>
                 <rect width={INSET_W} height={INSET_H} fill="none" stroke={INK} strokeOpacity={.4} />
