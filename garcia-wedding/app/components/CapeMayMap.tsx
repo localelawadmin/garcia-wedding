@@ -26,7 +26,7 @@ type Ev = { n:string; sub:string; img:string; place?:string; dy?:number };
 const ON_MAP: Ev[] = [
   { n:'Welcome Drinks', sub:'The Pier House at La Mer', img:'pier-house.png', place:'La Mer', dy:-78 },
   { n:'Nuptial Mass',   sub:'Our Lady Star of the Sea', img:'osos.png',       place:'Nuptial Mass' },
-  { n:'After Party',    sub:"Carney's",                 img:'carneys.png',    place:'After Party' },
+  { n:'After Party',    sub:"Carney's",                 img:'carneys.png',    place:'After Party', dy:64 },
 ];
 const KEY_ONLY: Ev[] = [
   { n:'Reception', sub:'Isaac Smith Vineyard', img:'reception-tent.png' },
@@ -57,7 +57,9 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
       style={{ position:'fixed', inset:0, zIndex:400, background:'rgba(40,46,30,.55)',
                display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
       <div onClick={e=>e.stopPropagation()}
-        style={{ background:CREAM, border:'1px solid rgba(175,184,133,.65)', maxWidth:1120,
+        style={{ background:CREAM, color:INK,   // must be explicit: this overlay inherits
+                                                 // colour from wherever it is mounted
+                 border:'1px solid rgba(175,184,133,.65)', maxWidth:1120,
                  width:'100%', maxHeight:'92vh', overflowY:'auto', padding:'26px 28px 22px', position:'relative' }}>
         <button onClick={onClose} aria-label="Close map"
           style={{ position:'absolute', top:16, right:16, width:32, height:32, borderRadius:'50%',
@@ -119,7 +121,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               })}
 
               {/* the vineyard is the only thing off the island — locator inset */}
-              <g transform={'translate('+(MAP_W-INSET_W-18)+' 16)'}>
+              <g transform={'translate(16 '+(MAP_H-INSET_H-16)+')'}>
                 <g clipPath="url(#cmm-inset-clip)">
                   <rect width={INSET_W} height={INSET_H} fill={SKY} />
                   <path d={INSET_PATHS.coast} fill={PISTACHIO} stroke={INK} strokeWidth={.7} strokeOpacity={.35} />
