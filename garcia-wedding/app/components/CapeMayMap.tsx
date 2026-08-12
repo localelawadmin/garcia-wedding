@@ -83,9 +83,13 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               </defs>
 
               <g clipPath="url(#cmm-clip)">
+                {/* ocean first, then land as a closed polygon — the raw coastline is an
+                    open polyline, so filling it directly floods the wrong side */}
                 <rect width={MAP_W} height={MAP_H} fill={SKY} />
-                <path d={MAP_PATHS.coast} fill={CREAM} stroke={SAND} strokeWidth={9} />
-                <path d={MAP_PATHS.coast} fill="none" stroke={INK} strokeWidth={1.1} strokeOpacity={.45} />
+                <path d={MAP_PATHS.land} fill={CREAM} />
+                <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={10} />
+                <path d={MAP_PATHS.coastLine} fill="none" stroke={INK} strokeWidth={1.1} strokeOpacity={.45} />
+                <path d={MAP_PATHS.islets} fill={CREAM} stroke={INK} strokeWidth={.8} strokeOpacity={.35} />
                 <path d={MAP_PATHS.water} fill={SKY} stroke={INK} strokeWidth={.8} strokeOpacity={.3} />
                 <path d={MAP_PATHS.streets}    fill="none" stroke={INK} strokeWidth={.7} strokeOpacity={.22} />
                 <path d={MAP_PATHS.washington} fill="none" stroke={INK} strokeWidth={1.2} strokeOpacity={.42} />
