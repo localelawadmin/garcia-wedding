@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Navbar from './Navbar';
+import CapeMayMap from './CapeMayMap';
 import MusicPlayer from './MusicPlayer';
 import NoteFromCouple from './NoteFromCouple';
 
@@ -676,6 +677,7 @@ export default function WeddingSite() {
     return () => clearInterval(t);
   }, []);
   const [noteOpen, setNoteOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(false);
   const [days, setDays] = useState<number | null>(null);
 
   useEffect(() => {
@@ -774,6 +776,7 @@ export default function WeddingSite() {
       <Navbar />
       <MusicPlayer />
       <NoteFromCouple onOpenChange={setNoteOpen} />
+      <CapeMayMap open={mapOpen} onClose={() => setMapOpen(false)} />
 
       {/* Countdown pill */}
       <div
@@ -1080,6 +1083,26 @@ export default function WeddingSite() {
           <Tile tone="ink" heading="By Air"   body="Closest airports: ACY (45 min), PHL (90 min), EWR (~3 hrs). If you fly, a rental car is recommended." />
           <Tile tone="ink" heading="By Ferry" body="The Cape May–Lewes Ferry runs from Delaware — walk-on or drive-on." />
         </div>
+
+        {/* Map entry point — a preview that opens full screen, rather than a fourth
+            floating button in a corner that already has three. */}
+        <button type="button" onClick={() => setMapOpen(true)}
+          style={{
+            display: 'block', width: '100%', margin: '26px 0 0', padding: 0,
+            border: '1px solid rgba(175,184,133,.65)', background: CREAM, color: DEEP_DARK,
+            cursor: 'pointer', font: 'inherit', textAlign: 'left',
+          }}>
+          <div style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', gap: 18 }}>
+            <img src="/photos/agenda/beach.png" alt="" style={{ width: 46, height: 46, objectFit: 'contain', opacity: .8 }} />
+            <div style={{ flex: 1 }}>
+              <div className="heading" style={{ fontSize: 24, lineHeight: 1.05, fontWeight: 400 }}>See the map</div>
+              <div style={{ fontSize: 13, opacity: .75, marginTop: 4 }}>
+                Every hotel, the church, the vineyard and the shuttle stops.
+              </div>
+            </div>
+            <span style={{ fontSize: 10, letterSpacing: '.08em', textTransform: 'uppercase', opacity: .6 }}>Open →</span>
+          </div>
+        </button>
 
         {/* --- Getting Around --- */}
         <h3 className="heading" style={{ fontSize: 'clamp(30px, 4vw, 42px)', lineHeight: 1, margin: '48px 0 18px', letterSpacing: '-0.005em', paddingTop: '0.1em' }}>Getting Around Cape May</h3>
