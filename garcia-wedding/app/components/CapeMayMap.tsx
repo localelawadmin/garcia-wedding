@@ -146,10 +146,10 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
             </svg>
           </div>
 
-          <div className="cmm-key" style={{ width:'100%' }}>
-            <div style={{ marginBottom:11 }}>
+          <div className="cmm-key" style={{ width:'100%', display:'flex', gap:26, alignItems:'flex-start' }}>
+            <div style={{ flex:'1 1 58%', minWidth:0 }}>
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
-              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'9px 24px' }}>
+              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'9px 22px' }}>
                 {HOTELS.map(h=>(
                   <div key={h.n} onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
                     style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, cursor:'pointer' }}>
@@ -165,9 +165,10 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 ))}
               </div>
             </div>
-            <div style={{ borderTop:'1px solid rgba(175,184,133,.5)', paddingTop:11 }}>
+            <div className="cmm-div" style={{ flex:'1 1 42%', minWidth:0,
+                 borderLeft:'1px solid rgba(175,184,133,.5)', paddingLeft:26 }}>
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>The weekend</h4>
-              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'9px 24px' }}>
+              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'9px 22px' }}>
                 {ON_MAP.map(e=>(
                   <div key={e.n} style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5 }}>
                     <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85 }} />
@@ -183,6 +184,9 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
 
         <style jsx>{`
           @media (max-width: 780px) {
+            :global(.cmm-key) { flex-direction: column !important; gap: 12px !important; }
+            :global(.cmm-div) { border-left: none !important; padding-left: 0 !important;
+                                border-top: 1px solid rgba(175,184,133,.5); padding-top: 12px; }
             :global(.cmm-chips) { gap: 10px 18px !important; }
           }
         `}</style>
