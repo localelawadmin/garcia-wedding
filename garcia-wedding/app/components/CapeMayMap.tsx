@@ -39,7 +39,7 @@ const ON_MAP: Ev[] = [
 
 const at = (n:string) => { const p = PLACES.find(p=>p.name===n); return p ? {x:p.x,y:p.y} : {x:0,y:0}; };
 
-function MapSvg({ sel, setSel }:{ sel:string|null; setSel:(v:string|null)=>void }) {
+function MapSvg({ sel, setSel, box }:{ sel:string|null; setSel:(v:string|null)=>void; box?:string }) {
   return (
   <svg viewBox={'0 0 '+MAP_W+' '+MAP_H} preserveAspectRatio="xMidYMid meet"
        style={{ width:'100%', height:'auto', display:'block',
@@ -132,43 +132,59 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
     return () => mq.removeEventListener('change', set);
   }, []);
 
-  // keep the map covering its frame — you can zoom in and drag, but not fling it away
+  // Zooming the viewBox re-renders the vectors at full resolution. A CSS transform
+  // on a promoted layer rasterises once at 1x and then scales the bitmap, which is
+  // why it went soft. x/y are the viewBox origin, in map units.
   const clamp = (v:{k:number;x:number;y:number}) => {
-    const el = stage.current; if (!el) return v;
-    const W = el.clientWidth, H = el.clientHeight;
-    const cw = W * v.k, ch = H * v.k;
-    return { k:v.k,
-      x: Math.min(0, Math.max(W - cw, v.x)),
-      y: Math.min(0, Math.max(H - ch, v.y)) };
+    const k = Math.min(4, Math.max(1, v.k));
+    const vw = MAP_W / k, vh = MAP_H / k;
+    return { k,
+      x: Math.min(MAP_W - vw, Math.max(0, v.x)),
+      y: Math.min(MAP_H - vh, Math.max(0, v.y)) };
+  };
+  // screen px -> map units at the current zoom
+  const perPx = () => {
+    const el = stage.current;
+    return el ? (MAP_W / view.k) / el.clientWidth : 1;
+  };
+  const local = (e:{clientX:number;clientY:number}) => {
+    const r = stage.current!.getBoundingClientRect();
+    return { x:e.clientX - r.left, y:e.clientY - r.top };
   };
   const down = (e:React.PointerEvent) => {
     ptrs.current.set(e.pointerId, { x:e.clientX, y:e.clientY });
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
   const move = (e:React.PointerEvent) => {
-    if (!ptrs.current.has(e.pointerId)) return;
+    if (!ptrs.current.has(e.pointerId) || !stage.current) return;
     const prev = new Map(ptrs.current);
     ptrs.current.set(e.pointerId, { x:e.clientX, y:e.clientY });
     const now = [...ptrs.current.values()], was = [...prev.values()];
+
     if (now.length === 1) {
       const p = prev.get(e.pointerId)!;
-      setView(v => clamp({ ...v, x:v.x + (e.clientX-p.x), y:v.y + (e.clientY-p.y) }));
-    } else if (now.length >= 2) {
+      const s = perPx();
+      setView(v => clamp({ ...v, x: v.x - (e.clientX-p.x)*s, y: v.y - (e.clientY-p.y)*s }));
+      return;
+    }
+    if (now.length >= 2) {
       const d0 = Math.hypot(was[0].x-was[1].x, was[0].y-was[1].y);
       const d1 = Math.hypot(now[0].x-now[1].x, now[0].y-now[1].y);
-      if (d0 > 0) {
-        const rect = stage.current!.getBoundingClientRect();
-        const cx = (now[0].x+now[1].x)/2 - rect.left, cy = (now[0].y+now[1].y)/2 - rect.top;
-        setView(v => {
-          const k = Math.min(4, Math.max(1, v.k * (d1/d0)));
-          const r = k / v.k;                       // zoom about the pinch centre
-          return clamp({ k, x: cx-(cx-v.x)*r, y: cy-(cy-v.y)*r });
-        });
-      }
+      const r = stage.current.getBoundingClientRect();
+      const pc = { x:(was[0].x+was[1].x)/2 - r.left, y:(was[0].y+was[1].y)/2 - r.top };
+      const nc = { x:(now[0].x+now[1].x)/2 - r.left, y:(now[0].y+now[1].y)/2 - r.top };
+      setView(v => {
+        const k = Math.min(4, Math.max(1, v.k * (d0>0 ? d1/d0 : 1)));
+        const sBefore = (MAP_W / v.k) / r.width;
+        const sAfter  = (MAP_W / k)   / r.width;
+        // the map point under the old finger-midpoint ends up under the new one,
+        // so the map pans and zooms together the way a map app does
+        const wx = v.x + pc.x * sBefore, wy = v.y + pc.y * sBefore;
+        return clamp({ k, x: wx - nc.x * sAfter, y: wy - nc.y * sAfter });
+      });
     }
   };
   const up = (e:React.PointerEvent) => { ptrs.current.delete(e.pointerId); };
-
   const reset = () => setView({ k:1, x:0, y:0 });
 
   useEffect(() => {
@@ -222,7 +238,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                display:'flex', alignItems:'center', justifyContent:'center', padding:14 }}>
       <div onClick={e=>e.stopPropagation()}
         style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
-                 width:'100%', height:'min(88vh, calc((100vw - 28px) * 16 / 9))',
+                 width:'100%', maxHeight:'88vh',
                  display:'flex', flexDirection:'column', overflow:'hidden' }}>
       <div style={{ flex:'0 0 auto', display:'flex', alignItems:'center', justifyContent:'space-between',
                     padding:'12px 14px', borderBottom:'1px solid rgba(175,184,133,.5)' }}>
@@ -246,16 +262,11 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
       <div ref={stage} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up}
         style={{ position:'relative', overflow:'hidden', touchAction:'none', cursor:'grab',
                  width:'100%', aspectRatio:`${MAP_W} / ${MAP_H}`, flex:'0 0 auto' }}>
-        <div style={{ position:'absolute', inset:0,
-                      transform:`translate(${view.x}px, ${view.y}px) scale(${view.k})`,
-                      transformOrigin:'0 0', willChange:'transform' }}>
-          <div style={{ position:'absolute', top:0, left:0, width:'100%' }}>
-            <MapSvg sel={sel} setSel={setSel} />
-          </div>
-        </div>
+        <MapSvg sel={sel} setSel={setSel}
+                box={`${view.x} ${view.y} ${MAP_W/view.k} ${MAP_H/view.k}`} />
       </div>
 
-      <div style={{ flex:'1 1 auto', minHeight:0, overflowY:'auto',
+      <div style={{ flex:'0 1 auto', minHeight:0, overflowY:'auto',
                     borderTop:'1px solid rgba(175,184,133,.5)', padding:'14px 14px 16px' }}>
         <KeyLists dense />
       </div>
