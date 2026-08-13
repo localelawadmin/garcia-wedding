@@ -27,9 +27,9 @@ const HOTELS: Hotel[] = [
 type Ev = { n:string; sub:string; img:string; place?:string; dx?:number; dy?:number; at?:[number,number] };
 const ON_MAP: Ev[] = [
   { n:'Welcome Drinks', sub:'The Pier House',        img:'pier-house.png', place:'La Mer',       dx:-16, dy:-84 },
-  { n:'Nuptial Mass',   sub:'Our Lady Star of the Sea', img:'osos.png',    place:'Nuptial Mass' },
+  { n:'Nuptial Mass',   sub:'Our Lady Star of the Sea', img:'osos.png',    place:'Nuptial Mass', dx:62, dy:-6 },
   { n:'After Party',    sub:"Carney's",              img:'carneys.png',    place:'After Party', dx:-70, dy:-56 },
-  { n:'Beach Day',      sub:'Cape May Beach',        img:'beach.png',      at:[430, 430] },
+  { n:'Beach Day',      sub:'Cape May Beach',        img:'beach.png',      at:[556, 424] },
 ];
 
 const at = (n:string) => { const p = PLACES.find(p=>p.name===n); return p ? {x:p.x,y:p.y} : {x:0,y:0}; };
@@ -89,11 +89,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
 
               {/* street labels, so the pins sit on something named */}
               <text x={18} y={MAP_H-14} fontSize={9.5} letterSpacing="1.4" fill={INK} opacity={.5}>BEACH AVENUE</text>
-              <text x={200} y={252} fontSize={9} letterSpacing="1.3" fill={INK} opacity={.42}
-                    transform={`rotate(-19 200 252)`}>WASHINGTON STREET</text>
-              <text x={352} y={150} fontSize={9} letterSpacing="1.3" fill={INK} opacity={.42}
-                    transform={`rotate(-52 352 150)`}>MADISON AVENUE</text>
-              <text x={430} y={MAP_H-38} fontSize={16} fill={INK} opacity={.4} textAnchor="middle"
+              <text x={300} y={MAP_H-40} fontSize={16} fill={INK} opacity={.38} textAnchor="middle"
                     fontStyle="italic" fontFamily="'Cormorant Garamond',Georgia,serif">The Atlantic</text>
 
               {/* events: cream disc behind the line art so both icon and label read on any ground */}
@@ -105,7 +101,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                   <g key={e.n}>
                     {moved && <line x1={x} y1={y} x2={base.x} y2={base.y} stroke={INK} strokeOpacity={.4} strokeDasharray="3 3" />}
                     {moved && <circle cx={base.x} cy={base.y} r={3} fill={INK} opacity={.55} />}
-                    <circle cx={x} cy={y} r={30} fill={CREAM} stroke={INK} strokeWidth={1.2} strokeOpacity={.55} />
+                    <circle cx={x} cy={y} r={30} fill={CREAM} />
                     <image href={ICON+e.img} x={x-23} y={y-23} width={46} height={46} filter="url(#cmm-ink)" opacity={.95} />
                     <text x={x} y={y+47} textAnchor="middle" fontSize={12.5} fontWeight={500} fill={INK}
                           stroke={CREAM} strokeWidth={3.2} paintOrder="stroke">{e.n}</text>
@@ -123,7 +119,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 return (
                   <g key={h.n} style={{cursor:'pointer'}}
                      onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}>
-                    <circle cx={x} cy={y} r={14} fill={on?PISTACHIO:OLIVE} stroke={INK} strokeWidth={1.5} />
+                    <circle cx={x} cy={y} r={14} fill={on?OLIVE:PISTACHIO} stroke={INK} strokeWidth={1.5} />
                     <g transform={`translate(${x-8} ${y-8}) scale(0.667)`}>
                       <path d={BED} fill={INK} />
                     </g>
@@ -146,12 +142,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                        filter="url(#cmm-ink)" opacity={.95} />
                 <text x={72} y={30} fontSize={8.6} letterSpacing="1.3" fill={INK} opacity={.55}>THE RECEPTION</text>
                 <text x={72} y={50} fontSize={15} fontWeight={500} fill={INK}>Isaac Smith Vineyard</text>
-                <text x={72} y={68} fontSize={11} fill={INK} opacity={.72}>2.5 miles north &middot; 8 min drive</text>
-                <g transform="translate(210 74)" opacity={.6}>
-                  <path d="M0 12 L0 -6 M-5 -1 L0 -6 L5 -1" fill="none" stroke={INK} strokeWidth={1.5}
-                        strokeLinecap="round" strokeLinejoin="round" />
-                  <text x={0} y={24} fontSize={7.6} letterSpacing="1" fill={INK} textAnchor="middle">NORTH</text>
-                </g>
+                <text x={72} y={68} fontSize={11} fill={INK} opacity={.72}>2.5 miles north &middot; about an 8 minute drive</text>
               </g>
             </svg>
           </div>
@@ -162,7 +153,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               <div key={h.n} onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
                 style={{ display:'flex', gap:9, alignItems:'center', marginBottom:7, fontSize:12.5, cursor:'pointer' }}>
                 <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%', border:'1.4px solid '+INK,
-                               background: sel===h.n?PISTACHIO:OLIVE, display:'inline-flex',
+                               background: sel===h.n?OLIVE:PISTACHIO, display:'inline-flex',
                                alignItems:'center', justifyContent:'center' }}>
                   <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={INK} /></svg>
                 </span>
