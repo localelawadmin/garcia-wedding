@@ -132,7 +132,7 @@ const box = (on:boolean) => ({
   background: on ? SKY : 'transparent',
   borderRadius: 5,
   padding: '4px 8px',
-  margin: '-4px -8px',
+  margin: '0 -8px',
 });
 return (
   <>
@@ -379,7 +379,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                     style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, cursor:'pointer',
                              minWidth:0, lineHeight:1.35, borderRadius:5,
                              background: picked===h.n ? SKY : 'transparent',
-                             padding:'5px 8px', margin:'-5px -8px',
+                             padding:'5px 8px', margin:'0 -8px',
                              transition:'background .18s ease, box-shadow .18s ease' }}>
                     <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%',
                                    border:'1.4px solid '+(sel===h.n?NAVY:INK),
@@ -402,7 +402,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                     style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, minWidth:0, lineHeight:1.35,
                              cursor:'pointer', borderRadius:5,
                              background: picked===e.n ? SKY : 'transparent',
-                             padding:'5px 8px', margin:'-5px -8px',
+                             padding:'5px 8px', margin:'0 -8px',
                              transition:'background .18s ease, box-shadow .18s ease' }}>
                     <img src={ICON+e.img} alt="" style={{ width:30, height:30, objectFit:'contain', opacity:.85, marginTop:-5 }} />
                     <span style={{ minWidth:0 }}>{e.n}</span>
