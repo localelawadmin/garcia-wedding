@@ -69,8 +69,8 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
           Every hotel sits on the same mile of Beach Avenue &mdash; the two far ends are about a 20&#8209;minute walk apart.
         </p>
 
-        <div className="cmm-row" style={{ display:'flex', gap:26, alignItems:'flex-start' }}>
-          <div style={{ flex:'1 1 auto', minWidth:0 }}>
+        <div className="cmm-row" style={{ display:'flex', flexDirection:'column', gap:20 }}>
+          <div style={{ width:'100%', minWidth:0 }}>
             <svg viewBox={'0 0 '+MAP_W+' '+MAP_H} style={{ width:'100%', height:'auto', display:'block' }}>
               <defs>
                 <filter id="cmm-ink" colorInterpolationFilters="sRGB">
@@ -144,37 +144,44 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
             </svg>
           </div>
 
-          <div className="cmm-key" style={{ flex:'0 0 214px' }}>
-            <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 9px', fontWeight:500 }}>Where to stay</h4>
-            {HOTELS.map(h=>(
-              <div key={h.n} onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
-                style={{ display:'flex', gap:9, alignItems:'center', marginBottom:7, fontSize:12.5, cursor:'pointer' }}>
-                <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%', border:'1.4px solid '+INK,
-                               background: sel===h.n?OLIVE:PISTACHIO, display:'inline-flex',
-                               alignItems:'center', justifyContent:'center' }}>
-                  <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={INK} /></svg>
-                </span>
-                <span>{h.n}<br />
-                  <span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>
-                    {h.addr.toUpperCase()}
-                  </span>
-                </span>
+          <div className="cmm-key" style={{ width:'100%' }}>
+            <div style={{ marginBottom:14 }}>
+              <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 10px', fontWeight:500 }}>Where to stay</h4>
+              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'12px 26px' }}>
+                {HOTELS.map(h=>(
+                  <div key={h.n} onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
+                    style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, cursor:'pointer' }}>
+                    <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%', border:'1.4px solid '+INK,
+                                   background: sel===h.n?OLIVE:PISTACHIO, display:'inline-flex',
+                                   alignItems:'center', justifyContent:'center' }}>
+                      <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={INK} /></svg>
+                    </span>
+                    <span style={{ whiteSpace:'nowrap' }}>{h.n}<br />
+                      <span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{h.addr.toUpperCase()}</span>
+                    </span>
+                  </div>
+                ))}
               </div>
-            ))}
-            <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'16px 0 9px', fontWeight:500 }}>The weekend</h4>
-            {ON_MAP.map(e=>(
-              <div key={e.n} style={{ display:'flex', gap:9, alignItems:'center', marginBottom:7, fontSize:12.5 }}>
-                <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85 }} />
-                <span>{e.n}<br /><span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{e.sub.toUpperCase()}</span></span>
+            </div>
+            <div style={{ borderTop:'1px solid rgba(175,184,133,.5)', paddingTop:14 }}>
+              <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 10px', fontWeight:500 }}>The weekend</h4>
+              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'12px 26px' }}>
+                {ON_MAP.map(e=>(
+                  <div key={e.n} style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5 }}>
+                    <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85 }} />
+                    <span style={{ whiteSpace:'nowrap' }}>{e.n}<br />
+                      <span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{e.sub.toUpperCase()}</span>
+                    </span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
 
         <style jsx>{`
           @media (max-width: 780px) {
-            :global(.cmm-row) { flex-direction: column !important; }
-            :global(.cmm-key) { flex: 1 1 auto !important; width: 100%; }
+            :global(.cmm-chips) { gap: 10px 18px !important; }
           }
         `}</style>
       </div>
