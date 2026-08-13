@@ -7,7 +7,8 @@ import {
 
 const CREAM='#FDFDFC', OLIVE='#AFB885', PISTACHIO='#E2E8CE',
       SKY='#DEE9F2', INK='#4E5B37', SAND='#EFE7D6',
-      STREET='#DED5C2';   // darker cream: reads as a street without the harshness of ink
+      STREET='#D9CDB4',   // Beach Ave — the one street that should read
+      STREET_FAINT='#EDE7DA';   // everything else: present, but not asking for attention
 const ICON='/photos/agenda/';
 
 /** Bed glyph, drawn to sit inside a 24x24 box. One shape so it stays legible at 13px. */
@@ -25,12 +26,12 @@ const HOTELS: Hotel[] = [
   { n:'La Mer',                addr:'1317 Beach Ave' },
 ];
 
-type Ev = { n:string; sub:string; img:string; place?:string; dx?:number; dy?:number; at?:[number,number] };
+type Ev = { n:string; sub:string; img:string; place?:string; dx?:number; dy?:number; at?:[number,number]; bare?:boolean };
 const ON_MAP: Ev[] = [
   { n:'Welcome Drinks', sub:'The Pier House',        img:'pier-house.png', place:'La Mer',       dx:-16, dy:-84 },
   { n:'Nuptial Mass',   sub:'Our Lady Star of the Sea', img:'osos.png',    place:'Nuptial Mass', dx:62, dy:-6 },
   { n:'After Party',    sub:"Carney's",              img:'carneys.png',    place:'After Party', dx:-70, dy:-56 },
-  { n:'Beach Day',      sub:'Cape May Beach',        img:'beach.png',      at:[548, 396] },
+  { n:'Beach Day',      sub:'Cape May Beach',        img:'beach.png',      at:[548, 392], bare:true },
 ];
 
 const at = (n:string) => { const p = PLACES.find(p=>p.name===n); return p ? {x:p.x,y:p.y} : {x:0,y:0}; };
@@ -96,19 +97,17 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 <path d={MAP_PATHS.land} fill={CREAM} />
                 {/* the beach: a real band along the shore. Filling between the road and the
                     water swallowed the ocean, because the two are nowhere near parallel. */}
-                <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={30} strokeLinecap="round" />
-                <path d={MAP_PATHS.islets} fill={CREAM} stroke={STREET} strokeWidth={1} />
-                <path d={MAP_PATHS.streets} fill="none" stroke={STREET} strokeWidth={1.1} mask="url(#cmm-streetmask)" />
-                <path d={MAP_PATHS.washington} fill="none" stroke={STREET} strokeWidth={2} />
-                <path d={MAP_PATHS.beachAve} fill="none" stroke={STREET} strokeWidth={3.4} />
+                <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={17} strokeLinecap="round" />
+                <path d={MAP_PATHS.islets} fill={CREAM} stroke={STREET_FAINT} strokeWidth={1} />
+                <path d={MAP_PATHS.streets} fill="none" stroke={STREET_FAINT} strokeWidth={1} strokeOpacity={.75} mask="url(#cmm-streetmask)" />
+                <path d={MAP_PATHS.washington} fill="none" stroke={STREET_FAINT} strokeWidth={1.8} />
+                <path d={MAP_PATHS.beachAve} fill="none" stroke={STREET} strokeWidth={4} />
               </g>
 
               {/* street labels, so the pins sit on something named */}
               <text x={18} y={MAP_H-14} fontSize={9.5} letterSpacing="1.4" fill={INK} opacity={.42}>BEACH AVENUE</text>
               <text x={782} y={MAP_H-34} fontSize={17} fill={INK} opacity={.4} textAnchor="middle"
                     fontStyle="italic" fontFamily="'Cormorant Garamond',Georgia,serif">The Atlantic</text>
-              <text x={470} y={196} fontSize={13} letterSpacing="4.2" fill={INK} opacity={.32}
-                    textAnchor="middle">CAPE MAY</text>
 
               {/* events: cream disc behind the line art so both icon and label read on any ground */}
               {ON_MAP.map(e=>{
@@ -116,12 +115,10 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 const x = base.x + (e.dx ?? 0), y = base.y + (e.dy ?? 0);
                 return (
                   <g key={e.n}>
-                    <ellipse cx={x} cy={y+16} rx={70} ry={56} fill="url(#cmm-halo)" />
-                    <image href={ICON+e.img} x={x-23} y={y-23} width={46} height={46} filter="url(#cmm-ink)" opacity={.95} />
-                    <text x={x} y={y+47} textAnchor="middle" fontSize={12.5} fontWeight={500} fill={INK}
-                          stroke={CREAM} strokeWidth={3.2} paintOrder="stroke">{e.n}</text>
-                    <text x={x} y={y+58} textAnchor="middle" fontSize={8.6} fill={INK} opacity={.7} letterSpacing=".7"
-                          stroke={CREAM} strokeWidth={2.6} paintOrder="stroke">{e.sub.toUpperCase()}</text>
+                    {!e.bare && <ellipse cx={x} cy={y+18} rx={104} ry={86} fill="url(#cmm-halo)" />}
+                    <image href={ICON+e.img} x={x-32} y={y-32} width={64} height={64} filter="url(#cmm-ink)" opacity={.95} />
+                    <text x={x} y={y+54} textAnchor="middle" fontSize={15} fontWeight={500} fill={INK}>{e.n}</text>
+                    <text x={x} y={y+68} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.65} letterSpacing=".9">{e.sub.toUpperCase()}</text>
                   </g>
                 );
               })}
