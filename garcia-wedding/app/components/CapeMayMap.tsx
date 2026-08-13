@@ -94,9 +94,9 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               <g clipPath="url(#cmm-clip)">
                 <rect width={MAP_W} height={MAP_H} fill={SKY} />
                 <path d={MAP_PATHS.land} fill={CREAM} />
-                {/* the beach is the whole band between the road and the water, not a hairline */}
-                <path d={MAP_PATHS.beachBand} fill={SAND} />
-                <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={7} />
+                {/* the beach: a real band along the shore. Filling between the road and the
+                    water swallowed the ocean, because the two are nowhere near parallel. */}
+                <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={30} strokeLinecap="round" />
                 <path d={MAP_PATHS.islets} fill={CREAM} stroke={STREET} strokeWidth={1} />
                 <path d={MAP_PATHS.streets} fill="none" stroke={STREET} strokeWidth={1.1} mask="url(#cmm-streetmask)" />
                 <path d={MAP_PATHS.washington} fill="none" stroke={STREET} strokeWidth={2} />
