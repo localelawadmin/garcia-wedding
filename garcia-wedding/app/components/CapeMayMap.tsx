@@ -15,16 +15,16 @@ const ICON='/photos/agenda/';
 const BED = 'M2.6 13.2h18.8c1.2 0 2.1.9 2.1 2.1v4.1c0 .5-.4.9-.9.9s-.9-.4-.9-.9v-.8c0-.3-.2-.5-.5-.5H3.8c-.3 0-.5.2-.5.5v.8c0 .5-.4.9-.9.9s-.9-.4-.9-.9v-4.1c0-1.2.9-2.1 2.1-2.1z'
           + 'M4.6 12.1V7.4c0-1.6 1.3-2.9 2.9-2.9h9c1.6 0 2.9 1.3 2.9 2.9v4.7c0 .2-.2.3-.4.3-.5-.1-1-.1-1.5-.1h-.3c-.1 0-.2-.1-.2-.2-.2-1-1-1.7-2-1.7h-2.4c-1 0-1.8.7-2 1.7 0 .1-.1.2-.2.2h-1c-.1 0-.2-.1-.2-.2-.2-1-1-1.7-2-1.7H8.8c-1 0-1.8.7-2 1.7 0 .1-.1.2-.2.2h-.3c-.5 0-1 0-1.5.1-.2 0-.4-.1-.4-.3z';
 
-type Hotel = { n:string; addr:string; nudge?:[number,number] };
+type Hotel = { n:string; l1:string; l2:string; addr:string; nudge?:[number,number] };
 const HOTELS: Hotel[] = [
-  // same order as The Accommodations section
-  { n:'La Mer',                addr:'1317 Beach Ave' },
-  { n:'Beach Club on Madison', addr:'605 Madison Ave' },
-  { n:'The Grand Hotel',       addr:'1045 Beach Ave', nudge:[-7,4] },
-  { n:'Marquis de Lafayette',  addr:'501 Beach Ave' },
-  { n:'Montreal Beach Resort', addr:'1025 Beach Ave', nudge:[-8,6] },
-  { n:'ICONA Cape May',        addr:'1101 Beach Ave', nudge:[11,0] },
-  { n:'Ocean Club Hotel',      addr:'1035 Beach Ave', nudge:[10,-4] },
+  // same order as The Accommodations section; every name set on two lines
+  { n:'La Mer',                l1:'La Mer',        l2:'Beachfront Resort', addr:'1317 Beach Ave' },
+  { n:'Beach Club on Madison', l1:'The Beach Club',l2:'on Madison',        addr:'605 Madison Ave' },
+  { n:'The Grand Hotel',       l1:'The Grand',     l2:'Hotel',             addr:'1045 Beach Ave', nudge:[-7,4] },
+  { n:'Marquis de Lafayette',  l1:'Marquis',       l2:'de Lafayette',      addr:'501 Beach Ave' },
+  { n:'Montreal Beach Resort', l1:'Montreal',      l2:'Beach Resort',      addr:'1025 Beach Ave', nudge:[-8,6] },
+  { n:'ICONA Cape May',        l1:'ICONA',         l2:'Cape May',          addr:'1101 Beach Ave', nudge:[11,0] },
+  { n:'Ocean Club Hotel',      l1:'Ocean Club',    l2:'Hotel',             addr:'1035 Beach Ave', nudge:[10,-4] },
 ];
 
 type Ev = { n:string; sub:string; extra?:string; img:string; place?:string; dx?:number; dy?:number; at?:[number,number]; bare?:boolean };
@@ -160,7 +160,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                                    alignItems:'center', justifyContent:'center', marginTop:-2 }}>
                       <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={INK} /></svg>
                     </span>
-                    <span style={{ minWidth:0 }}>{h.n}</span>
+                    <span style={{ minWidth:0 }}>{h.l1}<br />{h.l2}</span>
                   </div>
                 ))}
               </div>
