@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   MAP_W, MAP_H, MAP_PATHS, PLACES,
 } from './capeMayGeo';
@@ -189,6 +189,16 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
     const prev=document.body.style.overflow; document.body.style.overflow='hidden';
     return ()=>{ window.removeEventListener('keydown',esc); document.body.style.overflow=prev; };
   }, [open, onClose]);
+
+  // On phones the map opens already filling the frame. A layout effect so it's
+  // positioned before first paint rather than snapping into place after.
+  useLayoutEffect(() => {
+    if (!open || !mobile) { setView({ k:1, x:0, y:0 }); setDrawer(false); return; }
+    fill();
+    const onResize = () => fill();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [open, mobile, drawer]);
 
   if (!open) return null;
 
