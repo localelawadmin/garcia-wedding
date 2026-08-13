@@ -39,7 +39,17 @@ const ON_MAP: Ev[] = [
 
 const at = (n:string) => { const p = PLACES.find(p=>p.name===n); return p ? {x:p.x,y:p.y} : {x:0,y:0}; };
 
-function MapSvg({ sel, setSel, box }:{ sel:string|null; setSel:(v:string|null)=>void; box?:string }) {
+/** Where a marker actually sits on the map, nudges and offsets included. */
+export const posOf = (name:string) => {
+  const h = HOTELS.find(h=>h.n===name);
+  if (h) { const p = at(h.n); return { x:p.x+(h.nudge?.[0]??0), y:p.y+(h.nudge?.[1]??0) }; }
+  const e = ON_MAP.find(e=>e.n===name);
+  if (e) { const b = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
+           return { x:b.x+(e.dx??0), y:b.y+(e.dy??0) }; }
+  return null;
+};
+
+function MapSvg({ sel, setSel, box, picked, onPick }:{ sel:string|null; setSel:(v:string|null)=>void; box?:string; picked:string|null; onPick:(n:string)=>void }) {
   return (
   <svg viewBox={box ?? ('0 0 '+MAP_W+' '+MAP_H)} preserveAspectRatio="xMidYMid meet"
        style={{ width:'100%', height:'auto', display:'block' }}>
@@ -85,7 +95,8 @@ function MapSvg({ sel, setSel, box }:{ sel:string|null; setSel:(v:string|null)=>
         const b = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
         const x = b.x + (e.dx ?? 0), y = b.y + (e.dy ?? 0);
         return (
-          <g key={e.n}>
+          <g key={e.n} style={{cursor:'pointer'}} onClick={()=>onPick(e.n)}>
+            {picked===e.n && <circle cx={x} cy={y} r={46} fill={SKY} opacity={.5} />}
             <image href={ICON+e.img} x={x-37} y={y-37} width={74} height={74} filter="url(#cmm-ink)" opacity={.95} />
             <text x={x} y={y+53} textAnchor="middle" fontSize={15} fontWeight={500} fill={INK}>{e.n}</text>
             <text x={x} y={y+66} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.65} letterSpacing=".9">{e.sub.toUpperCase()}</text>
@@ -99,9 +110,9 @@ function MapSvg({ sel, setSel, box }:{ sel:string|null; setSel:(v:string|null)=>
     {HOTELS.map(h=>{
       const p=at(h.n);
       const x=p.x+(h.nudge?.[0] ?? 0), y=p.y+(h.nudge?.[1] ?? 0);
-      const on = sel===h.n;
+      const on = sel===h.n || picked===h.n;
       return (
-        <g key={h.n} style={{cursor:'pointer'}}
+        <g key={h.n} style={{cursor:'pointer'}} onClick={()=>onPick(h.n)}
            onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}>
           <circle cx={x} cy={y} r={14} fill={on?NAVY:SKY} stroke={on?NAVY:INK} strokeWidth={1.5} />
           <g transform={`translate(${x-8} ${y-8}) scale(0.667)`}>
@@ -116,13 +127,20 @@ function MapSvg({ sel, setSel, box }:{ sel:string|null; setSel:(v:string|null)=>
   );
 }
 
-function KeyLists() {
+function KeyLists({ picked, onPick }:{ picked:string|null; onPick:(n:string)=>void }) {
+const box = (on:boolean) => ({
+  background: on ? SKY : 'transparent',
+  boxShadow: on ? `0 0 0 5px ${SKY}` : 'none',
+  borderRadius: 3,
+});
 return (
   <>
     <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 6px', fontWeight:500 }}>Where to stay</h4>
     <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'5px 14px', gridAutoRows:'29px' }}>
       {HOTELS.map(h=>(
-        <div key={h.n} style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3 }}>
+        <div key={h.n} onClick={()=>onPick(h.n)} role="button" tabIndex={0}
+          style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3,
+                   cursor:'pointer', transition:'background .18s ease, box-shadow .18s ease', ...box(picked===h.n) }}>
           <span style={{ flex:'0 0 20px', height:20, borderRadius:'50%', border:'1.3px solid '+INK,
                          background:SKY, display:'inline-flex', alignItems:'center', justifyContent:'center', marginTop:-1 }}>
             <svg viewBox="0 0 24 24" width={12} height={12}><path d={BED} fill={INK} /></svg>
@@ -134,8 +152,10 @@ return (
     <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'11px 0 6px', fontWeight:500 }}>The weekend</h4>
     <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'5px 14px', gridAutoRows:'29px' }}>
       {ON_MAP.map(e=>(
-        <div key={e.n} style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3 }}>
-          <img src={ICON+e.img} alt="" style={{ width:23, height:23, objectFit:'contain', opacity:.85, marginTop:-3 }} />
+        <div key={e.n} onClick={()=>onPick(e.n)} role="button" tabIndex={0}
+          style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3,
+                   cursor:'pointer', transition:'background .18s ease, box-shadow .18s ease', ...box(picked===e.n) }}>
+          <img src={ICON+e.img} alt="" style={{ width:29, height:29, objectFit:'contain', opacity:.85, marginTop:-5 }} />
           <span style={{ minWidth:0 }}>{e.n}</span>
         </div>
       ))}
@@ -148,6 +168,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
   const [sel, setSel] = useState<string|null>(null);
   const [mobile, setMobile] = useState(false);
   const [drawer, setDrawer] = useState(false);
+  const [picked, setPicked] = useState<string|null>(null);
   const [view, setView] = useState({ k:1, x:0, y:0 });
   const ptrs = useRef<Map<number,{x:number;y:number}>>(new Map());
   const stage = useRef<HTMLDivElement|null>(null);
@@ -224,7 +245,20 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
       return clamp({ k, x: v.x + px*sB - px*sA, y: v.y + py*sB - py*sA });
     });
   };
-  const reset = () => setView({ k:1, x:0, y:0 });
+  const reset = () => { setView({ k:1, x:0, y:0 }); setPicked(null); };
+
+  // clicking a marker or a key row does the same thing: highlight it, and on the
+  // zoomable mobile map, bring that point to the middle
+  const pick = (name:string) => {
+    setPicked(p => p === name ? null : name);
+    if (!mobile) return;
+    const p = posOf(name); if (!p) return;
+    setView(v => {
+      const k = Math.max(v.k, 2.2);
+      const vw = MAP_W / k, vh = MAP_H / k;
+      return clamp({ k, x: p.x - vw/2, y: p.y - vh/2 });
+    });
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -236,7 +270,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
 
   // reset the view whenever it opens or the frame changes shape
   useLayoutEffect(() => {
-    if (!open) { setDrawer(false); }
+    if (!open) { setDrawer(false); setPicked(null); }
     setView({ k:1, x:0, y:0 });
     const onResize = () => setView({ k:1, x:0, y:0 });
     window.addEventListener('resize', onResize);
@@ -275,13 +309,13 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
       <div ref={stage} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onWheel={wheel}
         style={{ position:'relative', overflow:'hidden', touchAction:'none', cursor:'grab',
                  width:'100%', aspectRatio:`${MAP_W} / ${MAP_H}`, flex:'0 0 auto' }}>
-        <MapSvg sel={sel} setSel={setSel}
+        <MapSvg sel={sel} setSel={setSel} picked={picked} onPick={pick}
                 box={`${view.x} ${view.y} ${MAP_W/view.k} ${MAP_H/view.k}`} />
       </div>
 
       <div style={{ flex:'0 1 auto', minHeight:0, overflowY:'auto',
                     borderTop:'1px solid rgba(175,184,133,.5)', padding:'11px 12px 13px' }}>
-        <KeyLists />
+        <KeyLists picked={picked} onPick={pick} />
       </div>
       </div>
     </div>
@@ -309,7 +343,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
         <div className="cmm-row" style={{ display:'flex', flexDirection:'column', gap:14,
              width:'100%' }}>
           <div style={{ width:'100%', minWidth:0 }}>
-            <MapSvg sel={sel} setSel={setSel} />
+            <MapSvg sel={sel} setSel={setSel} picked={picked} onPick={pick} />
           </div>
 
           <div className="cmm-key" style={{ width:'100%', display:'flex', gap:26, alignItems:'flex-start' }}>
@@ -317,8 +351,13 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
               <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0,1fr))', gap:'8px 18px', gridAutoRows:'34px' }}>
                 {HOTELS.map(h=>(
-                  <div key={h.n} onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
-                    style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, cursor:'pointer', minWidth:0, lineHeight:1.35 }}>
+                  <div key={h.n} onClick={()=>pick(h.n)}
+                    onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
+                    style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, cursor:'pointer',
+                             minWidth:0, lineHeight:1.35, borderRadius:3,
+                             background: picked===h.n ? SKY : 'transparent',
+                             boxShadow: picked===h.n ? `0 0 0 5px ${SKY}` : 'none',
+                             transition:'background .18s ease, box-shadow .18s ease' }}>
                     <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%',
                                    border:'1.4px solid '+(sel===h.n?NAVY:INK),
                                    background: sel===h.n?NAVY:SKY, display:'inline-flex',
@@ -336,8 +375,13 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>The weekend</h4>
               <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'8px 18px', gridAutoRows:'34px' }}>
                 {ON_MAP.map(e=>(
-                  <div key={e.n} style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, minWidth:0, lineHeight:1.35 }}>
-                    <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85, marginTop:-4 }} />
+                  <div key={e.n} onClick={()=>pick(e.n)}
+                    style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, minWidth:0, lineHeight:1.35,
+                             cursor:'pointer', borderRadius:3,
+                             background: picked===e.n ? SKY : 'transparent',
+                             boxShadow: picked===e.n ? `0 0 0 5px ${SKY}` : 'none',
+                             transition:'background .18s ease, box-shadow .18s ease' }}>
+                    <img src={ICON+e.img} alt="" style={{ width:30, height:30, objectFit:'contain', opacity:.85, marginTop:-5 }} />
                     <span style={{ minWidth:0 }}>{e.n}</span>
                   </div>
                 ))}
