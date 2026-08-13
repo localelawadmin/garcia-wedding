@@ -57,7 +57,8 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
       <div onClick={e=>e.stopPropagation()}
         style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
-                 maxWidth:1120, width:'100%', maxHeight:'92vh', overflowY:'auto',
+                 maxWidth:'min(1080px, calc((92vh - 262px) * 1.826 + 56px))', width:'100%',
+                 maxHeight:'92vh', overflowY:'auto',
                  padding:'22px 28px 18px', position:'relative' }}>
         <button onClick={onClose} aria-label="Close map"
           style={{ position:'absolute', top:16, right:16, width:32, height:32, borderRadius:'50%',
@@ -70,7 +71,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
         </p>
 
         <div className="cmm-row" style={{ display:'flex', flexDirection:'column', gap:14,
-             width:'min(100%, calc((92vh - 326px) * 1.826))', margin:'0 auto' }}>
+             width:'100%' }}>
           <div style={{ width:'100%', minWidth:0 }}>
             <svg viewBox={'0 0 '+MAP_W+' '+MAP_H} preserveAspectRatio="xMidYMid meet"
                  style={{ width:'100%', height:'auto', display:'block',
@@ -153,15 +154,13 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0,1fr))', gap:'10px 18px' }}>
                 {HOTELS.map(h=>(
                   <div key={h.n} onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
-                    style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, cursor:'pointer', minWidth:0 }}>
+                    style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, cursor:'pointer', minWidth:0, lineHeight:1.35 }}>
                     <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%', border:'1.4px solid '+INK,
                                    background: sel===h.n?OLIVE:PISTACHIO, display:'inline-flex',
-                                   alignItems:'center', justifyContent:'center' }}>
+                                   alignItems:'center', justifyContent:'center', marginTop:-2 }}>
                       <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={INK} /></svg>
                     </span>
-                    <span style={{ minWidth:0 }}>{h.n}<br />
-                      <span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{h.addr.toUpperCase()}</span>
-                    </span>
+                    <span style={{ minWidth:0 }}>{h.n}</span>
                   </div>
                 ))}
               </div>
@@ -171,8 +170,8 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>The weekend</h4>
               <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'10px 18px' }}>
                 {ON_MAP.map(e=>(
-                  <div key={e.n} style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, minWidth:0 }}>
-                    <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85 }} />
+                  <div key={e.n} style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, minWidth:0, lineHeight:1.35 }}>
+                    <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85, marginTop:-4 }} />
                     <span style={{ minWidth:0 }}>{e.n}<br />
                       <span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{e.sub.toUpperCase()}</span>
                     </span>
