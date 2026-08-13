@@ -29,7 +29,7 @@ const ON_MAP: Ev[] = [
   { n:'Welcome Drinks', sub:'The Pier House',        img:'pier-house.png', place:'La Mer',       dx:-16, dy:-84 },
   { n:'Nuptial Mass',   sub:'Our Lady Star of the Sea', img:'osos.png',    place:'Nuptial Mass', dx:62, dy:-6 },
   { n:'After Party',    sub:"Carney's",              img:'carneys.png',    place:'After Party', dx:-70, dy:-56 },
-  { n:'Beach Day',      sub:'Cape May Beach',        img:'beach.png',      at:[556, 424] },
+  { n:'Beach Day',      sub:'Cape May Beach',        img:'beach.png',      at:[548, 396] },
 ];
 
 const at = (n:string) => { const p = PLACES.find(p=>p.name===n); return p ? {x:p.x,y:p.y} : {x:0,y:0}; };
@@ -96,11 +96,8 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               {ON_MAP.map(e=>{
                 const base = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
                 const x = base.x + (e.dx ?? 0), y = base.y + (e.dy ?? 0);
-                const moved = !!(e.dx || e.dy);
                 return (
                   <g key={e.n}>
-                    {moved && <line x1={x} y1={y} x2={base.x} y2={base.y} stroke={INK} strokeOpacity={.4} strokeDasharray="3 3" />}
-                    {moved && <circle cx={base.x} cy={base.y} r={3} fill={INK} opacity={.55} />}
                     <circle cx={x} cy={y} r={30} fill={CREAM} />
                     <image href={ICON+e.img} x={x-23} y={y-23} width={46} height={46} filter="url(#cmm-ink)" opacity={.95} />
                     <text x={x} y={y+47} textAnchor="middle" fontSize={12.5} fontWeight={500} fill={INK}
@@ -123,26 +120,20 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                     <g transform={`translate(${x-8} ${y-8}) scale(0.667)`}>
                       <path d={BED} fill={INK} />
                     </g>
-                    {h.stop && (
-                      <g>
-                        <circle cx={x+11} cy={y+11} r={5.5} fill={INK} stroke={CREAM} strokeWidth={1.4} />
-                        <path d={`M${x+8.6} ${y+11} l1.6 1.7 3.2 -3.4`} fill="none" stroke={CREAM} strokeWidth={1.5}
-                              strokeLinecap="round" strokeLinejoin="round" />
-                      </g>
-                    )}
                     <circle cx={x} cy={y} r={20} fill="transparent" />
                   </g>
                 );
               })}
 
               {/* The reception is off the map. A callout reads far better than a tiny mini-map. */}
-              <g transform={`translate(${MAP_W-262} ${MAP_H-118})`}>
-                <rect width={246} height={100} rx={2} fill={CREAM} stroke={INK} strokeOpacity={.5} />
-                <image href={ICON+'reception-tent.png'} x={12} y={26} width={50} height={50}
+              <g transform={`translate(${MAP_W-268} ${MAP_H-116})`}>
+                <rect width={252} height={102} rx={2} fill={CREAM} stroke={INK} strokeOpacity={.5} />
+                <image href={ICON+'reception-tent.png'} x={10} y={28} width={48} height={48}
                        filter="url(#cmm-ink)" opacity={.95} />
-                <text x={72} y={30} fontSize={8.6} letterSpacing="1.3" fill={INK} opacity={.55}>THE RECEPTION</text>
-                <text x={72} y={50} fontSize={15} fontWeight={500} fill={INK}>Isaac Smith Vineyard</text>
-                <text x={72} y={68} fontSize={11} fill={INK} opacity={.72}>2.5 miles north &middot; about an 8 minute drive</text>
+                <text x={66} y={28} fontSize={8.4} letterSpacing="1.3" fill={INK} opacity={.55}>THE RECEPTION</text>
+                <text x={66} y={49} fontSize={15} fontWeight={500} fill={INK}>Isaac Smith Vineyard</text>
+                <text x={66} y={66} fontSize={10.5} fill={INK} opacity={.7}>2.5 miles north</text>
+                <text x={66} y={80} fontSize={10.5} fill={INK} opacity={.7}>about an 8 minute drive</text>
               </g>
             </svg>
           </div>
@@ -171,14 +162,8 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 <span>{e.n}<br /><span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{e.sub.toUpperCase()}</span></span>
               </div>
             ))}
-            <p style={{ fontSize:10.5, opacity:.65, lineHeight:1.5, marginTop:14,
-                        display:'flex', gap:7, alignItems:'flex-start' }}>
-              <svg viewBox="0 0 24 24" width={13} height={13} style={{ flex:'0 0 13px', marginTop:1 }}>
-                <circle cx="12" cy="12" r="11" fill={INK} />
-                <path d="M6.6 12.4l3.2 3.4 7.4 -7.6" fill="none" stroke={CREAM} strokeWidth={2.4}
-                      strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              Planned shuttle pickup
+            <p style={{ fontSize:10.5, opacity:.6, lineHeight:1.5, marginTop:14 }}>
+              Hotels marked <strong style={{ fontWeight:500 }}>SHUTTLE</strong> are planned pickup points.
             </p>
           </div>
         </div>
