@@ -11,3 +11,4 @@ export const INSET_PATHS={"coast": "M133,35 126,37 119,54 112,61 111,63 117,69 1
 export const PLACES=[{"kind": "hotel", "name": "Marquis de Lafayette", "x": 195.6, "y": 386.7}, {"kind": "hotel", "name": "Beach Club on Madison", "x": 404.7, "y": 114.3}, {"kind": "hotel", "name": "Montreal Beach Resort", "x": 519.3, "y": 335.8}, {"kind": "hotel", "name": "Ocean Club Hotel", "x": 539.5, "y": 328.5}, {"kind": "hotel", "name": "The Grand Hotel", "x": 609.8, "y": 282.7}, {"kind": "hotel", "name": "ICONA Cape May", "x": 634.7, "y": 287.3}, {"kind": "hotel", "name": "La Mer", "x": 786.7, "y": 221.0}, {"kind": "event", "name": "Nuptial Mass", "x": 141.0, "y": 276.7}, {"kind": "event", "name": "After Party", "x": 160.6, "y": 388.4}, {"kind": "event", "name": "Reception", "x": 67.8, "y": -694.2}] as const;
 
 export const INSET_PLACES=[{"name": "The Grand Hotel", "x": 127.3, "y": 154.4}, {"name": "Reception", "x": 55.4, "y": 24.5}] as const;
+

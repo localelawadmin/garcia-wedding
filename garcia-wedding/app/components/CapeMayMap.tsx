@@ -222,7 +222,8 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                display:'flex', alignItems:'center', justifyContent:'center', padding:14 }}>
       <div onClick={e=>e.stopPropagation()}
         style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
-                 width:'100%', maxHeight:'88vh', display:'flex', flexDirection:'column', overflow:'hidden' }}>
+                 width:'100%', height:'min(88vh, calc((100vw - 28px) * 16 / 9))',
+                 display:'flex', flexDirection:'column', overflow:'hidden' }}>
       <div style={{ flex:'0 0 auto', display:'flex', alignItems:'center', justifyContent:'space-between',
                     padding:'12px 14px', borderBottom:'1px solid rgba(175,184,133,.5)' }}>
         <div>
@@ -254,23 +255,9 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
         </div>
       </div>
 
-      <div style={{ flex:'0 1 auto', borderTop:'1px solid rgba(175,184,133,.5)', background:CREAM, overflow:'hidden' }}>
-        <button onClick={()=>setDrawer(d=>!d)} aria-expanded={drawer}
-          style={{ width:'100%', padding:'12px 14px', background:'transparent', border:'none', color:INK,
-                   display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer', font:'inherit' }}>
-          <span style={{ fontSize:10, letterSpacing:'.14em', textTransform:'uppercase', opacity:.6 }}>
-            {drawer ? 'Hide the key' : 'Show the key'}
-          </span>
-          <span style={{ display:'inline-block', transition:'transform .25s ease',
-                         transform:`rotate(${drawer?180:0}deg)` }}>
-            <svg viewBox="0 0 24 24" width={14} height={14} fill="none" stroke={INK} strokeWidth={1.6}
-                 strokeLinecap="round" strokeLinejoin="round"><path d="M6 15l6-6 6 6"/></svg>
-          </span>
-        </button>
-        <div style={{ maxHeight: drawer ? '46vh' : 0, overflow:'hidden', overflowY: drawer ? 'auto' : 'hidden',
-                      transition:'max-height .32s ease', padding: drawer ? '0 14px 16px' : '0 14px' }}>
-          <KeyLists dense />
-        </div>
+      <div style={{ flex:'1 1 auto', minHeight:0, overflowY:'auto',
+                    borderTop:'1px solid rgba(175,184,133,.5)', padding:'14px 14px 16px' }}>
+        <KeyLists dense />
       </div>
       </div>
     </div>
