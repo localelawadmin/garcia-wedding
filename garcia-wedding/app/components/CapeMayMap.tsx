@@ -28,10 +28,10 @@ const HOTELS: Hotel[] = [
 
 type Ev = { n:string; sub:string; img:string; place?:string; dx?:number; dy?:number; at?:[number,number]; bare?:boolean };
 const ON_MAP: Ev[] = [
-  { n:'Welcome Drinks', sub:'The Pier House',        img:'pier-house.png', place:'La Mer',       dx:-16, dy:-84 },
-  { n:'Nuptial Mass',   sub:'Our Lady Star of the Sea', img:'osos.png',    place:'Nuptial Mass', dx:62, dy:-6 },
-  { n:'After Party',    sub:"Carney's",              img:'carneys.png',    place:'After Party', dx:-70, dy:-56 },
-  { n:'Beach Day',      sub:'Cape May Beach',        img:'beach.png',      at:[548, 392], bare:true },
+  { n:'Welcome Drinks', sub:'The Pier House',        img:'pier-house.png', place:'La Mer',       dx:-16, dy:-112 },
+  { n:'Nuptial Mass',   sub:'Our Lady Star of the Sea', img:'osos.png',    place:'Nuptial Mass', dx:189, dy:-22 },
+  { n:'After Party',    sub:"Carney's",              img:'carneys.png',    place:'After Party', dx:-11, dy:-100 },
+  { n:'Beach Day',      sub:'Cape May Beach',        img:'beach.png',      at:[650, 400], bare:true },
 ];
 
 const at = (n:string) => { const p = PLACES.find(p=>p.name===n); return p ? {x:p.x,y:p.y} : {x:0,y:0}; };
@@ -80,15 +80,6 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                   <stop offset="58%" stopColor={CREAM} stopOpacity={.94} />
                   <stop offset="100%" stopColor={CREAM} stopOpacity={0} />
                 </radialGradient>
-                {/* the far north-west corner is empty suburb — fade it out rather than cut it */}
-                <radialGradient id="cmm-fade" cx="0.1" cy="0.04" r="0.62">
-                  <stop offset="0%" stopColor="#000" />
-                  <stop offset="52%" stopColor="#000" />
-                  <stop offset="100%" stopColor="#fff" />
-                </radialGradient>
-                <mask id="cmm-streetmask">
-                  <rect width={MAP_W} height={MAP_H} fill="url(#cmm-fade)" />
-                </mask>
                 <clipPath id="cmm-clip"><rect x="0" y="0" width={MAP_W} height={MAP_H} /></clipPath>
               </defs>
 
@@ -99,7 +90,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                     water swallowed the ocean, because the two are nowhere near parallel. */}
                 <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={17} strokeLinecap="round" />
                 <path d={MAP_PATHS.islets} fill={CREAM} stroke={STREET_FAINT} strokeWidth={1} />
-                <path d={MAP_PATHS.streets} fill="none" stroke={STREET_FAINT} strokeWidth={1} strokeOpacity={.75} mask="url(#cmm-streetmask)" />
+                <path d={MAP_PATHS.streets} fill="none" stroke={STREET_FAINT} strokeWidth={1} strokeOpacity={.75} />
                 <path d={MAP_PATHS.washington} fill="none" stroke={STREET_FAINT} strokeWidth={1.8} />
                 <path d={MAP_PATHS.beachAve} fill="none" stroke={STREET} strokeWidth={4} />
               </g>
@@ -110,18 +101,28 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                     fontStyle="italic" fontFamily="'Cormorant Garamond',Georgia,serif">The Atlantic</text>
 
               {/* events: cream disc behind the line art so both icon and label read on any ground */}
-              {ON_MAP.map(e=>{
-                const base = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
-                const x = base.x + (e.dx ?? 0), y = base.y + (e.dy ?? 0);
-                return (
-                  <g key={e.n}>
-                    {!e.bare && <ellipse cx={x} cy={y+18} rx={104} ry={86} fill="url(#cmm-halo)" />}
-                    <image href={ICON+e.img} x={x-32} y={y-32} width={64} height={64} filter="url(#cmm-ink)" opacity={.95} />
-                    <text x={x} y={y+54} textAnchor="middle" fontSize={15} fontWeight={500} fill={INK}>{e.n}</text>
-                    <text x={x} y={y+68} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.65} letterSpacing=".9">{e.sub.toUpperCase()}</text>
-                  </g>
-                );
-              })}
+              {/* every halo first, on one layer: overlapping ones blend into a single
+                  soft field, and nothing can end up trapped behind a neighbour's disc */}
+              <g>
+                {ON_MAP.filter(e=>!e.bare).map(e=>{
+                  const b = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
+                  const x = b.x + (e.dx ?? 0), y = b.y + (e.dy ?? 0);
+                  return <ellipse key={e.n} cx={x} cy={y+18} rx={108} ry={88} fill="url(#cmm-halo)" />;
+                })}
+              </g>
+              <g>
+                {ON_MAP.map(e=>{
+                  const b = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
+                  const x = b.x + (e.dx ?? 0), y = b.y + (e.dy ?? 0);
+                  return (
+                    <g key={e.n}>
+                      <image href={ICON+e.img} x={x-32} y={y-32} width={64} height={64} filter="url(#cmm-ink)" opacity={.95} />
+                      <text x={x} y={y+54} textAnchor="middle" fontSize={15} fontWeight={500} fill={INK}>{e.n}</text>
+                      <text x={x} y={y+68} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.65} letterSpacing=".9">{e.sub.toUpperCase()}</text>
+                    </g>
+                  );
+                })}
+              </g>
 
               {/* hotels: one colour, one glyph. A small badge marks a planned shuttle pickup. */}
               {HOTELS.map(h=>{
