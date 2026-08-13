@@ -7,7 +7,7 @@ import {
 
 const CREAM='#FDFDFC', OLIVE='#AFB885', PISTACHIO='#E2E8CE',
       SKY='#DEE9F2', INK='#4E5B37', SAND='#EFE7D6',
-      CORAL='#F6C1C2',   // sampled from the floral: the pink of its sprigs
+      CORAL='#F9D7D7',   // the floral's pink, lifted toward white so it reads pink not red
       STREET='#D9CDB4',   // Beach Ave — the one street that should read
       STREET_FAINT='#EDE7DA';   // everything else: present, but not asking for attention
 const ICON='/photos/agenda/';
