@@ -58,20 +58,22 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
       <div onClick={e=>e.stopPropagation()}
         style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
                  maxWidth:1120, width:'100%', maxHeight:'92vh', overflowY:'auto',
-                 padding:'26px 28px 22px', position:'relative' }}>
+                 padding:'22px 28px 18px', position:'relative' }}>
         <button onClick={onClose} aria-label="Close map"
           style={{ position:'absolute', top:16, right:16, width:32, height:32, borderRadius:'50%',
                    border:'1px solid '+INK, background:'transparent', color:INK, cursor:'pointer',
                    fontSize:16, lineHeight:1, padding:0 }}>&times;</button>
 
-        <h2 className="heading" style={{ fontSize:40, lineHeight:1, margin:'0 0 6px', fontWeight:400 }}>Around Cape May</h2>
-        <p style={{ fontSize:13.5, lineHeight:1.55, opacity:.78, margin:'0 0 18px', maxWidth:540 }}>
+        <h2 className="heading" style={{ fontSize:34, lineHeight:1, margin:'0 0 5px', fontWeight:400 }}>Around Cape May</h2>
+        <p style={{ fontSize:13, lineHeight:1.5, opacity:.78, margin:'0 0 14px', maxWidth:620 }}>
           Every hotel sits on the same mile of Beach Avenue &mdash; the two far ends are about a 20&#8209;minute walk apart.
         </p>
 
-        <div className="cmm-row" style={{ display:'flex', flexDirection:'column', gap:20 }}>
+        <div className="cmm-row" style={{ display:'flex', flexDirection:'column', gap:14 }}>
           <div style={{ width:'100%', minWidth:0 }}>
-            <svg viewBox={'0 0 '+MAP_W+' '+MAP_H} style={{ width:'100%', height:'auto', display:'block' }}>
+            <svg viewBox={'0 0 '+MAP_W+' '+MAP_H} preserveAspectRatio="xMidYMid meet"
+                 style={{ width:'100%', height:'auto', display:'block',
+                          maxHeight:'calc(92vh - 300px)', margin:'0 auto' }}>
               <defs>
                 <filter id="cmm-ink" colorInterpolationFilters="sRGB">
                   <feFlood floodColor={INK} /><feComposite in2="SourceAlpha" operator="in" />
@@ -145,9 +147,9 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
           </div>
 
           <div className="cmm-key" style={{ width:'100%' }}>
-            <div style={{ marginBottom:14 }}>
-              <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 10px', fontWeight:500 }}>Where to stay</h4>
-              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'12px 26px' }}>
+            <div style={{ marginBottom:11 }}>
+              <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
+              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'9px 24px' }}>
                 {HOTELS.map(h=>(
                   <div key={h.n} onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
                     style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, cursor:'pointer' }}>
@@ -163,9 +165,9 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 ))}
               </div>
             </div>
-            <div style={{ borderTop:'1px solid rgba(175,184,133,.5)', paddingTop:14 }}>
-              <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 10px', fontWeight:500 }}>The weekend</h4>
-              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'12px 26px' }}>
+            <div style={{ borderTop:'1px solid rgba(175,184,133,.5)', paddingTop:11 }}>
+              <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>The weekend</h4>
+              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'9px 24px' }}>
                 {ON_MAP.map(e=>(
                   <div key={e.n} style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5 }}>
                     <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85 }} />
