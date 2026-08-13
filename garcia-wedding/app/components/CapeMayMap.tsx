@@ -8,6 +8,7 @@ import {
 const CREAM='#FDFDFC', OLIVE='#AFB885', PISTACHIO='#E2E8CE',
       SKY='#DEE9F2', INK='#4E5B37', SAND='#EFE7D6',
       CORAL='#F9D7D7',   // the floral's pink, lifted toward white so it reads pink not red
+      NAVY='#364C63',    // the lander's deep blue — hover state
       STREET='#D9CDB4',   // Beach Ave — the one street that should read
       STREET_FAINT='#EDE7DA';   // everything else: present, but not asking for attention
 const ICON='/photos/agenda/';
@@ -137,9 +138,9 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 return (
                   <g key={h.n} style={{cursor:'pointer'}}
                      onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}>
-                    <circle cx={x} cy={y} r={14} fill={on?OLIVE:CORAL} stroke={INK} strokeWidth={1.5} />
+                    <circle cx={x} cy={y} r={14} fill={on?NAVY:CORAL} stroke={on?NAVY:INK} strokeWidth={1.5} />
                     <g transform={`translate(${x-8} ${y-8}) scale(0.667)`}>
-                      <path d={BED} fill={INK} />
+                      <path d={BED} fill={on?CREAM:INK} />
                     </g>
                     <circle cx={x} cy={y} r={20} fill="transparent" />
                   </g>
@@ -156,10 +157,12 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 {HOTELS.map(h=>(
                   <div key={h.n} onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
                     style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, cursor:'pointer', minWidth:0, lineHeight:1.35 }}>
-                    <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%', border:'1.4px solid '+INK,
-                                   background: sel===h.n?OLIVE:CORAL, display:'inline-flex',
-                                   alignItems:'center', justifyContent:'center', marginTop:-2 }}>
-                      <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={INK} /></svg>
+                    <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%',
+                                   border:'1.4px solid '+(sel===h.n?NAVY:INK),
+                                   background: sel===h.n?NAVY:CORAL, display:'inline-flex',
+                                   alignItems:'center', justifyContent:'center', marginTop:-2,
+                                   transition:'background .15s ease' }}>
+                      <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={sel===h.n?CREAM:INK} /></svg>
                     </span>
                     <span style={{ minWidth:0 }}>{h.l1}<br />{h.l2}</span>
                   </div>
