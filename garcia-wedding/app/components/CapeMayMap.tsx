@@ -87,9 +87,9 @@ function MapSvg({ sel, setSel, box }:{ sel:string|null; setSel:(v:string|null)=>
         return (
           <g key={e.n}>
             <image href={ICON+e.img} x={x-37} y={y-37} width={74} height={74} filter="url(#cmm-ink)" opacity={.95} />
-            <text x={x} y={y+60} textAnchor="middle" fontSize={15} fontWeight={500} fill={INK}>{e.n}</text>
-            <text x={x} y={y+74} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.65} letterSpacing=".9">{e.sub.toUpperCase()}</text>
-            {e.extra && <text x={x} y={y+87} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.55}>{e.extra}</text>}
+            <text x={x} y={y+53} textAnchor="middle" fontSize={15} fontWeight={500} fill={INK}>{e.n}</text>
+            <text x={x} y={y+66} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.65} letterSpacing=".9">{e.sub.toUpperCase()}</text>
+            {e.extra && <text x={x} y={y+78} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.55}>{e.extra}</text>}
           </g>
         );
       })}
@@ -114,6 +114,34 @@ function MapSvg({ sel, setSel, box }:{ sel:string|null; setSel:(v:string|null)=>
 
   </svg>
   );
+}
+
+function KeyLists() {
+return (
+  <>
+    <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 6px', fontWeight:500 }}>Where to stay</h4>
+    <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'5px 14px', gridAutoRows:'29px' }}>
+      {HOTELS.map(h=>(
+        <div key={h.n} style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3 }}>
+          <span style={{ flex:'0 0 20px', height:20, borderRadius:'50%', border:'1.3px solid '+INK,
+                         background:SKY, display:'inline-flex', alignItems:'center', justifyContent:'center', marginTop:-1 }}>
+            <svg viewBox="0 0 24 24" width={12} height={12}><path d={BED} fill={INK} /></svg>
+          </span>
+          <span style={{ minWidth:0 }}>{h.l1}<br />{h.l2}</span>
+        </div>
+      ))}
+    </div>
+    <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'11px 0 6px', fontWeight:500 }}>The weekend</h4>
+    <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'5px 14px', gridAutoRows:'29px' }}>
+      {ON_MAP.map(e=>(
+        <div key={e.n} style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3 }}>
+          <img src={ICON+e.img} alt="" style={{ width:23, height:23, objectFit:'contain', opacity:.85, marginTop:-3 }} />
+          <span style={{ minWidth:0 }}>{e.n}</span>
+        </div>
+      ))}
+    </div>
+  </>
+);
 }
 
 export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=>void }) {
@@ -216,32 +244,6 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
   }, [open, mobile]);
 
   if (!open) return null;
-
-  const KeyLists = () => (
-    <>
-      <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 6px', fontWeight:500 }}>Where to stay</h4>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'5px 14px', gridAutoRows:'29px' }}>
-        {HOTELS.map(h=>(
-          <div key={h.n} style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3 }}>
-            <span style={{ flex:'0 0 20px', height:20, borderRadius:'50%', border:'1.3px solid '+INK,
-                           background:SKY, display:'inline-flex', alignItems:'center', justifyContent:'center', marginTop:-1 }}>
-              <svg viewBox="0 0 24 24" width={12} height={12}><path d={BED} fill={INK} /></svg>
-            </span>
-            <span style={{ minWidth:0 }}>{h.l1}<br />{h.l2}</span>
-          </div>
-        ))}
-      </div>
-      <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'11px 0 6px', fontWeight:500 }}>The weekend</h4>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'5px 14px', gridAutoRows:'29px' }}>
-        {ON_MAP.map(e=>(
-          <div key={e.n} style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3 }}>
-            <img src={ICON+e.img} alt="" style={{ width:23, height:23, objectFit:'contain', opacity:.85, marginTop:-3 }} />
-            <span style={{ minWidth:0 }}>{e.n}</span>
-          </div>
-        ))}
-      </div>
-    </>
-  );
 
   if (mobile) return (
     <div role="dialog" aria-modal="true" aria-label="Map of Cape May" onClick={onClose}
