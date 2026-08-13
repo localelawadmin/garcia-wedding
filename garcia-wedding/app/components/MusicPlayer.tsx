@@ -163,15 +163,20 @@ export default function MusicPlayer() {
     const txt = textRef.current;
     if (!txt) return;
     const measure = () => {
-      const tw = txt.scrollWidth;
-      if (tw > 4) {
-        const shift = tw + 34;
-        setMq({ on: true, shift, dur: Math.max(6, shift / 32) });
+      const box = boxRef.current;
+      if (!box) return;
+      const overflow = txt.scrollWidth - box.clientWidth;
+      if (overflow > 2) {
+        // travel only as far as the text actually hides, then ping-pong back
+        setMq({ on: true, shift: overflow, dur: Math.max(4.5, overflow / 16) });
+      } else {
+        setMq({ on: false, shift: 0, dur: 0 });
       }
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(txt);
+    if (boxRef.current) ro.observe(boxRef.current);
     return () => ro.disconnect();
   }, [trackIdx]);
 
@@ -335,12 +340,11 @@ export default function MusicPlayer() {
             <span style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: .55, fontWeight: 400, whiteSpace: 'nowrap' }}>Now Playing</span>
             <div ref={boxRef} className="mp-info-box" style={{ overflow: 'hidden', minWidth: 0, maxWidth: 168 }}>
               <div style={(mq.on
-                ? { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap', animation: `mp-marquee ${mq.dur}s linear infinite`, '--mq-shift': `-${mq.shift}px` }
+                ? { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap',
+                    animation: `mp-pingpong ${mq.dur}s ease-in-out infinite alternate`,
+                    '--mq-shift': `-${mq.shift}px` }
                 : { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap' }) as React.CSSProperties}>
                 <span ref={textRef} className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400 }}>{nowText}</span>
-                {mq.on && <span aria-hidden="true" style={{ padding: '0 12px', opacity: .5, fontSize: 9, lineHeight: 1 }}>•</span>}
-                {mq.on && <span aria-hidden="true" className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400 }}>{nowText}</span>}
-                {mq.on && <span aria-hidden="true" style={{ padding: '0 12px', opacity: .5, fontSize: 9, lineHeight: 1 }}>•</span>}
               </div>
             </div>
           </div>
