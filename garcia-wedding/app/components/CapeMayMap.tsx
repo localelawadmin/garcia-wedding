@@ -106,7 +106,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 {ON_MAP.filter(e=>!e.bare).map(e=>{
                   const b = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
                   const x = b.x + (e.dx ?? 0), y = b.y + (e.dy ?? 0);
-                  return <ellipse key={e.n} cx={x} cy={y+18} rx={132} ry={108} fill="url(#cmm-halo)" />;
+                  return <ellipse key={e.n} cx={x} cy={y+18} rx={140} ry={114} fill="url(#cmm-halo)" />;
                 })}
               </g>
               <g>
@@ -115,10 +115,10 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                   const x = b.x + (e.dx ?? 0), y = b.y + (e.dy ?? 0);
                   return (
                     <g key={e.n}>
-                      <image href={ICON+e.img} x={x-32} y={y-32} width={64} height={64} filter="url(#cmm-ink)" opacity={.95} />
-                      <text x={x} y={y+54} textAnchor="middle" fontSize={15} fontWeight={500} fill={INK}>{e.n}</text>
-                      <text x={x} y={y+68} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.65} letterSpacing=".9">{e.sub.toUpperCase()}</text>
-                      {e.extra && <text x={x} y={y+81} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.55}>{e.extra}</text>}
+                      <image href={ICON+e.img} x={x-37} y={y-37} width={74} height={74} filter="url(#cmm-ink)" opacity={.95} />
+                      <text x={x} y={y+60} textAnchor="middle" fontSize={15} fontWeight={500} fill={INK}>{e.n}</text>
+                      <text x={x} y={y+74} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.65} letterSpacing=".9">{e.sub.toUpperCase()}</text>
+                      {e.extra && <text x={x} y={y+87} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.55}>{e.extra}</text>}
                     </g>
                   );
                 })}
