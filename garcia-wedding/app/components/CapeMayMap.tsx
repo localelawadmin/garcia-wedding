@@ -69,11 +69,12 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
           Every hotel sits on the same mile of Beach Avenue &mdash; the two far ends are about a 20&#8209;minute walk apart.
         </p>
 
-        <div className="cmm-row" style={{ display:'flex', flexDirection:'column', gap:14 }}>
+        <div className="cmm-row" style={{ display:'flex', flexDirection:'column', gap:14,
+             width:'min(100%, calc((92vh - 326px) * 1.826))', margin:'0 auto' }}>
           <div style={{ width:'100%', minWidth:0 }}>
             <svg viewBox={'0 0 '+MAP_W+' '+MAP_H} preserveAspectRatio="xMidYMid meet"
                  style={{ width:'100%', height:'auto', display:'block',
-                          maxHeight:'calc(92vh - 326px)', margin:'0 auto' }}>
+                          }}>
               <defs>
                 <filter id="cmm-ink" colorInterpolationFilters="sRGB">
                   <feFlood floodColor={INK} /><feComposite in2="SourceAlpha" operator="in" />
@@ -149,16 +150,16 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
           <div className="cmm-key" style={{ width:'100%', display:'flex', gap:26, alignItems:'flex-start' }}>
             <div style={{ flex:'1 1 58%', minWidth:0 }}>
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
-              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'9px 22px' }}>
+              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0,1fr))', gap:'10px 18px' }}>
                 {HOTELS.map(h=>(
                   <div key={h.n} onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
-                    style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, cursor:'pointer' }}>
+                    style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, cursor:'pointer', minWidth:0 }}>
                     <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%', border:'1.4px solid '+INK,
                                    background: sel===h.n?OLIVE:PISTACHIO, display:'inline-flex',
                                    alignItems:'center', justifyContent:'center' }}>
                       <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={INK} /></svg>
                     </span>
-                    <span style={{ whiteSpace:'nowrap' }}>{h.n}<br />
+                    <span style={{ minWidth:0 }}>{h.n}<br />
                       <span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{h.addr.toUpperCase()}</span>
                     </span>
                   </div>
@@ -168,11 +169,11 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
             <div className="cmm-div" style={{ flex:'1 1 42%', minWidth:0,
                  borderLeft:'1px solid rgba(175,184,133,.5)', paddingLeft:26 }}>
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>The weekend</h4>
-              <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', gap:'9px 22px' }}>
+              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'10px 18px' }}>
                 {ON_MAP.map(e=>(
-                  <div key={e.n} style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5 }}>
+                  <div key={e.n} style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, minWidth:0 }}>
                     <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85 }} />
-                    <span style={{ whiteSpace:'nowrap' }}>{e.n}<br />
+                    <span style={{ minWidth:0 }}>{e.n}<br />
                       <span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{e.sub.toUpperCase()}</span>
                     </span>
                   </div>
@@ -187,7 +188,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
             :global(.cmm-key) { flex-direction: column !important; gap: 12px !important; }
             :global(.cmm-div) { border-left: none !important; padding-left: 0 !important;
                                 border-top: 1px solid rgba(175,184,133,.5); padding-top: 12px; }
-            :global(.cmm-chips) { gap: 10px 18px !important; }
+            :global(.cmm-chips) { grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 10px 14px !important; }
           }
         `}</style>
       </div>
