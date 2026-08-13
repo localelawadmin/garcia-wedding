@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   MAP_W, MAP_H, MAP_PATHS, PLACES,
 } from './capeMayGeo';
@@ -39,8 +39,136 @@ const ON_MAP: Ev[] = [
 
 const at = (n:string) => { const p = PLACES.find(p=>p.name===n); return p ? {x:p.x,y:p.y} : {x:0,y:0}; };
 
+function MapSvg({ sel, setSel }:{ sel:string|null; setSel:(v:string|null)=>void }) {
+  return (
+  <svg viewBox={'0 0 '+MAP_W+' '+MAP_H} preserveAspectRatio="xMidYMid meet"
+       style={{ width:'100%', height:'auto', display:'block',
+                }}>
+    <defs>
+      <filter id="cmm-ink" colorInterpolationFilters="sRGB">
+        <feFlood floodColor={INK} /><feComposite in2="SourceAlpha" operator="in" />
+      </filter>
+      {/* soft cream halo — covers icon and label, no hard rim */}
+      <radialGradient id="cmm-halo">
+        <stop offset="0%" stopColor={CREAM} stopOpacity={.97} />
+        <stop offset="58%" stopColor={CREAM} stopOpacity={.94} />
+        <stop offset="100%" stopColor={CREAM} stopOpacity={0} />
+      </radialGradient>
+      <clipPath id="cmm-clip"><rect x="0" y="0" width={MAP_W} height={MAP_H} /></clipPath>
+    </defs>
+
+    <g clipPath="url(#cmm-clip)">
+      <rect width={MAP_W} height={MAP_H} fill={SKY} />
+      <path d={MAP_PATHS.land} fill={CREAM} />
+      {/* the beach: a real band along the shore. Filling between the road and the
+          water swallowed the ocean, because the two are nowhere near parallel. */}
+      <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={17} strokeLinecap="round" />
+      <path d={MAP_PATHS.islets} fill={CREAM} stroke={STREET_FAINT} strokeWidth={1} />
+      <path d={MAP_PATHS.streets} fill="none" stroke={STREET_FAINT} strokeWidth={1} strokeOpacity={.75} />
+      <path d={MAP_PATHS.washington} fill="none" stroke={STREET_FAINT} strokeWidth={1.8} />
+      <path d={MAP_PATHS.beachAve} fill="none" stroke={STREET} strokeWidth={4} />
+    </g>
+
+    {/* street labels, so the pins sit on something named */}
+
+    {/* events: cream disc behind the line art so both icon and label read on any ground */}
+    {/* every halo first, on one layer: overlapping ones blend into a single
+        soft field, and nothing can end up trapped behind a neighbour's disc */}
+    <g>
+      {ON_MAP.filter(e=>!e.bare).map(e=>{
+        const b = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
+        const x = b.x + (e.dx ?? 0), y = b.y + (e.dy ?? 0);
+        return <ellipse key={e.n} cx={x} cy={y+18} rx={140} ry={114} fill="url(#cmm-halo)" />;
+      })}
+    </g>
+    <g>
+      {ON_MAP.map(e=>{
+        const b = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
+        const x = b.x + (e.dx ?? 0), y = b.y + (e.dy ?? 0);
+        return (
+          <g key={e.n}>
+            <image href={ICON+e.img} x={x-37} y={y-37} width={74} height={74} filter="url(#cmm-ink)" opacity={.95} />
+            <text x={x} y={y+60} textAnchor="middle" fontSize={15} fontWeight={500} fill={INK}>{e.n}</text>
+            <text x={x} y={y+74} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.65} letterSpacing=".9">{e.sub.toUpperCase()}</text>
+            {e.extra && <text x={x} y={y+87} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.55}>{e.extra}</text>}
+          </g>
+        );
+      })}
+    </g>
+
+    {/* hotels: one colour, one glyph. A small badge marks a planned shuttle pickup. */}
+    {HOTELS.map(h=>{
+      const p=at(h.n);
+      const x=p.x+(h.nudge?.[0] ?? 0), y=p.y+(h.nudge?.[1] ?? 0);
+      const on = sel===h.n;
+      return (
+        <g key={h.n} style={{cursor:'pointer'}}
+           onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}>
+          <circle cx={x} cy={y} r={14} fill={on?NAVY:SKY} stroke={on?NAVY:INK} strokeWidth={1.5} />
+          <g transform={`translate(${x-8} ${y-8}) scale(0.667)`}>
+            <path d={BED} fill={on?CREAM:INK} />
+          </g>
+          <circle cx={x} cy={y} r={20} fill="transparent" />
+        </g>
+      );
+    })}
+
+  </svg>
+  );
+}
+
 export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=>void }) {
   const [sel, setSel] = useState<string|null>(null);
+  const [mobile, setMobile] = useState(false);
+  const [drawer, setDrawer] = useState(false);
+  const [view, setView] = useState({ k:1, x:0, y:0 });
+  const ptrs = useRef<Map<number,{x:number;y:number}>>(new Map());
+  const stage = useRef<HTMLDivElement|null>(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 780px)');
+    const set = () => setMobile(mq.matches);
+    set(); mq.addEventListener('change', set);
+    return () => mq.removeEventListener('change', set);
+  }, []);
+
+  // keep the map covering its frame — you can zoom in and drag, but not fling it away
+  const clamp = (v:{k:number;x:number;y:number}) => {
+    const el = stage.current; if (!el) return v;
+    const W = el.clientWidth, H = el.clientHeight;
+    const cw = W * v.k, ch = H * v.k;
+    return { k:v.k,
+      x: Math.min(0, Math.max(W - cw, v.x)),
+      y: Math.min(0, Math.max(H - ch, v.y)) };
+  };
+  const down = (e:React.PointerEvent) => {
+    ptrs.current.set(e.pointerId, { x:e.clientX, y:e.clientY });
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+  const move = (e:React.PointerEvent) => {
+    if (!ptrs.current.has(e.pointerId)) return;
+    const prev = new Map(ptrs.current);
+    ptrs.current.set(e.pointerId, { x:e.clientX, y:e.clientY });
+    const now = [...ptrs.current.values()], was = [...prev.values()];
+    if (now.length === 1) {
+      const p = prev.get(e.pointerId)!;
+      setView(v => clamp({ ...v, x:v.x + (e.clientX-p.x), y:v.y + (e.clientY-p.y) }));
+    } else if (now.length >= 2) {
+      const d0 = Math.hypot(was[0].x-was[1].x, was[0].y-was[1].y);
+      const d1 = Math.hypot(now[0].x-now[1].x, now[0].y-now[1].y);
+      if (d0 > 0) {
+        const rect = stage.current!.getBoundingClientRect();
+        const cx = (now[0].x+now[1].x)/2 - rect.left, cy = (now[0].y+now[1].y)/2 - rect.top;
+        setView(v => {
+          const k = Math.min(4, Math.max(1, v.k * (d1/d0)));
+          const r = k / v.k;                       // zoom about the pinch centre
+          return clamp({ k, x: cx-(cx-v.x)*r, y: cy-(cy-v.y)*r });
+        });
+      }
+    }
+  };
+  const up = (e:React.PointerEvent) => { ptrs.current.delete(e.pointerId); };
+  const reset = () => setView({ k:1, x:0, y:0 });
 
   useEffect(() => {
     if (!open) return;
@@ -51,6 +179,87 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
   }, [open, onClose]);
 
   if (!open) return null;
+
+  const KeyLists = ({ dense }:{ dense?:boolean }) => (
+    <>
+      <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'8px 16px', gridAutoRows:'34px' }}>
+        {HOTELS.map(h=>(
+          <div key={h.n} style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, minWidth:0, lineHeight:1.35 }}>
+            <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%', border:'1.4px solid '+INK,
+                           background:SKY, display:'inline-flex', alignItems:'center', justifyContent:'center', marginTop:-2 }}>
+              <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={INK} /></svg>
+            </span>
+            <span style={{ minWidth:0 }}>{h.l1}<br />{h.l2}</span>
+          </div>
+        ))}
+      </div>
+      <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'14px 0 8px', fontWeight:500 }}>The weekend</h4>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'8px 16px', gridAutoRows:'34px' }}>
+        {ON_MAP.map(e=>(
+          <div key={e.n} style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, minWidth:0, lineHeight:1.35 }}>
+            <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85, marginTop:-4 }} />
+            <span style={{ minWidth:0 }}>{e.n}</span>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+
+  if (mobile) return (
+    <div role="dialog" aria-modal="true" aria-label="Map of Cape May"
+      style={{ position:'fixed', inset:0, zIndex:400, background:CREAM, color:INK,
+               display:'flex', flexDirection:'column' }}>
+      <div style={{ flex:'0 0 auto', display:'flex', alignItems:'center', justifyContent:'space-between',
+                    padding:'12px 14px', borderBottom:'1px solid rgba(175,184,133,.5)' }}>
+        <div>
+          <div className="heading" style={{ fontSize:22, lineHeight:1, fontWeight:400 }}>Around Cape May</div>
+          <div style={{ fontSize:10, opacity:.55, marginTop:3 }}>Pinch to zoom &middot; drag to move</div>
+        </div>
+        <div style={{ display:'flex', gap:8 }}>
+          {view.k > 1.02 && (
+            <button onClick={reset} aria-label="Reset zoom"
+              style={{ height:32, padding:'0 12px', borderRadius:999, border:'1px solid '+INK,
+                       background:'transparent', color:INK, fontSize:10, letterSpacing:'.08em',
+                       textTransform:'uppercase', cursor:'pointer' }}>Reset</button>
+          )}
+          <button onClick={onClose} aria-label="Close map"
+            style={{ width:32, height:32, borderRadius:'50%', border:'1px solid '+INK,
+                     background:'transparent', color:INK, cursor:'pointer', fontSize:16, padding:0 }}>&times;</button>
+        </div>
+      </div>
+
+      <div ref={stage} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up}
+        style={{ flex:'1 1 auto', overflow:'hidden', position:'relative', touchAction:'none', cursor:'grab' }}>
+        <div style={{ position:'absolute', inset:0,
+                      transform:`translate(${view.x}px, ${view.y}px) scale(${view.k})`,
+                      transformOrigin:'0 0', willChange:'transform' }}>
+          <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center' }}>
+            <MapSvg sel={sel} setSel={setSel} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ flex:'0 0 auto', borderTop:'1px solid rgba(175,184,133,.5)', background:CREAM }}>
+        <button onClick={()=>setDrawer(d=>!d)} aria-expanded={drawer}
+          style={{ width:'100%', padding:'12px 14px', background:'transparent', border:'none', color:INK,
+                   display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer', font:'inherit' }}>
+          <span style={{ fontSize:10, letterSpacing:'.14em', textTransform:'uppercase', opacity:.6 }}>
+            {drawer ? 'Hide the key' : 'Show the key'}
+          </span>
+          <span style={{ display:'inline-block', transition:'transform .25s ease',
+                         transform:`rotate(${drawer?180:0}deg)` }}>
+            <svg viewBox="0 0 24 24" width={14} height={14} fill="none" stroke={INK} strokeWidth={1.6}
+                 strokeLinecap="round" strokeLinejoin="round"><path d="M6 15l6-6 6 6"/></svg>
+          </span>
+        </button>
+        <div style={{ maxHeight: drawer ? '46vh' : 0, overflow:'hidden', overflowY: drawer ? 'auto' : 'hidden',
+                      transition:'max-height .32s ease', padding: drawer ? '0 14px 16px' : '0 14px' }}>
+          <KeyLists dense />
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div role="dialog" aria-modal="true" aria-label="Map of Cape May" onClick={onClose}
@@ -74,79 +283,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
         <div className="cmm-row" style={{ display:'flex', flexDirection:'column', gap:14,
              width:'100%' }}>
           <div style={{ width:'100%', minWidth:0 }}>
-            <svg viewBox={'0 0 '+MAP_W+' '+MAP_H} preserveAspectRatio="xMidYMid meet"
-                 style={{ width:'100%', height:'auto', display:'block',
-                          }}>
-              <defs>
-                <filter id="cmm-ink" colorInterpolationFilters="sRGB">
-                  <feFlood floodColor={INK} /><feComposite in2="SourceAlpha" operator="in" />
-                </filter>
-                {/* soft cream halo — covers icon and label, no hard rim */}
-                <radialGradient id="cmm-halo">
-                  <stop offset="0%" stopColor={CREAM} stopOpacity={.97} />
-                  <stop offset="58%" stopColor={CREAM} stopOpacity={.94} />
-                  <stop offset="100%" stopColor={CREAM} stopOpacity={0} />
-                </radialGradient>
-                <clipPath id="cmm-clip"><rect x="0" y="0" width={MAP_W} height={MAP_H} /></clipPath>
-              </defs>
-
-              <g clipPath="url(#cmm-clip)">
-                <rect width={MAP_W} height={MAP_H} fill={SKY} />
-                <path d={MAP_PATHS.land} fill={CREAM} />
-                {/* the beach: a real band along the shore. Filling between the road and the
-                    water swallowed the ocean, because the two are nowhere near parallel. */}
-                <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={17} strokeLinecap="round" />
-                <path d={MAP_PATHS.islets} fill={CREAM} stroke={STREET_FAINT} strokeWidth={1} />
-                <path d={MAP_PATHS.streets} fill="none" stroke={STREET_FAINT} strokeWidth={1} strokeOpacity={.75} />
-                <path d={MAP_PATHS.washington} fill="none" stroke={STREET_FAINT} strokeWidth={1.8} />
-                <path d={MAP_PATHS.beachAve} fill="none" stroke={STREET} strokeWidth={4} />
-              </g>
-
-              {/* street labels, so the pins sit on something named */}
-
-              {/* events: cream disc behind the line art so both icon and label read on any ground */}
-              {/* every halo first, on one layer: overlapping ones blend into a single
-                  soft field, and nothing can end up trapped behind a neighbour's disc */}
-              <g>
-                {ON_MAP.filter(e=>!e.bare).map(e=>{
-                  const b = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
-                  const x = b.x + (e.dx ?? 0), y = b.y + (e.dy ?? 0);
-                  return <ellipse key={e.n} cx={x} cy={y+18} rx={140} ry={114} fill="url(#cmm-halo)" />;
-                })}
-              </g>
-              <g>
-                {ON_MAP.map(e=>{
-                  const b = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
-                  const x = b.x + (e.dx ?? 0), y = b.y + (e.dy ?? 0);
-                  return (
-                    <g key={e.n}>
-                      <image href={ICON+e.img} x={x-37} y={y-37} width={74} height={74} filter="url(#cmm-ink)" opacity={.95} />
-                      <text x={x} y={y+60} textAnchor="middle" fontSize={15} fontWeight={500} fill={INK}>{e.n}</text>
-                      <text x={x} y={y+74} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.65} letterSpacing=".9">{e.sub.toUpperCase()}</text>
-                      {e.extra && <text x={x} y={y+87} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.55}>{e.extra}</text>}
-                    </g>
-                  );
-                })}
-              </g>
-
-              {/* hotels: one colour, one glyph. A small badge marks a planned shuttle pickup. */}
-              {HOTELS.map(h=>{
-                const p=at(h.n);
-                const x=p.x+(h.nudge?.[0] ?? 0), y=p.y+(h.nudge?.[1] ?? 0);
-                const on = sel===h.n;
-                return (
-                  <g key={h.n} style={{cursor:'pointer'}}
-                     onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}>
-                    <circle cx={x} cy={y} r={14} fill={on?NAVY:SKY} stroke={on?NAVY:INK} strokeWidth={1.5} />
-                    <g transform={`translate(${x-8} ${y-8}) scale(0.667)`}>
-                      <path d={BED} fill={on?CREAM:INK} />
-                    </g>
-                    <circle cx={x} cy={y} r={20} fill="transparent" />
-                  </g>
-                );
-              })}
-
-            </svg>
+            <MapSvg sel={sel} setSel={setSel} />
           </div>
 
           <div className="cmm-key" style={{ width:'100%', display:'flex', gap:26, alignItems:'flex-start' }}>
