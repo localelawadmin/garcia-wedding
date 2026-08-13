@@ -73,7 +73,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
           <div style={{ width:'100%', minWidth:0 }}>
             <svg viewBox={'0 0 '+MAP_W+' '+MAP_H} preserveAspectRatio="xMidYMid meet"
                  style={{ width:'100%', height:'auto', display:'block',
-                          maxHeight:'calc(92vh - 300px)', margin:'0 auto' }}>
+                          maxHeight:'calc(92vh - 326px)', margin:'0 auto' }}>
               <defs>
                 <filter id="cmm-ink" colorInterpolationFilters="sRGB">
                   <feFlood floodColor={INK} /><feComposite in2="SourceAlpha" operator="in" />
