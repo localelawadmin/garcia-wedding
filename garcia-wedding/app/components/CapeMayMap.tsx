@@ -13,15 +13,15 @@ const ICON='/photos/agenda/';
 const BED = 'M2.6 13.2h18.8c1.2 0 2.1.9 2.1 2.1v4.1c0 .5-.4.9-.9.9s-.9-.4-.9-.9v-.8c0-.3-.2-.5-.5-.5H3.8c-.3 0-.5.2-.5.5v.8c0 .5-.4.9-.9.9s-.9-.4-.9-.9v-4.1c0-1.2.9-2.1 2.1-2.1z'
           + 'M4.6 12.1V7.4c0-1.6 1.3-2.9 2.9-2.9h9c1.6 0 2.9 1.3 2.9 2.9v4.7c0 .2-.2.3-.4.3-.5-.1-1-.1-1.5-.1h-.3c-.1 0-.2-.1-.2-.2-.2-1-1-1.7-2-1.7h-2.4c-1 0-1.8.7-2 1.7 0 .1-.1.2-.2.2h-1c-.1 0-.2-.1-.2-.2-.2-1-1-1.7-2-1.7H8.8c-1 0-1.8.7-2 1.7 0 .1-.1.2-.2.2h-.3c-.5 0-1 0-1.5.1-.2 0-.4-.1-.4-.3z';
 
-type Hotel = { n:string; addr:string; stop?:boolean; nudge?:[number,number] };
+type Hotel = { n:string; addr:string; nudge?:[number,number] };
 const HOTELS: Hotel[] = [
   { n:'Marquis de Lafayette',  addr:'501 Beach Ave' },
-  { n:'Beach Club on Madison', addr:'605 Madison Ave', stop:true },
+  { n:'Beach Club on Madison', addr:'605 Madison Ave' },
   { n:'Montreal Beach Resort', addr:'1025 Beach Ave', nudge:[-8,6] },
   { n:'Ocean Club Hotel',      addr:'1035 Beach Ave', nudge:[10,-4] },
-  { n:'The Grand Hotel',       addr:'1045 Beach Ave', stop:true, nudge:[-7,4] },
+  { n:'The Grand Hotel',       addr:'1045 Beach Ave', nudge:[-7,4] },
   { n:'ICONA Cape May',        addr:'1101 Beach Ave', nudge:[11,0] },
-  { n:'La Mer',                addr:'1317 Beach Ave', stop:true },
+  { n:'La Mer',                addr:'1317 Beach Ave' },
 ];
 
 type Ev = { n:string; sub:string; img:string; place?:string; dx?:number; dy?:number; at?:[number,number] };
@@ -72,6 +72,21 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 <filter id="cmm-ink" colorInterpolationFilters="sRGB">
                   <feFlood floodColor={INK} /><feComposite in2="SourceAlpha" operator="in" />
                 </filter>
+                {/* soft cream halo — covers icon and label, no hard rim */}
+                <radialGradient id="cmm-halo">
+                  <stop offset="0%" stopColor={CREAM} stopOpacity={.97} />
+                  <stop offset="58%" stopColor={CREAM} stopOpacity={.94} />
+                  <stop offset="100%" stopColor={CREAM} stopOpacity={0} />
+                </radialGradient>
+                {/* the far north-west corner is empty suburb — fade it out rather than cut it */}
+                <radialGradient id="cmm-fade" cx="0.1" cy="0.04" r="0.62">
+                  <stop offset="0%" stopColor="#000" />
+                  <stop offset="52%" stopColor="#000" />
+                  <stop offset="100%" stopColor="#fff" />
+                </radialGradient>
+                <mask id="cmm-streetmask">
+                  <rect width={MAP_W} height={MAP_H} fill="url(#cmm-fade)" />
+                </mask>
                 <clipPath id="cmm-clip"><rect x="0" y="0" width={MAP_W} height={MAP_H} /></clipPath>
               </defs>
 
@@ -81,8 +96,8 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={10} />
                 <path d={MAP_PATHS.coastLine} fill="none" stroke={INK} strokeWidth={1.1} strokeOpacity={.45} />
                 <path d={MAP_PATHS.islets} fill={CREAM} stroke={INK} strokeWidth={.8} strokeOpacity={.35} />
-                <path d={MAP_PATHS.water} fill={SKY} stroke={INK} strokeWidth={.8} strokeOpacity={.3} />
-                <path d={MAP_PATHS.streets} fill="none" stroke={INK} strokeWidth={.7} strokeOpacity={.22} />
+                
+                <path d={MAP_PATHS.streets} fill="none" stroke={INK} strokeWidth={.7} strokeOpacity={.22} mask="url(#cmm-streetmask)" />
                 <path d={MAP_PATHS.washington} fill="none" stroke={INK} strokeWidth={1.2} strokeOpacity={.42} />
                 <path d={MAP_PATHS.beachAve} fill="none" stroke={INK} strokeWidth={2.6} />
               </g>
@@ -98,7 +113,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 const x = base.x + (e.dx ?? 0), y = base.y + (e.dy ?? 0);
                 return (
                   <g key={e.n}>
-                    <circle cx={x} cy={y} r={30} fill={CREAM} />
+                    <ellipse cx={x} cy={y+16} rx={70} ry={56} fill="url(#cmm-halo)" />
                     <image href={ICON+e.img} x={x-23} y={y-23} width={46} height={46} filter="url(#cmm-ink)" opacity={.95} />
                     <text x={x} y={y+47} textAnchor="middle" fontSize={12.5} fontWeight={500} fill={INK}
                           stroke={CREAM} strokeWidth={3.2} paintOrder="stroke">{e.n}</text>
@@ -126,7 +141,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               })}
 
               {/* The reception is off the map. A callout reads far better than a tiny mini-map. */}
-              <g transform={`translate(${MAP_W-268} ${MAP_H-116})`}>
+              <g transform={`translate(18 16)`}>
                 <rect width={252} height={102} rx={2} fill={CREAM} stroke={INK} strokeOpacity={.5} />
                 <image href={ICON+'reception-tent.png'} x={10} y={28} width={48} height={48}
                        filter="url(#cmm-ink)" opacity={.95} />
@@ -150,7 +165,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 </span>
                 <span>{h.n}<br />
                   <span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>
-                    {h.addr.toUpperCase()}{h.stop ? ' · SHUTTLE' : ''}
+                    {h.addr.toUpperCase()}
                   </span>
                 </span>
               </div>
@@ -162,9 +177,6 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 <span>{e.n}<br /><span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{e.sub.toUpperCase()}</span></span>
               </div>
             ))}
-            <p style={{ fontSize:10.5, opacity:.6, lineHeight:1.5, marginTop:14 }}>
-              Hotels marked <strong style={{ fontWeight:500 }}>SHUTTLE</strong> are planned pickup points.
-            </p>
           </div>
         </div>
 
