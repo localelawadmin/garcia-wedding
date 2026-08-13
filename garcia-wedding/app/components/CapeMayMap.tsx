@@ -6,7 +6,8 @@ import {
 } from './capeMayGeo';
 
 const CREAM='#FDFDFC', OLIVE='#AFB885', PISTACHIO='#E2E8CE',
-      SKY='#DEE9F2', INK='#4E5B37', SAND='#F4EFE3';
+      SKY='#DEE9F2', INK='#4E5B37', SAND='#EFE7D6',
+      STREET='#DED5C2';   // darker cream: reads as a street without the harshness of ink
 const ICON='/photos/agenda/';
 
 /** Bed glyph, drawn to sit inside a 24x24 box. One shape so it stays legible at 13px. */
@@ -93,19 +94,21 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               <g clipPath="url(#cmm-clip)">
                 <rect width={MAP_W} height={MAP_H} fill={SKY} />
                 <path d={MAP_PATHS.land} fill={CREAM} />
-                <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={10} />
-                <path d={MAP_PATHS.coastLine} fill="none" stroke={INK} strokeWidth={1.1} strokeOpacity={.45} />
-                <path d={MAP_PATHS.islets} fill={CREAM} stroke={INK} strokeWidth={.8} strokeOpacity={.35} />
-                
-                <path d={MAP_PATHS.streets} fill="none" stroke={INK} strokeWidth={.7} strokeOpacity={.22} mask="url(#cmm-streetmask)" />
-                <path d={MAP_PATHS.washington} fill="none" stroke={INK} strokeWidth={1.2} strokeOpacity={.42} />
-                <path d={MAP_PATHS.beachAve} fill="none" stroke={INK} strokeWidth={2.6} />
+                {/* the beach is the whole band between the road and the water, not a hairline */}
+                <path d={MAP_PATHS.beachBand} fill={SAND} />
+                <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={7} />
+                <path d={MAP_PATHS.islets} fill={CREAM} stroke={STREET} strokeWidth={1} />
+                <path d={MAP_PATHS.streets} fill="none" stroke={STREET} strokeWidth={1.1} mask="url(#cmm-streetmask)" />
+                <path d={MAP_PATHS.washington} fill="none" stroke={STREET} strokeWidth={2} />
+                <path d={MAP_PATHS.beachAve} fill="none" stroke={STREET} strokeWidth={3.4} />
               </g>
 
               {/* street labels, so the pins sit on something named */}
-              <text x={18} y={MAP_H-14} fontSize={9.5} letterSpacing="1.4" fill={INK} opacity={.5}>BEACH AVENUE</text>
-              <text x={300} y={MAP_H-40} fontSize={16} fill={INK} opacity={.38} textAnchor="middle"
+              <text x={18} y={MAP_H-14} fontSize={9.5} letterSpacing="1.4" fill={INK} opacity={.42}>BEACH AVENUE</text>
+              <text x={782} y={MAP_H-34} fontSize={17} fill={INK} opacity={.4} textAnchor="middle"
                     fontStyle="italic" fontFamily="'Cormorant Garamond',Georgia,serif">The Atlantic</text>
+              <text x={470} y={196} fontSize={13} letterSpacing="4.2" fill={INK} opacity={.32}
+                    textAnchor="middle">CAPE MAY</text>
 
               {/* events: cream disc behind the line art so both icon and label read on any ground */}
               {ON_MAP.map(e=>{
