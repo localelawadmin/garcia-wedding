@@ -169,18 +169,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
   };
   const up = (e:React.PointerEvent) => { ptrs.current.delete(e.pointerId); };
 
-  // the scale at which the map covers the frame rather than letterboxing inside it
-  const coverK = () => {
-    const el = stage.current; if (!el) return 1;
-    const natural = el.clientWidth * (MAP_H / MAP_W);
-    return Math.max(1, el.clientHeight / natural);
-  };
-  const fill = () => {
-    const el = stage.current; if (!el) { setView({ k:1, x:0, y:0 }); return; }
-    const k = coverK();
-    setView(clamp({ k, x: el.clientWidth * (1 - k) / 2, y: 0 }));
-  };
-  const reset = () => fill();
+  const reset = () => setView({ k:1, x:0, y:0 });
 
   useEffect(() => {
     if (!open) return;
@@ -190,15 +179,14 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
     return ()=>{ window.removeEventListener('keydown',esc); document.body.style.overflow=prev; };
   }, [open, onClose]);
 
-  // On phones the map opens already filling the frame. A layout effect so it's
-  // positioned before first paint rather than snapping into place after.
+  // reset the view whenever it opens or the frame changes shape
   useLayoutEffect(() => {
-    if (!open || !mobile) { setView({ k:1, x:0, y:0 }); setDrawer(false); return; }
-    fill();
-    const onResize = () => fill();
+    if (!open) { setDrawer(false); }
+    setView({ k:1, x:0, y:0 });
+    const onResize = () => setView({ k:1, x:0, y:0 });
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
-  }, [open, mobile, drawer]);
+  }, [open, mobile]);
 
   if (!open) return null;
 
@@ -229,9 +217,12 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
   );
 
   if (mobile) return (
-    <div role="dialog" aria-modal="true" aria-label="Map of Cape May"
-      style={{ position:'fixed', inset:0, zIndex:400, background:CREAM, color:INK,
-               display:'flex', flexDirection:'column' }}>
+    <div role="dialog" aria-modal="true" aria-label="Map of Cape May" onClick={onClose}
+      style={{ position:'fixed', inset:0, zIndex:400, background:'rgba(40,46,30,.55)',
+               display:'flex', alignItems:'center', justifyContent:'center', padding:14 }}>
+      <div onClick={e=>e.stopPropagation()}
+        style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
+                 width:'100%', maxHeight:'88vh', display:'flex', flexDirection:'column', overflow:'hidden' }}>
       <div style={{ flex:'0 0 auto', display:'flex', alignItems:'center', justifyContent:'space-between',
                     padding:'12px 14px', borderBottom:'1px solid rgba(175,184,133,.5)' }}>
         <div>
@@ -239,7 +230,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
           <div style={{ fontSize:10, opacity:.55, marginTop:3 }}>Pinch to zoom &middot; drag to move</div>
         </div>
         <div style={{ display:'flex', gap:8 }}>
-          {Math.abs(view.k - coverK()) > 0.02 && (
+          {view.k > 1.02 && (
             <button onClick={reset} aria-label="Reset zoom"
               style={{ height:32, padding:'0 12px', borderRadius:999, border:'1px solid '+INK,
                        background:'transparent', color:INK, fontSize:10, letterSpacing:'.08em',
@@ -252,7 +243,8 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
       </div>
 
       <div ref={stage} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up}
-        style={{ flex:'1 1 auto', overflow:'hidden', position:'relative', touchAction:'none', cursor:'grab' }}>
+        style={{ position:'relative', overflow:'hidden', touchAction:'none', cursor:'grab',
+                 width:'100%', aspectRatio:`${MAP_W} / ${MAP_H}`, flex:'0 0 auto' }}>
         <div style={{ position:'absolute', inset:0,
                       transform:`translate(${view.x}px, ${view.y}px) scale(${view.k})`,
                       transformOrigin:'0 0', willChange:'transform' }}>
@@ -262,7 +254,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
         </div>
       </div>
 
-      <div style={{ flex:'0 0 auto', borderTop:'1px solid rgba(175,184,133,.5)', background:CREAM }}>
+      <div style={{ flex:'0 1 auto', borderTop:'1px solid rgba(175,184,133,.5)', background:CREAM, overflow:'hidden' }}>
         <button onClick={()=>setDrawer(d=>!d)} aria-expanded={drawer}
           style={{ width:'100%', padding:'12px 14px', background:'transparent', border:'none', color:INK,
                    display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer', font:'inherit' }}>
@@ -279,6 +271,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                       transition:'max-height .32s ease', padding: drawer ? '0 14px 16px' : '0 14px' }}>
           <KeyLists dense />
         </div>
+      </div>
       </div>
     </div>
   );
