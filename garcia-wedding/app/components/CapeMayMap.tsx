@@ -206,25 +206,25 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
 
   if (!open) return null;
 
-  const KeyLists = ({ dense }:{ dense?:boolean }) => (
+  const KeyLists = () => (
     <>
-      <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'8px 16px', gridAutoRows:'34px' }}>
+      <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 6px', fontWeight:500 }}>Where to stay</h4>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'5px 14px', gridAutoRows:'29px' }}>
         {HOTELS.map(h=>(
-          <div key={h.n} style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, minWidth:0, lineHeight:1.35 }}>
-            <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%', border:'1.4px solid '+INK,
-                           background:SKY, display:'inline-flex', alignItems:'center', justifyContent:'center', marginTop:-2 }}>
-              <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={INK} /></svg>
+          <div key={h.n} style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3 }}>
+            <span style={{ flex:'0 0 20px', height:20, borderRadius:'50%', border:'1.3px solid '+INK,
+                           background:SKY, display:'inline-flex', alignItems:'center', justifyContent:'center', marginTop:-1 }}>
+              <svg viewBox="0 0 24 24" width={12} height={12}><path d={BED} fill={INK} /></svg>
             </span>
             <span style={{ minWidth:0 }}>{h.l1}<br />{h.l2}</span>
           </div>
         ))}
       </div>
-      <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'14px 0 8px', fontWeight:500 }}>The weekend</h4>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'8px 16px', gridAutoRows:'34px' }}>
+      <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'11px 0 6px', fontWeight:500 }}>The weekend</h4>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'5px 14px', gridAutoRows:'29px' }}>
         {ON_MAP.map(e=>(
-          <div key={e.n} style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, minWidth:0, lineHeight:1.35 }}>
-            <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85, marginTop:-4 }} />
+          <div key={e.n} style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3 }}>
+            <img src={ICON+e.img} alt="" style={{ width:23, height:23, objectFit:'contain', opacity:.85, marginTop:-3 }} />
             <span style={{ minWidth:0 }}>{e.n}</span>
           </div>
         ))}
@@ -241,9 +241,9 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                  width:'100%', maxHeight:'88vh',
                  display:'flex', flexDirection:'column', overflow:'hidden' }}>
       <div style={{ flex:'0 0 auto', display:'flex', alignItems:'center', justifyContent:'space-between',
-                    padding:'12px 14px', borderBottom:'1px solid rgba(175,184,133,.5)' }}>
+                    padding:'9px 13px', borderBottom:'1px solid rgba(175,184,133,.5)' }}>
         <div>
-          <div className="heading" style={{ fontSize:22, lineHeight:1, fontWeight:400 }}>Around Cape May</div>
+          <div className="heading" style={{ fontSize:20, lineHeight:1, fontWeight:400 }}>Around Cape May</div>
           <div style={{ fontSize:10, opacity:.55, marginTop:3 }}>Pinch to zoom &middot; drag to move</div>
         </div>
         <div style={{ display:'flex', gap:8 }}>
@@ -267,8 +267,8 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
       </div>
 
       <div style={{ flex:'0 1 auto', minHeight:0, overflowY:'auto',
-                    borderTop:'1px solid rgba(175,184,133,.5)', padding:'14px 14px 16px' }}>
-        <KeyLists dense />
+                    borderTop:'1px solid rgba(175,184,133,.5)', padding:'11px 12px 13px' }}>
+        <KeyLists />
       </div>
       </div>
     </div>
