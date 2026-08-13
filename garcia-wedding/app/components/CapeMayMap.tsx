@@ -131,13 +131,13 @@ function KeyLists({ picked, onPick }:{ picked:string|null; onPick:(n:string)=>vo
 const box = (on:boolean) => ({
   background: on ? SKY : 'transparent',
   borderRadius: 5,
-  padding: '6px 8px',
-  margin: '-6px -8px',
+  padding: '4px 8px',
+  margin: '-4px -8px',
 });
 return (
   <>
     <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 6px', fontWeight:500 }}>Where to stay</h4>
-    <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'12px 14px', gridAutoRows:'26px' }}>
+    <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'7px 14px', gridAutoRows:'34px' }}>
       {HOTELS.map(h=>(
         <div key={h.n} onClick={()=>onPick(h.n)} role="button" tabIndex={0}
           style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3,
@@ -151,7 +151,7 @@ return (
       ))}
     </div>
     <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'11px 0 6px', fontWeight:500 }}>The weekend</h4>
-    <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'12px 14px', gridAutoRows:'26px' }}>
+    <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'7px 14px', gridAutoRows:'34px' }}>
       {ON_MAP.map(e=>(
         <div key={e.n} onClick={()=>onPick(e.n)} role="button" tabIndex={0}
           style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3,
@@ -372,14 +372,14 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
           <div className="cmm-key" style={{ width:'100%', display:'flex', gap:26, alignItems:'flex-start' }}>
             <div style={{ flex:'1 1 58%', minWidth:0 }}>
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
-              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0,1fr))', gap:'14px 18px', gridAutoRows:'30px' }}>
+              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0,1fr))', gap:'9px 18px', gridAutoRows:'40px' }}>
                 {HOTELS.map(h=>(
                   <div key={h.n} onClick={()=>pick(h.n)}
                     onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
                     style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, cursor:'pointer',
                              minWidth:0, lineHeight:1.35, borderRadius:5,
                              background: picked===h.n ? SKY : 'transparent',
-                             padding:'6px 8px', margin:'-6px -8px',
+                             padding:'5px 8px', margin:'-5px -8px',
                              transition:'background .18s ease, box-shadow .18s ease' }}>
                     <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%',
                                    border:'1.4px solid '+(sel===h.n?NAVY:INK),
@@ -396,13 +396,13 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
             <div className="cmm-div" style={{ flex:'1 1 42%', minWidth:0,
                  borderLeft:'1px solid rgba(175,184,133,.5)', paddingLeft:26 }}>
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>The weekend</h4>
-              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'14px 18px', gridAutoRows:'30px' }}>
+              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'9px 18px', gridAutoRows:'40px' }}>
                 {ON_MAP.map(e=>(
                   <div key={e.n} onClick={()=>pick(e.n)}
                     style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, minWidth:0, lineHeight:1.35,
                              cursor:'pointer', borderRadius:5,
                              background: picked===e.n ? SKY : 'transparent',
-                             padding:'6px 8px', margin:'-6px -8px',
+                             padding:'5px 8px', margin:'-5px -8px',
                              transition:'background .18s ease, box-shadow .18s ease' }}>
                     <img src={ICON+e.img} alt="" style={{ width:30, height:30, objectFit:'contain', opacity:.85, marginTop:-5 }} />
                     <span style={{ minWidth:0 }}>{e.n}</span>
