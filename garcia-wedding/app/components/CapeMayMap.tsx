@@ -137,7 +137,7 @@ const box = (on:boolean) => ({
 return (
   <>
     <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 6px', fontWeight:500 }}>Where to stay</h4>
-    <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'7px 14px', gridAutoRows:'34px' }}>
+    <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'9px 14px', gridAutoRows:'42px' }}>
       {HOTELS.map(h=>(
         <div key={h.n} onClick={()=>onPick(h.n)} role="button" tabIndex={0}
           style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3,
@@ -151,7 +151,7 @@ return (
       ))}
     </div>
     <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'11px 0 6px', fontWeight:500 }}>The weekend</h4>
-    <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'7px 14px', gridAutoRows:'34px' }}>
+    <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'9px 14px', gridAutoRows:'42px' }}>
       {ON_MAP.map(e=>(
         <div key={e.n} onClick={()=>onPick(e.n)} role="button" tabIndex={0}
           style={{ display:'flex', gap:8, alignItems:'flex-start', fontSize:12, minWidth:0, lineHeight:1.3,
@@ -372,7 +372,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
           <div className="cmm-key" style={{ width:'100%', display:'flex', gap:26, alignItems:'flex-start' }}>
             <div style={{ flex:'1 1 58%', minWidth:0 }}>
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
-              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0,1fr))', gap:'9px 18px', gridAutoRows:'40px' }}>
+              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0,1fr))', gap:'11px 18px', gridAutoRows:'46px' }}>
                 {HOTELS.map(h=>(
                   <div key={h.n} onClick={()=>pick(h.n)}
                     onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
@@ -396,7 +396,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
             <div className="cmm-div" style={{ flex:'1 1 42%', minWidth:0,
                  borderLeft:'1px solid rgba(175,184,133,.5)', paddingLeft:26 }}>
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>The weekend</h4>
-              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'9px 18px', gridAutoRows:'40px' }}>
+              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'11px 18px', gridAutoRows:'46px' }}>
                 {ON_MAP.map(e=>(
                   <div key={e.n} onClick={()=>pick(e.n)}
                     style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, minWidth:0, lineHeight:1.35,
