@@ -168,7 +168,19 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
     }
   };
   const up = (e:React.PointerEvent) => { ptrs.current.delete(e.pointerId); };
-  const reset = () => setView({ k:1, x:0, y:0 });
+
+  // the scale at which the map covers the frame rather than letterboxing inside it
+  const coverK = () => {
+    const el = stage.current; if (!el) return 1;
+    const natural = el.clientWidth * (MAP_H / MAP_W);
+    return Math.max(1, el.clientHeight / natural);
+  };
+  const fill = () => {
+    const el = stage.current; if (!el) { setView({ k:1, x:0, y:0 }); return; }
+    const k = coverK();
+    setView(clamp({ k, x: el.clientWidth * (1 - k) / 2, y: 0 }));
+  };
+  const reset = () => fill();
 
   useEffect(() => {
     if (!open) return;
@@ -217,7 +229,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
           <div style={{ fontSize:10, opacity:.55, marginTop:3 }}>Pinch to zoom &middot; drag to move</div>
         </div>
         <div style={{ display:'flex', gap:8 }}>
-          {view.k > 1.02 && (
+          {Math.abs(view.k - coverK()) > 0.02 && (
             <button onClick={reset} aria-label="Reset zoom"
               style={{ height:32, padding:'0 12px', borderRadius:999, border:'1px solid '+INK,
                        background:'transparent', color:INK, fontSize:10, letterSpacing:'.08em',
@@ -234,7 +246,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
         <div style={{ position:'absolute', inset:0,
                       transform:`translate(${view.x}px, ${view.y}px) scale(${view.k})`,
                       transformOrigin:'0 0', willChange:'transform' }}>
-          <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center' }}>
+          <div style={{ position:'absolute', top:0, left:0, width:'100%' }}>
             <MapSvg sel={sel} setSel={setSel} />
           </div>
         </div>
