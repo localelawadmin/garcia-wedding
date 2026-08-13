@@ -2,52 +2,47 @@
 
 import { useEffect, useState } from 'react';
 import {
-  MAP_W, MAP_H, INSET_W, INSET_H,
-  MAP_PATHS, INSET_PATHS, PLACES, INSET_PLACES,
+  MAP_W, MAP_H, MAP_PATHS, PLACES,
 } from './capeMayGeo';
 
 const CREAM='#FDFDFC', OLIVE='#AFB885', PISTACHIO='#E2E8CE',
       SKY='#DEE9F2', INK='#4E5B37', SAND='#F4EFE3';
 const ICON='/photos/agenda/';
 
-// Hotels stay a matched set — a ring marks a planned shuttle pickup, not a colour change.
+/** Bed glyph, drawn to sit inside a 24x24 box. One shape so it stays legible at 13px. */
+const BED = 'M2.6 13.2h18.8c1.2 0 2.1.9 2.1 2.1v4.1c0 .5-.4.9-.9.9s-.9-.4-.9-.9v-.8c0-.3-.2-.5-.5-.5H3.8c-.3 0-.5.2-.5.5v.8c0 .5-.4.9-.9.9s-.9-.4-.9-.9v-4.1c0-1.2.9-2.1 2.1-2.1z'
+          + 'M4.6 12.1V7.4c0-1.6 1.3-2.9 2.9-2.9h9c1.6 0 2.9 1.3 2.9 2.9v4.7c0 .2-.2.3-.4.3-.5-.1-1-.1-1.5-.1h-.3c-.1 0-.2-.1-.2-.2-.2-1-1-1.7-2-1.7h-2.4c-1 0-1.8.7-2 1.7 0 .1-.1.2-.2.2h-1c-.1 0-.2-.1-.2-.2-.2-1-1-1.7-2-1.7H8.8c-1 0-1.8.7-2 1.7 0 .1-.1.2-.2.2h-.3c-.5 0-1 0-1.5.1-.2 0-.4-.1-.4-.3z';
+
 type Hotel = { n:string; addr:string; stop?:boolean; nudge?:[number,number] };
 const HOTELS: Hotel[] = [
   { n:'Marquis de Lafayette',  addr:'501 Beach Ave' },
   { n:'Beach Club on Madison', addr:'605 Madison Ave', stop:true },
-  { n:'Montreal Beach Resort', addr:'1025 Beach Ave', nudge:[-7,5] },
-  { n:'Ocean Club Hotel',      addr:'1035 Beach Ave', nudge:[9,-3] },
-  { n:'The Grand Hotel',       addr:'1045 Beach Ave', stop:true, nudge:[-6,3] },
-  { n:'ICONA Cape May',        addr:'1101 Beach Ave', nudge:[9,0] },
+  { n:'Montreal Beach Resort', addr:'1025 Beach Ave', nudge:[-8,6] },
+  { n:'Ocean Club Hotel',      addr:'1035 Beach Ave', nudge:[10,-4] },
+  { n:'The Grand Hotel',       addr:'1045 Beach Ave', stop:true, nudge:[-7,4] },
+  { n:'ICONA Cape May',        addr:'1101 Beach Ave', nudge:[11,0] },
   { n:'La Mer',                addr:'1317 Beach Ave', stop:true },
 ];
 
-type Ev = { n:string; sub:string; img:string; place?:string; dx?:number; dy?:number };
+type Ev = { n:string; sub:string; img:string; place?:string; dx?:number; dy?:number; at?:[number,number] };
 const ON_MAP: Ev[] = [
-  { n:'Welcome Drinks', sub:'The Pier House at La Mer', img:'pier-house.png', place:'La Mer', dy:-78 },
-  { n:'Nuptial Mass',   sub:'Our Lady Star of the Sea', img:'osos.png',       place:'Nuptial Mass' },
-  { n:'After Party',    sub:"Carney's",                 img:'carneys.png',    place:'After Party', dx:-66, dy:-58 },
-];
-const KEY_ONLY: Ev[] = [
-  { n:'Reception', sub:'Isaac Smith Vineyard', img:'reception-tent.png' },
-  { n:'Beach Day', sub:'Cape May Beach',       img:'beach.png' },
+  { n:'Welcome Drinks', sub:'The Pier House',        img:'pier-house.png', place:'La Mer',       dx:-16, dy:-84 },
+  { n:'Nuptial Mass',   sub:'Our Lady Star of the Sea', img:'osos.png',    place:'Nuptial Mass' },
+  { n:'After Party',    sub:"Carney's",              img:'carneys.png',    place:'After Party', dx:-70, dy:-56 },
+  { n:'Beach Day',      sub:'Cape May Beach',        img:'beach.png',      at:[430, 430] },
 ];
 
-const at = (name:string) => {
-  const p = PLACES.find(p => p.name === name);
-  return p ? { x:p.x, y:p.y } : { x:0, y:0 };
-};
+const at = (n:string) => { const p = PLACES.find(p=>p.name===n); return p ? {x:p.x,y:p.y} : {x:0,y:0}; };
 
 export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=>void }) {
   const [sel, setSel] = useState<string|null>(null);
 
   useEffect(() => {
     if (!open) return;
-    const esc = (e:KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', esc);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { window.removeEventListener('keydown', esc); document.body.style.overflow = prev; };
+    const esc=(e:KeyboardEvent)=>{ if(e.key==='Escape') onClose(); };
+    window.addEventListener('keydown',esc);
+    const prev=document.body.style.overflow; document.body.style.overflow='hidden';
+    return ()=>{ window.removeEventListener('keydown',esc); document.body.style.overflow=prev; };
   }, [open, onClose]);
 
   if (!open) return null;
@@ -57,10 +52,9 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
       style={{ position:'fixed', inset:0, zIndex:400, background:'rgba(40,46,30,.55)',
                display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
       <div onClick={e=>e.stopPropagation()}
-        style={{ background:CREAM, color:INK,   // must be explicit: this overlay inherits
-                                                 // colour from wherever it is mounted
-                 border:'1px solid rgba(175,184,133,.65)', maxWidth:1120,
-                 width:'100%', maxHeight:'92vh', overflowY:'auto', padding:'26px 28px 22px', position:'relative' }}>
+        style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
+                 maxWidth:1120, width:'100%', maxHeight:'92vh', overflowY:'auto',
+                 padding:'26px 28px 22px', position:'relative' }}>
         <button onClick={onClose} aria-label="Close map"
           style={{ position:'absolute', top:16, right:16, width:32, height:32, borderRadius:'50%',
                    border:'1px solid '+INK, background:'transparent', color:INK, cursor:'pointer',
@@ -79,99 +73,122 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                   <feFlood floodColor={INK} /><feComposite in2="SourceAlpha" operator="in" />
                 </filter>
                 <clipPath id="cmm-clip"><rect x="0" y="0" width={MAP_W} height={MAP_H} /></clipPath>
-                <clipPath id="cmm-inset-clip"><rect x="0" y="0" width={INSET_W} height={INSET_H} /></clipPath>
               </defs>
 
               <g clipPath="url(#cmm-clip)">
-                {/* ocean first, then land as a closed polygon — the raw coastline is an
-                    open polyline, so filling it directly floods the wrong side */}
                 <rect width={MAP_W} height={MAP_H} fill={SKY} />
                 <path d={MAP_PATHS.land} fill={CREAM} />
                 <path d={MAP_PATHS.coastLine} fill="none" stroke={SAND} strokeWidth={10} />
                 <path d={MAP_PATHS.coastLine} fill="none" stroke={INK} strokeWidth={1.1} strokeOpacity={.45} />
                 <path d={MAP_PATHS.islets} fill={CREAM} stroke={INK} strokeWidth={.8} strokeOpacity={.35} />
                 <path d={MAP_PATHS.water} fill={SKY} stroke={INK} strokeWidth={.8} strokeOpacity={.3} />
-                <path d={MAP_PATHS.streets}    fill="none" stroke={INK} strokeWidth={.7} strokeOpacity={.22} />
+                <path d={MAP_PATHS.streets} fill="none" stroke={INK} strokeWidth={.7} strokeOpacity={.22} />
                 <path d={MAP_PATHS.washington} fill="none" stroke={INK} strokeWidth={1.2} strokeOpacity={.42} />
-                <path d={MAP_PATHS.beachAve}   fill="none" stroke={INK} strokeWidth={2.4} />
+                <path d={MAP_PATHS.beachAve} fill="none" stroke={INK} strokeWidth={2.6} />
               </g>
 
+              {/* street labels, so the pins sit on something named */}
+              <text x={18} y={MAP_H-14} fontSize={9.5} letterSpacing="1.4" fill={INK} opacity={.5}>BEACH AVENUE</text>
+              <text x={200} y={252} fontSize={9} letterSpacing="1.3" fill={INK} opacity={.42}
+                    transform={`rotate(-19 200 252)`}>WASHINGTON STREET</text>
+              <text x={352} y={150} fontSize={9} letterSpacing="1.3" fill={INK} opacity={.42}
+                    transform={`rotate(-52 352 150)`}>MADISON AVENUE</text>
+              <text x={430} y={MAP_H-38} fontSize={16} fill={INK} opacity={.4} textAnchor="middle"
+                    fontStyle="italic" fontFamily="'Cormorant Garamond',Georgia,serif">The Atlantic</text>
+
+              {/* events: cream disc behind the line art so both icon and label read on any ground */}
               {ON_MAP.map(e=>{
-                const p = at(e.place as string);
-                const x = p.x + (e.dx ?? 0), y = p.y + (e.dy ?? 0);
-                const moved = (e.dx ?? 0) !== 0 || (e.dy ?? 0) !== 0;
+                const base = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
+                const x = base.x + (e.dx ?? 0), y = base.y + (e.dy ?? 0);
+                const moved = !!(e.dx || e.dy);
                 return (
                   <g key={e.n}>
-                    {/* leader back to the true position when the icon has been moved for room */}
-                    {moved && <line x1={x} y1={y} x2={p.x} y2={p.y} stroke={INK} strokeOpacity={.35} strokeDasharray="3 3" />}
-                    {moved && <circle cx={p.x} cy={p.y} r={2.6} fill={INK} opacity={.5} />}
-                    <image href={ICON+e.img} x={x-26} y={y-26} width={52} height={52} filter="url(#cmm-ink)" opacity={.92} />
-                    <text x={x} y={y+44} textAnchor="middle" fontSize={12} fontWeight={500} fill={INK}>{e.n}</text>
-                    <text x={x} y={y+55} textAnchor="middle" fontSize={8.6} fill={INK} opacity={.55} letterSpacing=".7">{e.sub.toUpperCase()}</text>
+                    {moved && <line x1={x} y1={y} x2={base.x} y2={base.y} stroke={INK} strokeOpacity={.4} strokeDasharray="3 3" />}
+                    {moved && <circle cx={base.x} cy={base.y} r={3} fill={INK} opacity={.55} />}
+                    <circle cx={x} cy={y} r={30} fill={CREAM} stroke={INK} strokeWidth={1.2} strokeOpacity={.55} />
+                    <image href={ICON+e.img} x={x-23} y={y-23} width={46} height={46} filter="url(#cmm-ink)" opacity={.95} />
+                    <text x={x} y={y+47} textAnchor="middle" fontSize={12.5} fontWeight={500} fill={INK}
+                          stroke={CREAM} strokeWidth={3.2} paintOrder="stroke">{e.n}</text>
+                    <text x={x} y={y+58} textAnchor="middle" fontSize={8.6} fill={INK} opacity={.7} letterSpacing=".7"
+                          stroke={CREAM} strokeWidth={2.6} paintOrder="stroke">{e.sub.toUpperCase()}</text>
                   </g>
                 );
               })}
 
-              {HOTELS.map((h,i)=>{
-                const p = at(h.n);
-                const x = p.x + (h.nudge?.[0] ?? 0), y = p.y + (h.nudge?.[1] ?? 0);
-                const on = sel === h.n;
+              {/* hotels: one colour, one glyph. A small badge marks a planned shuttle pickup. */}
+              {HOTELS.map(h=>{
+                const p=at(h.n);
+                const x=p.x+(h.nudge?.[0] ?? 0), y=p.y+(h.nudge?.[1] ?? 0);
+                const on = sel===h.n;
                 return (
-                  <g key={h.n} style={{ cursor:'pointer' }}
+                  <g key={h.n} style={{cursor:'pointer'}}
                      onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}>
-                    {h.stop && <circle cx={x} cy={y} r={14} fill="none" stroke={INK} strokeOpacity={.45} />}
-                    <circle cx={x} cy={y} r={10.5} fill={on?OLIVE:CREAM} stroke={INK} strokeWidth={1.6} />
-                    <text x={x} y={y+3.8} textAnchor="middle" fontSize={11} fontWeight={500} fill={INK}>{i+1}</text>
-                    <circle cx={x} cy={y} r={17} fill="transparent" />
+                    <circle cx={x} cy={y} r={14} fill={on?PISTACHIO:OLIVE} stroke={INK} strokeWidth={1.5} />
+                    <g transform={`translate(${x-8} ${y-8}) scale(0.667)`}>
+                      <path d={BED} fill={INK} />
+                    </g>
+                    {h.stop && (
+                      <g>
+                        <circle cx={x+11} cy={y+11} r={5.5} fill={INK} stroke={CREAM} strokeWidth={1.4} />
+                        <path d={`M${x+8.6} ${y+11} l1.6 1.7 3.2 -3.4`} fill="none" stroke={CREAM} strokeWidth={1.5}
+                              strokeLinecap="round" strokeLinejoin="round" />
+                      </g>
+                    )}
+                    <circle cx={x} cy={y} r={20} fill="transparent" />
                   </g>
                 );
               })}
 
-              {/* the vineyard is the only thing off the island — locator inset */}
-              <g transform={'translate('+(MAP_W-INSET_W-16)+' '+(MAP_H-INSET_H-14)+')'}>
-                <g clipPath="url(#cmm-inset-clip)">
-                  <rect width={INSET_W} height={INSET_H} fill={SKY} />
-                  <path d={INSET_PATHS.coast} fill={PISTACHIO} stroke={INK} strokeWidth={.7} strokeOpacity={.35} />
-                  <path d={INSET_PATHS.water} fill={SKY} stroke={INK} strokeWidth={.5} strokeOpacity={.25} />
-                  <path d={INSET_PATHS.streets} fill="none" stroke={INK} strokeWidth={.4} strokeOpacity={.18} />
-                  <path d={INSET_PATHS.canal} fill="none" stroke={SKY} strokeWidth={4} />
+              {/* The reception is off the map. A callout reads far better than a tiny mini-map. */}
+              <g transform={`translate(${MAP_W-262} ${MAP_H-118})`}>
+                <rect width={246} height={100} rx={2} fill={CREAM} stroke={INK} strokeOpacity={.5} />
+                <image href={ICON+'reception-tent.png'} x={12} y={26} width={50} height={50}
+                       filter="url(#cmm-ink)" opacity={.95} />
+                <text x={72} y={30} fontSize={8.6} letterSpacing="1.3" fill={INK} opacity={.55}>THE RECEPTION</text>
+                <text x={72} y={50} fontSize={15} fontWeight={500} fill={INK}>Isaac Smith Vineyard</text>
+                <text x={72} y={68} fontSize={11} fill={INK} opacity={.72}>2.5 miles north &middot; 8 min drive</text>
+                <g transform="translate(210 74)" opacity={.6}>
+                  <path d="M0 12 L0 -6 M-5 -1 L0 -6 L5 -1" fill="none" stroke={INK} strokeWidth={1.5}
+                        strokeLinecap="round" strokeLinejoin="round" />
+                  <text x={0} y={24} fontSize={7.6} letterSpacing="1" fill={INK} textAnchor="middle">NORTH</text>
                 </g>
-                <rect width={INSET_W} height={INSET_H} fill="none" stroke={INK} strokeOpacity={.4} />
-                {INSET_PLACES.map(p=>(
-                  <g key={p.name}>
-                    <circle cx={p.x} cy={p.y} r={p.name==='Reception'?7:4}
-                            fill={p.name==='Reception'?OLIVE:CREAM} stroke={INK} strokeWidth={1.3} />
-                    {p.name==='Reception' && <text x={p.x+12} y={p.y+3.5} fontSize={10} fontWeight={500} fill={INK}>Reception</text>}
-                  </g>
-                ))}
-                <text x={9} y={15} fontSize={8} letterSpacing="1.1" fill={INK} opacity={.55}>ISAAC SMITH VINEYARD</text>
-                <text x={9} y={INSET_H-9} fontSize={8} fill={INK} opacity={.55}>&#8776; 8 min drive north</text>
               </g>
-
-              <text x={14} y={MAP_H-12} fontSize={9} letterSpacing="1.3" fill={INK} opacity={.45}>BEACH AVENUE</text>
             </svg>
           </div>
 
-          <div className="cmm-key" style={{ flex:'0 0 210px' }}>
+          <div className="cmm-key" style={{ flex:'0 0 214px' }}>
             <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 9px', fontWeight:500 }}>Where to stay</h4>
-            {HOTELS.map((h,i)=>(
+            {HOTELS.map(h=>(
               <div key={h.n} onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
-                style={{ display:'flex', gap:9, alignItems:'center', marginBottom:7, fontSize:12.5 }}>
-                <span style={{ flex:'0 0 19px', height:19, borderRadius:'50%', border:'1.4px solid '+INK,
-                               background: sel===h.n?OLIVE:CREAM, fontSize:10, display:'inline-flex',
-                               alignItems:'center', justifyContent:'center', fontWeight:500,
-                               boxShadow: h.stop ? '0 0 0 2.4px '+CREAM+', 0 0 0 3.5px rgba(78,91,55,.45)' : undefined }}>{i+1}</span>
-                <span>{h.n}<br /><span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{h.addr.toUpperCase()}</span></span>
+                style={{ display:'flex', gap:9, alignItems:'center', marginBottom:7, fontSize:12.5, cursor:'pointer' }}>
+                <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%', border:'1.4px solid '+INK,
+                               background: sel===h.n?PISTACHIO:OLIVE, display:'inline-flex',
+                               alignItems:'center', justifyContent:'center' }}>
+                  <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={INK} /></svg>
+                </span>
+                <span>{h.n}<br />
+                  <span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>
+                    {h.addr.toUpperCase()}{h.stop ? ' · SHUTTLE' : ''}
+                  </span>
+                </span>
               </div>
             ))}
             <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'16px 0 9px', fontWeight:500 }}>The weekend</h4>
-            {ON_MAP.concat(KEY_ONLY).map(e=>(
+            {ON_MAP.concat([{n:'Reception',sub:'Isaac Smith Vineyard',img:'reception-tent.png'}]).map(e=>(
               <div key={e.n} style={{ display:'flex', gap:9, alignItems:'center', marginBottom:7, fontSize:12.5 }}>
                 <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85 }} />
                 <span>{e.n}<br /><span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{e.sub.toUpperCase()}</span></span>
               </div>
             ))}
-            <p style={{ fontSize:10.5, opacity:.6, lineHeight:1.5, marginTop:14 }}>Ringed markers are planned shuttle pickups.</p>
+            <p style={{ fontSize:10.5, opacity:.65, lineHeight:1.5, marginTop:14,
+                        display:'flex', gap:7, alignItems:'flex-start' }}>
+              <svg viewBox="0 0 24 24" width={13} height={13} style={{ flex:'0 0 13px', marginTop:1 }}>
+                <circle cx="12" cy="12" r="11" fill={INK} />
+                <path d="M6.6 12.4l3.2 3.4 7.4 -7.6" fill="none" stroke={CREAM} strokeWidth={2.4}
+                      strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Planned shuttle pickup
+            </p>
           </div>
         </div>
 
