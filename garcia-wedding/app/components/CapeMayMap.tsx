@@ -153,7 +153,9 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
   };
   const down = (e:React.PointerEvent) => {
     ptrs.current.set(e.pointerId, { x:e.clientX, y:e.clientY });
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    // capture can throw for pointers the browser no longer considers active;
+    // it's an optimisation, not a requirement, so never let it break the gesture
+    try { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); } catch {}
   };
   const move = (e:React.PointerEvent) => {
     if (!ptrs.current.has(e.pointerId) || !stage.current) return;
@@ -185,6 +187,16 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
     }
   };
   const up = (e:React.PointerEvent) => { ptrs.current.delete(e.pointerId); };
+  const wheel = (e:React.WheelEvent) => {
+    if (!stage.current) return;
+    const r = stage.current.getBoundingClientRect();
+    const px = e.clientX - r.left, py = e.clientY - r.top;
+    setView(v => {
+      const k = Math.min(4, Math.max(1, v.k * Math.pow(1.0015, -e.deltaY)));
+      const sB = (MAP_W / v.k) / r.width, sA = (MAP_W / k) / r.width;
+      return clamp({ k, x: v.x + px*sB - px*sA, y: v.y + py*sB - py*sA });
+    });
+  };
   const reset = () => setView({ k:1, x:0, y:0 });
 
   useEffect(() => {
@@ -259,7 +271,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
         </div>
       </div>
 
-      <div ref={stage} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up}
+      <div ref={stage} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onWheel={wheel}
         style={{ position:'relative', overflow:'hidden', touchAction:'none', cursor:'grab',
                  width:'100%', aspectRatio:`${MAP_W} / ${MAP_H}`, flex:'0 0 auto' }}>
         <MapSvg sel={sel} setSel={setSel}
