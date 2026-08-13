@@ -41,9 +41,8 @@ const at = (n:string) => { const p = PLACES.find(p=>p.name===n); return p ? {x:p
 
 function MapSvg({ sel, setSel, box }:{ sel:string|null; setSel:(v:string|null)=>void; box?:string }) {
   return (
-  <svg viewBox={'0 0 '+MAP_W+' '+MAP_H} preserveAspectRatio="xMidYMid meet"
-       style={{ width:'100%', height:'auto', display:'block',
-                }}>
+  <svg viewBox={box ?? ('0 0 '+MAP_W+' '+MAP_H)} preserveAspectRatio="xMidYMid meet"
+       style={{ width:'100%', height:'auto', display:'block' }}>
     <defs>
       <filter id="cmm-ink" colorInterpolationFilters="sRGB">
         <feFlood floodColor={INK} /><feComposite in2="SourceAlpha" operator="in" />
