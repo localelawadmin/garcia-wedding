@@ -17,21 +17,23 @@ const BED = 'M2.6 13.2h18.8c1.2 0 2.1.9 2.1 2.1v4.1c0 .5-.4.9-.9.9s-.9-.4-.9-.9v
 
 type Hotel = { n:string; addr:string; nudge?:[number,number] };
 const HOTELS: Hotel[] = [
-  { n:'Marquis de Lafayette',  addr:'501 Beach Ave' },
-  { n:'Beach Club on Madison', addr:'605 Madison Ave' },
-  { n:'Montreal Beach Resort', addr:'1025 Beach Ave', nudge:[-8,6] },
-  { n:'Ocean Club Hotel',      addr:'1035 Beach Ave', nudge:[10,-4] },
-  { n:'The Grand Hotel',       addr:'1045 Beach Ave', nudge:[-7,4] },
-  { n:'ICONA Cape May',        addr:'1101 Beach Ave', nudge:[11,0] },
+  // same order as The Accommodations section
   { n:'La Mer',                addr:'1317 Beach Ave' },
+  { n:'Beach Club on Madison', addr:'605 Madison Ave' },
+  { n:'The Grand Hotel',       addr:'1045 Beach Ave', nudge:[-7,4] },
+  { n:'Marquis de Lafayette',  addr:'501 Beach Ave' },
+  { n:'Montreal Beach Resort', addr:'1025 Beach Ave', nudge:[-8,6] },
+  { n:'ICONA Cape May',        addr:'1101 Beach Ave', nudge:[11,0] },
+  { n:'Ocean Club Hotel',      addr:'1035 Beach Ave', nudge:[10,-4] },
 ];
 
-type Ev = { n:string; sub:string; img:string; place?:string; dx?:number; dy?:number; at?:[number,number]; bare?:boolean };
+type Ev = { n:string; sub:string; extra?:string; img:string; place?:string; dx?:number; dy?:number; at?:[number,number]; bare?:boolean };
 const ON_MAP: Ev[] = [
   { n:'Welcome Drinks', sub:'The Pier House',        img:'pier-house.png', place:'La Mer',       dx:-16, dy:-112 },
   { n:'Nuptial Mass',   sub:'Our Lady Star of the Sea', img:'osos.png',    place:'Nuptial Mass', dx:189, dy:-22 },
   { n:'After Party',    sub:"Carney's",              img:'carneys.png',    place:'After Party', dx:-11, dy:-100 },
   { n:'Beach Day',      sub:'Cape May Beach',        img:'beach.png',      at:[650, 400], bare:true },
+  { n:'Reception',      sub:'Isaac Smith Vineyard',  extra:'1.8 miles north', img:'reception-tent.png', at:[252, 76] },
 ];
 
 const at = (n:string) => { const p = PLACES.find(p=>p.name===n); return p ? {x:p.x,y:p.y} : {x:0,y:0}; };
@@ -96,9 +98,6 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               </g>
 
               {/* street labels, so the pins sit on something named */}
-              <text x={18} y={MAP_H-14} fontSize={9.5} letterSpacing="1.4" fill={INK} opacity={.42}>BEACH AVENUE</text>
-              <text x={782} y={MAP_H-34} fontSize={17} fill={INK} opacity={.4} textAnchor="middle"
-                    fontStyle="italic" fontFamily="'Cormorant Garamond',Georgia,serif">The Atlantic</text>
 
               {/* events: cream disc behind the line art so both icon and label read on any ground */}
               {/* every halo first, on one layer: overlapping ones blend into a single
@@ -107,7 +106,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 {ON_MAP.filter(e=>!e.bare).map(e=>{
                   const b = e.at ? {x:e.at[0],y:e.at[1]} : at(e.place as string);
                   const x = b.x + (e.dx ?? 0), y = b.y + (e.dy ?? 0);
-                  return <ellipse key={e.n} cx={x} cy={y+18} rx={108} ry={88} fill="url(#cmm-halo)" />;
+                  return <ellipse key={e.n} cx={x} cy={y+18} rx={132} ry={108} fill="url(#cmm-halo)" />;
                 })}
               </g>
               <g>
@@ -119,6 +118,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                       <image href={ICON+e.img} x={x-32} y={y-32} width={64} height={64} filter="url(#cmm-ink)" opacity={.95} />
                       <text x={x} y={y+54} textAnchor="middle" fontSize={15} fontWeight={500} fill={INK}>{e.n}</text>
                       <text x={x} y={y+68} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.65} letterSpacing=".9">{e.sub.toUpperCase()}</text>
+                      {e.extra && <text x={x} y={y+81} textAnchor="middle" fontSize={9.6} fill={INK} opacity={.55}>{e.extra}</text>}
                     </g>
                   );
                 })}
@@ -141,16 +141,6 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                 );
               })}
 
-              {/* The reception is off the map. A callout reads far better than a tiny mini-map. */}
-              <g transform={`translate(18 16)`}>
-                <rect width={252} height={102} rx={2} fill={CREAM} stroke={INK} strokeOpacity={.5} />
-                <image href={ICON+'reception-tent.png'} x={10} y={28} width={48} height={48}
-                       filter="url(#cmm-ink)" opacity={.95} />
-                <text x={66} y={28} fontSize={8.4} letterSpacing="1.3" fill={INK} opacity={.55}>THE RECEPTION</text>
-                <text x={66} y={49} fontSize={15} fontWeight={500} fill={INK}>Isaac Smith Vineyard</text>
-                <text x={66} y={66} fontSize={10.5} fill={INK} opacity={.7}>2.5 miles north</text>
-                <text x={66} y={80} fontSize={10.5} fill={INK} opacity={.7}>about an 8 minute drive</text>
-              </g>
             </svg>
           </div>
 
@@ -172,7 +162,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
               </div>
             ))}
             <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'16px 0 9px', fontWeight:500 }}>The weekend</h4>
-            {ON_MAP.concat([{n:'Reception',sub:'Isaac Smith Vineyard',img:'reception-tent.png'}]).map(e=>(
+            {ON_MAP.map(e=>(
               <div key={e.n} style={{ display:'flex', gap:9, alignItems:'center', marginBottom:7, fontSize:12.5 }}>
                 <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85 }} />
                 <span>{e.n}<br /><span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{e.sub.toUpperCase()}</span></span>
