@@ -151,7 +151,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
           <div className="cmm-key" style={{ width:'100%', display:'flex', gap:26, alignItems:'flex-start' }}>
             <div style={{ flex:'1 1 58%', minWidth:0 }}>
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
-              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0,1fr))', gap:'10px 18px' }}>
+              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0,1fr))', gap:'8px 18px', gridAutoRows:'34px' }}>
                 {HOTELS.map(h=>(
                   <div key={h.n} onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
                     style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, cursor:'pointer', minWidth:0, lineHeight:1.35 }}>
@@ -168,13 +168,11 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
             <div className="cmm-div" style={{ flex:'1 1 42%', minWidth:0,
                  borderLeft:'1px solid rgba(175,184,133,.5)', paddingLeft:26 }}>
               <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>The weekend</h4>
-              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'10px 18px' }}>
+              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'8px 18px', gridAutoRows:'34px' }}>
                 {ON_MAP.map(e=>(
                   <div key={e.n} style={{ display:'flex', gap:9, alignItems:'flex-start', fontSize:12.5, minWidth:0, lineHeight:1.35 }}>
                     <img src={ICON+e.img} alt="" style={{ width:26, height:26, objectFit:'contain', opacity:.85, marginTop:-4 }} />
-                    <span style={{ minWidth:0 }}>{e.n}<br />
-                      <span style={{ opacity:.5, fontSize:10, letterSpacing:'.07em' }}>{e.sub.toUpperCase()}</span>
-                    </span>
+                    <span style={{ minWidth:0 }}>{e.n}</span>
                   </div>
                 ))}
               </div>
