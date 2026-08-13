@@ -52,7 +52,8 @@ export const posOf = (name:string) => {
 function MapSvg({ sel, setSel, box, picked, onPick }:{ sel:string|null; setSel:(v:string|null)=>void; box?:string; picked:string|null; onPick:(n:string)=>void }) {
   return (
   <svg viewBox={box ?? ('0 0 '+MAP_W+' '+MAP_H)} preserveAspectRatio="xMidYMid meet"
-       style={{ width:'100%', height:'auto', display:'block' }}>
+       style={ box ? { position:'absolute', inset:0, width:'100%', height:'100%', display:'block' }
+                   : { width:'100%', height:'auto', display:'block' } }>
     <defs>
       <filter id="cmm-ink" colorInterpolationFilters="sRGB">
         <feFlood floodColor={INK} /><feComposite in2="SourceAlpha" operator="in" />
@@ -279,6 +280,28 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
 
   if (!open) return null;
 
+  const tooShort = mobile && typeof window !== 'undefined'
+    && window.innerHeight < 430 && window.innerWidth > window.innerHeight;
+
+  if (tooShort) return (
+    <div role="dialog" aria-modal="true" aria-label="Map of Cape May" onClick={onClose}
+      style={{ position:'fixed', inset:0, zIndex:400, background:'rgba(40,46,30,.55)',
+               display:'flex', alignItems:'center', justifyContent:'center', padding:14 }}>
+      <div onClick={e=>e.stopPropagation()}
+        style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
+                 padding:'22px 24px', textAlign:'center', maxWidth:380 }}>
+        <div className="heading" style={{ fontSize:24, lineHeight:1.05, fontWeight:400 }}>Around Cape May</div>
+        <p style={{ fontSize:13, lineHeight:1.55, opacity:.75, margin:'8px 0 16px' }}>
+          Turn your phone upright to see the map.
+        </p>
+        <button onClick={onClose}
+          style={{ padding:'9px 20px', borderRadius:999, border:'1px solid '+INK,
+                   background:'transparent', color:INK, fontSize:10, letterSpacing:'.08em',
+                   textTransform:'uppercase', cursor:'pointer' }}>Close</button>
+      </div>
+    </div>
+  );
+
   if (mobile) return (
     <div role="dialog" aria-modal="true" aria-label="Map of Cape May" onClick={onClose}
       style={{ position:'fixed', inset:0, zIndex:400, background:'rgba(40,46,30,.55)',
@@ -308,7 +331,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
 
       <div ref={stage} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onWheel={wheel}
         style={{ position:'relative', overflow:'hidden', touchAction:'none', cursor:'grab',
-                 width:'100%', aspectRatio:`${MAP_W} / ${MAP_H}`, flex:'0 0 auto' }}>
+                 width:'100%', aspectRatio:`${MAP_W} / ${MAP_H}`, maxHeight:'52vh', flex:'0 0 auto' }}>
         <MapSvg sel={sel} setSel={setSel} picked={picked} onPick={pick}
                 box={`${view.x} ${view.y} ${MAP_W/view.k} ${MAP_H/view.k}`} />
       </div>
