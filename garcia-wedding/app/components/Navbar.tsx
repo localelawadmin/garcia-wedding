@@ -6,7 +6,7 @@ const LINKS = [
   { label: 'Schedule', href: '#agenda' },
   { label: 'Stay',     href: '#accommodations' },
   { label: 'Travel',   href: '#getting-there' },
-  { label: 'Dining',   href: '#things' },
+  { label: 'To-Do',   href: '#things' },
   { label: 'Attire',   href: '#dress' },
   { label: 'FAQ',      href: '#faq' },
 ];

@@ -1170,8 +1170,15 @@ export default function WeddingSite() {
       </SectionShell>
 
       <SectionShell id="things" tone="pattern">
-        <Title>Places to Eat</Title>
-        <Lede>A few of our favorite spots in town. Reservations recommended for dinners.</Lede>
+        <Title>Things to Do</Title>
+        <Lede>A few of our favorite spots in town.</Lede>
+
+        {/* Sub-heading, not a section title: the nav now says To-Do, so this section is
+            the container and eating is one thing to do in it. Adding an activities
+            block later is another h3 here, not another rename. */}
+        <h3 className="heading" style={{ fontSize: 'clamp(30px, 4vw, 42px)', lineHeight: 1, margin: '0 0 6px', letterSpacing: '-0.005em', paddingTop: '0.1em' }}>Places to Eat</h3>
+        <p style={{ fontSize: 14, lineHeight: 1.6, opacity: .72, margin: '0 0 18px', letterSpacing: '-0.005em' }}>Reservations recommended for dinners.</p>
+
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 22px' }} className="things-grid">
           {[
             { name: 'The Buoy Coffee Shop', address: '722 Beach Avenue', note: 'A morning must!' },
@@ -1225,7 +1232,7 @@ export default function WeddingSite() {
           <FaqRow q='Can I add an extra day to the hotel room block?' a='Absolutely! Many of us are staying through the weekend. Please call the hotel to extend your stay, and book early to secure your room! Rates may vary.' />
           <FaqRow q="What's the dress code for Welcome Drinks?" a='Summer cocktail. Dresses (any length) for women, button-down and pants for men. Jackets preferred but not required.' />
           <FaqRow q="What's the dress code for the Ceremony and Reception?" a='Our wedding dress code is black-tie optional. We ask that ladies wear floor-length dresses, with bright, summery colors encouraged. We ask that gentlemen wear tuxedos or dark suits. The reception is outdoors on grass, so block heels are strongly recommended.' />
-          <FaqRow q='Where is a good spot to grab dinner on Thursday?' a='Please check out the Dining section for our local favorites. We highly recommend making a reservation in advance.' />
+          <FaqRow q='Where is a good spot to grab dinner on Thursday?' a='Please check out the Places to Eat list in the To-Do section for our local favorites. We highly recommend making a reservation in advance.' />
           <FaqRow q='How early should I get to the Church?' a='The mass starts promptly at 1:30 PM — please arrive 15–30 minutes early to find your seat.' />
           <FaqRow q='Will there be provided transportation to the Mass?' a='There will not be transportation provided to the Church. Please see the Travel section for a few easy options.' />
           <FaqRow q='Will there be provided transportation to the reception?' a='Yes - a shuttle will run to and from the reception. The full schedule and pickup points will be posted in the Travel section closer to the date.' />
