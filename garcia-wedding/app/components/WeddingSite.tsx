@@ -116,6 +116,9 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
   const [bodyH, setBodyH] = useState(0);
   const nameRef = useRef<HTMLDivElement>(null);
   const [nameH, setNameH] = useState(0);
+  // A logo that fails to load otherwise falls back to raw alt text — the name in the
+  // body font next to a broken-image glyph, which reads as broken rather than designed.
+  const [logoOk, setLogoOk] = useState(true);
 
   // Booking instructions vary a lot in length — Icona and Ocean Club are a paragraph,
   // Montreal is one line — so the panel measures its own content instead of animating
@@ -165,13 +168,22 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
           filter: 'url(#tint-deep-dark)',
           transform: isStamp ? 'scaleY(0.78)' : undefined,
         }} />
-        <img src={logoSrc} alt={hotel.name} style={{
-          position: 'relative', zIndex: 2,
-          maxWidth: '72%', maxHeight: '72%', objectFit: 'contain',
-          filter: 'url(#tint-deep-dark)',
-          transform: isIcona ? 'translateY(-9%)' : undefined,
-          pointerEvents: 'none',
-        }} />
+        {logoOk ? (
+          <img src={logoSrc} alt={hotel.name} onError={() => setLogoOk(false)} style={{
+            position: 'relative', zIndex: 2,
+            maxWidth: '72%', maxHeight: '72%', objectFit: 'contain',
+            filter: 'url(#tint-deep-dark)',
+            transform: isIcona ? 'translateY(-9%)' : undefined,
+            pointerEvents: 'none',
+          }} />
+        ) : (
+          <div className="heading" style={{
+            position: 'relative', zIndex: 2,
+            maxWidth: '72%', textAlign: 'center', pointerEvents: 'none',
+            fontSize: 'clamp(15px, 2.4vw, 23px)', lineHeight: 1.15,
+            fontWeight: 400, letterSpacing: '-0.005em', color: 'inherit',
+          }}>{hotel.name}</div>
+        )}
       </div>
       <div style={{ borderTop: '1px solid currentColor', marginTop: 4 }}>
         {/* The logo is the identifier on a closed card; opening one names it outright,
