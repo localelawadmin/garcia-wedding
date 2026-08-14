@@ -170,3 +170,14 @@ body {
 }
 
 @keyframes note-pulse { 0% { transform: scale(1); opacity: .6; } 70% { opacity: 0; } 100% { transform: scale(1.85); opacity: 0; } }
+
+/* Inline text link into the map — quiet by default, firms up on hover.
+   Used by the Accommodations coda so the map has a second, lighter door. */
+.map-link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(78, 91, 55, .38);
+  transition: text-decoration-color .18s ease;
+}
+.map-link:hover { text-decoration-color: currentColor; }

@@ -232,7 +232,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
 
 function priceTier(p: string): number { return p.length; }
 
-const AccommodationsBody: React.FC = () => {
+const AccommodationsBody: React.FC<{ onOpenMap: () => void }> = ({ onOpenMap }) => {
   const [sortByPrice, setSortByPrice] = useState(false);
   const sorted = sortByPrice
     ? [...HOTELS].sort((a, b) => priceTier(a.price) - priceTier(b.price))
@@ -243,6 +243,14 @@ const AccommodationsBody: React.FC = () => {
         <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>Get ready for a fun stay in Cape May!</p>
         <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>We&apos;ve secured room blocks at several local hotels and resorts — from beachfront classics to boutique stays, at a range of price points. Cape May is small enough that no matter where you stay, you&apos;ll be close to the action and events.</p>
         <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400 }}>If you wish to book elsewhere, the area is full of Airbnbs and rental properties as well.</p>
+        <div style={{ width: 26, height: 1, background: 'currentColor', opacity: .35, margin: '22px auto 14px' }} />
+        <p style={{ textAlign: 'center', fontSize: 15, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400 }}>
+          All seven sit along the same mile of Beach Avenue.{' '}
+          <button type="button" onClick={onOpenMap} className="map-link"
+            style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', color: 'inherit', cursor: 'pointer' }}>
+            See them on the map &rarr;
+          </button>
+        </p>
       </div>
       <div style={{ maxWidth: 720, margin: '0 auto 12px', display: 'flex', justifyContent: 'flex-end' }}>
         <button type="button" onClick={() => setSortByPrice(v => !v)}
@@ -1069,7 +1077,7 @@ export default function WeddingSite() {
 
       <SectionShell id="accommodations" tone="pattern" wide>
         <Title>The Accommodations</Title>
-        <AccommodationsBody />
+        <AccommodationsBody onOpenMap={() => setMapOpen(true)} />
       </SectionShell>
 
       <SectionShell id="getting-there" tone="ink">
@@ -1084,11 +1092,14 @@ export default function WeddingSite() {
           <Tile tone="ink" heading="By Ferry" body="The Cape May–Lewes Ferry runs from Delaware — walk-on or drive-on." />
         </div>
 
-        {/* Map entry point — a preview that opens full screen, rather than a fourth
-            floating button in a corner that already has three. */}
+        {/* --- Getting Around --- */}
+        <h3 className="heading" style={{ fontSize: 'clamp(30px, 4vw, 42px)', lineHeight: 1, margin: '48px 0 18px', letterSpacing: '-0.005em', paddingTop: '0.1em' }}>Getting Around Cape May</h3>
+        {/* Map entry point. Lives here, not under "Getting to Cape May" — the map answers
+            "where is everything relative to everything else", which is the Getting Around
+            question. The Accommodations section has a quieter text link into the same map. */}
         <button type="button" onClick={() => setMapOpen(true)}
           style={{
-            display: 'block', width: '100%', margin: '26px 0 0', padding: 0,
+            display: 'block', width: '100%', margin: '0 0 24px', padding: 0,
             border: '1px solid rgba(175,184,133,.65)', background: CREAM, color: DEEP_DARK,
             cursor: 'pointer', font: 'inherit', textAlign: 'left',
           }}>
@@ -1103,9 +1114,6 @@ export default function WeddingSite() {
             <span style={{ fontSize: 10, letterSpacing: '.08em', textTransform: 'uppercase', opacity: .6 }}>Open →</span>
           </div>
         </button>
-
-        {/* --- Getting Around --- */}
-        <h3 className="heading" style={{ fontSize: 'clamp(30px, 4vw, 42px)', lineHeight: 1, margin: '48px 0 18px', letterSpacing: '-0.005em', paddingTop: '0.1em' }}>Getting Around Cape May</h3>
 
         {/* Wedding shuttle — the provided transportation (jitneys, reception + return); details TBD */}
         <div style={{
