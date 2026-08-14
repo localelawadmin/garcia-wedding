@@ -22,11 +22,20 @@ export const metadata: Metadata = {
     url: "https://thegarcias2027.com",
     type: "website",
     locale: "en_US",
+    // Cropped from eng-bike-together.jpg, which is portrait — the band starts below
+    // the treeline so both faces and the basket survive the 1200x630 letterbox.
+    images: [{
+      url: "/og-image.jpg",
+      width: 1200,
+      height: 630,
+      alt: "Haley and George riding a bicycle together in Cape May",
+    }],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Haley Driscoll & George Garcia III",
     description: "Join us in Cape May, New Jersey on June 18, 2027.",
+    images: ["/og-image.jpg"],
   },
 };
 
