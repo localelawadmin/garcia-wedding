@@ -1132,7 +1132,7 @@ export default function WeddingSite() {
         <h3 className="heading" style={{ fontSize: 'clamp(30px, 4vw, 42px)', lineHeight: 1, margin: '48px 0 18px', letterSpacing: '-0.005em', paddingTop: '0.1em' }}>Getting Around Cape May</h3>
         {/* Wedding shuttle — the provided transportation (jitneys, reception + return); details TBD */}
         <div style={{
-          background: CREAM, color: DEEP_DARK, border: '1px solid rgba(175,184,133,.65)',
+          background: SKY, color: DEEP_DARK, border: '1px solid rgba(175,184,133,.65)',
           padding: '28px 30px', marginBottom: 24, textAlign: 'center',
         }}>
           <h4 className="heading" style={{ fontSize: 26, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>The Wedding Shuttle</h4>
