@@ -339,7 +339,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
       <div className="cmm-modal" onClick={e=>e.stopPropagation()}
         style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
-                 maxWidth:'min(1080px, max(460px, calc((92vh - 244px) * 1.826 + 56px)))', width:'100%',
+                 maxWidth:'min(1080px, max(460px, calc((92vh - 253px) * 1.826 + 56px)))', width:'100%',
                  maxHeight:'92vh', overflowY:'auto', scrollbarWidth:'none',
                  padding:'22px 28px 18px', position:'relative' }}>
         <button onClick={onClose} aria-label="Close map"
