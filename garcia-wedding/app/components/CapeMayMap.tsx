@@ -150,17 +150,6 @@ return (
         </div>
       ))}
     </div>
-    <h4 style={{ fontSize:8.2, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'11px 0 6px', fontWeight:500 }}>The weekend</h4>
-    <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'9px 14px', gridAutoRows:'42px' }}>
-      {ON_MAP.map(e=>(
-        <div key={e.n} onClick={()=>onPick(e.n)} role="button" tabIndex={0}
-          style={{ display:'flex', gap:8, alignItems:'center', fontSize:12, minWidth:0, lineHeight:1.3,
-                   cursor:'pointer', transition:'background .18s ease, box-shadow .18s ease', ...box(picked===e.n) }}>
-          <img src={ICON+e.img} alt="" style={{ width:29, height:29, objectFit:'contain', opacity:.85 }} />
-          <span style={{ minWidth:0 }}>{e.n}</span>
-        </div>
-      ))}
-    </div>
   </>
 );
 }
@@ -350,7 +339,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
                display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
       <div onClick={e=>e.stopPropagation()}
         style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
-                 maxWidth:'min(1080px, max(460px, calc((92vh - 296px) * 1.826 + 56px)))', width:'100%',
+                 maxWidth:'min(1080px, max(460px, calc((92vh - 239px) * 1.826 + 56px)))', width:'100%',
                  maxHeight:'92vh', overflowY:'auto',
                  padding:'22px 28px 18px', position:'relative' }}>
         <button onClick={onClose} aria-label="Close map"
@@ -369,55 +358,33 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
             <MapSvg sel={sel} setSel={setSel} picked={picked} onPick={pick} />
           </div>
 
-          <div className="cmm-key" style={{ width:'100%', display:'flex', gap:26, alignItems:'flex-start' }}>
-            <div style={{ flex:'1 1 58%', minWidth:0 }}>
-              <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
-              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0,1fr))', gap:'11px 18px', gridAutoRows:'46px' }}>
-                {HOTELS.map(h=>(
-                  <div key={h.n} onClick={()=>pick(h.n)}
-                    onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
-                    style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, cursor:'pointer',
-                             minWidth:0, lineHeight:1.35, borderRadius:5,
-                             background: picked===h.n ? SKY : 'transparent',
-                             padding:'5px 8px', margin:'0 -8px',
-                             transition:'background .18s ease, box-shadow .18s ease' }}>
-                    <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%',
-                                   border:'1.4px solid '+(sel===h.n?NAVY:INK),
-                                   background: sel===h.n?NAVY:SKY, display:'inline-flex',
-                                   alignItems:'center', justifyContent:'center',
-                                   transition:'background .15s ease' }}>
-                      <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={sel===h.n?CREAM:INK} /></svg>
-                    </span>
-                    <span style={{ minWidth:0 }}>{h.l1}<br />{h.l2}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="cmm-div" style={{ flex:'1 1 42%', minWidth:0,
-                 borderLeft:'1px solid rgba(175,184,133,.5)', paddingLeft:26 }}>
-              <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>The weekend</h4>
-              <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:'11px 18px', gridAutoRows:'46px' }}>
-                {ON_MAP.map(e=>(
-                  <div key={e.n} onClick={()=>pick(e.n)}
-                    style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, minWidth:0, lineHeight:1.35,
-                             cursor:'pointer', borderRadius:5,
-                             background: picked===e.n ? SKY : 'transparent',
-                             padding:'5px 8px', margin:'0 -8px',
-                             transition:'background .18s ease, box-shadow .18s ease' }}>
-                    <img src={ICON+e.img} alt="" style={{ width:30, height:30, objectFit:'contain', opacity:.85 }} />
-                    <span style={{ minWidth:0 }}>{e.n}</span>
-                  </div>
-                ))}
-              </div>
+          <div className="cmm-key" style={{ width:'100%' }}>
+            <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
+            <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(4, minmax(0,1fr))', gap:'11px 18px', gridAutoRows:'46px' }}>
+              {HOTELS.map(h=>(
+                <div key={h.n} onClick={()=>pick(h.n)}
+                  onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
+                  style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, cursor:'pointer',
+                           minWidth:0, lineHeight:1.35, borderRadius:5,
+                           background: picked===h.n ? SKY : 'transparent',
+                           padding:'5px 8px', margin:'0 -8px',
+                           transition:'background .18s ease' }}>
+                  <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%',
+                                 border:'1.4px solid '+(sel===h.n?NAVY:INK),
+                                 background: sel===h.n?NAVY:SKY, display:'inline-flex',
+                                 alignItems:'center', justifyContent:'center',
+                                 transition:'background .15s ease' }}>
+                    <svg viewBox="0 0 24 24" width={13} height={13}><path d={BED} fill={sel===h.n?CREAM:INK} /></svg>
+                  </span>
+                  <span style={{ minWidth:0 }}>{h.l1}<br />{h.l2}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
         <style jsx>{`
           @media (max-width: 780px) {
-            :global(.cmm-key) { flex-direction: column !important; gap: 12px !important; }
-            :global(.cmm-div) { border-left: none !important; padding-left: 0 !important;
-                                border-top: 1px solid rgba(175,184,133,.5); padding-top: 12px; }
             :global(.cmm-chips) { grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 10px 14px !important; }
           }
         `}</style>
