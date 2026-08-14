@@ -244,8 +244,8 @@ const AccommodationsBody: React.FC<{ onOpenMap: () => void }> = ({ onOpenMap }) 
         <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: '0 0 14px', letterSpacing: '-0.005em', fontWeight: 400 }}>We&apos;ve secured room blocks at several local hotels and resorts — from beachfront classics to boutique stays, at a range of price points. Cape May is small enough that no matter where you stay, you&apos;ll be close to the action and events.</p>
         <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400 }}>If you wish to book elsewhere, the area is full of Airbnbs and rental properties as well.</p>
         <div style={{ width: 26, height: 1, background: 'currentColor', opacity: .35, margin: '22px auto 14px' }} />
-        <p style={{ textAlign: 'center', fontSize: 15, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400 }}>
-          All seven sit along the same mile of Beach Avenue.{' '}
+        <p style={{ textAlign: 'center', fontSize: 15, lineHeight: 1.6, opacity: .82, margin: 0, letterSpacing: '-0.005em', fontWeight: 400, fontStyle: 'italic' }}>
+          All seven hotels sit along the same mile of Beach Avenue.{' '}
           <button type="button" onClick={onOpenMap} className="map-link"
             style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', color: 'inherit', cursor: 'pointer' }}>
             See them on the map &rarr;
@@ -1094,12 +1094,29 @@ export default function WeddingSite() {
 
         {/* --- Getting Around --- */}
         <h3 className="heading" style={{ fontSize: 'clamp(30px, 4vw, 42px)', lineHeight: 1, margin: '48px 0 18px', letterSpacing: '-0.005em', paddingTop: '0.1em' }}>Getting Around Cape May</h3>
+        {/* Wedding shuttle — the provided transportation (jitneys, reception + return); details TBD */}
+        <div style={{
+          background: SKY, color: DEEP_DARK, border: '1px solid rgba(175,184,133,.65)',
+          padding: '28px 30px', marginBottom: 24, textAlign: 'center',
+        }}>
+          <h4 className="heading" style={{ fontSize: 26, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>The Wedding Shuttle</h4>
+          <div style={{ width: 26, height: 1, background: 'currentColor', opacity: .35, margin: '12px auto 14px' }} />
+          <p style={{ fontSize: 15, lineHeight: 1.6, opacity: .85, fontWeight: 400, letterSpacing: '-0.005em', margin: '0 auto', maxWidth: 560 }}>
+            We&apos;ll be running a shuttle to and from the Reception. Please check back closer to the wedding for the full shuttle schedule &amp; pickup points!
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
+          <Tile tone="ink" heading="Around Town" body="Cape May is a walkable town, with bikes available for rent, and ride share apps available as needed." />
+          <Tile tone="ink" heading="Golf Carts and Shuttles" body={<>Separate from our wedding shuttle, Cape May has a few free rides of its own. The <strong>Cape May Jitney</strong> runs a set route — hop on and hop off wherever you like. <strong>Cape May Free Ride</strong> (609) 435-2680 and <strong>Cape May Beach Buggy</strong> (609) 846-6678 are golf carts you text or call for a pickup.</>} />
+        </div>
+
         {/* Map entry point. Lives here, not under "Getting to Cape May" — the map answers
             "where is everything relative to everything else", which is the Getting Around
             question. The Accommodations section has a quieter text link into the same map. */}
         <button type="button" onClick={() => setMapOpen(true)}
           style={{
-            display: 'block', width: '100%', margin: '0 0 24px', padding: 0,
+            display: 'block', width: '100%', margin: '26px 0 0', padding: 0,
             border: '1px solid rgba(175,184,133,.65)', background: CREAM, color: DEEP_DARK,
             cursor: 'pointer', font: 'inherit', textAlign: 'left',
           }}>
@@ -1114,23 +1131,6 @@ export default function WeddingSite() {
             <span style={{ fontSize: 10, letterSpacing: '.08em', textTransform: 'uppercase', opacity: .6 }}>Open →</span>
           </div>
         </button>
-
-        {/* Wedding shuttle — the provided transportation (jitneys, reception + return); details TBD */}
-        <div style={{
-          background: CREAM, color: DEEP_DARK, border: '1px solid rgba(175,184,133,.65)',
-          padding: '28px 30px', marginBottom: 24, textAlign: 'center',
-        }}>
-          <h4 className="heading" style={{ fontSize: 26, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>The Wedding Shuttle</h4>
-          <div style={{ width: 26, height: 1, background: 'currentColor', opacity: .35, margin: '12px auto 14px' }} />
-          <p style={{ fontSize: 15, lineHeight: 1.6, opacity: .85, fontWeight: 400, letterSpacing: '-0.005em', margin: '0 auto', maxWidth: 560 }}>
-            We&apos;ll be running a shuttle to and from the Reception. Please check back closer to the wedding for the full shuttle schedule &amp; pickup points!
-          </p>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="pair-grid">
-          <Tile tone="ink" heading="Around Town" body="Cape May is a walkable town, with bikes available for rent, and ride share apps available as needed." />
-          <Tile tone="ink" heading="Golf Carts and Shuttles" body={<>Separate from our wedding shuttle, Cape May has a few free rides of its own. The <strong>Cape May Jitney</strong> runs a set route — hop on and hop off wherever you like. <strong>Cape May Free Ride</strong> (609) 435-2680 and <strong>Cape May Beach Buggy</strong> (609) 846-6678 are golf carts you text or call for a pickup.</>} />
-        </div>
       </SectionShell>
 
       <SectionShell id="things" tone="pattern">

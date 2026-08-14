@@ -276,7 +276,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
     <div role="dialog" aria-modal="true" aria-label="Map of Cape May" onClick={onClose}
       style={{ position:'fixed', inset:0, zIndex:400, background:'rgba(40,46,30,.55)',
                display:'flex', alignItems:'center', justifyContent:'center', padding:14 }}>
-      <div onClick={e=>e.stopPropagation()}
+      <div className="cmm-modal" onClick={e=>e.stopPropagation()}
         style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
                  padding:'22px 24px', textAlign:'center', maxWidth:380 }}>
         <div className="heading" style={{ fontSize:24, lineHeight:1.05, fontWeight:400 }}>Around Cape May</div>
@@ -295,7 +295,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
     <div role="dialog" aria-modal="true" aria-label="Map of Cape May" onClick={onClose}
       style={{ position:'fixed', inset:0, zIndex:400, background:'rgba(40,46,30,.55)',
                display:'flex', alignItems:'center', justifyContent:'center', padding:14 }}>
-      <div onClick={e=>e.stopPropagation()}
+      <div className="cmm-modal" onClick={e=>e.stopPropagation()}
         style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
                  width:'100%', maxHeight:'88vh',
                  display:'flex', flexDirection:'column', overflow:'hidden' }}>
@@ -337,10 +337,10 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
     <div role="dialog" aria-modal="true" aria-label="Map of Cape May" onClick={onClose}
       style={{ position:'fixed', inset:0, zIndex:400, background:'rgba(40,46,30,.55)',
                display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
-      <div onClick={e=>e.stopPropagation()}
+      <div className="cmm-modal" onClick={e=>e.stopPropagation()}
         style={{ background:CREAM, color:INK, border:'1px solid rgba(175,184,133,.65)',
                  maxWidth:'min(1080px, max(460px, calc((92vh - 244px) * 1.826 + 56px)))', width:'100%',
-                 maxHeight:'92vh', overflowY:'auto',
+                 maxHeight:'92vh', overflowY:'auto', scrollbarWidth:'none',
                  padding:'22px 28px 18px', position:'relative' }}>
         <button onClick={onClose} aria-label="Close map"
           style={{ position:'absolute', top:16, right:16, width:32, height:32, borderRadius:'50%',
@@ -360,14 +360,18 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
 
           <div className="cmm-key" style={{ width:'100%' }}>
             <h4 style={{ fontSize:8.6, letterSpacing:'.15em', textTransform:'uppercase', opacity:.5, margin:'0 0 8px', fontWeight:500 }}>Where to stay</h4>
-            <div className="cmm-chips" style={{ display:'grid', gridTemplateColumns:'repeat(4, minmax(0,1fr))', gap:'11px 18px', gridAutoRows:'46px' }}>
+            {/* flex-wrap, not grid: seven hotels over four columns leaves a hole in the
+                second row, and justifyContent centres the short row instead of stranding it. */}
+            <div className="cmm-chips" style={{ display:'flex', flexWrap:'wrap', justifyContent:'center',
+                 gap:'11px 18px', margin:'0 -8px' }}>
               {HOTELS.map(h=>(
                 <div key={h.n} onClick={()=>pick(h.n)}
                   onMouseEnter={()=>setSel(h.n)} onMouseLeave={()=>setSel(null)}
-                  style={{ display:'flex', gap:9, alignItems:'center', fontSize:12.5, cursor:'pointer',
+                  style={{ flex:'0 0 calc((100% - 54px) / 4)', height:46, boxSizing:'border-box',
+                           display:'flex', gap:9, alignItems:'center', fontSize:12.5, cursor:'pointer',
                            minWidth:0, lineHeight:1.35, borderRadius:5,
                            background: picked===h.n ? SKY : 'transparent',
-                           padding:'5px 8px', margin:'0 -8px',
+                           padding:'5px 8px',
                            transition:'background .18s ease' }}>
                   <span style={{ flex:'0 0 22px', height:22, borderRadius:'50%',
                                  border:'1.4px solid '+(sel===h.n?NAVY:INK),
@@ -383,11 +387,6 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
           </div>
         </div>
 
-        <style jsx>{`
-          @media (max-width: 780px) {
-            :global(.cmm-chips) { grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 10px 14px !important; }
-          }
-        `}</style>
       </div>
     </div>
   );

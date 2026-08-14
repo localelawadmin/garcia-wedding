@@ -181,3 +181,8 @@ body {
   transition: text-decoration-color .18s ease;
 }
 .map-link:hover { text-decoration-color: currentColor; }
+
+/* Map modal: it can overflow by a hairline at some window heights; the scrollbar
+   that appears is louder than the 4px it exists for. Scrolling still works. */
+.cmm-modal { scrollbar-width: none; -ms-overflow-style: none; }
+.cmm-modal::-webkit-scrollbar { width: 0; height: 0; display: none; }
