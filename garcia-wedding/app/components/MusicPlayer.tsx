@@ -17,6 +17,8 @@ const TRACKS = [
 ];
 
 const CREAM = '#FDFDFC';
+// right-hand slack so the last glyph's italic lean is not shaved by the clip edge
+const MQ_PAD = 7;
 
 export default function MusicPlayer() {
   const [trackIdx, setTrackIdx] = useState(0);
@@ -169,9 +171,13 @@ export default function MusicPlayer() {
     const measure = () => {
       const box = boxRef.current;
       if (!box) return;
-      const overflow = txt.scrollWidth - box.clientWidth;
-      if (overflow > 2) {
-        // travel only as far as the text actually hides, then ping-pong back
+      // scrollWidth includes the italic-slack padding, so subtract it before asking
+      // whether the text itself overflows — otherwise a title that fits exactly still
+      // wiggles a few pixels. Travel, though, does include the padding, so the last
+      // glyph clears the edge completely.
+      const textW = txt.scrollWidth - MQ_PAD;
+      if (textW > box.clientWidth) {
+        const overflow = txt.scrollWidth - box.clientWidth;
         setMq({ on: true, shift: overflow, dur: Math.max(4.5, overflow / 16) });
       } else {
         setMq({ on: false, shift: 0, dur: 0 });
@@ -353,7 +359,7 @@ export default function MusicPlayer() {
                 {/* paddingRight buys room for the final glyph's italic lean, which the
                     clip edge would otherwise shave. scrollWidth counts it, so the
                     travel distance accounts for it too. */}
-                <span ref={textRef} className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400, paddingRight: 7 }}>{nowText}</span>
+                <span ref={textRef} className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400, paddingRight: MQ_PAD }}>{nowText}</span>
               </div>
             </div>
           </div>
