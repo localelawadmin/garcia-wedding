@@ -415,8 +415,10 @@ export default function MusicPlayer() {
             backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
           }}>
             <span style={ctr}>
-              {/* chevron sits left of centre in its own box, so nudge it back */}
-              <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', marginLeft: 1 }}><path d="M8 2 L4 6 L8 10"/></svg>
+              {/* 12px svg against a 12-unit viewBox: 1:1, so the path lands on whole
+                  pixels and the glyph is exactly centred at any device pixel ratio.
+                  An earlier optical nudge here left it half a pixel right of centre. */}
+              <svg viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}><path d="M8 2 L4 6 L8 10"/></svg>
             </span>
           </button>
         </div>
