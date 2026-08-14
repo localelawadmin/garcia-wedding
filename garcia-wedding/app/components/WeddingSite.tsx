@@ -114,17 +114,26 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
   const [open, setOpen] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [bodyH, setBodyH] = useState(0);
+  const nameRef = useRef<HTMLDivElement>(null);
+  const [nameH, setNameH] = useState(0);
 
   // Booking instructions vary a lot in length — Icona and Ocean Club are a paragraph,
   // Montreal is one line — so the panel measures its own content instead of animating
   // to a fixed height that would clip the long ones.
+  // The name label is measured too, not given a fixed height: 'The Beach Club on
+  // Madison' wraps to two lines in a narrow column and a hardcoded height would clip it.
   useEffect(() => {
-    const el = bodyRef.current;
-    if (!el) return;
-    const read = () => setBodyH(el.scrollHeight);
+    const body = bodyRef.current;
+    const name = nameRef.current;
+    if (!body) return;
+    const read = () => {
+      setBodyH(body.scrollHeight);
+      if (name) setNameH(name.scrollHeight);
+    };
     read();
     const ro = new ResizeObserver(read);
-    ro.observe(el);
+    ro.observe(body);
+    if (name) ro.observe(name);
     return () => ro.disconnect();
   }, []);
   const frameSrc = `/photos/accommodations/frames/${hotel.frame}.png`;
@@ -165,6 +174,18 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
         }} />
       </div>
       <div style={{ borderTop: '1px solid currentColor', marginTop: 4 }}>
+        {/* The logo is the identifier on a closed card; opening one names it outright,
+            so the booking codes below are unambiguously attached to a hotel. */}
+        <div aria-hidden={!open} style={{
+          height: open ? nameH : 0, overflow: 'hidden',
+          opacity: open ? 1 : 0,
+          transition: 'height .35s ease, opacity .28s ease',
+        }}>
+          <div ref={nameRef} style={{
+            paddingTop: 13, fontSize: 11, letterSpacing: '0.08em',
+            textTransform: 'uppercase', opacity: .75, lineHeight: 1.35, fontWeight: 400,
+          }}>{hotel.name}</div>
+        </div>
         <button type="button" onClick={() => setOpen(o => !o)}
           aria-expanded={open}
           style={{
