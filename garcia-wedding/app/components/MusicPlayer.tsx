@@ -28,6 +28,10 @@ export default function MusicPlayer() {
   const [revealed, setRevealed] = useState(false);
   const [mq, setMq]           = useState<{ on: boolean; shift: number; dur: number }>({ on: false, shift: 0, dur: 0 });
 
+  // Declared up here, not beside `spinning`: the marquee effect below lists it as a
+  // dependency, and dependency arrays are evaluated during render.
+  const drawerOpen = hover || pinned;
+
   const audioRef  = useRef<HTMLAudioElement | null>(null);
   const idxRef    = useRef(0);
   const queueRef  = useRef<number[]>([]);   // shuffled play order (a "bag")
@@ -161,7 +165,7 @@ export default function MusicPlayer() {
 
   useEffect(() => {
     const txt = textRef.current;
-    if (!txt) return;
+    if (!txt || !drawerOpen) return;
     const measure = () => {
       const box = boxRef.current;
       if (!box) return;
@@ -178,7 +182,7 @@ export default function MusicPlayer() {
     ro.observe(txt);
     if (boxRef.current) ro.observe(boxRef.current);
     return () => ro.disconnect();
-  }, [trackIdx]);
+  }, [trackIdx, drawerOpen]);
 
   // Record decelerates to a stop when paused, resumes seamlessly (no harsh freeze)
   useEffect(() => {
@@ -271,6 +275,13 @@ export default function MusicPlayer() {
     if (v > 0 && audioRef.current?.paused) play();
   };
 
+  // Safari does not honour flex centring applied directly to a <button>, so every
+  // icon gets wrapped in a span that does the centring instead.
+  const ctr: React.CSSProperties = {
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    width: '100%', height: '100%', lineHeight: 0,
+  };
+
   const iconBtn: React.CSSProperties = {
     width: 22, height: 22, borderRadius: '50%',
     border: '1px solid rgba(242, 239, 233, .45)',
@@ -281,23 +292,18 @@ export default function MusicPlayer() {
   };
 
   const spinning = playing;
-  const drawerOpen = hover || pinned;
   const track = TRACKS[trackIdx];
   const nowText = track.artist ? `${track.label} · ${track.artist}` : track.label;
 
   const tbtn = (onClick: () => void, label: string, svg: React.ReactNode) => (
-    <button onClick={onClick} aria-label={label} type="button" style={iconBtn}
-      onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
-      onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}>
-      {svg}
+    <button onClick={onClick} aria-label={label} type="button" className="mp-btn" style={iconBtn}>
+      <span style={ctr}>{svg}</span>
     </button>
   );
   const mIconBtn: React.CSSProperties = { ...iconBtn, width: 26, height: 26 };
   const mtbtn = (onClick: () => void, label: string, svg: React.ReactNode) => (
-    <button onClick={onClick} aria-label={label} type="button" style={mIconBtn}
-      onMouseEnter={e => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = '#4E5B37'; }}
-      onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}>
-      {svg}
+    <button onClick={onClick} aria-label={label} type="button" className="mp-btn" style={mIconBtn}>
+      <span style={ctr}>{svg}</span>
     </button>
   );
   const ICN = {
@@ -338,13 +344,16 @@ export default function MusicPlayer() {
           {/* Song info */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 3, minWidth: 0 }}>
             <span style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: .55, fontWeight: 400, whiteSpace: 'nowrap' }}>Now Playing</span>
-            <div ref={boxRef} className="mp-info-box" style={{ overflow: 'hidden', minWidth: 0, maxWidth: 168 }}>
-              <div style={(mq.on
+            <div ref={boxRef} className="mp-info-box" style={{ overflow: 'hidden', width: 168, flexShrink: 0 }}>
+              <div style={(mq.on && drawerOpen
                 ? { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap',
                     animation: `mp-pingpong ${mq.dur}s ease-in-out infinite alternate`,
                     '--mq-shift': `-${mq.shift}px` }
                 : { display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap' }) as React.CSSProperties}>
-                <span ref={textRef} className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400 }}>{nowText}</span>
+                {/* paddingRight buys room for the final glyph's italic lean, which the
+                    clip edge would otherwise shave. scrollWidth counts it, so the
+                    travel distance accounts for it too. */}
+                <span ref={textRef} className="heading" style={{ fontSize: 14, lineHeight: 1.15, fontWeight: 400, paddingRight: 7 }}>{nowText}</span>
               </div>
             </div>
           </div>
@@ -370,9 +379,11 @@ export default function MusicPlayer() {
             {mtbtn(togglePlay, playing && !muted ? 'Pause' : 'Play', playing && !muted ? ICN.pause(10) : ICN.play(10))}
           </div>
 
-          <button className="mp-close" onClick={() => { setPinned(false); setHover(false); }} aria-label="Close player" type="button"
-            style={{ display: 'none', alignItems: 'center', justifyContent: 'center', width: 18, height: 18, borderRadius: '50%', border: '1px solid rgba(253,253,252,.4)', background: 'transparent', color: CREAM, cursor: 'pointer', padding: 0, flexShrink: 0 }}>
-            <svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M3 3 L9 9 M9 3 L3 9"/></svg>
+          <button className="mp-close mp-btn" onClick={() => { setPinned(false); setHover(false); }} aria-label="Close player" type="button"
+            style={{ display: 'none', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, borderRadius: '50%', border: '1px solid rgba(253,253,252,.4)', background: 'transparent', color: CREAM, cursor: 'pointer', padding: 0, flexShrink: 0 }}>
+            <span style={ctr}>
+              <svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" style={{ display: 'block' }}><path d="M3 3 L9 9 M9 3 L3 9"/></svg>
+            </span>
           </button>
         </div>
       </div>
@@ -389,15 +400,18 @@ export default function MusicPlayer() {
             whiteSpace: 'nowrap', textAlign: 'right', lineHeight: 1.3,
             fontSize: 9.5, letterSpacing: '0.05em', textTransform: 'uppercase', color: CREAM, pointerEvents: 'none',
           }}>Tap the record<br />to play HG&nbsp;Radio</span>
-          <button type="button" aria-label="Open player controls" onClick={() => setPinned(true)} style={{
+          <button type="button" aria-label="Open player controls" onClick={() => setPinned(true)} className="mp-btn" style={{
             position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)',
             opacity: revealed ? 1 : 0, pointerEvents: revealed ? 'auto' : 'none', transition: 'opacity .35s ease',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            width: 22, height: 22, borderRadius: '50%', border: '1px solid rgba(253,253,252,.4)',
+            width: 24, height: 24, borderRadius: '50%', border: '1px solid rgba(253,253,252,.4)',
             background: 'rgba(78, 91, 55, .55)', color: CREAM, cursor: 'pointer', padding: 0,
             backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
           }}>
-            <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2 L4 6 L8 10"/></svg>
+            <span style={ctr}>
+              {/* chevron sits left of centre in its own box, so nudge it back */}
+              <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', marginLeft: 1 }}><path d="M8 2 L4 6 L8 10"/></svg>
+            </span>
           </button>
         </div>
       )}

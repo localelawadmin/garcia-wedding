@@ -100,7 +100,7 @@ body {
   .mp-ctrl-mobile { display: grid !important; }
   .mp-close { display: flex !important; }
   .mp-prompt { display: flex !important; }
-  .mp-info-box { max-width: 130px !important; }
+  .mp-info-box { width: 130px !important; }
 }
 
 /* Scroll feel: hard section-snapping reads as a jerk under a finger, so every touch
@@ -186,3 +186,14 @@ body {
    that appears is louder than the 4px it exists for. Scrolling still works. */
 .cmm-modal { scrollbar-width: none; -ms-overflow-style: none; }
 .cmm-modal::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+/* Player buttons. Hover used to be driven by onMouseEnter/onMouseLeave, which on a
+   phone fires enter on tap and never fires leave — so the pressed colour stuck until
+   the next tap. Gate it on a real hovering pointer instead. */
+.mp-btn {
+  transition: background .25s ease, color .25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (hover: hover) and (pointer: fine) {
+  .mp-btn:hover { background: #FDFDFC !important; color: #4E5B37 !important; }
+}
