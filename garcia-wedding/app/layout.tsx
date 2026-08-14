@@ -4,8 +4,30 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Haley & George Garcia — June 18, 2027",
-  description: "Join us for our wedding celebration in Cape May, NJ",
+  metadataBase: new URL("https://thegarcias2027.com"),
+
+  // The browser tab and Google's headline read from the same tag, so this one string
+  // has to serve both. Short form wins: the tab stays legible, and the full names are
+  // carried by the description and the share card below.
+  title: "The Garcias 2027",
+  description:
+    "Haley Driscoll & George Garcia III. June 18, 2027 in Cape May, New Jersey.",
+
+  // What a guest sees when someone texts them the link, which is how most people will
+  // arrive here. Full names lead.
+  openGraph: {
+    title: "Haley Driscoll & George Garcia III",
+    description: "Join us in Cape May, New Jersey on June 18, 2027.",
+    siteName: "The Garcias 2027",
+    url: "https://thegarcias2027.com",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary",
+    title: "Haley Driscoll & George Garcia III",
+    description: "Join us in Cape May, New Jersey on June 18, 2027.",
+  },
 };
 
 export default function RootLayout({
