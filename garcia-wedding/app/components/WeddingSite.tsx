@@ -100,10 +100,7 @@ const HOTELS: Hotel[] = [
     details: [<>Promo Code: <strong>garcia2027</strong></>],
     bookUrl: 'https://www.montrealbeachresort.com' },
   { name: 'ICONA Cape May', frame: 19, logo: 'icona', price: '$$',
-    details: [
-      <>To book a room at Icona, please call the front desk at <strong>609-551-0100</strong> and mention the Driscoll-Garcia Wedding room block.</>,
-      <>Group Code: <strong>377239</strong></>,
-    ],
+    details: [<>Group Code: <strong>377239</strong></>],
     bookUrl: 'https://www.icona.com/cape-may/' },
   { name: 'Ocean Club Hotel', frame: 20, logo: 'ocean-club', price: '$$$',
     details: [<>To book a room at the Ocean Club, please first select the dates you wish to stay. There is a 2 night minimum. Then, enter the Group ID: <strong>69765</strong>.</>],
