@@ -1097,7 +1097,7 @@ export default function WeddingSite() {
             <div style={{ flex: 1 }}>
               <div className="heading" style={{ fontSize: 24, lineHeight: 1.05, fontWeight: 400 }}>See the map</div>
               <div style={{ fontSize: 13, opacity: .75, marginTop: 4 }}>
-                Every hotel, the church, the vineyard and the shuttle stops.
+                Every hotel, the church, the vineyard and the weekend's gatherings.
               </div>
             </div>
             <span style={{ fontSize: 10, letterSpacing: '.08em', textTransform: 'uppercase', opacity: .6 }}>Open →</span>
