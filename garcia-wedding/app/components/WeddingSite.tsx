@@ -15,19 +15,14 @@ const DEEP_DARK_ = '#4E5B37';
 // (not just heads) sit centered when cropped into the wide hero.
 // `ink` is chosen from the measured luminance behind the mobile wordmarks:
 // pale sky wants olive ink, the darker frame wants cream.
-// Each `src` is a stem: `${src}-1280.webp` and `${src}-2048.webp` exist in /public.
-// Landscape frames on a portrait phone are cover-cropped by height, so they need
-// roughly twice the width a plain 100vw would ask for — hence the orientation hint.
-const heroSrcSet = (src: string) => `${src}-1280.webp 1280w, ${src}-2048.webp 2048w`;
-const HERO_SIZES = '(orientation: portrait) 200vw, 100vw';
-
+// Originals on purpose: re-encoded versions visibly lost quality.
 const HERO_PHOTOS = [
-  { src: '/photos/eng-beach-walk',    pos: 'center 40%', ink: DEEP_DARK_ },
-  { src: '/photos/eng-bikes-motion',  pos: 'center 45%', ink: DEEP_DARK_ },
-  { src: '/photos/eng-dunes-sitting', pos: 'center 45%', ink: DEEP_DARK_ },
-  { src: '/photos/eng-beach-lift',    pos: 'center 70%', ink: DEEP_DARK_ },
-  { src: '/photos/eng-bike-together', pos: 'center 50%', ink: DEEP_DARK_ },
-  { src: '/photos/eng-beach-standing', pos: 'center 55%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-beach-walk.jpg',    pos: 'center 40%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-bikes-motion.jpg',  pos: 'center 45%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-dunes-sitting.jpg', pos: 'center 45%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-beach-lift.jpg',    pos: 'center 70%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-bike-together.jpg', pos: 'center 50%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-beach-standing.jpg', pos: 'center 55%', ink: DEEP_DARK_ },
 ];
 const HERO_MS = 3750;   // 50% longer per frame
 
@@ -858,9 +853,7 @@ export default function WeddingSite() {
         {HERO_PHOTOS.map((p, i) => i > heroReach ? null : (
           <img
             key={p.src}
-            src={`${p.src}-1280.webp`}
-            srcSet={heroSrcSet(p.src)}
-            sizes={HERO_SIZES}
+            src={p.src}
             fetchPriority={i === 0 ? 'high' : 'low'}
             decoding="async"
             alt=""

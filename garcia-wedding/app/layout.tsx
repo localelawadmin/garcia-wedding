@@ -59,6 +59,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${bodyFont.variable} ${serifFont.variable}`}>
+      <head>
+        <link rel="preload" href="/fonts/montmartre-thin.woff" as="font" type="font/woff" crossOrigin="anonymous" />
+      </head>
       <body className="antialiased">
         {children}
         <Analytics />

@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'Montmartre';
-  src: url('https://static.showit.co/file/RR2mVNeCRiq1KM0wCkf85g/139270/montmartre-thin.woff') format('woff');
+  src: url('/fonts/montmartre-thin.woff') format('woff');
   font-display: swap;
   font-weight: 100 900;
   font-style: normal;
