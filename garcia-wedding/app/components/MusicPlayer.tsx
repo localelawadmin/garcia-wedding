@@ -1,162 +1,26 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-
-const TRACKS = [
-  { src: '/audio/leon-bridges.mp3',                 label: 'Coming Home',                          artist: 'Leon Bridges' },
-  { src: '/audio/sam-cooke.mp3',                    label: 'Bring It On Home',                     artist: 'Sam Cooke' },
-  { src: '/audio/frankie-valli.m4a',                label: "Can't Take My Eyes Off You",           artist: 'Frankie Valli' },
-  { src: '/audio/nat-king-cole-love.m4a',           label: 'L-O-V-E',                              artist: 'Nat King Cole' },
-  { src: '/audio/natalie-cole-this-will-be.m4a',    label: 'This Will Be (An Everlasting Love)',   artist: 'Natalie Cole' },
-  { src: '/audio/van-morrison-crazy-love.mp3',      label: 'Crazy Love',                           artist: 'Van Morrison' },
-  { src: '/audio/stevie-wonder-isnt-she-lovely.m4a', label: "Isn't She Lovely",                    artist: 'Stevie Wonder' },
-  { src: '/audio/james-taylor-how-sweet-it-is.m4a', label: 'How Sweet It Is (To Be Loved by You)', artist: 'James Taylor' },
-  { src: '/audio/elvis-presley-cant-help-falling-in-love.m4a', label: "Can't Help Falling in Love", artist: 'Elvis Presley' },
-  { src: '/audio/luther-vandross-so-amazing.mp3',   label: 'So Amazing',                           artist: 'Luther Vandross' },
-  { src: '/audio/perry-como-more.mp3',              label: 'More',                                 artist: 'Perry Como' },
-];
+import { useHGRadio } from './useHGRadio';
 
 const CREAM = '#FDFDFC';
 // right-hand slack so the last glyph's italic lean is not shaved by the clip edge
 const MQ_PAD = 7;
 
+// The record, the drawer and the marquee. All audio behaviour lives in useHGRadio.
 export default function MusicPlayer() {
-  const [trackIdx, setTrackIdx] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [volume, setVolume]   = useState(0.25);
-  const [muted, setMuted]     = useState(true);
+  const { track, trackIdx, playing, muted, volume, toggle, next, prev, toggleMute, setVolume } = useHGRadio();
   const [hover, setHover]     = useState(false);
   const [pinned, setPinned]   = useState(false);
   const [revealed, setRevealed] = useState(false);
   const [mq, setMq]           = useState<{ on: boolean; shift: number; dur: number }>({ on: false, shift: 0, dur: 0 });
-
-  // Declared up here, not beside `spinning`: the marquee effect below lists it as a
-  // dependency, and dependency arrays are evaluated during render.
   const drawerOpen = hover || pinned;
 
-  const audioRef  = useRef<HTMLAudioElement | null>(null);
-  const idxRef    = useRef(0);
-  const queueRef  = useRef<number[]>([]);   // shuffled play order (a "bag")
-  const posRef    = useRef(0);              // position within the bag
-
-  // Fisher-Yates shuffle of all track indices
-  const shuffleBag = () => {
-    const a = TRACKS.map((_, i) => i);
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  };
-  const volRef    = useRef(0.25);
-  const mutedRef  = useRef(true);
   const boxRef    = useRef<HTMLDivElement | null>(null);
   const textRef   = useRef<HTMLSpanElement | null>(null);
   const discRef   = useRef<HTMLDivElement | null>(null);
-  const ctxRef    = useRef<AudioContext | null>(null);
-  const gainRef   = useRef<GainNode | null>(null);
-  const wantRef   = useRef(false);
 
-  // Web Audio gain so we can start genuinely quiet even on iOS (element.volume is ignored there).
-  const setGain = () => {
-    const v = mutedRef.current ? 0 : volRef.current;
-    if (gainRef.current) gainRef.current.gain.value = v;
-    else if (audioRef.current) audioRef.current.volume = v;
-  };
-  const setupGraph = () => {
-    if (ctxRef.current || !audioRef.current) return;
-    try {
-      const W = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
-      const Ctx = W.AudioContext || W.webkitAudioContext;
-      if (!Ctx) return;
-      const ctx = new Ctx();
-      const gain = ctx.createGain();
-      gain.gain.value = mutedRef.current ? 0 : volRef.current;
-      gain.connect(ctx.destination);
-      ctx.createMediaElementSource(audioRef.current).connect(gain);
-      audioRef.current.volume = 1;
-      ctxRef.current = ctx;
-      gainRef.current = gain;
-    } catch { /* keep element.volume fallback */ }
-  };
-  const play = () => {
-    const a = audioRef.current; if (!a) return;
-    wantRef.current = true;
-    const start = () => a.play().then(() => setPlaying(true)).catch(() => {});
-    const ctx = ctxRef.current;
-    if (ctx && ctx.state === 'suspended') ctx.resume().then(start).catch(start);
-    else start();
-  };
-
-  // Keep the music alive on mobile — iOS may pause it (backgrounding, interruptions).
-  // If it should be playing but got paused, resume on return-to-tab or the next tap.
-  useEffect(() => {
-    const resume = () => {
-      const a = audioRef.current;
-      if (wantRef.current && a && a.paused) {
-        ctxRef.current?.resume?.().catch(() => {});
-        a.play().then(() => setPlaying(true)).catch(() => {});
-      }
-    };
-    document.addEventListener('visibilitychange', resume);
-    document.addEventListener('pointerdown', resume);
-    document.addEventListener('touchstart', resume);
-    return () => {
-      document.removeEventListener('visibilitychange', resume);
-      document.removeEventListener('pointerdown', resume);
-      document.removeEventListener('touchstart', resume);
-    };
-  }, []);
-
-  useEffect(() => {
-    const bag = shuffleBag();
-    queueRef.current = bag;
-    posRef.current = 0;
-    const startIdx = bag[0];
-    setTrackIdx(startIdx);
-    idxRef.current = startIdx;
-    const audio = new Audio(TRACKS[startIdx].src);
-    audio.volume = volRef.current;
-    audioRef.current = audio;
-    setMuted(false);
-    mutedRef.current = false;
-    audio.addEventListener('ended', goNext);
-
-    // Music kicks in on first user interaction with the site (post-password).
-    // MusicPlayer only mounts inside WeddingSite, so this only arms post-auth.
-    let fired = false;
-    const fire = () => {
-      if (fired || !audioRef.current) return;
-      fired = true;
-      setupGraph();
-      setGain();
-      play();
-      cleanup();
-    };
-    const cleanup = () => {
-      document.removeEventListener('pointerdown', fire);
-      document.removeEventListener('wheel', fire);
-      document.removeEventListener('touchstart', fire);
-      document.removeEventListener('keydown', fire);
-      document.removeEventListener('scroll', fire, true);
-    };
-    const isTouch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
-    if (!isTouch) {
-      document.addEventListener('pointerdown', fire);
-      document.addEventListener('wheel', fire);
-      document.addEventListener('touchstart', fire);
-      document.addEventListener('keydown', fire);
-      document.addEventListener('scroll', fire, true);
-    }
-
-    return () => {
-      audio.pause();
-      cleanup();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Marquee: the now-playing line always side-scrolls (iPod-style, seamless loop)
+  // The 'tap the record' prompt collapses to a chevron once the guest scrolls past the hero
   useEffect(() => {
     const hero = document.getElementById('hero');
     if (!hero) return;
@@ -215,71 +79,10 @@ export default function MusicPlayer() {
     }
   }, [playing]);
 
-  const loadTrack = (idx: number) => {
-    const a = audioRef.current; if (!a) return;
-    a.pause();
-    a.src = TRACKS[idx].src;
-    idxRef.current = idx;
-    setGain();
-    play();
-  };
-
-  const goNext = () => {
-    posRef.current += 1;
-    if (posRef.current >= queueRef.current.length) {
-      const last = idxRef.current;
-      const bag = shuffleBag();
-      // avoid the same song playing twice across the reshuffle seam
-      if (bag.length > 1 && bag[0] === last) { [bag[0], bag[1]] = [bag[1], bag[0]]; }
-      queueRef.current = bag;
-      posRef.current = 0;
-    }
-    const next = queueRef.current[posRef.current];
-    setTrackIdx(next);
-    loadTrack(next);
-  };
-
-  const goPrev = () => {
-    posRef.current = Math.max(0, posRef.current - 1);
-    const prev = queueRef.current[posRef.current] ?? idxRef.current;
-    setTrackIdx(prev);
-    loadTrack(prev);
-  };
-
-  const togglePlay = () => {
-    const a = audioRef.current; if (!a) return;
-    setupGraph();
-    setRevealed(true);
-    if (mutedRef.current) {
-      mutedRef.current = false;
-      setMuted(false);
-    }
-    setGain();
-    if (a.paused) {
-      play();
-    } else {
-      a.pause();
-      setPlaying(false);
-      wantRef.current = false;
-    }
-  };
-
-  const toggleMute = () => {
-    const newMuted = !mutedRef.current;
-    mutedRef.current = newMuted;
-    setMuted(newMuted);
-    setGain();
-    if (!newMuted && audioRef.current?.paused) play();
-  };
-
-  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = parseFloat(e.target.value);
-    volRef.current = v;
-    setVolume(v);
-    if (v > 0 && mutedRef.current) { mutedRef.current = false; setMuted(false); }
-    setGain();
-    if (v > 0 && audioRef.current?.paused) play();
-  };
+  const togglePlay = () => { setRevealed(true); toggle(); };
+  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => setVolume(parseFloat(e.target.value));
+  const goNext = next;
+  const goPrev = prev;
 
   // Safari does not honour flex centring applied directly to a <button>, so every
   // icon gets wrapped in a span that does the centring instead.
@@ -298,7 +101,6 @@ export default function MusicPlayer() {
   };
 
   const spinning = playing;
-  const track = TRACKS[trackIdx];
   const nowText = track.artist ? `${track.label} · ${track.artist}` : track.label;
 
   const tbtn = (onClick: () => void, label: string, svg: React.ReactNode) => (
