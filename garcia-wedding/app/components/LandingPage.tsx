@@ -161,7 +161,7 @@ export default function LandingPage({ onSuccess }: Props) {
               iPad that pass is low-res enough to show a ghost edge. The PNG is padded
               by 31.25% / 25% of the card box, hence the negative insets. */}
           <img
-            src="/photos/lander/card-shadow.png"
+            src="/photos/lander/card-shadow.webp"
             alt=""
             aria-hidden="true"
             style={{
