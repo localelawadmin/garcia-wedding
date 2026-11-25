@@ -25,7 +25,7 @@ export default function HGReveal({
   const [box, setBox] = useState<Box | null>(null);
   const [creamInk, setCreamInk] = useState(false);
   const boxRef = useRef<Box | null>(null);
-  boxRef.current = box;
+  useLayoutEffect(() => { boxRef.current = box; }, [box]);
 
   const measure = (sel: string): Box | null => {
     const els = Array.from(document.querySelectorAll<HTMLElement>(sel));

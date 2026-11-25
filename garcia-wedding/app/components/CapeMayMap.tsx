@@ -5,7 +5,7 @@ import {
   MAP_W, MAP_H, MAP_PATHS, PLACES,
 } from './capeMayGeo';
 
-const CREAM='#FDFDFC', OLIVE='#AFB885', PISTACHIO='#E2E8CE',
+const CREAM='#FDFDFC',
       SKY='#DEE9F2', INK='#4E5B37', SAND='#EFE7D6',
       NAVY='#364C63',    // the lander's deep blue — hover state
       STREET='#D9CDB4',   // Beach Ave — the one street that should read
@@ -157,7 +157,6 @@ return (
 export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=>void }) {
   const [sel, setSel] = useState<string|null>(null);
   const [mobile, setMobile] = useState(false);
-  const [drawer, setDrawer] = useState(false);
   const [picked, setPicked] = useState<string|null>(null);
   const [view, setView] = useState({ k:1, x:0, y:0 });
   const ptrs = useRef<Map<number,{x:number;y:number}>>(new Map());
@@ -184,10 +183,6 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
   const perPx = () => {
     const el = stage.current;
     return el ? (MAP_W / view.k) / el.clientWidth : 1;
-  };
-  const local = (e:{clientX:number;clientY:number}) => {
-    const r = stage.current!.getBoundingClientRect();
-    return { x:e.clientX - r.left, y:e.clientY - r.top };
   };
   const down = (e:React.PointerEvent) => {
     ptrs.current.set(e.pointerId, { x:e.clientX, y:e.clientY });
@@ -260,7 +255,7 @@ export default function CapeMayMap({ open, onClose }:{ open:boolean; onClose:()=
 
   // reset the view whenever it opens or the frame changes shape
   useLayoutEffect(() => {
-    if (!open) { setDrawer(false); setPicked(null); }
+    if (!open) setPicked(null);
     setView({ k:1, x:0, y:0 });
     const onResize = () => setView({ k:1, x:0, y:0 });
     window.addEventListener('resize', onResize);

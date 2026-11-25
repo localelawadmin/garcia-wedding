@@ -51,16 +51,9 @@ const isTouchLayout = () =>
   typeof window !== 'undefined' &&
   (window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 1024);
 
-// Noise texture (SVG turbulence as data URI). NO LONGER used on section backgrounds —
-// blended over the stripes it muddied the pistachio and greyed the cream. Kept for reference.
-const NOISE_BG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
-const NOISE_CARD = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.95' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
-
 // Stripe backgrounds — clean gradient, no grain layer
 const stripeCream = `linear-gradient(90deg, ${SKY} 0 3px, ${CREAM} 3px 9px, ${PISTACHIO} 9px 34px, ${CREAM} 34px 40px, ${SKY} 40px 43px, ${CREAM} 43px 76px)`;
 const stripeInk   = `linear-gradient(90deg, ${SKY} 0 3px, ${OLIVE} 3px 9px, ${CREAM} 9px 34px, ${OLIVE} 34px 40px, ${SKY} 40px 43px, ${OLIVE} 43px 76px)`;
-const stripeCreamSize = '280px 280px, auto';
-const stripeInkSize   = '280px 280px, auto';
 
 // Wavy oval path for the invite section (generated from sin-wave perimeter)
 const WAVY_PATH = "M 789.55 240.00 L 788.78 246.09 L 786.53 252.12 L 782.93 258.03 L 778.19 263.79 L 772.59 269.35 L 766.43 274.73 L 760.07 279.93 L 753.82 285.00 L 747.99 289.99 L 742.84 294.97 L 738.54 300.01 L 735.20 305.17 L 732.83 310.53 L 731.36 316.11 L 730.64 321.95 L 730.45 328.04 L 730.53 334.34 L 730.56 340.79 L 730.26 347.30 L 729.33 353.77 L 727.51 360.10 L 724.62 366.15 L 720.52 371.82 L 715.15 377.01 L 708.55 381.67 L 700.81 385.76 L 692.08 389.27 L 682.60 392.26 L 672.60 394.79 L 662.34 396.98 L 652.07 398.95 L 642.04 400.85 L 632.43 402.84 L 623.37 405.06 L 614.94 407.62 L 607.16 410.62 L 599.99 414.12 L 593.31 418.12 L 586.99 422.59 L 580.86 427.45 L 574.74 432.57 L 568.43 437.80 L 561.79 442.97 L 554.67 447.88 L 547.00 452.35 L 538.71 456.23 L 529.82 459.37 L 520.38 461.69 L 510.46 463.14 L 500.18 463.72 L 489.67 463.50 L 479.06 462.58 L 468.48 461.11 L 458.04 459.27 L 447.80 457.25 L 437.81 455.26 L 428.08 453.49 L 418.58 452.10 L 409.24 451.21 L 400.00 450.90 L 390.76 451.21 L 381.42 452.10 L 371.92 453.49 L 362.19 455.26 L 352.20 457.25 L 341.96 459.27 L 331.52 461.11 L 320.94 462.58 L 310.33 463.50 L 299.82 463.72 L 289.54 463.14 L 279.62 461.69 L 270.18 459.37 L 261.29 456.23 L 253.00 452.35 L 245.33 447.88 L 238.21 442.97 L 231.57 437.80 L 225.26 432.57 L 219.14 427.45 L 213.01 422.59 L 206.69 418.12 L 200.01 414.12 L 192.84 410.62 L 185.06 407.62 L 176.63 405.06 L 167.57 402.84 L 157.96 400.85 L 147.93 398.95 L 137.66 396.98 L 127.40 394.79 L 117.40 392.26 L 107.92 389.27 L 99.19 385.76 L 91.45 381.67 L 84.85 377.01 L 79.48 371.82 L 75.38 366.15 L 72.49 360.10 L 70.67 353.77 L 69.74 347.30 L 69.44 340.79 L 69.47 334.34 L 69.55 328.04 L 69.36 321.95 L 68.64 316.11 L 67.17 310.53 L 64.80 305.17 L 61.46 300.01 L 57.16 294.97 L 52.01 289.99 L 46.18 285.00 L 39.93 279.93 L 33.57 274.73 L 27.41 269.35 L 21.81 263.79 L 17.07 258.03 L 13.47 252.12 L 11.22 246.09 L 10.45 240.00 L 11.22 233.91 L 13.47 227.88 L 17.07 221.97 L 21.81 216.21 L 27.41 210.65 L 33.57 205.27 L 39.93 200.07 L 46.18 195.00 L 52.01 190.01 L 57.16 185.03 L 61.46 179.99 L 64.80 174.83 L 67.17 169.47 L 68.64 163.89 L 69.36 158.05 L 69.55 151.96 L 69.47 145.66 L 69.44 139.21 L 69.74 132.70 L 70.67 126.23 L 72.49 119.90 L 75.38 113.85 L 79.48 108.18 L 84.85 102.99 L 91.45 98.33 L 99.19 94.24 L 107.92 90.73 L 117.40 87.74 L 127.40 85.21 L 137.66 83.02 L 147.93 81.05 L 157.96 79.15 L 167.57 77.16 L 176.63 74.94 L 185.06 72.38 L 192.84 69.38 L 200.01 65.88 L 206.69 61.88 L 213.01 57.41 L 219.14 52.55 L 225.26 47.43 L 231.57 42.20 L 238.21 37.03 L 245.33 32.12 L 253.00 27.65 L 261.29 23.77 L 270.18 20.63 L 279.62 18.31 L 289.54 16.86 L 299.82 16.28 L 310.33 16.50 L 320.94 17.42 L 331.52 18.89 L 341.96 20.73 L 352.20 22.75 L 362.19 24.74 L 371.92 26.51 L 381.42 27.90 L 390.76 28.79 L 400.00 29.10 L 409.24 28.79 L 418.58 27.90 L 428.08 26.51 L 437.81 24.74 L 447.80 22.75 L 458.04 20.73 L 468.48 18.89 L 479.06 17.42 L 489.67 16.50 L 500.18 16.28 L 510.46 16.86 L 520.38 18.31 L 529.82 20.63 L 538.71 23.77 L 547.00 27.65 L 554.67 32.12 L 561.79 37.03 L 568.43 42.20 L 574.74 47.43 L 580.86 52.55 L 586.99 57.41 L 593.31 61.88 L 599.99 65.88 L 607.16 69.38 L 614.94 72.38 L 623.37 74.94 L 632.43 77.16 L 642.04 79.15 L 652.07 81.05 L 662.34 83.02 L 672.60 85.21 L 682.60 87.74 L 692.08 90.73 L 700.81 94.24 L 708.55 98.33 L 715.15 102.99 L 720.52 108.18 L 724.62 113.85 L 727.51 119.90 L 729.33 126.23 L 730.26 132.70 L 730.56 139.21 L 730.53 145.66 L 730.45 151.96 L 730.64 158.05 L 731.36 163.89 L 732.83 169.47 L 735.20 174.83 L 738.54 179.99 L 742.84 185.03 L 747.99 190.01 L 753.82 195.00 L 760.07 200.07 L 766.43 205.27 L 772.59 210.65 L 778.19 216.21 L 782.93 221.97 L 786.53 227.88 L 788.78 233.91 Z";
@@ -371,12 +364,6 @@ const Eyebrow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   }}>{children}</div>
 );
 
-const NumEyebrow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="heading" style={{
-    fontSize: 16, letterSpacing: '0.02em', opacity: .65, marginBottom: 10, fontWeight: 400,
-  }}>{children}</div>
-);
-
 const Wordmark: React.FC<{
   src: string; alt: string; ratio: number; ink: string; halo?: string;
   width?: string; height?: number; style?: React.CSSProperties;
@@ -570,16 +557,6 @@ const EventSection: React.FC<{
 );
 
 
-const HotelTile: React.FC<{ name: string; address: string; note?: string }> = ({ name, address, note }) => (
-  <div style={{ padding: '28px 26px', background: 'rgba(78, 91, 55, .03)', position: 'relative' }}>
-    <Bracket pos="tl" /><Bracket pos="br" />
-    <h3 className="heading" style={{ fontSize: 22, lineHeight: 1.05, margin: 0, fontWeight: 400, letterSpacing: '-0.005em' }}>{name}</h3>
-    <p style={{ fontSize: 9.5, letterSpacing: '0.07em', textTransform: 'uppercase', opacity: .55, margin: '10px 0 0', fontWeight: 400 }}>{address}</p>
-    <div style={{ width: 24, height: 1, background: 'currentColor', opacity: .3, margin: '12px 0' }} />
-    {note && <p style={{ fontSize: 13.5, lineHeight: 1.5, opacity: .82, fontWeight: 400, letterSpacing: '-0.005em', margin: 0 }}>{note}</p>}
-  </div>
-);
-
 type CardTone = 'ink' | 'cream' | 'pattern';
 function cardColors(tone: CardTone) {
   // Card fill contrasts with section tone; text + icon are inverse of fill.
@@ -618,15 +595,6 @@ const EatTile: React.FC<{ name: string; address: string; note: string; mapUrl?: 
   );
 };
 
-const Bracket: React.FC<{ pos: 'tl' | 'br' }> = ({ pos }) => (
-  <span aria-hidden="true" style={{
-    position: 'absolute',
-    width: 18, height: 18, opacity: .45, pointerEvents: 'none',
-    ...(pos === 'tl'
-      ? { top: 0, left: 0, borderTop: '1px solid currentColor', borderLeft: '1px solid currentColor' }
-      : { bottom: 0, right: 0, borderBottom: '1px solid currentColor', borderRight: '1px solid currentColor' }),
-  }} />
-);
 
 const Tile: React.FC<{ heading: string; body: React.ReactNode; tone?: CardTone }> = ({ heading, body, tone = 'ink' }) => {
   const { bg, fg, border } = cardColors(tone);
@@ -1158,7 +1126,7 @@ export default function WeddingSite() {
             <div style={{ flex: 1 }}>
               <div className="heading" style={{ fontSize: 24, lineHeight: 1.05, fontWeight: 400 }}>See the map</div>
               <div style={{ fontSize: 13, opacity: .75, marginTop: 4 }}>
-                Every hotel, the church, the vineyard and the weekend's gatherings.
+                Every hotel, the church, the vineyard and the weekend&apos;s gatherings.
               </div>
             </div>
             <span style={{ fontSize: 10, letterSpacing: '.08em', textTransform: 'uppercase', opacity: .6 }}>Open →</span>

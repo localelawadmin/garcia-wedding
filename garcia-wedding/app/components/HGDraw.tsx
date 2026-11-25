@@ -73,7 +73,7 @@ export default function HGDraw({
   const grps = useRef<(SVGGElement | null)[]>([]);
   const uid = useId().replace(/[^a-zA-Z0-9]/g, '');
   const doneRef = useRef(onDone);
-  doneRef.current = onDone;
+  useEffect(() => { doneRef.current = onDone; }, [onDone]);
 
   useEffect(() => {
     let raf = 0;
