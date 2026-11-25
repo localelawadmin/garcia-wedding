@@ -797,7 +797,7 @@ export default function WeddingSite() {
           borderRadius: 999, color: CREAM,
           backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
           zIndex: 200,
-          fontFamily: "'Montmartre','Cormorant Garamond',Georgia,serif",
+          fontFamily: "'Montmartre',var(--ff-serif),Georgia,serif",
           fontStyle: 'italic', fontWeight: 400, lineHeight: 1,
           WebkitTextStroke: '0.4px currentColor',
         }}

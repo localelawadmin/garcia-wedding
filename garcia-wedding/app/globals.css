@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap');
 @import "tailwindcss";
 
 @font-face {
@@ -9,12 +8,6 @@
   font-style: normal;
 }
 
-@font-face {
-  font-family: 'Black Editorial Script';
-  src: url('/black-editorial-script.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
 
 @theme {
   --color-cream: #FDFDFC;
@@ -23,14 +16,13 @@
   --color-ink:   #0a0a0a;
   --color-cream-soft: rgba(242,239,233,.55);
   --color-deep-soft: rgba(78,91,55,.4);
-  --font-heading: 'Montmartre', 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Inter Tight', -apple-system, 'Helvetica Neue', sans-serif;
-  --font-script: 'Black Editorial Script', cursive;
+  --font-heading: 'Montmartre', var(--ff-serif), Georgia, serif;
+  --font-body: var(--ff-body), -apple-system, 'Helvetica Neue', sans-serif;
 }
 
 html, body { background: #0a0a0a; }
 body {
-  font-family: 'Inter Tight', -apple-system, 'Helvetica Neue', sans-serif;
+  font-family: var(--ff-body), -apple-system, 'Helvetica Neue', sans-serif;
   font-weight: 400;
   letter-spacing: -0.005em;
   line-height: 1.55;
@@ -38,7 +30,7 @@ body {
 }
 
 .heading {
-  font-family: 'Montmartre', 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Montmartre', var(--ff-serif), Georgia, serif;
   font-style: italic;
   font-weight: 400;
   -webkit-text-stroke: 0.5px currentColor;

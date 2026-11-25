@@ -1,7 +1,20 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
+import { Inter_Tight, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
+
+// Self-hosted by Next at build time instead of a render-blocking @import to Google
+// from inside globals.css (CSS -> Google CSS -> font file was three hops before text
+// could paint). Cormorant is only the fallback behind Montmartre, so it isn't preloaded.
+const bodyFont = Inter_Tight({
+  subsets: ["latin"], weight: ["300", "400", "500", "600"],
+  variable: "--ff-body", display: "swap",
+});
+const serifFont = Cormorant_Garamond({
+  subsets: ["latin"], weight: ["400", "500", "600"], style: ["italic"],
+  variable: "--ff-serif", display: "swap", preload: false,
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thegarcias2027.com"),
@@ -45,7 +58,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${bodyFont.variable} ${serifFont.variable}`}>
       <body className="antialiased">
         {children}
         <Analytics />
