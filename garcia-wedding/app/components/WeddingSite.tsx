@@ -15,13 +15,19 @@ const DEEP_DARK_ = '#4E5B37';
 // (not just heads) sit centered when cropped into the wide hero.
 // `ink` is chosen from the measured luminance behind the mobile wordmarks:
 // pale sky wants olive ink, the darker frame wants cream.
+// Each `src` is a stem: `${src}-1280.webp` and `${src}-2048.webp` exist in /public.
+// Landscape frames on a portrait phone are cover-cropped by height, so they need
+// roughly twice the width a plain 100vw would ask for — hence the orientation hint.
+const heroSrcSet = (src: string) => `${src}-1280.webp 1280w, ${src}-2048.webp 2048w`;
+const HERO_SIZES = '(orientation: portrait) 200vw, 100vw';
+
 const HERO_PHOTOS = [
-  { src: '/photos/eng-beach-walk.jpg',    pos: 'center 40%', ink: DEEP_DARK_ },
-  { src: '/photos/eng-bikes-motion.jpg',  pos: 'center 45%', ink: DEEP_DARK_ },
-  { src: '/photos/eng-dunes-sitting.jpg', pos: 'center 45%', ink: DEEP_DARK_ },
-  { src: '/photos/eng-beach-lift.jpg',    pos: 'center 70%', ink: DEEP_DARK_ },
-  { src: '/photos/eng-bike-together.jpg', pos: 'center 50%', ink: DEEP_DARK_ },
-  { src: '/photos/eng-beach-standing.jpg', pos: 'center 55%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-beach-walk',    pos: 'center 40%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-bikes-motion',  pos: 'center 45%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-dunes-sitting', pos: 'center 45%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-beach-lift',    pos: 'center 70%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-bike-together', pos: 'center 50%', ink: DEEP_DARK_ },
+  { src: '/photos/eng-beach-standing', pos: 'center 55%', ink: DEEP_DARK_ },
 ];
 const HERO_MS = 3750;   // 50% longer per frame
 
@@ -312,7 +318,7 @@ const SectionShell: React.FC<{
   wide?: boolean; foot?: React.ReactNode;
 }> = ({ id, tone, children, wide, foot }) => {
   const isPattern  = tone === 'pattern';
-  const sectionBg  = isPattern ? "url('/photos/floral.jpg')" : (tone === 'cream' ? stripeCream : stripeInk);
+  const sectionBg  = isPattern ? "url('/photos/floral.webp')" : (tone === 'cream' ? stripeCream : stripeInk);
   const boxBg      = tone === 'cream' ? PISTACHIO : CREAM;
   const fg         = DEEP_DARK;
   // hairline rim: soft olive on light panels, faint cream on dark panels
@@ -673,6 +679,9 @@ export default function WeddingSite() {
   const [showTop, setShowTop] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [heroIdx, setHeroIdx] = useState(0);
+  // Only mount slides up to one ahead of the one showing. Previously all six loaded
+  // the moment the password was accepted (~2 MB) while the guest saw just the first.
+  const [heroReach, setHeroReach] = useState(1);
   const heroInk = HERO_PHOTOS[heroIdx].ink;
   // a soft halo in the opposite tone: the lower lines can land on a treeline or
   // on the couple, where ink colour alone isn't enough
@@ -682,7 +691,13 @@ export default function WeddingSite() {
 
   // Hero slideshow timer
   useEffect(() => {
-    const t = setInterval(() => setHeroIdx(i => (i + 1) % HERO_PHOTOS.length), HERO_MS);
+    const t = setInterval(() => {
+      setHeroIdx(i => {
+        const n = (i + 1) % HERO_PHOTOS.length;
+        setHeroReach(r => Math.max(r, Math.min(n + 1, HERO_PHOTOS.length - 1)));
+        return n;
+      });
+    }, HERO_MS);
     return () => clearInterval(t);
   }, []);
   const [noteOpen, setNoteOpen] = useState(false);
@@ -840,10 +855,14 @@ export default function WeddingSite() {
           position: 'relative', overflow: 'hidden',
         }}
       >
-        {HERO_PHOTOS.map((p, i) => (
+        {HERO_PHOTOS.map((p, i) => i > heroReach ? null : (
           <img
             key={p.src}
-            src={p.src}
+            src={`${p.src}-1280.webp`}
+            srcSet={heroSrcSet(p.src)}
+            sizes={HERO_SIZES}
+            fetchPriority={i === 0 ? 'high' : 'low'}
+            decoding="async"
             alt=""
             style={{
               position: 'absolute', inset: 0, width: '100%', height: '100%',
